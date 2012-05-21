@@ -8,7 +8,10 @@ renderer = pystache.Renderer(search_dirs = [
 
 class Base:
     def render(self, name, *context, **kwargs):
-        return renderer.render(renderer.load_template(name), *context, **kwargs)
+        content = renderer.render(
+            renderer.load_template(name), *context, **kwargs)
+        return renderer.render(renderer.load_template("layout"),
+                               content = content)
 
 class Root(Base):
     @cherrypy.expose
