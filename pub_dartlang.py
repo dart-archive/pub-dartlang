@@ -7,10 +7,4 @@ class Root:
     def index(self):
         return 'Hello World!'
 
-application = cherrypy.Application(Root())
-
-def main():
-    run_wsgi_app(application)
-
-if __name__ == "__main__":
-    main()
+run_wsgi_app(cherrypy.Application(Root()))
