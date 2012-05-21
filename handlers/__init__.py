@@ -1,6 +1,5 @@
 import os
 
-import cherrypy
 import pystache
 
 renderer = pystache.Renderer(search_dirs = [
@@ -12,8 +11,3 @@ class Base:
             renderer.load_template(name), *context, **kwargs)
         return renderer.render(renderer.load_template("layout"),
                                content = content)
-
-class Root(Base):
-    @cherrypy.expose
-    def index(self):
-        return self.render('index')
