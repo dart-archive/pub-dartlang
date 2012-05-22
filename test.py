@@ -16,14 +16,6 @@ Run unit tests.
 SDK_PATH    Path to the SDK installation.
             Auto-detected if dev_appserver.py is on $PATH."""
 
-
-def main(sdk_path, test_path):
-    sys.path.insert(0, sdk_path)
-    import dev_appserver
-    dev_appserver.fix_sys_path()
-    suite = unittest2.loader.TestLoader().discover(test_path)
-    unittest2.TextTestRunner(verbosity=2).run(suite)
-
 parser = optparse.OptionParser(USAGE)
 options, args = parser.parse_args()
 sdk_path = None
@@ -43,4 +35,12 @@ else:
         sys.exit(1)
     sdk_path = os.path.dirname(stdout.strip())
 
-main(sdk_path, os.path.join(os.path.dirname(__file__), 'test'))
+sys.path.append(sdk_path)
+third_party_path = os.path.join(os.path.dirname(__file__), 'third_party')
+sys.path.append(third_party_path)
+
+import dev_appserver
+dev_appserver.fix_sys_path()
+test_path = os.path.join(os.path.dirname(__file__), 'test')
+suite = unittest2.loader.TestLoader().discover(test_path)
+unittest2.TextTestRunner(verbosity = 2).run(suite)

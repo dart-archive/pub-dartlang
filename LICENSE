@@ -2,8 +2,8 @@ This license applies to all parts of pub.dartlang.org that are not
 externally maintained libraries. The external maintained libraries
 used by pub.dartlang.org are:
 
-CherryPy - in cherrypy
-Pystache - in pystache
+CherryPy - in third_party/cherrypy
+Pystache - in third_party/pystache
 
 The libraries may have their own licenses; we recommend you read them,
 as their terms may differ from the terms below.
