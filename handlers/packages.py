@@ -16,11 +16,10 @@ class Packages(handlers.Base):
         if not users.is_current_user_admin():
             raise cherrypy.HTTPError(403, "Only admins may create packages.")
 
-        if Package.exists(name):
+        if not Package.create_unless_exists(name):
             self.flash('A package named "%s" already exists.' % name)
             raise cherrypy.HTTPRedirect('/packages/create')
 
-        Package(name = name).put()
         self.flash('Package "%s" created successfully.' % name)
         # TODO(nweiz): redirect to actual package page
         raise cherrypy.HTTPRedirect('/packages/')
