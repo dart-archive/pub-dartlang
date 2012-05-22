@@ -11,6 +11,10 @@
       {{^logged_in}}
         <a href="{{login_url}}">Log In</a>
       {{/logged_in}}
+
+      {{#message}}
+        <h3>{{message}}</h3>
+      {{/message}}
     </div>
     {{& content}}
   </body>
