@@ -4,6 +4,14 @@
     <title>Pub Package Repository</title>
   </head>
   <body>
+    <div id="header">
+      {{#logged_in}}
+        <a href="{{logout_url}}">Log Out</a>
+      {{/logged_in}}
+      {{^logged_in}}
+        <a href="{{login_url}}">Log In</a>
+      {{/logged_in}}
+    </div>
     {{& content}}
   </body>
 </html>
