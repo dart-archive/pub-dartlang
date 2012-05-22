@@ -7,9 +7,9 @@ import cherrypy
 import handlers
 from handlers.packages import Packages
 
-class Root(handlers.Base):
+class Root:
     @cherrypy.expose
     def index(self):
-        return self.render('index')
+        return handlers.render('index')
 
     packages = Packages()

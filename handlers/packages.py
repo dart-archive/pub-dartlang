@@ -9,7 +9,7 @@ import handlers
 import sys
 from models.package import Package
 
-class Packages(handlers.Base):
+class Packages:
     @cherrypy.expose
     def index(self, name = None, page = 1):
         if cherrypy.request.method == 'POST':
@@ -17,7 +17,7 @@ class Packages(handlers.Base):
 
         offset = (page - 1) * 10
         packages = Package.all().order('-updated').fetch(10, offset)
-        return self.render("packages/index", packages = packages)
+        return handlers.render("packages/index", packages = packages)
         raise cherrypy.HTTPRedirect("/")
 
     def index_post(self, name):
@@ -25,10 +25,10 @@ class Packages(handlers.Base):
             raise cherrypy.HTTPError(403, "Only admins may create packages.")
 
         if not Package.create_unless_exists(name):
-            self.flash('A package named "%s" already exists.' % name)
+            handlers.flash('A package named "%s" already exists.' % name)
             raise cherrypy.HTTPRedirect('/packages/create')
 
-        self.flash('Package "%s" created successfully.' % name)
+        handlers.flash('Package "%s" created successfully.' % name)
         # TODO(nweiz): redirect to actual package page
         raise cherrypy.HTTPRedirect('/packages/')
 
@@ -38,7 +38,7 @@ class Packages(handlers.Base):
             raise cherrypy.HTTPRedirect(
                 users.create_login_url(cherrypy.url()))
         elif not users.is_current_user_admin():
-            self.flash('Currently only admins may create packages.')
+            handlers.flash('Currently only admins may create packages.')
             raise cherrypy.HTTPRedirect('/packages/')
 
-        return self.render("packages/create")
+        return handlers.render("packages/create")
