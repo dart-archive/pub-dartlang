@@ -7,9 +7,13 @@ from models.package import Package
 
 class Packages(handlers.Base):
     @cherrypy.expose
-    def index(self, name = None):
+    def index(self, name = None, page = 1):
         if cherrypy.request.method == 'POST':
             return self.index_post(name)
+
+        offset = (page - 1) * 10
+        packages = Package.all().order('-updated').fetch(10, offset)
+        return self.render("packages/index", packages = packages)
         raise cherrypy.HTTPRedirect("/")
 
     def index_post(self, name):

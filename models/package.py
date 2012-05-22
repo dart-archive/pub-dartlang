@@ -3,6 +3,8 @@ from google.appengine.ext import db
 class Package(db.Model):
     owner = db.UserProperty(auto_current_user_add = True)
     name = db.StringProperty()
+    created = db.DateTimeProperty(auto_now_add = True)
+    updated = db.DateTimeProperty(auto_now = True)
 
     def __init__(self, *args, **kwargs):
         kwargs['key_name'] = kwargs['name']
