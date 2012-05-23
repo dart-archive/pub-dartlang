@@ -10,17 +10,13 @@ import sys
 from models.package import Package
 
 class Packages:
-    @cherrypy.expose
-    def index(self, name = None, page = 1):
-        if cherrypy.request.method == 'POST':
-            return self.index_post(name)
-
+    def _index_get(self, page = 1):
         offset = (page - 1) * 10
         packages = Package.all().order('-updated').fetch(10, offset)
         return handlers.render("packages/index", packages = packages)
         raise cherrypy.HTTPRedirect("/")
 
-    def index_post(self, name):
+    def _index_post(self, name = None):
         if not users.is_current_user_admin():
             raise cherrypy.HTTPError(403, "Only admins may create packages.")
 
@@ -31,6 +27,10 @@ class Packages:
         handlers.flash('Package "%s" created successfully.' % name)
         # TODO(nweiz): redirect to actual package page
         raise cherrypy.HTTPRedirect('/packages/')
+
+    index = handlers.dispatch_by_method(
+        GET  = _index_get,
+        POST = _index_post)
 
     @cherrypy.expose
     def create(self):

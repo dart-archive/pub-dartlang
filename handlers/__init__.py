@@ -34,3 +34,18 @@ def render(name, *context, **kwargs):
 def flash(message):
     cherrypy.response.cookie['flash'] = message
     cherrypy.response.cookie['flash']['path'] = '/'
+
+def dispatch_by_method(**kwargs):
+    @cherrypy.expose
+    def dispatcher(self, *dispatcher_args, **dispatcher_kwargs):
+        http_method = cherrypy.request.method
+        if not http_method in kwargs:
+            raise cherrypy.HTTPError(404, "The path '%s' was not found." %
+                                            cherrypy.request.path_info)
+
+        dispatchee = kwargs[http_method]
+        cherrypy._cpdispatch.test_callable_spec(
+            dispatchee, dispatcher_args, dispatcher_kwargs)
+        dispatchee(self, *dispatcher_args, **dispatcher_kwargs)
+
+    return dispatcher
