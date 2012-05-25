@@ -5,9 +5,9 @@
 
 """The entrypoint for running tests.
 
-If the AppEngine dev_appserver.py is on $PATH, this can be run without any
-arguments. Otherwise, it should be passed a single argument: the path to the
-AppEngine SDK.
+If the App Engine dev_appserver.py is on $PATH, this can be run without any
+arguments. Otherwise, it should be passed a single argument: the path to the App
+Engine SDK.
 """
 
 import optparse

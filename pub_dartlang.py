@@ -4,7 +4,7 @@
 
 """The entrypoint for the pub.dartlang.org server.
 
-In development, this should be run using the AppEngine dev_appserver.py script.
+In development, this should be run using the App Engine dev_appserver.py script.
 """
 
 import os

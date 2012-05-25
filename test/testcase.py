@@ -24,7 +24,7 @@ class TestCase(unittest.TestCase):
         """Initialize stubs for testing.
 
         This initializes the following fields:
-          self.testbed: An AppEngine Testbed used for mocking AppEngine
+          self.testbed: An App Engine Testbed used for mocking App Engine
             services. This is activated, and any necessary stubs are
             initialized.
           self.testapp: A webtest.TestApp wrapping the CherryPy application.
