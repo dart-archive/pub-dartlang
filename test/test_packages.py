@@ -72,3 +72,58 @@ class PackagesTest(TestCase):
 
         package = Package.get_by_key_name('test-package')
         self.assertEqual(package.owner, other_admin)
+
+    def testGetPackagesListsPackagesInUpdateOrder(self):
+        self.beAdminUser()
+
+        Package(name='armadillo').put()
+        Package(name='zebra').put()
+        mongoose = Package(name='mongoose')
+        mongoose.put()
+        Package(name='snail').put()
+
+        # Make update time different than create time
+        mongoose.put()
+
+        self.expectListsPackages(['mongoose', 'snail', 'zebra', 'armadillo'])
+
+    def testGetPackagesListsOnePageOfPackages(self):
+        self.beAdminUser()
+
+        Package(name='armadillo').put()
+        Package(name='bat').put()
+        Package(name='crocodile').put()
+        Package(name='dragon').put()
+        Package(name='elephant').put()
+        Package(name='frog').put()
+        Package(name='gorilla').put()
+        Package(name='headcrab').put()
+        Package(name='ibex').put()
+        Package(name='jaguar').put()
+        Package(name='kangaroo').put()
+        Package(name='llama').put()
+
+        # Only the ten most recent packages should be listed
+        self.expectListsPackages([
+                'llama', 'kangaroo', 'jaguar', 'ibex', 'headcrab', 'gorilla',
+                'frog', 'elephant', 'dragon', 'crocodile'])
+
+    def expectListsPackages(self, expected_order):
+        """Assert that the package index lists packages in a particular order.
+
+        Arguments:
+          expected_order: A list of package names.
+        """
+        response = self.testapp.get('/packages/')
+        for li in self.html(response).select("#packages li"):
+            if not expected_order:
+                self.fail("more packages were listed than expected: %s" % li)
+            elif expected_order[0] in li.string:
+                del expected_order[0]
+            else:
+                self.fail("expected package '%s' in element %s" %
+                          (expected_order[0], li))
+
+        self.assertEqual(expected_order, [],
+                         "<li>s not found for packages: %s" % expected_order)
+        

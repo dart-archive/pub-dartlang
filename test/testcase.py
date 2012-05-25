@@ -6,6 +6,7 @@ import unittest
 
 import cherrypy
 import webtest
+from bs4 import BeautifulSoup
 from google.appengine.ext.testbed import Testbed
 from google.appengine.api import users
 
@@ -131,4 +132,18 @@ class TestCase(unittest.TestCase):
           response: The webtest response object to check.
         """
         # TODO(nweiz): Make a better error page that's easier to detect
-        self.assertTrue(response.html.find('pre', id='traceback') is not None)
+        error_pre = self.html(response).find('pre', id='traceback')
+        self.assertTrue(error_pre is not None, "expected error page")
+
+    def html(self, response):
+        """Parse a webtest response with BeautifulSoup.
+
+        WebTest includes built-in support for BeautifulSoup 3.x, but we want to
+        be able to use the features in 4.x.
+
+        Arguments:
+          response: The webtest response object to parse.
+
+        Returns: The BeautifulSoup parsed HTML.
+        """
+        return BeautifulSoup(response.body)
