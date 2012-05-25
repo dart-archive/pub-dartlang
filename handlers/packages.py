@@ -24,7 +24,7 @@ class Packages:
         """
         offset = (page - 1) * 10
         packages = Package.all().order('-updated').fetch(10, offset)
-        return handlers.render("packages/index", packages = packages)
+        return handlers.render("packages/index", packages=packages)
 
     def index_post(self, name = None):
         """Create a new package.

@@ -21,10 +21,11 @@ For license information, please see LICENSE.
 The server is written in Python and intended to run on Google App Engine. To run
 it locally, perform the following steps:
 
-* Install the [App Engine
-  SDK](https://developers.google.com/appengine/downloads).
+* Install the [App Engine SDK][].
 * Make sure the SDK is on your `$PATH`.
 * Run `dev_appserver.py .` from the root directory of this repository.
+
+[app engine sdk]: https://developers.google.com/appengine/downloads
 
 That's it. All the dependencies needed to run the app are included in the
 repository so that App Engine can use them, so no further installation is
