@@ -61,6 +61,6 @@ def dispatch_by_method(**kwargs):
         dispatchee = kwargs[http_method]
         cherrypy._cpdispatch.test_callable_spec(
             dispatchee, dispatcher_args, dispatcher_kwargs)
-        dispatchee(self, *dispatcher_args, **dispatcher_kwargs)
+        return dispatchee(self, *dispatcher_args, **dispatcher_kwargs)
 
     return dispatcher
