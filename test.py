@@ -3,6 +3,13 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+"""The entrypoint for running tests.
+
+If the AppEngine dev_appserver.py is on $PATH, this can be run without any
+arguments. Otherwise, it should be passed a single argument: the path to the
+AppEngine SDK.
+"""
+
 import optparse
 import os
 import sys

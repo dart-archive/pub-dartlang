@@ -8,8 +8,11 @@ import handlers
 from handlers.packages import Packages
 
 class Root:
+    """The handler for /*."""
+
     @cherrypy.expose
     def index(self):
+        """Retrieves the front page of the package server."""
         return handlers.render('index')
 
     packages = Packages()

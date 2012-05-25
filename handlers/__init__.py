@@ -2,6 +2,8 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+"""This module provides utility functions for handlers."""
+
 import os
 
 import cherrypy
@@ -13,6 +15,15 @@ _renderer = pystache.Renderer(search_dirs = [
         os.path.join(os.path.dirname(__file__), '../views')])
 
 def render(name, *context, **kwargs):
+    """Renders a Moustache template with the standard layout.
+
+    The interface of this function is the same as pystache.Renderer.render,
+    except that it takes the name of a template instead of the template string
+    itself. These templates are located in views/.
+
+    This also surrounds the rendered template in the layout template (located in
+    views/layout.mustache)."""
+
     content = _renderer.render(
         _renderer.load_template(name), *context, **kwargs)
 
@@ -32,6 +43,10 @@ def render(name, *context, **kwargs):
         message = flash and flash.value)
 
 def flash(message):
+    """Records a message for the user.
+
+    This message will be displayed and cleared next time a page is rendered for
+    the user. Redirects and error pages will not clear the message."""
     cherrypy.response.cookie['flash'] = message
     cherrypy.response.cookie['flash']['path'] = '/'
 

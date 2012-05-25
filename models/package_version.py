@@ -6,8 +6,21 @@ from google.appengine.ext import db
 from package import Package
 
 class PackageVersion(db.Model):
+    """The model for a single version of a package.
+
+    This model contains the actual (compressed) blob of code for this version of
+    the package.
+    """
+
     version = db.StringProperty()
+    """The version of the package, a valid semantic version."""
+
     created = db.DateTimeProperty(auto_now_add=True)
+    """When this package version was created."""
+
     contents = db.BlobProperty()
+    """The blob of code for this package version, a gzipped tar file."""
+
     package = db.ReferenceProperty(Package,
                                    collection_name = "package_version_set")
+    """The Package model for this package version."""
