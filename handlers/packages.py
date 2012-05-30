@@ -66,3 +66,22 @@ class Packages(object):
             raise cherrypy.HTTPRedirect('/packages')
 
         return handlers.render("packages/new")
+
+    def show(self, id):
+        """Retrieve the page describing a specific package."""
+        package = self._get_package(id)
+        return handlers.render(
+            "packages/show", package = package,
+            is_owner = package.owner == users.get_current_user())
+
+    def _get_package(self, name):
+        """Look up a Package by name.
+
+        Throws a 404 error if the package doesn't exist.
+
+        Arguments:
+          name: The name of the package.
+        """
+        package = Package.get_by_key_name(name)
+        if package is not None: return package
+        raise cherrypy.HTTPError(404, "Package \"%s\" doesn't exist." % name)

@@ -6,6 +6,9 @@
 <p><a href="/packages/new">Create Package</a></p>
 <ul id="packages">
   {{#packages}}
-    <li>{{name}} owned by {{owner.nickname}}</li>
+    <li>
+      <a href="/packages/show/{{name}}">{{name}}</a>
+      owned by {{owner.nickname}}
+    </li>
   {{/packages}}
 </ul>

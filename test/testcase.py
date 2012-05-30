@@ -147,3 +147,35 @@ class TestCase(unittest.TestCase):
         Returns: The BeautifulSoup parsed HTML.
         """
         return BeautifulSoup(response.body)
+
+    def assertLink(self, response, url):
+        """Assert that the response contains a link to the given url.
+
+        Arguments:
+          response: The webtest response object to check.
+          url: The link URL to look for.
+        """
+        error_msg = "expected response body to contain a link to '%s'" % url
+        self.assertTrue(self._linkExists(response, url), error_msg)
+
+    def assertNoLink(self, response, url):
+        """Assert that the response doesn't contain a link to the given url.
+
+        Arguments:
+          response: The webtest response object to check.
+          url: The link URL to look for.
+        """
+        error_msg = "expected response body not to contain a link to '%s'" % url
+        self.assertFalse(self._linkExists(response, url), error_msg)
+
+
+    def _linkExists(self, response, url):
+        """Return whether or not the response contains a link to the given url.
+
+        Arguments:
+          response: The webtest response object to check.
+          url: The link URL to look for.
+        """
+
+        return any([link['href'] == url for link
+                    in self.html(response).find_all('a')])

@@ -108,6 +108,24 @@ class PackagesTest(TestCase):
                 'llama', 'kangaroo', 'jaguar', 'ibex', 'headcrab', 'gorilla',
                 'frog', 'elephant', 'dragon', 'crocodile'])
 
+    def testGetNonExistantPackage(self):
+        self.testapp.get('/packages/package/test-package', status=404)
+
+    def testGetUnownedPackage(self):
+        self.beAdminUser()
+        Package(name='test-package').put()
+
+        self.beNormalUser()
+        response = self.testapp.get('/packages/test-package')
+        self.assertNoLink(response, '/packages/test-package/edit')
+
+    def testGetOwnedPackage(self):
+        self.beAdminUser()
+        Package(name='test-package').put()
+
+        response = self.testapp.get('/packages/test-package')
+        self.assertLink(response, '/packages/test-package/edit')
+
     def expectListsPackages(self, expected_order):
         """Assert that the package index lists packages in a particular order.
 
@@ -118,7 +136,7 @@ class PackagesTest(TestCase):
         for li in self.html(response).select("#packages li"):
             if not expected_order:
                 self.fail("more packages were listed than expected: %s" % li)
-            elif expected_order[0] in li.string:
+            elif expected_order[0] in ''.join(li.strings):
                 del expected_order[0]
             else:
                 self.fail("expected package '%s' in element %s" %
