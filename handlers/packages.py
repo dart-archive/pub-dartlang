@@ -9,7 +9,7 @@ import handlers
 import sys
 from models.package import Package
 
-class Packages:
+class Packages(object):
     """The handler for /packages/*.
 
     This handler is in charge of the web UI for viewing and managing uploaded

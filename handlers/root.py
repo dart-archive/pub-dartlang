@@ -7,7 +7,7 @@ import cherrypy
 import handlers
 from handlers.packages import Packages
 
-class Root:
+class Root(object):
     """The handler for /*."""
 
     @cherrypy.expose
