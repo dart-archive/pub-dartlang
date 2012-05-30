@@ -30,14 +30,14 @@ class PackagesTest(TestCase):
         self.assertEqual(package.name, 'test-package')
         self.assertEqual(package.owner, users.get_current_user())
 
-    def testGetCreateRequiresLogin(self):
+    def testNewRequiresLogin(self):
         response = self.testapp.get('/packages/new')
         self.assertEqual(response.status_int, 302)
         self.assertEqual(response.headers['Location'],
                          'https://www.google.com/accounts/Login?continue=http'
                          '%3A//localhost%3A80/packages/new')
 
-    def testGetCreateRequiresAdmin(self):
+    def testNewRequiresAdmin(self):
         self.beNormalUser()
 
         response = self.testapp.get('/packages/new')
@@ -46,19 +46,19 @@ class PackagesTest(TestCase):
                          'http://localhost:80/packages')
         self.assertTrue(response.cookies_set.has_key('flash'))
 
-    def testPostPackagesRequiresLogin(self):
+    def testCreateRequiresLogin(self):
         response = self.testapp.post('/packages', {'name': 'test-package'},
                                      status=403)
         self.assertErrorPage(response)
 
-    def testPostPackagesRequiresAdmin(self):
+    def testCreateRequiresAdmin(self):
         self.beNormalUser()
 
         response = self.testapp.post('/packages', {'name': 'test-package'},
                                      status=403)
         self.assertErrorPage(response)
 
-    def testPostPackagesRequiresNewPackageName(self):
+    def testCreateRequiresNewPackageName(self):
         self.beAdminUser()
 
         other_admin = self.adminUser('other')
@@ -73,7 +73,7 @@ class PackagesTest(TestCase):
         package = Package.get_by_key_name('test-package')
         self.assertEqual(package.owner, other_admin)
 
-    def testGetPackagesListsPackagesInUpdateOrder(self):
+    def testIndexListsPackagesInUpdateOrder(self):
         self.beAdminUser()
 
         Package(name='armadillo').put()
@@ -87,7 +87,7 @@ class PackagesTest(TestCase):
 
         self.expectListsPackages(['mongoose', 'snail', 'zebra', 'armadillo'])
 
-    def testGetPackagesListsOnePageOfPackages(self):
+    def testIndexListsOnePageOfPackages(self):
         self.beAdminUser()
 
         Package(name='armadillo').put()
