@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from google.appengine.ext.testbed import Testbed
 from google.appengine.api import users
 
-from handlers.root import Root
+from pub_dartlang import Application
 
 class TestCase(unittest.TestCase):
     """Utility methods for testing.
@@ -41,7 +41,7 @@ class TestCase(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_user_stub()
 
-        self.testapp = webtest.TestApp(cherrypy.Application(Root()))
+        self.testapp = webtest.TestApp(Application())
 
     def tearDown(self):
         """Deactivates the stubs initialized in setUp.

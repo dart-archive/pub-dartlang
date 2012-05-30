@@ -16,4 +16,11 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from handlers.root import Root
 
-run_wsgi_app(cherrypy.Application(Root()))
+class Application(cherrypy.Application):
+    """The pub.dartlang.org WSGI application."""
+
+    def __init__(self, *args, **kwargs):
+        super(Application, self).__init__(Root(), *args, **kwargs)
+
+if __name__ == "__main__":
+    run_wsgi_app(Application())

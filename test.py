@@ -43,11 +43,11 @@ else:
     sdk_path = os.path.dirname(stdout.strip())
 
 sys.path.append(sdk_path)
-third_party_path = os.path.join(os.path.dirname(__file__), 'third_party')
-sys.path.append(third_party_path)
-
 import dev_appserver
 dev_appserver.fix_sys_path()
+
+import pub_dartlang
+
 test_path = os.path.join(os.path.dirname(__file__), 'test')
 suite = unittest2.loader.TestLoader().discover(test_path)
 unittest2.TextTestRunner(verbosity = 2).run(suite)
