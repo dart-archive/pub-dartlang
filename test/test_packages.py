@@ -11,10 +11,10 @@ class PackagesTest(TestCase):
     def testAdminCreatesPackage(self):
         self.beAdminUser()
 
-        get_response = self.testapp.get('/packages/create')
+        get_response = self.testapp.get('/packages/new')
         self.assertEqual(get_response.status_int, 200)
         form = get_response.form
-        self.assertEqual(form.action, '/packages/')
+        self.assertEqual(form.action, '/packages')
         self.assertEqual(form.method, 'POST')
 
         form['name'] = 'test-package'
@@ -22,7 +22,7 @@ class PackagesTest(TestCase):
 
         self.assertEqual(post_response.status_int, 302)
         self.assertEqual(post_response.headers['Location'],
-                         'http://localhost:80/packages/')
+                         'http://localhost:80/packages')
         self.assertTrue(post_response.cookies_set.has_key('flash'))
 
         package = Package.get_by_key_name('test-package')
@@ -31,30 +31,30 @@ class PackagesTest(TestCase):
         self.assertEqual(package.owner, users.get_current_user())
 
     def testGetCreateRequiresLogin(self):
-        response = self.testapp.get('/packages/create')
+        response = self.testapp.get('/packages/new')
         self.assertEqual(response.status_int, 302)
         self.assertEqual(response.headers['Location'],
                          'https://www.google.com/accounts/Login?continue=http'
-                         '%3A//localhost%3A80/packages/create')
+                         '%3A//localhost%3A80/packages/new')
 
     def testGetCreateRequiresAdmin(self):
         self.beNormalUser()
 
-        response = self.testapp.get('/packages/create')
+        response = self.testapp.get('/packages/new')
         self.assertEqual(response.status_int, 302)
         self.assertEqual(response.headers['Location'],
-                         'http://localhost:80/packages/')
+                         'http://localhost:80/packages')
         self.assertTrue(response.cookies_set.has_key('flash'))
 
     def testPostPackagesRequiresLogin(self):
-        response = self.testapp.post('/packages/', {'name': 'test-package'},
+        response = self.testapp.post('/packages', {'name': 'test-package'},
                                      status=403)
         self.assertErrorPage(response)
 
     def testPostPackagesRequiresAdmin(self):
         self.beNormalUser()
 
-        response = self.testapp.post('/packages/', {'name': 'test-package'},
+        response = self.testapp.post('/packages', {'name': 'test-package'},
                                      status=403)
         self.assertErrorPage(response)
 
@@ -64,10 +64,10 @@ class PackagesTest(TestCase):
         other_admin = self.adminUser('other')
         Package(name='test-package', owner=other_admin).put()
 
-        response = self.testapp.post('/packages/', {'name': 'test-package'})
+        response = self.testapp.post('/packages', {'name': 'test-package'})
         self.assertEqual(response.status_int, 302)
         self.assertEqual(response.headers['Location'],
-                         'http://localhost:80/packages/create')
+                         'http://localhost:80/packages/new')
         self.assertTrue(response.cookies_set.has_key('flash'))
 
         package = Package.get_by_key_name('test-package')
@@ -114,7 +114,7 @@ class PackagesTest(TestCase):
         Arguments:
           expected_order: A list of package names.
         """
-        response = self.testapp.get('/packages/')
+        response = self.testapp.get('/packages')
         for li in self.html(response).select("#packages li"):
             if not expected_order:
                 self.fail("more packages were listed than expected: %s" % li)
