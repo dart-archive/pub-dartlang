@@ -8,8 +8,10 @@ import os
 
 import cherrypy
 from google.appengine.api import users
-
 import pystache
+import routes
+
+from models.package import Package
 
 _renderer = pystache.Renderer(search_dirs = [
         os.path.join(os.path.dirname(__file__), '../views')])
@@ -49,3 +51,61 @@ def flash(message):
     the user. Redirects and error pages will not clear the message."""
     cherrypy.response.cookie['flash'] = message
     cherrypy.response.cookie['flash']['path'] = '/'
+
+def request():
+    """Return the current Request instance."""
+    if not hasattr(cherrypy.request, 'pub_data'):
+        setattr(cherrypy.request, 'pub_data', Request(cherrypy.request))
+    return cherrypy.request.pub_data
+
+class Request(object):
+    """A collection of request-specific helpers."""
+
+    def __init__(self, request):
+        self.request = request
+        self._route = None
+        self._package = None
+
+    def url(self, **kwargs):
+        """Construct a URL for a given set of parametters.
+
+        This takes the given parameters and merges them with the parameters for
+        the current request to produce the resulting URL.
+        """
+        params = self.route.copy()
+        params.update(kwargs)
+        return routes.url_for(**params)
+
+    @property
+    def route(self):
+        """Return the parsed route for the current request.
+
+        Most route information is available in the request parameters, but the
+        controller and action components get stripped out early.
+        """
+        if not self._route:
+            mapper = routes.request_config().mapper
+            self._route = mapper.match(self.request.path_info)
+        return self._route
+
+    @property
+    def package(self):
+        """Load the current package object.
+
+        This auto-detects the package name from the request parameters. If the
+        package doesn't exist, throws a 404 error.
+        """
+
+        if self._package: return self._package
+
+        if self.route['controller'] == 'packages':
+            package_name = self.request.params['id']
+        else:
+            package_name = self.request.params['package_id']
+        if not package_name:
+            raise cherrypy.HTTPError(403, "No package name found.")
+
+        self._package = Package.get_by_key_name(package_name)
+        if self._package: return self._package
+        raise cherrypy.HTTPError(
+            404, "Package \"%s\" doesn't exist." % package_name)
