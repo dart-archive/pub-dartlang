@@ -122,6 +122,14 @@ class TestCase(unittest.TestCase):
             user_is_admin = '1',
             overwrite = True)
 
+    def assertRequiresLogin(self, response):
+        """Assert that the given response is requesting user authentication."""
+        self.assertEqual(response.status_int, 302)
+        self.assertTrue(
+            response.headers['Location'].startswith(
+                'https://www.google.com/accounts/Login?continue='),
+            'expected response to redirect to the Google login page')
+
     def assertErrorPage(self, response):
         """Assert that the given response renders an HTTP error page.
 

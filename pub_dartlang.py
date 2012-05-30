@@ -16,6 +16,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 from handlers.root import Root
 from handlers.packages import Packages
+from handlers.package_versions import PackageVersions
 
 class Application(cherrypy.Application):
     """The pub.dartlang.org WSGI application."""
@@ -28,6 +29,11 @@ class Application(cherrypy.Application):
         # Configure routes
         self.dispatcher.connect('root', '/', Root(), action='index')
         self._resource('package', 'packages', Packages())
+        self._resource(
+            'version', 'versions', PackageVersions(), parent_resource={
+                'member_name': 'package',
+                'collection_name': 'packages'
+            })
 
     def _resource(self, member_name, collection_name, controller, **kwargs):
         """Configure routes for a resource.

@@ -12,8 +12,8 @@ from models.package import Package
 class Packages(object):
     """The handler for /packages/*.
 
-    This handler is in charge of the web UI for viewing and managing uploaded
-    packages.
+    This handler is in charge of packages (but not package versions, which are
+    the responsibility of the PackageVersions class).
     """
 
     def index(self, page = 1):

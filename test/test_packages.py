@@ -117,14 +117,14 @@ class PackagesTest(TestCase):
 
         self.beNormalUser()
         response = self.testapp.get('/packages/test-package')
-        self.assertNoLink(response, '/packages/test-package/edit')
+        self.assertNoLink(response, '/packages/test-package/versions/new')
 
     def testGetOwnedPackage(self):
         self.beAdminUser()
         Package(name='test-package').put()
 
         response = self.testapp.get('/packages/test-package')
-        self.assertLink(response, '/packages/test-package/edit')
+        self.assertLink(response, '/packages/test-package/versions/new')
 
     def expectListsPackages(self, expected_order):
         """Assert that the package index lists packages in a particular order.
