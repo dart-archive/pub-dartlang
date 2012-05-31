@@ -41,3 +41,16 @@ class PackageVersion(db.Model):
                                    required=True,
                                    collection_name = "package_version_set")
     """The Package model for this package version."""
+
+    def __init__(self, *args, **kwargs):
+        """Construct a new package version.
+
+        This automatically sets the key name of the model. Unless the key is set
+        explicitly, it requires that the version and package keys be passed in.
+        """
+
+        if not 'key_name' in kwargs and not 'key' in kwargs:
+            kwargs['key_name'] = \
+                "%s %s" % (kwargs['package'].name, kwargs['version'])
+
+        super(PackageVersion, self).__init__(*args, **kwargs)

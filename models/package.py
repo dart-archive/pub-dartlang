@@ -30,7 +30,10 @@ class Package(db.Model):
         This automatically sets the key name of the model to the name field,
         in order to ensure that each package has a unique name.
         """
-        kwargs['key_name'] = kwargs['name']
+
+        if not 'key_name' in kwargs and not 'key' in kwargs:
+            kwargs['key_name'] = kwargs['name']
+
         super(Package, self).__init__(*args, **kwargs)
 
     @classmethod
