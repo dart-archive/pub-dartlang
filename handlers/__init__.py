@@ -49,3 +49,11 @@ def flash(message):
     the user. Redirects and error pages will not clear the message."""
     cherrypy.response.cookie['flash'] = message
     cherrypy.response.cookie['flash']['path'] = '/'
+
+def http_error(status, message):
+    """Throw an HTTP error.
+
+    This raises a cherrypy.HTTPError after ensuring that the error message is a
+    str object and not a unicode object.
+    """
+    raise cherrypy.HTTPError(status, message.encode('utf-8'))

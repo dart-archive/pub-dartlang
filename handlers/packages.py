@@ -41,7 +41,7 @@ class Packages(object):
         """
 
         if not users.is_current_user_admin():
-            raise cherrypy.HTTPError(403, "Only admins may create packages.")
+            handlers.http_error(403, "Only admins may create packages.")
 
         if Package.exists(name):
             handlers.flash('A package named "%s" already exists.' % name)
