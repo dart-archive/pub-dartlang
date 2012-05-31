@@ -4,6 +4,7 @@
 
 from testcase import TestCase
 from models.package import Package
+from models.package_version import PackageVersion
 
 class PackageTest(TestCase):
     def testExists(self):
@@ -11,3 +12,11 @@ class PackageTest(TestCase):
 
         self.assertTrue(Package.exists('test-package'))
         self.assertFalse(Package.exists('other-package'))
+
+    def testHasVersion(self):
+        package = Package(name='test-package', owner=self.adminUser())
+        package.put()
+        PackageVersion(version='1.2.3', package=package, contents='foo').put()
+
+        self.assertTrue(package.has_version('1.2.3'))
+        self.assertFalse(package.has_version('1.2.4'))
