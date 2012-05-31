@@ -50,13 +50,21 @@ def flash(message):
     cherrypy.response.cookie['flash'] = message
     cherrypy.response.cookie['flash']['path'] = '/'
 
+def http_error(status, message):
+    """Throw an HTTP error.
+
+    This raises a cherrypy.HTTPError after ensuring that the error message is a
+    str object and not a unicode object.
+    """
+    raise cherrypy.HTTPError(status, message.encode('utf-8'))
+
 def dispatch_by_method(**kwargs):
     @cherrypy.expose
     def dispatcher(self, *dispatcher_args, **dispatcher_kwargs):
         http_method = cherrypy.request.method
         if not http_method in kwargs:
-            raise cherrypy.HTTPError(404, "The path '%s' was not found." %
-                                            cherrypy.request.path_info)
+            http_error(404, "The path '%s' was not found." %
+                            cherrypy.request.path_info)
 
         dispatchee = kwargs[http_method]
         cherrypy._cpdispatch.test_callable_spec(
