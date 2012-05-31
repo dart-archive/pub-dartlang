@@ -2,7 +2,10 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+import re
+
 from google.appengine.ext import db
+
 from package import Package
 
 class PackageVersion(db.Model):
@@ -12,7 +15,20 @@ class PackageVersion(db.Model):
     the package.
     """
 
-    version = db.StringProperty(required=True)
+    _SEMANTIC_VERSION_RE = re.compile(r"""
+      ^
+      (\d+)\.(\d+)\.(\d+)              # Version number.
+      (-([0-9a-z-]+(\.[0-9a-z-]+)*))?  # Pre-release.
+      (\+([0-9a-z-]+(\.[0-9a-z-]+)*))? # Build.
+      $                                # Consume entire string.
+      """, re.VERBOSE | re.IGNORECASE)
+
+    def _check_semver(value):
+        """Validate that value matches the semantic version spec."""
+        if PackageVersion._SEMANTIC_VERSION_RE.match(value): return
+        raise db.BadValueError('"%s" is not a valid semantic version.' % value)
+
+    version = db.StringProperty(required=True, validator=_check_semver)
     """The version of the package, a valid semantic version."""
 
     created = db.DateTimeProperty(auto_now_add=True)
