@@ -12,7 +12,7 @@ class Package(db.Model):
     is represented by a PackageVersion model.
     """
 
-    owner = db.UserProperty(auto_current_user_add=True)
+    owner = db.UserProperty(required=True, auto_current_user_add=True)
     """The user who owns the package."""
 
     name = db.StringProperty(required=True)
