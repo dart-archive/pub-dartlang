@@ -12,16 +12,16 @@ class Package(db.Model):
     is represented by a PackageVersion model.
     """
 
-    owner = db.UserProperty(auto_current_user_add = True)
+    owner = db.UserProperty(auto_current_user_add=True)
     """The user who owns the package."""
 
-    name = db.StringProperty()
+    name = db.StringProperty(required=True)
     """The name of the package."""
 
-    created = db.DateTimeProperty(auto_now_add = True)
+    created = db.DateTimeProperty(auto_now_add=True)
     """When the package was created."""
 
-    updated = db.DateTimeProperty(auto_now = True)
+    updated = db.DateTimeProperty(auto_now=True)
     """When the package or any of its versions were last updated."""
 
     def __init__(self, *args, **kwargs):

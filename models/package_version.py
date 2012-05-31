@@ -12,15 +12,16 @@ class PackageVersion(db.Model):
     the package.
     """
 
-    version = db.StringProperty()
+    version = db.StringProperty(required=True)
     """The version of the package, a valid semantic version."""
 
     created = db.DateTimeProperty(auto_now_add=True)
     """When this package version was created."""
 
-    contents = db.BlobProperty()
+    contents = db.BlobProperty(required=True)
     """The blob of code for this package version, a gzipped tar file."""
 
     package = db.ReferenceProperty(Package,
+                                   required=True,
                                    collection_name = "package_version_set")
     """The Package model for this package version."""
