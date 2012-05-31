@@ -53,6 +53,14 @@ def flash(message):
     cherrypy.response.cookie['flash'] = message
     cherrypy.response.cookie['flash']['path'] = '/'
 
+def http_error(status, message):
+    """Throw an HTTP error.
+
+    This raises a cherrypy.HTTPError after ensuring that the error message is a
+    str object and not a unicode object.
+    """
+    raise cherrypy.HTTPError(status, message.encode('utf-8'))
+
 def handle_validation_errors(fn):
     """Convert validation errors into user-friendly behavior.
 
@@ -129,9 +137,8 @@ class Request(object):
         else:
             package_name = self.request.params['package_id']
         if not package_name:
-            raise cherrypy.HTTPError(403, "No package name found.")
+            http_error(403, "No package name found.")
 
         self._package = Package.get_by_key_name(package_name)
         if self._package: return self._package
-        raise cherrypy.HTTPError(
-            404, "Package \"%s\" doesn't exist." % package_name)
+        http_error(404, "Package \"%s\" doesn't exist." % package_name)
