@@ -8,6 +8,7 @@ import os
 
 import cherrypy
 from google.appengine.api import users
+from google.appengine.ext import db
 import pystache
 import routes
 
@@ -51,6 +52,31 @@ def flash(message):
     the user. Redirects and error pages will not clear the message."""
     cherrypy.response.cookie['flash'] = message
     cherrypy.response.cookie['flash']['path'] = '/'
+
+def handle_validation_errors(fn):
+    """Convert validation errors into user-friendly behavior.
+
+    This is a decorator that catches validation errors for models, displays them
+    in the flash text, and redirects the user back to the create or edit page
+    for said models.
+    """
+
+    def wrapped(*args, **kwargs):
+        try: fn(*args, **kwargs)
+        except (db.BadKeyError, db.BadValueError) as err:
+            flash(err)
+
+            new_action = 'index'
+            if request().route['action'] == 'create':
+                new_action = 'new'
+            elif request().route['action'] == 'update':
+                new_action = 'edit'
+
+            # TODO(nweiz): auto-fill the form values from
+            # cherrypy.request.params
+            raise cherrypy.HTTPRedirect(request().url(action=new_action))
+
+    return wrapped
 
 def request():
     """Return the current Request instance."""
