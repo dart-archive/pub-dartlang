@@ -4,11 +4,13 @@
 
 from testcase import TestCase
 from models.package import Package
+from models.package_version import PackageVersion
 
 class PackageVersionsTest(TestCase):
     def setUp(self):
         super(PackageVersionsTest, self).setUp()
-        Package(name='test-package', owner=self.adminUser()).put()
+        self.package = Package(name='test-package', owner=self.adminUser())
+        self.package.put()
 
     def testNewRequiresLogin(self):
         response = self.testapp.get('/packages/test-package/versions/new')
@@ -22,3 +24,55 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(response.headers['Location'],
                          'http://localhost:80/packages/test-package')
         self.assertTrue(response.cookies_set.has_key('flash'))
+
+    def testOwnerCreatesPackageVersion(self):
+        self.beAdminUser()
+
+        get_response = self.testapp.get('/packages/test-package/versions/new')
+        self.assertEqual(get_response.status_int, 200)
+        form = get_response.form
+        self.assertEqual(form.action, '/packages/test-package/versions')
+        self.assertEqual(form.method, 'POST')
+
+        form['version'] = '1.2.3'
+        form['file'] = ('test-package.tar.gz', 'test-package contents')
+        post_response = form.submit()
+
+        self.assertEqual(post_response.status_int, 302)
+        self.assertEqual(
+            post_response.headers['Location'],
+            'http://localhost:80/packages/test-package/versions/1.2.3')
+        self.assertTrue(post_response.cookies_set.has_key('flash'))
+
+        version = PackageVersion.get_by_key_name('test-package 1.2.3')
+        self.assertTrue(version is not None)
+        self.assertEqual(version.version, '1.2.3')
+        self.assertEqual(version.package.name, 'test-package')
+
+    def testCreateRequiresOwner(self):
+        self.beNormalUser()
+        upload = ('file', 'test-package.tar.gz', 'test-package contents')
+        response = self.testapp.post(
+            '/packages/test-package/versions', {'version': '1.2.3'},
+            upload_files=[upload], status=403)
+        self.assertErrorPage(response)
+
+    def testCreateRequiresNewVersionNumber(self):
+        self.beAdminUser()
+        PackageVersion(
+            version='1.2.3',
+            contents='old test-package contents',
+            package=self.package).put()
+
+        upload = ('file', 'test-package.tar.gz', 'new test-package contents')
+        response = self.testapp.post(
+            '/packages/test-package/versions', {'version': '1.2.3'},
+            upload_files=[upload])
+        self.assertEqual(response.status_int, 302)
+        self.assertEqual(
+            response.headers['Location'],
+            'http://localhost:80/packages/test-package/versions/new')
+        self.assertTrue(response.cookies_set.has_key('flash'))
+
+        version = PackageVersion.get_by_key_name('test-package 1.2.3')
+        self.assertEqual(version.contents, 'old test-package contents')

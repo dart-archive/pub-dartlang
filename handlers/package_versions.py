@@ -4,10 +4,12 @@
 
 import cherrypy
 import routes
+from google.appengine.ext import db
 from google.appengine.api import users
 
 import handlers
 from models.package import Package
+from models.package_version import PackageVersion
 
 class PackageVersions(object):
     """The handler for packages/*/versions/*.
@@ -35,3 +37,35 @@ class PackageVersions(object):
                                action=handlers.request().url(action='create'),
                                package=package)
 
+    @handlers.handle_validation_errors
+    def create(self, package_id, version, file):
+        """Create a package version.
+
+        If the user doesn't own the package, this will return a 403 error. If
+        the package already has a version with this number, or if the version is
+        invalid, this will redirect to the new version form.
+        """
+
+        package = handlers.request().package
+        if not package.owner == users.get_current_user():
+            handlers.http_error(
+                403, "You don't own package '%s'" % package.name)
+
+        failure_url = '/packages/%s/versions/new' % package.name
+        if package.has_version(version):
+            handlers.flash('Package "%s" already has version "%s".' %
+                           (package.name, version))
+            raise cherrypy.HTTPRedirect(failure_url)
+
+        if not file.file:
+            handlers.flash('No package uploaded.')
+            raise cherrypy.HTTPRedirect(failure_url)
+
+        PackageVersion(
+            version = version,
+            package = package,
+            contents = db.Blob(file.file.read())).put()
+
+        handlers.flash('%s %s created successfully.' % (package.name, version))
+        raise cherrypy.HTTPRedirect(
+            '/packages/%s/versions/%s' % (package.name, version))
