@@ -6,6 +6,7 @@ CherryPy   - in third_party/cherrypy
 Pystache   - in third_party/pystache
 Routes     - in third_party/routes
 repoze.lru - in third_party/repoze/lru
+decorator  - in third_party/decorator.py
 
 The libraries may have their own licenses; we recommend you read them,
 as their terms may differ from the terms below.
