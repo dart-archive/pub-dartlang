@@ -7,6 +7,7 @@
 import os
 
 import cherrypy
+from decorator import decorator
 from google.appengine.api import users
 from google.appengine.ext import db
 import pystache
@@ -61,7 +62,8 @@ def http_error(status, message):
     """
     raise cherrypy.HTTPError(status, message.encode('utf-8'))
 
-def handle_validation_errors(fn):
+@decorator
+def handle_validation_errors(fn, *args, **kwargs):
     """Convert validation errors into user-friendly behavior.
 
     This is a decorator that catches validation errors for models, displays them
@@ -69,22 +71,19 @@ def handle_validation_errors(fn):
     for said models.
     """
 
-    def wrapped(*args, **kwargs):
-        try: fn(*args, **kwargs)
-        except (db.BadKeyError, db.BadValueError) as err:
-            flash(err)
+    try: fn(*args, **kwargs)
+    except (db.BadKeyError, db.BadValueError) as err:
+        flash(err)
 
-            new_action = 'index'
-            if request().route['action'] == 'create':
-                new_action = 'new'
-            elif request().route['action'] == 'update':
-                new_action = 'edit'
+        new_action = 'index'
+        if request().route['action'] == 'create':
+            new_action = 'new'
+        elif request().route['action'] == 'update':
+            new_action = 'edit'
 
-            # TODO(nweiz): auto-fill the form values from
-            # cherrypy.request.params
-            raise cherrypy.HTTPRedirect(request().url(action=new_action))
-
-    return wrapped
+        # TODO(nweiz): auto-fill the form values from
+        # cherrypy.request.params
+        raise cherrypy.HTTPRedirect(request().url(action=new_action))
 
 def request():
     """Return the current Request instance."""
