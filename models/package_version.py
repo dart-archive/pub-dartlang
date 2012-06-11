@@ -39,7 +39,7 @@ class PackageVersion(db.Model):
 
     package = db.ReferenceProperty(Package,
                                    required=True,
-                                   collection_name = "package_version_set")
+                                   collection_name = "version_set")
     """The Package model for this package version."""
 
     def __init__(self, *args, **kwargs):

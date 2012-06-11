@@ -54,13 +54,14 @@ def flash(message):
     cherrypy.response.cookie['flash'] = message
     cherrypy.response.cookie['flash']['path'] = '/'
 
-def http_error(status, message):
+def http_error(status, message=None):
     """Throw an HTTP error.
 
     This raises a cherrypy.HTTPError after ensuring that the error message is a
     str object and not a unicode object.
     """
-    raise cherrypy.HTTPError(status, message.encode('utf-8'))
+    if message: message = message.encode('utf-8')
+    raise cherrypy.HTTPError(status, message)
 
 @decorator
 def handle_validation_errors(fn, *args, **kwargs):

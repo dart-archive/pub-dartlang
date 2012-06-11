@@ -2,6 +2,8 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+import json
+
 import cherrypy
 from google.appengine.api import users
 
@@ -68,9 +70,20 @@ class Packages(object):
 
         return handlers.render("packages/new")
 
-    def show(self, id):
+    def show(self, id, format='html'):
         """Retrieve the page describing a specific package."""
-        package = handlers.request().package
-        return handlers.render(
-            "packages/show", package = package,
-            is_owner = package.owner == users.get_current_user())
+        if format == 'json':
+            package = handlers.request().package
+            cherrypy.response.headers['Content-Type'] = 'application/json'
+            return json.dumps({
+                "name": package.name,
+                "owner": package.owner.email(),
+                "versions": [version.version for version in package.version_set]
+            })
+        elif format is 'html':
+            package = handlers.request().package
+            return handlers.render(
+                "packages/show", package = package,
+                is_owner = package.owner == users.get_current_user())
+        else:
+            raise handlers.http_error(404)
