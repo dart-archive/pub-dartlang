@@ -4,6 +4,11 @@
 
 <h2>{{package.name}}</h2>
 <h3>Owned by {{package.owner.nickname}}</h3>
+<ul>
+  {{#versions}}
+    <li>{{version}}</li>
+  {{/versions}}
+</ul>
 {{#is_owner}}
   <p><a href="/packages/{{package.name}}/versions/new">Add Version</a></p>
 {{/is_owner}}
