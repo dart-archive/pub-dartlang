@@ -76,3 +76,18 @@ class PackageVersionsTest(TestCase):
 
         version = PackageVersion.get_by_key_name('test-package 1.2.3')
         self.assertEqual(version.contents, 'old test-package contents')
+
+    def testShowPackageVersionTarGz(self):
+        PackageVersion(
+            owner=self.adminUser(),
+            version='1.2.3',
+            contents='test-package contents',
+            package=self.package).put()
+
+        response = self.testapp.get(
+            '/packages/test-package/versions/1.2.3.tar.gz')
+        self.assertEqual(response.headers['Content-Type'],
+                         'application/octet-stream')
+        self.assertEqual(response.headers['Content-Disposition'],
+                         'attachment; filename=test-package-1.2.3.tar.gz')
+        self.assertEqual(response.body, 'test-package contents')
