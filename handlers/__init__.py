@@ -14,6 +14,7 @@ import pystache
 import routes
 
 from models.package import Package
+from models.package_version import PackageVersion
 
 _renderer = pystache.Renderer(search_dirs = [
         os.path.join(os.path.dirname(__file__), '../views')])
@@ -99,6 +100,7 @@ class Request(object):
         self.request = request
         self._route = None
         self._package = None
+        self._package_version = None
 
     def url(self, **kwargs):
         """Construct a URL for a given set of parametters.
@@ -142,3 +144,22 @@ class Request(object):
         self._package = Package.get_by_key_name(package_name)
         if self._package: return self._package
         http_error(404, "Package \"%s\" doesn't exist." % package_name)
+
+    def package_version(self, version):
+        """Load the current package version object.
+
+        This auto-detects the package name from the request parameters. If the
+        package version doesn't exist, throws a 404 error.
+        """
+
+        if self._package_version: return self._package_version
+
+        package_name = self.request.params['package_id']
+        if not package_name:
+            http_error(403, "No package name found.")
+
+        self._package_version = PackageVersion.get_by_name_and_version(
+            package_name, version)
+        if self._package_version: return self._package_version
+        http_error(404, "\"%s\" version %s doesn't exist." %
+                   (package_name, version))

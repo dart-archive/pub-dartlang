@@ -69,3 +69,25 @@ class PackageVersions(object):
         handlers.flash('%s %s created successfully.' % (package.name, version))
         raise cherrypy.HTTPRedirect(
             '/packages/%s/versions/%s' % (package.name, version))
+
+    def show(self, package_id, id, format):
+        """Retrieve the page describing a package version.
+
+        Depending on the format, this could be a user-readable webpage (.html),
+        a machine-readable JSON document (.json), or a download of the actual
+        package blob (.tar.gz).
+        """
+
+        # The built-in format parsing has trouble with versions since they
+        # contain periods, so we have to undo it and apply our own.
+        id = '%s.%s' % (id, format)
+        if id.endswith('.tar.gz'):
+            id = id[0:-len('.tar.gz')]
+            version = handlers.request().package_version(id)
+            cherrypy.response.headers['Content-Type'] = \
+                'application/octet-stream';
+            cherrypy.response.headers['Content-Disposition'] = \
+                'attachment; filename=%s-%s.tar.gz' % (package_id, id)
+            return version.contents
+        else:
+            handlers.http_error(404)
