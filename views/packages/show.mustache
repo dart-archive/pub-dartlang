@@ -6,7 +6,10 @@
 <h3>Owned by {{package.owner.nickname}}</h3>
 <ul>
   {{#versions}}
-    <li>{{version}}</li>
+    <li>
+      {{version}}
+      (<a href="{{download_url}}">Download</a>)
+    </li>
   {{/versions}}
 </ul>
 {{#is_owner}}

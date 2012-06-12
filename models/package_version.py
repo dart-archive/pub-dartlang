@@ -59,3 +59,8 @@ class PackageVersion(db.Model):
     def get_by_name_and_version(cls, package_name, version):
         """Looks up a package version by its package name and version."""
         return cls.get_by_key_name("%s %s" % (package_name, version))
+
+    @property
+    def download_url(self):
+        return "/packages/%s/versions/%s.tar.gz" % \
+            (self.package.name, self.version)
