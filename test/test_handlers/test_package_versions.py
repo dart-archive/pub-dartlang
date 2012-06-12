@@ -41,7 +41,7 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(post_response.status_int, 302)
         self.assertEqual(
             post_response.headers['Location'],
-            'http://localhost:80/packages/test-package/versions/1.2.3')
+            'http://localhost:80/packages/test-package')
         self.assertTrue(post_response.cookies_set.has_key('flash'))
 
         version = PackageVersion.get_by_key_name('test-package 1.2.3')

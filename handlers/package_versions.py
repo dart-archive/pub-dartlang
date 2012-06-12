@@ -67,8 +67,7 @@ class PackageVersions(object):
             contents = db.Blob(file.file.read())).put()
 
         handlers.flash('%s %s created successfully.' % (package.name, version))
-        raise cherrypy.HTTPRedirect(
-            '/packages/%s/versions/%s' % (package.name, version))
+        raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
 
     def show(self, package_id, id, format):
         """Retrieve the page describing a package version.
