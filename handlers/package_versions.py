@@ -38,7 +38,7 @@ class PackageVersions(object):
                                package=package)
 
     @handlers.handle_validation_errors
-    def create(self, package_id, version, file):
+    def create(self, package_id, file):
         """Create a package version.
 
         If the user doesn't own the package, this will return a 403 error. If
@@ -51,22 +51,24 @@ class PackageVersions(object):
             handlers.http_error(
                 403, "You don't own package '%s'" % package.name)
 
-        failure_url = '/packages/%s/versions/new' % package.name
-        if package.has_version(version):
-            handlers.flash('Package "%s" already has version "%s".' %
-                           (package.name, version))
-            raise cherrypy.HTTPRedirect(failure_url)
-
         if not file.file:
             handlers.flash('No package uploaded.')
             raise cherrypy.HTTPRedirect(failure_url)
 
-        PackageVersion(
-            version = version,
+        version = PackageVersion(
             package = package,
-            contents_file = file.file).put()
+            contents_file = file.file)
 
-        handlers.flash('%s %s created successfully.' % (package.name, version))
+        failure_url = '/packages/%s/versions/new' % package.name
+        if package.has_version(version.version):
+            handlers.flash('Package "%s" already has version "%s".' %
+                           (package.name, version.version))
+            raise cherrypy.HTTPRedirect(failure_url)
+
+        version.put()
+
+        handlers.flash('%s %s created successfully.' %
+                       (package.name, version.version))
         raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
 
     def show(self, package_id, id, format):

@@ -54,13 +54,21 @@ class PackageVersion(db.Model):
         explicitly, it requires that the version and package keys be passed in.
         """
 
+        if 'contents_file' in kwargs:
+            self.pubspec = self._parse_contents(kwargs['contents_file'])
+            kwargs['contents'] = db.Blob(kwargs['contents_file'].read())
+            kwargs['pubspec'] = self.pubspec
+
+            kwargs['version'] = self._required_pubspec_value('version')
+            name_in_pubspec = self._required_pubspec_value('name')
+            if name_in_pubspec != kwargs['package'].name:
+                raise db.BadValueError(
+                    'Name "%s" in pubspec doesn\'t match package name "%s"' %
+                    (name_in_pubspec, kwargs['package'].name))
+
         if not 'key_name' in kwargs and not 'key' in kwargs:
             kwargs['key_name'] = \
                 "%s %s" % (kwargs['package'].name, kwargs['version'])
-
-        if 'contents_file' in kwargs:
-            kwargs['pubspec'] = self._parse_contents(kwargs['contents_file'])
-            kwargs['contents'] = db.Blob(kwargs['contents_file'].read())
 
         super(PackageVersion, self).__init__(*args, **kwargs)
 
@@ -89,3 +97,9 @@ class PackageVersion(db.Model):
                 "Error parsing package archive: %s" % err)
         except yaml.YAMLError as err:
             raise db.BadValueError("Error parsing pubspec: %s" % err)
+
+    def _required_pubspec_value(self, key):
+        """Assert a value in the pubspec exists and return it."""
+        if key not in self.pubspec:
+            raise db.BadValueError("Pubspec is missing key %r" % key)
+        return self.pubspec[key]
