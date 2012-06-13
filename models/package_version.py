@@ -55,23 +55,21 @@ class PackageVersion(db.Model):
         """
 
         if 'contents_file' in kwargs:
-            kwargs['pubspec'] = self._parse_contents(kwargs['contents_file'])
-            kwargs['contents'] = db.Blob(kwargs['contents_file'].read())
+            file = kwargs['contents_file']
+            if 'pubspec' not in kwargs:
+                kwargs['pubspec'] = self._parse_contents(file)
+            kwargs['contents'] = db.Blob(file.read())
 
+        if 'pubspec' in kwargs and 'version' not in kwargs:
             kwargs['version'] = self._required_pubspec_value(
                 kwargs['pubspec'], 'version')
-            name_in_pubspec = self._required_pubspec_value(
-                kwargs['pubspec'], 'name')
-            if name_in_pubspec != kwargs['package'].name:
-                raise db.BadValueError(
-                    'Name "%s" in pubspec doesn\'t match package name "%s"' %
-                    (name_in_pubspec, kwargs['package'].name))
 
         if not 'key_name' in kwargs and not 'key' in kwargs:
             kwargs['key_name'] = \
                 "%s %s" % (kwargs['package'].name, kwargs['version'])
 
         super(PackageVersion, self).__init__(*args, **kwargs)
+        self._validate_fields_match_pubspec()
 
     @classmethod
     def get_by_name_and_version(cls, package_name, version):
@@ -108,3 +106,19 @@ class PackageVersion(db.Model):
         if key not in pubspec:
             raise db.BadValueError("Pubspec is missing key %r" % key)
         return pubspec[key]
+
+    def _validate_fields_match_pubspec(self):
+        """Assert that the fields in the pubspec match this object's fields."""
+
+        name_in_pubspec = self._required_pubspec_value(self.pubspec, 'name')
+        if name_in_pubspec != self.package.name:
+            raise db.BadValueError(
+                'Name "%s" in pubspec doesn\'t match package name "%s"' %
+                (name_in_pubspec, self.package.name))
+
+        version_in_pubspec = self._required_pubspec_value(
+            self.pubspec, 'version')
+        if version_in_pubspec != self.version:
+            raise db.BadValueError(
+                'Version "%s" in pubspec doesn\'t match version "%s"' %
+                (name_in_pubspec, self.version))
