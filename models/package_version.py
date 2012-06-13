@@ -62,5 +62,6 @@ class PackageVersion(db.Model):
 
     @property
     def download_url(self):
+        """The URL for downloading this package."""
         return "/packages/%s/versions/%s.tar.gz" % \
             (self.package.name, self.version)
