@@ -64,7 +64,7 @@ class PackageVersions(object):
         PackageVersion(
             version = version,
             package = package,
-            contents = db.Blob(file.file.read())).put()
+            contents_file = file.file).put()
 
         handlers.flash('%s %s created successfully.' % (package.name, version))
         raise cherrypy.HTTPRedirect('/packages/%s' % package.name)

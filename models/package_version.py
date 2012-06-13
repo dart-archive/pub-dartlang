@@ -3,10 +3,13 @@
 # BSD-style license that can be found in the LICENSE file.
 
 import re
+import tarfile
 
 from google.appengine.ext import db
+import yaml
 
 from package import Package
+from properties import DocumentProperty
 
 class PackageVersion(db.Model):
     """The model for a single version of a package.
@@ -37,6 +40,8 @@ class PackageVersion(db.Model):
     contents = db.BlobProperty(required=True)
     """The blob of code for this package version, a gzipped tar file."""
 
+    pubspec = DocumentProperty(required=True, indexed=False)
+
     package = db.ReferenceProperty(Package,
                                    required=True,
                                    collection_name = "version_set")
@@ -53,6 +58,10 @@ class PackageVersion(db.Model):
             kwargs['key_name'] = \
                 "%s %s" % (kwargs['package'].name, kwargs['version'])
 
+        if 'contents_file' in kwargs:
+            kwargs['pubspec'] = self._parse_contents(kwargs['contents_file'])
+            kwargs['contents'] = db.Blob(kwargs['contents_file'].read())
+
         super(PackageVersion, self).__init__(*args, **kwargs)
 
     @classmethod
@@ -65,3 +74,18 @@ class PackageVersion(db.Model):
         """The URL for downloading this package."""
         return "/packages/%s/versions/%s.tar.gz" % \
             (self.package.name, self.version)
+
+    def _parse_contents(self, file):
+        """Extract and return the parsed pubspec from the package archive.
+
+        After consuming the file, this puts the cursor back at the beginning."""
+        try:
+            tar = tarfile.open(mode="r:gz", fileobj=file)
+            pubspec = yaml.load(tar.extractfile("pubspec.yaml").read())
+            file.seek(0)
+            return pubspec
+        except (tarfile.TarError, KeyError) as err:
+            raise db.BadValueError(
+                "Error parsing package archive: %s" % err)
+        except yaml.YAMLError as err:
+            raise db.BadValueError("Error parsing pubspec: %s" % err)
