@@ -84,7 +84,8 @@ class Packages(object):
             package = handlers.request().package
             return handlers.render(
                 "packages/show", package = package,
-                versions = package.version_set.get(),
+                # TODO(nweiz): paginate
+                versions = package.version_set.fetch(10),
                 is_owner = package.owner == users.get_current_user())
         else:
             raise handlers.http_error(404)
