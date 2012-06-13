@@ -9,7 +9,7 @@ from models.package import Package
 
 class PackageVersionTest(TestCase):
     def testVersionMatchesSemver(self):
-        package = Package(name='test-package', owner=self.adminUser())
+        package = Package.new(name='test-package', owner=self.adminUser())
         package.put()
 
         def assertValidSemver(version):

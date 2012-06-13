@@ -64,7 +64,7 @@ class PackagesTest(TestCase):
         self.beAdminUser()
 
         other_admin = self.adminUser('other')
-        Package(name='test-package', owner=other_admin).put()
+        Package.new(name='test-package', owner=other_admin).put()
 
         response = self.testapp.post('/packages', {'name': 'test-package'})
         self.assertEqual(response.status_int, 302)
@@ -78,11 +78,11 @@ class PackagesTest(TestCase):
     def testIndexListsPackagesInUpdateOrder(self):
         self.beAdminUser()
 
-        Package(name='armadillo').put()
-        Package(name='zebra').put()
-        mongoose = Package(name='mongoose')
+        Package.new(name='armadillo').put()
+        Package.new(name='zebra').put()
+        mongoose = Package.new(name='mongoose')
         mongoose.put()
-        Package(name='snail').put()
+        Package.new(name='snail').put()
 
         # Make update time different than create time
         mongoose.put()
@@ -92,18 +92,18 @@ class PackagesTest(TestCase):
     def testIndexListsOnePageOfPackages(self):
         self.beAdminUser()
 
-        Package(name='armadillo').put()
-        Package(name='bat').put()
-        Package(name='crocodile').put()
-        Package(name='dragon').put()
-        Package(name='elephant').put()
-        Package(name='frog').put()
-        Package(name='gorilla').put()
-        Package(name='headcrab').put()
-        Package(name='ibex').put()
-        Package(name='jaguar').put()
-        Package(name='kangaroo').put()
-        Package(name='llama').put()
+        Package.new(name='armadillo').put()
+        Package.new(name='bat').put()
+        Package.new(name='crocodile').put()
+        Package.new(name='dragon').put()
+        Package.new(name='elephant').put()
+        Package.new(name='frog').put()
+        Package.new(name='gorilla').put()
+        Package.new(name='headcrab').put()
+        Package.new(name='ibex').put()
+        Package.new(name='jaguar').put()
+        Package.new(name='kangaroo').put()
+        Package.new(name='llama').put()
 
         # Only the ten most recent packages should be listed
         self.expectListsPackages([
@@ -115,7 +115,7 @@ class PackagesTest(TestCase):
 
     def testGetUnownedPackage(self):
         self.beAdminUser()
-        Package(name='test-package').put()
+        Package.new(name='test-package').put()
 
         self.beNormalUser()
         response = self.testapp.get('/packages/test-package')
@@ -123,14 +123,14 @@ class PackagesTest(TestCase):
 
     def testGetOwnedPackage(self):
         self.beAdminUser()
-        Package(name='test-package').put()
+        Package.new(name='test-package').put()
 
         response = self.testapp.get('/packages/test-package')
         self.assertLink(response, '/packages/test-package/versions/new')
 
     def testGetPackageJsonWithoutVersions(self):
         admin = self.adminUser()
-        Package(name='test-package', owner=admin).put()
+        Package.new(name='test-package', owner=admin).put()
 
         response = self.testapp.get('/packages/test-package.json')
         self.assertEqual(response.headers['Content-Type'], 'application/json')
@@ -142,7 +142,7 @@ class PackagesTest(TestCase):
 
     def testGetPackageJsonWithVersions(self):
         admin = self.adminUser()
-        package = Package(name='test-package', owner=admin)
+        package = Package.new(name='test-package', owner=admin)
         package.put()
 
         self.packageVersion(package, '1.1.0').put()

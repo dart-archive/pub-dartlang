@@ -50,7 +50,7 @@ class Packages(object):
             handlers.flash('A package named "%s" already exists.' % name)
             raise cherrypy.HTTPRedirect('/packages/new')
 
-        Package(name = name).put()
+        Package.new(name = name).put()
         handlers.flash('Package "%s" created successfully.' % name)
         # TODO(nweiz): redirect to actual package page
         raise cherrypy.HTTPRedirect('/packages')

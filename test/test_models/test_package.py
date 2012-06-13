@@ -7,13 +7,13 @@ from models.package import Package
 
 class PackageTest(TestCase):
     def testExists(self):
-        Package(name='test-package', owner=self.adminUser()).put()
+        Package.new(name='test-package', owner=self.adminUser()).put()
 
         self.assertTrue(Package.exists('test-package'))
         self.assertFalse(Package.exists('other-package'))
 
     def testHasVersion(self):
-        package = Package(name='test-package', owner=self.adminUser())
+        package = Package.new(name='test-package', owner=self.adminUser())
         package.put()
         self.packageVersion(package, '1.2.3').put()
 

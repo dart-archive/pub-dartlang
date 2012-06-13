@@ -24,17 +24,19 @@ class Package(db.Model):
     updated = db.DateTimeProperty(auto_now=True)
     """When the package or any of its versions were last updated."""
 
-    def __init__(self, *args, **kwargs):
+    @classmethod
+    def new(cls, **kwargs):
         """Construct a new package.
 
-        This automatically sets the key name of the model to the name field,
-        in order to ensure that each package has a unique name.
+        Unlike __init__, this infers some properties from others. In particular:
+
+        - The key name is inferred from the package name.
         """
 
         if not 'key_name' in kwargs and not 'key' in kwargs:
             kwargs['key_name'] = kwargs['name']
 
-        super(Package, self).__init__(*args, **kwargs)
+        return cls(**kwargs)
 
     def has_version(self, version):
         """Determine whether this package has a given version uploaded."""

@@ -135,7 +135,7 @@ class TestCase(unittest.TestCase):
         """
         pubspec = {'name': package.name, 'version': version}
         pubspec.update(additional_pubspec_fields)
-        return PackageVersion(
+        return PackageVersion.new(
             version=version,
             package=package,
             pubspec=pubspec,

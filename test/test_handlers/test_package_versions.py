@@ -9,7 +9,7 @@ from models.package_version import PackageVersion
 class PackageVersionsTest(TestCase):
     def setUp(self):
         super(PackageVersionsTest, self).setUp()
-        self.package = Package(name='test-package', owner=self.adminUser())
+        self.package = Package.new(name='test-package', owner=self.adminUser())
         self.package.put()
 
     def testNewRequiresLogin(self):

@@ -47,29 +47,34 @@ class PackageVersion(db.Model):
                                    collection_name = "version_set")
     """The Package model for this package version."""
 
-    def __init__(self, *args, **kwargs):
+    @classmethod
+    def new(cls, **kwargs):
         """Construct a new package version.
 
-        This automatically sets the key name of the model. Unless the key is set
-        explicitly, it requires that the version and package keys be passed in.
+        Unlike __init__, this infers some properties from others. In particular:
+
+        - The pubspec is loaded from contents_file, if provided.
+        - The version is inferred from the pubspec.
+        - The key name is inferred from the package name and version.
         """
 
         if 'contents_file' in kwargs:
             file = kwargs['contents_file']
             if 'pubspec' not in kwargs:
-                kwargs['pubspec'] = self._parse_contents(file)
+                kwargs['pubspec'] = _parse_contents(file)
             kwargs['contents'] = db.Blob(file.read())
 
         if 'pubspec' in kwargs and 'version' not in kwargs:
-            kwargs['version'] = self._required_pubspec_value(
+            kwargs['version'] = _required_pubspec_value(
                 kwargs['pubspec'], 'version')
 
         if not 'key_name' in kwargs and not 'key' in kwargs:
             kwargs['key_name'] = \
                 "%s %s" % (kwargs['package'].name, kwargs['version'])
 
-        super(PackageVersion, self).__init__(*args, **kwargs)
-        self._validate_fields_match_pubspec()
+        version = cls(**kwargs)
+        version._validate_fields_match_pubspec()
+        return version
 
     @classmethod
     def get_by_name_and_version(cls, package_name, version):
@@ -82,43 +87,42 @@ class PackageVersion(db.Model):
         return "/packages/%s/versions/%s.tar.gz" % \
             (self.package.name, self.version)
 
-    def _parse_contents(self, file):
-        """Extract and return the parsed pubspec from the package archive.
-
-        After consuming the file, this puts the cursor back at the beginning."""
-        try:
-            tar = tarfile.open(mode="r:gz", fileobj=file)
-            pubspec = yaml.load(tar.extractfile("pubspec.yaml").read())
-            if not isinstance(pubspec, dict):
-                raise db.BadValueError(
-                    "Invalid pubspec, expected mapping at top level, was %s" %
-                    pubspec)
-            file.seek(0)
-            return pubspec
-        except (tarfile.TarError, KeyError) as err:
-            raise db.BadValueError(
-                "Error parsing package archive: %s" % err)
-        except yaml.YAMLError as err:
-            raise db.BadValueError("Error parsing pubspec: %s" % err)
-
-    def _required_pubspec_value(self, pubspec, key):
-        """Assert a value in the pubspec exists and return it."""
-        if key not in pubspec:
-            raise db.BadValueError("Pubspec is missing key %r" % key)
-        return pubspec[key]
-
     def _validate_fields_match_pubspec(self):
         """Assert that the fields in the pubspec match this object's fields."""
 
-        name_in_pubspec = self._required_pubspec_value(self.pubspec, 'name')
+        name_in_pubspec = _required_pubspec_value(self.pubspec, 'name')
         if name_in_pubspec != self.package.name:
             raise db.BadValueError(
                 'Name "%s" in pubspec doesn\'t match package name "%s"' %
                 (name_in_pubspec, self.package.name))
 
-        version_in_pubspec = self._required_pubspec_value(
-            self.pubspec, 'version')
+        version_in_pubspec = _required_pubspec_value(self.pubspec, 'version')
         if version_in_pubspec != self.version:
             raise db.BadValueError(
                 'Version "%s" in pubspec doesn\'t match version "%s"' %
                 (name_in_pubspec, self.version))
+
+def _parse_contents(file):
+    """Extract and return the parsed pubspec from the package archive.
+
+    After consuming the file, this puts the cursor back at the beginning."""
+    try:
+        tar = tarfile.open(mode="r:gz", fileobj=file)
+        pubspec = yaml.load(tar.extractfile("pubspec.yaml").read())
+        if not isinstance(pubspec, dict):
+            raise db.BadValueError(
+                "Invalid pubspec, expected mapping at top level, was %s" %
+                pubspec)
+        file.seek(0)
+        return pubspec
+    except (tarfile.TarError, KeyError) as err:
+        raise db.BadValueError(
+            "Error parsing package archive: %s" % err)
+    except yaml.YAMLError as err:
+        raise db.BadValueError("Error parsing pubspec: %s" % err)
+
+def _required_pubspec_value(pubspec, key):
+    """Assert a value in the pubspec exists and return it."""
+    if key not in pubspec:
+        raise db.BadValueError("Pubspec is missing key %r" % key)
+    return pubspec[key]

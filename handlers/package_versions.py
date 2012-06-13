@@ -55,7 +55,7 @@ class PackageVersions(object):
             handlers.flash('No package uploaded.')
             raise cherrypy.HTTPRedirect(failure_url)
 
-        version = PackageVersion(
+        version = PackageVersion.new(
             package = package,
             contents_file = file.file)
 
