@@ -55,7 +55,8 @@ class PackageVersion(db.Model):
 
         - The pubspec is loaded from contents_file, if provided.
         - The version is inferred from the pubspec.
-        - The key name is inferred from the package name and version.
+        - The key name is set to the version.
+        - The parent entity is set to the package.
         """
 
         if 'contents_file' in kwargs:
@@ -69,8 +70,10 @@ class PackageVersion(db.Model):
                 kwargs['pubspec'], 'version')
 
         if not 'key_name' in kwargs and not 'key' in kwargs:
-            kwargs['key_name'] = \
-                "%s %s" % (kwargs['package'].name, kwargs['version'])
+            kwargs['key_name'] = kwargs['version']
+
+        if not 'parent' in kwargs:
+            kwargs['parent'] = kwargs['package']
 
         version = cls(**kwargs)
         version._validate_fields_match_pubspec()
@@ -79,7 +82,8 @@ class PackageVersion(db.Model):
     @classmethod
     def get_by_name_and_version(cls, package_name, version):
         """Looks up a package version by its package name and version."""
-        return cls.get_by_key_name("%s %s" % (package_name, version))
+        parent_key = db.Key.from_path('Package', package_name)
+        return cls.get_by_key_name(version, parent=parent_key)
 
     @property
     def download_url(self):

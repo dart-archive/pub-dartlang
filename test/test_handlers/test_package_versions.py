@@ -44,7 +44,8 @@ class PackageVersionsTest(TestCase):
             'http://localhost:80/packages/test-package')
         self.assertTrue(post_response.cookies_set.has_key('flash'))
 
-        version = PackageVersion.get_by_key_name('test-package 1.2.3')
+        version = PackageVersion.get_by_name_and_version(
+            'test-package', '1.2.3')
         self.assertTrue(version is not None)
         self.assertEqual(version.version, '1.2.3')
         self.assertEqual(version.package.name, 'test-package')
@@ -70,7 +71,8 @@ class PackageVersionsTest(TestCase):
             'http://localhost:80/packages/test-package/versions/new')
         self.assertTrue(response.cookies_set.has_key('flash'))
 
-        version = PackageVersion.get_by_key_name('test-package 1.2.3')
+        version = PackageVersion.get_by_name_and_version(
+            'test-package', '1.2.3')
         self.assertEqual(version.pubspec['description'], 'old')
 
     def testShowPackageVersionTarGz(self):

@@ -41,7 +41,7 @@ class Package(db.Model):
     def has_version(self, version):
         """Determine whether this package has a given version uploaded."""
         from package_version import PackageVersion
-        version = PackageVersion.get_by_key_name("%s %s" % (self.name, version))
+        version = PackageVersion.get_by_name_and_version(self.name, version)
         return version is not None
 
     @classmethod
