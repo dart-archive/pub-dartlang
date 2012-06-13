@@ -8,7 +8,6 @@ from google.appengine.api import users
 
 from testcase import TestCase
 from models.package import Package
-from models.package_version import PackageVersion
 
 class PackagesTest(TestCase):
     def testAdminCreatesPackage(self):
@@ -146,20 +145,9 @@ class PackagesTest(TestCase):
         package = Package(name='test-package', owner=admin)
         package.put()
 
-        PackageVersion(
-            version='1.1.0',
-            contents='test-package contents 1.1.0',
-            package=package).put()
-
-        PackageVersion(
-            version='1.1.1',
-            contents='test-package contents 1.1.1',
-            package=package).put()
-
-        PackageVersion(
-            version='1.2.0',
-            contents='test-package contents 1.2.0',
-            package=package).put()
+        self.packageVersion(package, '1.1.0').put()
+        self.packageVersion(package, '1.1.1').put()
+        self.packageVersion(package, '1.2.0').put()
 
         response = self.testapp.get('/packages/test-package.json')
         self.assertEqual(response.headers['Content-Type'], 'application/json')

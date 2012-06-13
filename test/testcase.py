@@ -3,14 +3,18 @@
 # BSD-style license that can be found in the LICENSE file.
 
 import unittest
+from StringIO import StringIO
 
 import cherrypy
 import webtest
 from bs4 import BeautifulSoup
 from google.appengine.ext.testbed import Testbed
 from google.appengine.api import users
+import yaml
+import tarfile
 
 from pub_dartlang import Application
+from models.package_version import PackageVersion
 
 class TestCase(unittest.TestCase):
     """Utility methods for testing.
@@ -121,6 +125,38 @@ class TestCase(unittest.TestCase):
             user_email = self.adminUser(name).email(),
             user_is_admin = '1',
             overwrite = True)
+
+    def packageVersion(self, package, version,
+                       **additional_pubspec_fields):
+        """Create a package version object.
+
+        This constructs the package archive based on the other information
+        passed in. The archive contains only the pubspec.
+        """
+        pubspec = {'name': package.name, 'version': version}
+        pubspec.update(additional_pubspec_fields)
+        return PackageVersion(
+            version=version,
+            package=package,
+            pubspec=pubspec,
+            contents=self.tarPubspec(pubspec))
+
+    def tarPubspec(self, pubspec):
+        """Return a tarfile containing the given pubspec.
+
+        The pubspec is dumped to YAML, then placed in a tarfile. The tarfile is
+        then returned as a string.
+        """
+        tarfile_io = StringIO()
+        tar = tarfile.open(fileobj=tarfile_io, mode='w:gz')
+
+        tarinfo = tarfile.TarInfo("pubspec.yaml")
+        pubspec_io = StringIO(yaml.dump(pubspec))
+        tarinfo.size = len(pubspec_io.getvalue())
+        tar.addfile(tarinfo, pubspec_io)
+        tar.close()
+
+        return tarfile_io.getvalue()
 
     def assertRequiresLogin(self, response):
         """Assert that the given response is requesting user authentication."""

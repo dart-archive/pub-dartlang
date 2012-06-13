@@ -6,7 +6,6 @@ from google.appengine.ext import db
 
 from testcase import TestCase
 from models.package import Package
-from models.package_version import PackageVersion
 
 class PackageVersionTest(TestCase):
     def testVersionMatchesSemver(self):
@@ -15,11 +14,12 @@ class PackageVersionTest(TestCase):
 
         def assertValidSemver(version):
             # This just shouldn't raise an error
-            PackageVersion(package=package, contents="foo", version=version)
+            self.packageVersion(package, version)
 
         def assertInvalidSemver(version):
-            self.assertRaises(db.BadValueError, lambda: PackageVersion(
-                    package=package, contents="foo", version=version))
+            self.assertRaises(
+                db.BadValueError,
+                lambda: self.packageVersion(package, version))
 
         assertValidSemver("0.0.0")
         assertValidSemver("12.34.56")

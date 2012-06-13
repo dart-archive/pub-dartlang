@@ -34,8 +34,8 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(form.action, '/packages/test-package/versions')
         self.assertEqual(form.method, 'POST')
 
-        form['version'] = '1.2.3'
-        form['file'] = ('test-package.tar.gz', 'test-package contents')
+        contents = self.tarPubspec({'name': 'test-package', 'version': '1.2.3'})
+        form['file'] = ('test-package-1.2.3.tar.gz', contents)
         post_response = form.submit()
 
         self.assertEqual(post_response.status_int, 302)
@@ -51,23 +51,19 @@ class PackageVersionsTest(TestCase):
 
     def testCreateRequiresOwner(self):
         self.beNormalUser()
-        upload = ('file', 'test-package.tar.gz', 'test-package contents')
+        upload = self._upload('test-package', '1.2.3')
         response = self.testapp.post(
-            '/packages/test-package/versions', {'version': '1.2.3'},
-            upload_files=[upload], status=403)
+            '/packages/test-package/versions', upload_files=[upload],
+            status=403)
         self.assertErrorPage(response)
 
     def testCreateRequiresNewVersionNumber(self):
         self.beAdminUser()
-        PackageVersion(
-            version='1.2.3',
-            contents='old test-package contents',
-            package=self.package).put()
+        self.packageVersion(self.package, '1.2.3', description='old').put()
 
-        upload = ('file', 'test-package.tar.gz', 'new test-package contents')
-        response = self.testapp.post(
-            '/packages/test-package/versions', {'version': '1.2.3'},
-            upload_files=[upload])
+        upload = self._upload('test-package', '1.2.3', description='new')
+        response = self.testapp.post('/packages/test-package/versions',
+                                     upload_files=[upload])
         self.assertEqual(response.status_int, 302)
         self.assertEqual(
             response.headers['Location'],
@@ -75,14 +71,11 @@ class PackageVersionsTest(TestCase):
         self.assertTrue(response.cookies_set.has_key('flash'))
 
         version = PackageVersion.get_by_key_name('test-package 1.2.3')
-        self.assertEqual(version.contents, 'old test-package contents')
+        self.assertEqual(version.pubspec['description'], 'old')
 
     def testShowPackageVersionTarGz(self):
-        PackageVersion(
-            owner=self.adminUser(),
-            version='1.2.3',
-            contents='test-package contents',
-            package=self.package).put()
+        version = self.packageVersion(self.package, '1.2.3')
+        version.put()
 
         response = self.testapp.get(
             '/packages/test-package/versions/1.2.3.tar.gz')
@@ -90,4 +83,10 @@ class PackageVersionsTest(TestCase):
                          'application/octet-stream')
         self.assertEqual(response.headers['Content-Disposition'],
                          'attachment; filename=test-package-1.2.3.tar.gz')
-        self.assertEqual(response.body, 'test-package contents')
+        self.assertEqual(response.body, self.tarPubspec(version.pubspec))
+
+    def _upload(self, name, version, **additional_pubspec_fields):
+        pubspec = {'name': name, 'version': version}
+        pubspec.update(additional_pubspec_fields)
+        contents = self.tarPubspec(pubspec)
+        return ('file', '%s-%s.tar.gz' % (name, version), contents)

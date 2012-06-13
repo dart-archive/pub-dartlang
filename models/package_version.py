@@ -55,12 +55,13 @@ class PackageVersion(db.Model):
         """
 
         if 'contents_file' in kwargs:
-            self.pubspec = self._parse_contents(kwargs['contents_file'])
+            kwargs['pubspec'] = self._parse_contents(kwargs['contents_file'])
             kwargs['contents'] = db.Blob(kwargs['contents_file'].read())
-            kwargs['pubspec'] = self.pubspec
 
-            kwargs['version'] = self._required_pubspec_value('version')
-            name_in_pubspec = self._required_pubspec_value('name')
+            kwargs['version'] = self._required_pubspec_value(
+                kwargs['pubspec'], 'version')
+            name_in_pubspec = self._required_pubspec_value(
+                kwargs['pubspec'], 'name')
             if name_in_pubspec != kwargs['package'].name:
                 raise db.BadValueError(
                     'Name "%s" in pubspec doesn\'t match package name "%s"' %
@@ -90,6 +91,10 @@ class PackageVersion(db.Model):
         try:
             tar = tarfile.open(mode="r:gz", fileobj=file)
             pubspec = yaml.load(tar.extractfile("pubspec.yaml").read())
+            if not isinstance(pubspec, dict):
+                raise db.BadValueError(
+                    "Invalid pubspec, expected mapping at top level, was %s" %
+                    pubspec)
             file.seek(0)
             return pubspec
         except (tarfile.TarError, KeyError) as err:
@@ -98,8 +103,8 @@ class PackageVersion(db.Model):
         except yaml.YAMLError as err:
             raise db.BadValueError("Error parsing pubspec: %s" % err)
 
-    def _required_pubspec_value(self, key):
+    def _required_pubspec_value(self, pubspec, key):
         """Assert a value in the pubspec exists and return it."""
-        if key not in self.pubspec:
+        if key not in pubspec:
             raise db.BadValueError("Pubspec is missing key %r" % key)
-        return self.pubspec[key]
+        return pubspec[key]
