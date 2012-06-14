@@ -5,6 +5,8 @@
 from google.appengine.ext import db
 import json
 
+from pubspec import Pubspec
+
 class DocumentProperty(db.Property):
     """A property that stores a JSON-encodable document."""
 
@@ -21,3 +23,13 @@ class DocumentProperty(db.Property):
         if value is None:
             return None
         return json.loads(value)
+
+class PubspecProperty(DocumentProperty):
+    """A property that stores a parsed Pubspec."""
+
+    data_type = Pubspec
+
+    def make_value_from_datastore(self, value):
+        """Load the pubspec from JSON."""
+        contents = super(PubspecProperty, self).make_value_from_datastore(value)
+        return Pubspec(contents)

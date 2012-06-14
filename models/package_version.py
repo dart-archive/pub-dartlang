@@ -9,7 +9,8 @@ from google.appengine.ext import db
 import yaml
 
 from package import Package
-from properties import DocumentProperty
+from properties import PubspecProperty
+from pubspec import Pubspec
 
 class PackageVersion(db.Model):
     """The model for a single version of a package.
@@ -40,7 +41,7 @@ class PackageVersion(db.Model):
     contents = db.BlobProperty(required=True)
     """The blob of code for this package version, a gzipped tar file."""
 
-    pubspec = DocumentProperty(required=True, indexed=False)
+    pubspec = PubspecProperty(required=True, indexed=False)
 
     package = db.ReferenceProperty(Package,
                                    required=True,
@@ -62,12 +63,11 @@ class PackageVersion(db.Model):
         if 'contents_file' in kwargs:
             file = kwargs['contents_file']
             if 'pubspec' not in kwargs:
-                kwargs['pubspec'] = _parse_contents(file)
+                kwargs['pubspec'] = Pubspec.from_archive(file)
             kwargs['contents'] = db.Blob(file.read())
 
         if 'pubspec' in kwargs and 'version' not in kwargs:
-            kwargs['version'] = _required_pubspec_value(
-                kwargs['pubspec'], 'version')
+            kwargs['version'] = kwargs['pubspec'].required('version')
 
         if not 'key_name' in kwargs and not 'key' in kwargs:
             kwargs['key_name'] = kwargs['version']
@@ -94,39 +94,14 @@ class PackageVersion(db.Model):
     def _validate_fields_match_pubspec(self):
         """Assert that the fields in the pubspec match this object's fields."""
 
-        name_in_pubspec = _required_pubspec_value(self.pubspec, 'name')
+        name_in_pubspec = self.pubspec.required('name')
         if name_in_pubspec != self.package.name:
             raise db.BadValueError(
                 'Name "%s" in pubspec doesn\'t match package name "%s"' %
                 (name_in_pubspec, self.package.name))
 
-        version_in_pubspec = _required_pubspec_value(self.pubspec, 'version')
+        version_in_pubspec = self.pubspec.required('version')
         if version_in_pubspec != self.version:
             raise db.BadValueError(
                 'Version "%s" in pubspec doesn\'t match version "%s"' %
                 (name_in_pubspec, self.version))
-
-def _parse_contents(file):
-    """Extract and return the parsed pubspec from the package archive.
-
-    After consuming the file, this puts the cursor back at the beginning."""
-    try:
-        tar = tarfile.open(mode="r:gz", fileobj=file)
-        pubspec = yaml.load(tar.extractfile("pubspec.yaml").read())
-        if not isinstance(pubspec, dict):
-            raise db.BadValueError(
-                "Invalid pubspec, expected mapping at top level, was %s" %
-                pubspec)
-        file.seek(0)
-        return pubspec
-    except (tarfile.TarError, KeyError) as err:
-        raise db.BadValueError(
-            "Error parsing package archive: %s" % err)
-    except yaml.YAMLError as err:
-        raise db.BadValueError("Error parsing pubspec: %s" % err)
-
-def _required_pubspec_value(pubspec, key):
-    """Assert a value in the pubspec exists and return it."""
-    if key not in pubspec:
-        raise db.BadValueError("Pubspec is missing key %r" % key)
-    return pubspec[key]

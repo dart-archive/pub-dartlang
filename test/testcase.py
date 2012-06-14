@@ -15,6 +15,7 @@ import tarfile
 
 from pub_dartlang import Application
 from models.package_version import PackageVersion
+from models.pubspec import Pubspec
 
 class TestCase(unittest.TestCase):
     """Utility methods for testing.
@@ -133,7 +134,7 @@ class TestCase(unittest.TestCase):
         This constructs the package archive based on the other information
         passed in. The archive contains only the pubspec.
         """
-        pubspec = {'name': package.name, 'version': version}
+        pubspec = Pubspec(name=package.name, version=version)
         pubspec.update(additional_pubspec_fields)
         return PackageVersion.new(
             version=version,
