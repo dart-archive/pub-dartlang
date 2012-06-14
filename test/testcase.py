@@ -159,6 +159,13 @@ class TestCase(unittest.TestCase):
 
         return tarfile_io.getvalue()
 
+    def uploadArchive(self, name, version, **additional_pubspec_fields):
+        """Return a tuple representing a package archive upload."""
+        pubspec = {'name': name, 'version': version}
+        pubspec.update(additional_pubspec_fields)
+        contents = self.tarPubspec(pubspec)
+        return ('file', '%s-%s.tar.gz' % (name, version), contents)
+
     def assertRequiresLogin(self, response):
         """Assert that the given response is requesting user authentication."""
         self.assertEqual(response.status_int, 302)

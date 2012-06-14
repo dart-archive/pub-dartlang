@@ -19,7 +19,10 @@ class PackagesTest(TestCase):
         self.assertEqual(form.action, '/packages')
         self.assertEqual(form.method, 'POST')
 
-        form['name'] = 'test-package'
+        form['file'] = ('test-package-0.0.1.tar.gz', self.tarPubspec({
+                'name': 'test-package',
+                'version': '0.0.1'
+            }))
         post_response = form.submit()
 
         self.assertEqual(post_response.status_int, 302)
@@ -31,6 +34,11 @@ class PackagesTest(TestCase):
         self.assertTrue(package is not None)
         self.assertEqual(package.name, 'test-package')
         self.assertEqual(package.owner, users.get_current_user())
+
+        version = package.version_set.get()
+        self.assertTrue(version is not None)
+        self.assertEqual(version.version, '0.0.1')
+        self.assertEqual(version.package.name, 'test-package')
 
     def testNewRequiresLogin(self):
         response = self.testapp.get('/packages/new')
@@ -49,15 +57,17 @@ class PackagesTest(TestCase):
         self.assertTrue(response.cookies_set.has_key('flash'))
 
     def testCreateRequiresLogin(self):
-        response = self.testapp.post('/packages', {'name': 'test-package'},
-                                     status=403)
+        upload = self.uploadArchive('test-package', '0.0.1')
+        response = self.testapp.post(
+            '/packages', upload_files=[upload], status=403)
         self.assertErrorPage(response)
 
     def testCreateRequiresAdmin(self):
         self.beNormalUser()
 
-        response = self.testapp.post('/packages', {'name': 'test-package'},
-                                     status=403)
+        upload = self.uploadArchive('test-package', '0.0.1')
+        response = self.testapp.post(
+            '/packages', upload_files=[upload], status=403)
         self.assertErrorPage(response)
 
     def testCreateRequiresNewPackageName(self):
@@ -66,7 +76,8 @@ class PackagesTest(TestCase):
         other_admin = self.adminUser('other')
         Package.new(name='test-package', owner=other_admin).put()
 
-        response = self.testapp.post('/packages', {'name': 'test-package'})
+        upload = self.uploadArchive('test-package', '0.0.1')
+        response = self.testapp.post('/packages', upload_files=[upload])
         self.assertEqual(response.status_int, 302)
         self.assertEqual(response.headers['Location'],
                          'http://localhost:80/packages/new')

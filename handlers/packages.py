@@ -9,6 +9,7 @@ from google.appengine.api import users
 
 import handlers
 import sys
+import models
 from models.package import Package
 
 class Packages(object):
@@ -29,29 +30,34 @@ class Packages(object):
         return handlers.render("packages/index", packages=packages)
 
     @handlers.handle_validation_errors
-    def create(self, name = None):
+    def create(self, file):
         """Create a new package.
 
-        This only creates the package metadata; it doesn't handle uploading any
-        package versions.
+        This creates both the package metadata and a single package version.
 
         If the user isn't logged in with admin privileges, this will return a
         403. If a package with the given name already exists, this will redirect
         to /packages/new.
 
         Arguments:
-          name: The name of the package to create.
+          file: The package archive.
         """
 
         if not users.is_current_user_admin():
             handlers.http_error(403, "Only admins may create packages.")
 
-        if Package.exists(name):
-            handlers.flash('A package named "%s" already exists.' % name)
+        package, version = Package.from_archive(file.file)
+
+        if Package.exists(package.name):
+            handlers.flash('A package named "%s" already exists.' %
+                           package.name)
             raise cherrypy.HTTPRedirect('/packages/new')
 
-        Package.new(name = name).put()
-        handlers.flash('Package "%s" created successfully.' % name)
+        with models.transaction():
+            package.put()
+            version.put()
+        handlers.flash('Package %s %s uploaded successfully.' %
+                       (package.name, version.version))
         # TODO(nweiz): redirect to actual package page
         raise cherrypy.HTTPRedirect('/packages')
 

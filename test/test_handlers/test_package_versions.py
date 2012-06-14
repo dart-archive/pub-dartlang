@@ -52,7 +52,7 @@ class PackageVersionsTest(TestCase):
 
     def testCreateRequiresOwner(self):
         self.beNormalUser()
-        upload = self._upload('test-package', '1.2.3')
+        upload = self.uploadArchive('test-package', '1.2.3')
         response = self.testapp.post(
             '/packages/test-package/versions', upload_files=[upload],
             status=403)
@@ -62,7 +62,7 @@ class PackageVersionsTest(TestCase):
         self.beAdminUser()
         self.packageVersion(self.package, '1.2.3', description='old').put()
 
-        upload = self._upload('test-package', '1.2.3', description='new')
+        upload = self.uploadArchive('test-package', '1.2.3', description='new')
         response = self.testapp.post('/packages/test-package/versions',
                                      upload_files=[upload])
         self.assertEqual(response.status_int, 302)
@@ -86,9 +86,3 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(response.headers['Content-Disposition'],
                          'attachment; filename=test-package-1.2.3.tar.gz')
         self.assertEqual(response.body, self.tarPubspec(version.pubspec))
-
-    def _upload(self, name, version, **additional_pubspec_fields):
-        pubspec = {'name': name, 'version': version}
-        pubspec.update(additional_pubspec_fields)
-        contents = self.tarPubspec(pubspec)
-        return ('file', '%s-%s.tar.gz' % (name, version), contents)

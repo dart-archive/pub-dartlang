@@ -4,6 +4,8 @@
 
 from google.appengine.ext import db
 
+from pubspec import Pubspec
+
 class Package(db.Model):
     """The model for a package.
 
@@ -38,13 +40,29 @@ class Package(db.Model):
 
         return cls(**kwargs)
 
-    def has_version(self, version):
-        """Determine whether this package has a given version uploaded."""
+    @classmethod
+    def from_archive(cls, file):
+        """Load a package and a package version from a .tar.gz archive.
+
+        Arguments:
+          file: An open file object containing a .tar.gz archive.
+
+        Returns: Both the Package object and the PackageVersion object.
+        """
         from package_version import PackageVersion
-        version = PackageVersion.get_by_name_and_version(self.name, version)
-        return version is not None
+        pubspec = Pubspec.from_archive(file)
+        package = Package.new(name=pubspec.required('name'))
+        version = PackageVersion.new(
+            package=package, pubspec=pubspec, contents_file=file)
+        return package, version
 
     @classmethod
     def exists(cls, name):
         """Determine whether a package with the given name exists."""
         return cls.get_by_key_name(name) is not None
+
+    def has_version(self, version):
+        """Determine whether this package has a given version uploaded."""
+        from package_version import PackageVersion
+        version = PackageVersion.get_by_name_and_version(self.name, version)
+        return version is not None
