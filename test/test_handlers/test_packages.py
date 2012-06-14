@@ -27,7 +27,7 @@ class PackagesTest(TestCase):
 
         self.assertEqual(post_response.status_int, 302)
         self.assertEqual(post_response.headers['Location'],
-                         'http://localhost:80/packages')
+                         'http://localhost:80/packages/test-package')
         self.assertTrue(post_response.cookies_set.has_key('flash'))
 
         package = Package.get_by_key_name('test-package')

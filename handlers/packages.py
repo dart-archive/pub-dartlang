@@ -58,8 +58,7 @@ class Packages(object):
             version.put()
         handlers.flash('Package %s %s uploaded successfully.' %
                        (package.name, version.version))
-        # TODO(nweiz): redirect to actual package page
-        raise cherrypy.HTTPRedirect('/packages')
+        raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
 
     def new(self):
         """Retrieve the form for creating a package.
