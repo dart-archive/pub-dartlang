@@ -20,7 +20,7 @@ _renderer = pystache.Renderer(search_dirs = [
         os.path.join(os.path.dirname(__file__), '../views')])
 
 def render(name, *context, **kwargs):
-    """Renders a Moustache template with the standard layout.
+    """Renders a Mustache template with the standard layout.
 
     The interface of this function is the same as pystache.Renderer.render,
     except that it takes the name of a template instead of the template string
