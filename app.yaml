@@ -2,9 +2,10 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
-application: pub-dartlang
+application: dartlang-pub
 version: 1
-runtime: python
+runtime: python27
+threadsafe: true
 api_version: 1
 
 handlers:
