@@ -75,7 +75,7 @@ class PackageVersions(object):
         """Retrieve the page describing a package version.
 
         Depending on the format, this could be a user-readable webpage (.html),
-        a machine-readable JSON document (.json), or a download of the actual
+        a machine-readable YAML document (.yaml), or a download of the actual
         package blob (.tar.gz).
         """
 
@@ -86,9 +86,14 @@ class PackageVersions(object):
             id = id[0:-len('.tar.gz')]
             version = handlers.request().package_version(id)
             cherrypy.response.headers['Content-Type'] = \
-                'application/octet-stream';
+                'application/octet-stream'
             cherrypy.response.headers['Content-Disposition'] = \
                 'attachment; filename=%s-%s.tar.gz' % (package_id, id)
             return version.contents
+        elif id.endswith('.yaml'):
+            id = id[0:-len('.yaml')]
+            version = handlers.request().package_version(id)
+            cherrypy.response.headers['Content-Type'] = 'text/yaml'
+            return version.pubspec.to_yaml()
         else:
             handlers.http_error(404)

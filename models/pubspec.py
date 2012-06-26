@@ -31,6 +31,16 @@ class Pubspec(dict):
         except yaml.YAMLError as err:
             raise db.BadValueError("Error parsing pubspec: %s" % err)
 
+    def to_yaml(self):
+        """Dump the Pubspec to YAML."""
+        # "dict()" causes Yaml to tag the output as a standard Yaml mapping
+        # rather than a custom "!!python/object/new:models.pubspec.Pubspec"
+        # object.
+        #
+        # "safe_dump()" causes Yaml to tag unicode objects as standard Yaml
+        # strings rather than "!!python/unicode".
+        return yaml.safe_dump(dict(self))
+
     def required(self, key):
         """Return a value from the pubspec, and assert that it exists."""
         if key not in self:

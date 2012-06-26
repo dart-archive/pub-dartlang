@@ -2,6 +2,8 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+import yaml
+
 from testcase import TestCase
 from models.package import Package
 from models.package_version import PackageVersion
@@ -86,3 +88,18 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(response.headers['Content-Disposition'],
                          'attachment; filename=test-package-1.2.3.tar.gz')
         self.assertEqual(response.body, self.tarPubspec(version.pubspec))
+
+    def testShowPackageVersionYaml(self):
+        version = self.packageVersion(self.package, '1.2.3',
+            description="Test package!",
+            dependencies={
+                "test-dep1": "1.2.3",
+                "test-dep2": {"git": "git://github.com/dart/test-dep2.git"}
+            })
+        version.put()
+
+        response = self.testapp.get(
+            '/packages/test-package/versions/1.2.3.yaml')
+        self.assertEqual(response.headers['Content-Type'],
+                         'text/yaml;charset=utf-8')
+        self.assertEqual(yaml.load(response.body), version.pubspec)
