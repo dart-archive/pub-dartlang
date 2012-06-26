@@ -3,7 +3,6 @@ import re
 import sys
 import threading
 
-import pkg_resources
 from repoze.lru import LRUCache
 
 from routes import request_config
