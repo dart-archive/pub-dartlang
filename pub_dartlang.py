@@ -45,5 +45,7 @@ class Application(cherrypy.Application):
         self.dispatcher.controllers[collection_name] = controller
         self.dispatcher.mapper.resource(member_name, collection_name, **kwargs)
 
+app = Application()
+
 if __name__ == "__main__":
-    run_wsgi_app(Application())
+    run_wsgi_app(app)

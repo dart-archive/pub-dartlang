@@ -10,4 +10,4 @@ api_version: 1
 
 handlers:
 - url: /.*
-  script: pub_dartlang.py
+  script: pub_dartlang.app
