@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # Copyright (c) 2012, the Dart project authors.  Please see the AUTHORS file
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
@@ -15,7 +15,7 @@ import os
 import sys
 import subprocess
 
-import unittest2
+import unittest
 
 USAGE = """%prog [SDK_PATH]
 Run unit tests.
@@ -49,5 +49,5 @@ dev_appserver.fix_sys_path()
 import pub_dartlang
 
 test_path = os.path.join(os.path.dirname(__file__), 'test')
-suite = unittest2.loader.TestLoader().discover(test_path)
-unittest2.TextTestRunner(verbosity = 2).run(suite)
+suite = unittest.loader.TestLoader().discover(test_path)
+unittest.TextTestRunner(verbosity = 2).run(suite)
