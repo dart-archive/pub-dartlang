@@ -38,8 +38,7 @@ necessary.
 The tests have some external dependencies. Before you can run the tests,
 perform the following steps once:
 
-  * Install the [App Engine
-    SDK](https://developers.google.com/appengine/downloads).
+  * Install the [App Engine SDK][].
   * Make sure the SDK is on your `$PATH`.
   * Run:
 

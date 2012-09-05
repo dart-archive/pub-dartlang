@@ -1,2 +1,2 @@
 *.pyc
-css/.sass-cache/
+.sass-cache/
