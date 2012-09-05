@@ -51,7 +51,7 @@ Once everything is installed, you can run the tests by running:
 
 ### Modifying the CSS
 
-The CSS files are generated from the source [SASS][] files using [Compass][].
+The CSS files are generated from the source [Sass][] files using [Compass][].
 To get ready to make changes, you'll need [Ruby][] and then:
 
 [ruby]: http://ruby-lang.org
@@ -60,33 +60,21 @@ To get ready to make changes, you'll need [Ruby][] and then:
 
  1. Ensure you have bundler installed:
 
-        sudo gem install bundler
+        gem install bundler
 
- 2. Run:
+ 2. Run this to install bootstrap and the other dependencies:
 
-        gem install compass
+        bundler install
 
- 3. Install a forked version of compass-twitter-bootstrap:
-
-        cd <some directory where you want to install this>
-        git clone git://github.com/toao/compass-twitter-bootstrap.git
-        cd compass-twitter-bootstrap
-        bundle
-        rake build
-        cd pkg
-        gem install compass_twitter_bootstrap
-
-Note that these are only needed on your development machine to iterate on the
-CSS. The deployed server just uses the pre-compiled CSS and only requires
-Python.
+Note that this is only needed on your development machine to iterate on the CSS.The deployed server just uses the pre-compiled CSS and only requires Python.
 
 Once you have everything installed, to modify the styles:
 
  1. Edit the .scss files under `css/sass`.
  2. Regenerate the .css files from them (run this from the pub-dartlang root directory):
 
-        compass build css
+        bundle exec compass build css
 
-You can also run `compass watch` if you want a live refresh experience. When
-you make changes to .scss files, make sure to regenerate and check in the .css
-files with them.
+You can also run `bundle exec compass watch` if you want a live refresh
+experience. When you make changes to .scss files, make sure to regenerate and
+check in the .css files with them.
