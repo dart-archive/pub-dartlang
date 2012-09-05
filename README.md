@@ -21,9 +21,11 @@ For license information, please see LICENSE.
 The server is written in Python and intended to run on Google App Engine. To run
 it locally, perform the following steps:
 
-* Install the [App Engine SDK][].
-* Make sure the SDK is on your `$PATH`.
-* Run `dev_appserver.py .` from the root directory of this repository.
+  * Install the [App Engine SDK][].
+  * Make sure the SDK is on your `$PATH`.
+  * From the root directory of this repository, run:
+
+        dev_appserver.py .
 
 [app engine sdk]: https://developers.google.com/appengine/downloads
 
@@ -33,12 +35,59 @@ necessary.
 
 ### Running Tests
 
-The tests do have some external dependencies. To run the tests, perform the
-following steps:
+The tests have some external dependencies. Before you can run the tests,
+perform the following steps once:
 
-* Install the [App Engine
-  SDK](https://developers.google.com/appengine/downloads).
-* Make sure the SDK is on your `$PATH`.
-* Run `easy_install webtest`.
-* Run `easy_install beautifulsoup4`.
-* Run `./test.py`.
+  * Install the [App Engine
+    SDK](https://developers.google.com/appengine/downloads).
+  * Make sure the SDK is on your `$PATH`.
+  * Run:
+
+        easy_install webtest
+        easy_install beautifulsoup4
+
+Once everything is installed, you can run the tests by running:
+
+    ./test.py
+
+### Modifying the CSS
+
+The CSS files are generated from the source [SASS][] files using [Compass][].
+To get ready to make changes, you'll need [Ruby][] and then:
+
+[ruby]: http://ruby-lang.org
+[sass]: http://sass-lang.com
+[compass]: http://compass-style.org
+
+ 1. Ensure you have bundler installed:
+
+        sudo gem install bundler
+
+ 2. Run:
+
+        gem install compass
+
+ 3. Install a forked version of compass-twitter-bootstrap:
+
+        cd <some directory where you want to install this>
+        git clone git://github.com/toao/compass-twitter-bootstrap.git
+        cd compass-twitter-bootstrap
+        bundle
+        rake build
+        cd pkg
+        gem install compass_twitter_bootstrap
+
+Note that these are only needed on your development machine to iterate on the
+CSS. The deployed server just uses the pre-compiled CSS and only requires
+Python.
+
+Once you have everything installed, to modify the styles:
+
+ 1. Edit the .scss files under `css/sass`.
+ 2. Regenerate the .css files from them (run this from the pub-dartlang root directory):
+
+        compass build css
+
+You can also run `compass watch` if you want a live refresh experience. When
+you make changes to .scss files, make sure to regenerate and check in the .css
+files with them.
