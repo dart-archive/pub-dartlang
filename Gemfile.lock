@@ -20,4 +20,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  compass
   compass_twitter_bootstrap!

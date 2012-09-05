@@ -64,9 +64,10 @@ To get ready to make changes, you'll need [Ruby][] and then:
 
  2. Run this to install bootstrap and the other dependencies:
 
-        bundler install
+        bundle install
 
-Note that this is only needed on your development machine to iterate on the CSS.The deployed server just uses the pre-compiled CSS and only requires Python.
+Note that this is only needed on your development machine to iterate on the CSS.
+The deployed server just uses the pre-compiled CSS and only requires Python.
 
 Once you have everything installed, to modify the styles:
 
