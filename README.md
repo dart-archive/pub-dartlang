@@ -70,11 +70,12 @@ Note that this is only needed on your development machine to iterate on the CSS.
 
 Once you have everything installed, to modify the styles:
 
- 1. Edit the .scss files under `css/sass`.
- 2. Regenerate the .css files from them (run this from the pub-dartlang root directory):
+ 1. Run compass to automatically regenerate the `.css` files when any Sass files
+    change:
 
-        bundle exec compass build css
+        bundle exec compass watch css
 
-You can also run `bundle exec compass watch` if you want a live refresh
-experience. When you make changes to .scss files, make sure to regenerate and
-check in the .css files with them.
+ 1. Edit the `.scss` files under `css/sass`.
+
+When you make changes to .scss files, make sure check in the generated `.css`
+files with them.
