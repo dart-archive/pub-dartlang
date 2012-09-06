@@ -1,7 +1,4 @@
-/* Welcome to Compass.
- * In this file you should write your main styles. (or centralize your imports)
- * Import this file using the following HTML or equivalent:
- * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700|Montserrat:400,700);
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -180,9 +177,9 @@ textarea {
 
 body {
   margin: 0;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 24px;
   color: #333333;
   background-color: white;
 }
@@ -418,21 +415,21 @@ a:hover {
 }
 
 p {
-  margin: 0 0 9px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  line-height: 18px;
+  margin: 0 0 12px;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 24px;
 }
 p small {
-  font-size: 11px;
+  font-size: 12px;
   color: #999999;
 }
 
 .lead {
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   font-size: 20px;
   font-weight: 200;
-  line-height: 27px;
+  line-height: 36px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -449,7 +446,7 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
 
 h1 {
   font-size: 30px;
-  line-height: 36px;
+  line-height: 48px;
 }
 h1 small {
   font-size: 18px;
@@ -457,7 +454,7 @@ h1 small {
 
 h2 {
   font-size: 24px;
-  line-height: 36px;
+  line-height: 48px;
 }
 h2 small {
   font-size: 18px;
@@ -465,14 +462,14 @@ h2 small {
 
 h3 {
   font-size: 18px;
-  line-height: 27px;
+  line-height: 36px;
 }
 h3 small {
   font-size: 14px;
 }
 
 h4, h5, h6 {
-  line-height: 18px;
+  line-height: 24px;
 }
 
 h4 {
@@ -493,8 +490,8 @@ h6 {
 }
 
 .page-header {
-  padding-bottom: 17px;
-  margin: 18px 0;
+  padding-bottom: 23px;
+  margin: 24px 0;
   border-bottom: 1px solid #eeeeee;
 }
 
@@ -504,7 +501,7 @@ h6 {
 
 ul, ol {
   padding: 0;
-  margin: 0 0 9px 25px;
+  margin: 0 0 12px 25px;
 }
 
 ul ul,
@@ -523,7 +520,7 @@ ol {
 }
 
 li {
-  line-height: 18px;
+  line-height: 24px;
 }
 
 ul.unstyled,
@@ -533,21 +530,21 @@ ol.unstyled {
 }
 
 dl {
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 
 dt,
 dd {
-  line-height: 18px;
+  line-height: 24px;
 }
 
 dt {
   font-weight: bold;
-  line-height: 17px;
+  line-height: 23px;
 }
 
 dd {
-  margin-left: 9px;
+  margin-left: 12px;
 }
 
 .dl-horizontal dt {
@@ -564,7 +561,7 @@ dd {
 }
 
 hr {
-  margin: 18px 0;
+  margin: 24px 0;
   border: 0;
   border-top: 1px solid #eeeeee;
   border-bottom: 1px solid white;
@@ -594,18 +591,18 @@ abbr.initialism {
 
 blockquote {
   padding: 0 0 0 15px;
-  margin: 0 0 18px;
+  margin: 0 0 24px;
   border-left: 5px solid #eeeeee;
 }
 blockquote p {
   margin-bottom: 0;
   font-size: 16px;
   font-weight: 300;
-  line-height: 22.5px;
+  line-height: 30px;
 }
 blockquote small {
   display: block;
-  line-height: 18px;
+  line-height: 24px;
   color: #999999;
 }
 blockquote small:before {
@@ -632,9 +629,9 @@ blockquote:after {
 
 address {
   display: block;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   font-style: normal;
-  line-height: 18px;
+  line-height: 24px;
 }
 
 small {
@@ -649,7 +646,7 @@ code,
 pre {
   padding: 0 3px 2px;
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-size: 12px;
+  font-size: 13px;
   color: #333333;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -665,10 +662,10 @@ code {
 
 pre {
   display: block;
-  padding: 8.5px;
-  margin: 0 0 9px;
-  font-size: 12.025px;
-  line-height: 18px;
+  padding: 11.5px;
+  margin: 0 0 12px;
+  font-size: 12.95px;
+  line-height: 24px;
   word-break: break-all;
   word-wrap: break-word;
   white-space: pre;
@@ -681,7 +678,7 @@ pre {
   border-radius: 4px;
 }
 pre.prettyprint {
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 pre code {
   padding: 0;
@@ -696,7 +693,7 @@ pre code {
 }
 
 form {
-  margin: 0 0 18px;
+  margin: 0 0 24px;
 }
 
 fieldset {
@@ -709,15 +706,15 @@ legend {
   display: block;
   width: 100%;
   padding: 0;
-  margin-bottom: 27px;
-  font-size: 19.5px;
-  line-height: 36px;
+  margin-bottom: 36px;
+  font-size: 21px;
+  line-height: 48px;
   color: #333333;
   border: 0;
   border-bottom: 1px solid #eee;
 }
 legend small {
-  font-size: 13.5px;
+  font-size: 18px;
   color: #999999;
 }
 
@@ -726,16 +723,16 @@ input,
 button,
 select,
 textarea {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: normal;
-  line-height: 18px;
+  line-height: 24px;
 }
 
 input,
 button,
 select,
 textarea {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 label {
@@ -750,11 +747,11 @@ select,
 .uneditable-input {
   display: inline-block;
   width: 210px;
-  height: 18px;
+  height: 24px;
   padding: 4px;
   margin-bottom: 9px;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 14px;
+  line-height: 24px;
   color: #555555;
   background-color: white;
   border: 1px solid #cccccc;
@@ -1120,9 +1117,9 @@ select:focus:required:invalid:focus {
 }
 
 .form-actions {
-  padding: 17px 20px 18px;
-  margin-top: 18px;
-  margin-bottom: 18px;
+  padding: 23px 20px 24px;
+  margin-top: 24px;
+  margin-bottom: 24px;
   background-color: whitesmoke;
   border-top: 1px solid #ddd;
   *zoom: 1;
@@ -1161,7 +1158,7 @@ select:focus:required:invalid:focus {
 
 .help-block {
   display: block;
-  margin-bottom: 9px;
+  margin-bottom: 12px;
 }
 
 .help-inline {
@@ -1218,11 +1215,11 @@ select:focus:required:invalid:focus {
 .input-append .add-on {
   display: inline-block;
   width: auto;
-  height: 18px;
+  height: 24px;
   min-width: 16px;
   padding: 4px 5px;
   font-weight: normal;
-  line-height: 18px;
+  line-height: 24px;
   text-align: center;
   text-shadow: 0 1px 0 white;
   vertical-align: middle;
@@ -1371,16 +1368,16 @@ select:focus:required:invalid:focus {
 }
 
 .control-group {
-  margin-bottom: 9px;
+  margin-bottom: 12px;
 }
 
 legend + .control-group {
-  margin-top: 18px;
+  margin-top: 24px;
   -webkit-margin-top-collapse: separate;
 }
 
 .form-horizontal .control-group {
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   *zoom: 1;
 }
 .form-horizontal .control-group:before, .form-horizontal .control-group:after {
@@ -1406,7 +1403,7 @@ legend + .control-group {
   *padding-left: 160px;
 }
 .form-horizontal .help-block {
-  margin-top: 9px;
+  margin-top: 12px;
   margin-bottom: 0;
 }
 .form-horizontal .form-actions {
@@ -1422,12 +1419,12 @@ table {
 
 .table {
   width: 100%;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 .table th,
 .table td {
   padding: 8px;
-  line-height: 18px;
+  line-height: 24px;
   text-align: left;
   vertical-align: top;
   border-top: 1px solid #dddddd;
@@ -2290,7 +2287,7 @@ table .span24 {
 .dropdown-menu .divider {
   *width: 100%;
   height: 1px;
-  margin: 8px 1px;
+  margin: 11px 1px;
   *margin: -5px 0 5px;
   overflow: hidden;
   background-color: #e5e5e5;
@@ -2301,7 +2298,7 @@ table .span24 {
   padding: 3px 15px;
   clear: both;
   font-weight: normal;
-  line-height: 18px;
+  line-height: 24px;
   color: #333333;
   white-space: nowrap;
 }
@@ -2411,7 +2408,7 @@ table .span24 {
   float: right;
   font-size: 20px;
   font-weight: bold;
-  line-height: 18px;
+  line-height: 24px;
   color: black;
   text-shadow: 0 1px 0 white;
   opacity: 0.2;
@@ -2440,8 +2437,8 @@ button.close {
   *zoom: 1;
   padding: 4px 10px 4px;
   margin-bottom: 0;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 14px;
+  line-height: 24px;
   *line-height: 20px;
   color: #333333;
   text-align: center;
@@ -2529,7 +2526,7 @@ button.close {
 
 .btn-large {
   padding: 9px 14px;
-  font-size: 15px;
+  font-size: 16px;
   line-height: normal;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -2542,8 +2539,8 @@ button.close {
 
 .btn-small {
   padding: 5px 9px;
-  font-size: 11px;
-  line-height: 16px;
+  font-size: 12px;
+  line-height: 22px;
 }
 
 .btn-small [class^="icon-"] {
@@ -2552,8 +2549,8 @@ button.close {
 
 .btn-mini {
   padding: 2px 6px;
-  font-size: 11px;
-  line-height: 14px;
+  font-size: 12px;
+  line-height: 20px;
 }
 
 .btn-primary,
@@ -2777,8 +2774,8 @@ input[type="submit"].btn.btn-mini {
 }
 
 .btn-toolbar {
-  margin-top: 9px;
-  margin-bottom: 9px;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 .btn-toolbar .btn-group {
   display: inline-block;
@@ -2946,7 +2943,7 @@ input[type="submit"].btn.btn-mini {
 
 .alert {
   padding: 8px 35px 8px 14px;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   background-color: #fcf8e3;
   border: 1px solid #fbeed5;
@@ -3002,7 +2999,7 @@ input[type="submit"].btn.btn-mini {
 
 .nav {
   margin-left: 0;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   list-style: none;
 }
 
@@ -3024,7 +3021,7 @@ input[type="submit"].btn.btn-mini {
   padding: 3px 15px;
   font-size: 11px;
   font-weight: bold;
-  line-height: 18px;
+  line-height: 24px;
   color: #999999;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
@@ -3039,7 +3036,7 @@ input[type="submit"].btn.btn-mini {
   padding: 3px 15px;
   font-size: 11px;
   font-weight: bold;
-  line-height: 18px;
+  line-height: 24px;
   color: #999999;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
@@ -3080,7 +3077,7 @@ input[type="submit"].btn.btn-mini {
 .nav-list .divider {
   *width: 100%;
   height: 1px;
-  margin: 8px 1px;
+  margin: 11px 1px;
   *margin: -5px 0 5px;
   overflow: hidden;
   background-color: #e5e5e5;
@@ -3126,7 +3123,7 @@ input[type="submit"].btn.btn-mini {
 .nav-tabs > li > a {
   padding-top: 9px;
   padding-bottom: 9px;
-  line-height: 18px;
+  line-height: 24px;
   border: 1px solid transparent;
   -webkit-border-radius: 4px 4px 0 0;
   -moz-border-radius: 4px 4px 0 0;
@@ -3379,7 +3376,7 @@ input[type="submit"].btn.btn-mini {
   *position: relative;
   *z-index: 2;
   overflow: visible;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 
 .navbar-inner {
@@ -3490,7 +3487,7 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar-search .search-query {
   padding: 4px 9px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   font-weight: normal;
   line-height: 1;
@@ -3585,7 +3582,7 @@ input[type="submit"].btn.btn-mini {
   display: inline-block;
   padding: 4px 10px 4px;
   margin: 5px 5px 6px;
-  line-height: 18px;
+  line-height: 24px;
 }
 
 .navbar .btn-group {
@@ -3744,7 +3741,7 @@ input[type="submit"].btn.btn-mini {
 
 .breadcrumb {
   padding: 7px 14px;
-  margin: 0 0 18px;
+  margin: 0 0 24px;
   list-style: none;
   background-color: #fbfbfb;
   background-image: -moz-linear-gradient(top, white, whitesmoke);
@@ -3779,8 +3776,8 @@ input[type="submit"].btn.btn-mini {
 }
 
 .pagination {
-  height: 36px;
-  margin: 18px 0;
+  height: 48px;
+  margin: 24px 0;
 }
 
 .pagination ul {
@@ -3805,7 +3802,7 @@ input[type="submit"].btn.btn-mini {
 .pagination a {
   float: left;
   padding: 0 14px;
-  line-height: 34px;
+  line-height: 46px;
   text-decoration: none;
   border: 1px solid #ddd;
   border-left-width: 0;
@@ -3852,7 +3849,7 @@ input[type="submit"].btn.btn-mini {
 
 .pager {
   margin-left: 0;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   list-style: none;
   text-align: center;
   *zoom: 1;
@@ -4205,7 +4202,7 @@ input[type="submit"].btn.btn-mini {
 
 .thumbnails > li {
   float: left;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   margin-left: 20px;
 }
 
@@ -4242,7 +4239,7 @@ a.thumbnail:hover {
 
 .label,
 .badge {
-  font-size: 10.998px;
+  font-size: 11.844px;
   font-weight: bold;
   line-height: 14px;
   color: white;
@@ -4534,7 +4531,7 @@ a.label:hover, a.badge:hover {
 }
 
 .accordion {
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 
 .accordion-group {
@@ -4565,7 +4562,7 @@ a.label:hover, a.badge:hover {
 
 .carousel {
   position: relative;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
   line-height: 1;
 }
 
@@ -4683,7 +4680,7 @@ a.label:hover, a.badge:hover {
 .hero-unit p {
   font-size: 18px;
   font-weight: 200;
-  line-height: 27px;
+  line-height: 36px;
   color: inherit;
 }
 
@@ -4705,4 +4702,9 @@ a.label:hover, a.badge:hover {
 
 .invisible {
   visibility: hidden;
+}
+
+body {
+  padding-top: 50px;
+  /* To account for the navbar. */
 }

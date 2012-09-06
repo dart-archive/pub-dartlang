@@ -2,13 +2,20 @@
     for details. All rights reserved. Use of this source code is governed by a
     BSD-style license that can be found in the LICENSE file. }}
 
-<h2>Packages</h2>
-<p><a href="/packages/new">Create Package</a></p>
-<ul id="packages">
+<h1>Packages</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Package</th>
+      <th>Owner</th>
+      <th>Last Updated</th>
+    </tr>
+  </thead>
   {{#packages}}
-    <li>
-      <a href="/packages/{{name}}">{{name}}</a>
-      owned by {{owner.nickname}}
-    </li>
+    <tr>
+      <td><strong><a href="/packages/{{name}}">{{name}}</a></strong></td>
+      <td>{{owner.nickname}}</td>
+      <td>{{updated}}</td>
+    </tr>
   {{/packages}}
-</ul>
+</table>

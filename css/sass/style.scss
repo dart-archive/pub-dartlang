@@ -1,7 +1,14 @@
-/* Welcome to Compass.
- * In this file you should write your main styles. (or centralize your imports)
- * Import this file using the following HTML or equivalent:
- * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700|Montserrat:400,700);
 
 @import "compass/reset";
+
+$baseFontSize: 14px;
+$baseLineHeight: 24px;
+
+$sansFontFamily: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
 @import "compass_twitter_bootstrap";
+
+body {
+  padding-top: 50px; /* To account for the navbar. */
+}

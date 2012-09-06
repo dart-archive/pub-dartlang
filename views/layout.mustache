@@ -2,25 +2,43 @@
     for details. All rights reserved. Use of this source code is governed by a
     BSD-style license that can be found in the LICENSE file. }}
 
-<!doctype html5>
+<!doctype html>
 <html>
   <head>
     <title>Pub Package Repository</title>
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div id="header">
-      {{#logged_in}}
-        <a href="{{logout_url}}">Log Out</a>
-      {{/logged_in}}
-      {{^logged_in}}
-        <a href="{{login_url}}">Log In</a>
-      {{/logged_in}}
-
-      {{#message}}
-        <h3>{{message}}</h3>
-      {{/message}}
+    <nav>
+    </nav>
+    <div class="container">
+      <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="brand" href="/">pub.dartlang.org</a>
+            <ul class="nav">
+              <li><a href="http://www.dartlang.org/docs/pub-package-manager/">Getting Started</a></li>
+              <li><a href="#">Docs</a></li>
+              <li><a href="/packages">Packages</a></li>
+            </ul>
+            <ul class="nav pull-right">
+              {{#logged_in}}
+                <li><a href="/packages/new">Upload Package</a></li>
+                <li><a href="{{logout_url}}">Log Out</a></li>
+              {{/logged_in}}
+              {{^logged_in}}
+                <li><a href="{{login_url}}">Log In</a></li>
+              {{/logged_in}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div id="header">
+        {{#message}}
+          <h3>{{message}}</h3>
+        {{/message}}
+      </div>
+      {{& content}}
     </div>
-    {{& content}}
   </body>
 </html>
