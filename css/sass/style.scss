@@ -9,6 +9,12 @@ $sansFontFamily: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 @import "compass_twitter_bootstrap";
 
+// Don't require nasty <table class="table"> that bootstrap expects.
+table {
+  @extend .table;
+}
+
 body {
-  padding-top: 50px; /* To account for the navbar. */
+  // Account for the fixed navbar height.
+  padding-top: 50px;
 }
