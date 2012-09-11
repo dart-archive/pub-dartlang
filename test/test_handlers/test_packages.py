@@ -175,15 +175,15 @@ class PackagesTest(TestCase):
           expected_order: A list of package names.
         """
         response = self.testapp.get('/packages')
-        for li in self.html(response).select("#packages li"):
+        for tr in self.html(response).select("tbody tr"):
             if not expected_order:
-                self.fail("more packages were listed than expected: %s" % li)
-            elif expected_order[0] in ''.join(li.strings):
+                self.fail("more packages were listed than expected: %s" % tr)
+            elif expected_order[0] in ''.join(tr.strings):
                 del expected_order[0]
             else:
                 self.fail("expected package '%s' in element %s" %
-                          (expected_order[0], li))
+                          (expected_order[0], tr))
 
         self.assertEqual(expected_order, [],
-                         "<li>s not found for packages: %s" % expected_order)
+                         "<tr>s not found for packages: %s" % expected_order)
         
