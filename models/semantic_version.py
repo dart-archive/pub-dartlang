@@ -62,6 +62,9 @@ class SemanticVersion(object):
         return "%d.%d.%d%s%s" % (self.major, self.minor, self.patch, prerelease,
                                  build)
 
+    def __repr__(self):
+        return 'SemanticVersion({0!r})'.format(str(self))
+
 def _split(string):
     """Split a prerelease or build string as per the semver spec.
 
