@@ -31,6 +31,12 @@ class Package(db.Model):
     latest_version = db.ReferenceProperty()
     """The most recent non-prerelease version of this package."""
 
+    @property
+    def description(self):
+        """The short description of the package."""
+        if self.latest_version is None: return None
+        return self.latest_version.pubspec.get('description')
+
     @classmethod
     def new(cls, **kwargs):
         """Construct a new package.
