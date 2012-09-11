@@ -12,15 +12,15 @@ from models.semantic_version import SemanticVersion
 class PackageVersionsTest(TestCase):
     def setUp(self):
         super(PackageVersionsTest, self).setUp()
-        self.package = Package.new(name='test-package', owner=self.adminUser())
+        self.package = Package.new(name='test-package', owner=self.admin_user())
         self.package.put()
 
-    def testNewRequiresLogin(self):
+    def test_new_requires_login(self):
         response = self.testapp.get('/packages/test-package/versions/new')
-        self.assertRequiresLogin(response)
+        self.assert_requires_login(response)
 
-    def testNewRequiresOwnership(self):
-        self.beNormalUser()
+    def test_new_requires_ownership(self):
+        self.be_normal_user()
 
         response = self.testapp.get('/packages/test-package/versions/new')
         self.assertEqual(response.status_int, 302)
@@ -28,30 +28,30 @@ class PackageVersionsTest(TestCase):
                          'http://localhost:80/packages/test-package')
         self.assertTrue(response.cookies_set.has_key('flash'))
 
-    def testOwnerCreatesPackageVersion(self):
-        self.beAdminUser()
-        self.postPackageVersion('1.2.3')
+    def test_owner_creates_package_version(self):
+        self.be_admin_user()
+        self.post_package_version('1.2.3')
 
         version = PackageVersion.get_by_name_and_version(
             'test-package', '1.2.3')
         self.assertTrue(version is not None)
         self.assertEqual(version.version, SemanticVersion('1.2.3'))
         self.assertEqual(version.package.name, 'test-package')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3'))
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
-    def testCreateRequiresOwner(self):
-        self.beNormalUser()
-        upload = self.uploadArchive('test-package', '1.2.3')
+    def test_create_requires_owner(self):
+        self.be_normal_user()
+        upload = self.upload_archive('test-package', '1.2.3')
         response = self.testapp.post(
             '/packages/test-package/versions', upload_files=[upload],
             status=403)
-        self.assertErrorPage(response)
+        self.assert_error_page(response)
 
-    def testCreateRequiresNewVersionNumber(self):
-        self.beAdminUser()
-        self.packageVersion(self.package, '1.2.3', description='old').put()
+    def test_create_requires_new_version_number(self):
+        self.be_admin_user()
+        self.package_version(self.package, '1.2.3', description='old').put()
 
-        upload = self.uploadArchive('test-package', '1.2.3', description='new')
+        upload = self.upload_archive('test-package', '1.2.3', description='new')
         response = self.testapp.post('/packages/test-package/versions',
                                      upload_files=[upload])
         self.assertEqual(response.status_int, 302)
@@ -64,59 +64,59 @@ class PackageVersionsTest(TestCase):
             'test-package', '1.2.3')
         self.assertEqual(version.pubspec['description'], 'old')
 
-    def testCreateSetsLatestPackageForIncreasedVersionNumber(self):
-        self.beAdminUser()
+    def test_create_sets_latest_package_for_increased_version_number(self):
+        self.be_admin_user()
 
-        self.postPackageVersion('1.2.3')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3'))
+        self.post_package_version('1.2.3')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
-        self.postPackageVersion('1.2.4')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.4'))
+        self.post_package_version('1.2.4')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.4'))
 
-    def testCreateSetsLatestPackageForPrereleaseVersionsOnly(self):
-        self.beAdminUser()
+    def test_create_sets_latest_package_for_prerelease_versions_only(self):
+        self.be_admin_user()
 
-        self.postPackageVersion('1.2.3-pre1')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3-pre1'))
+        self.post_package_version('1.2.3-pre1')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3-pre1'))
 
-        self.postPackageVersion('1.2.3-pre0')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3-pre1'))
+        self.post_package_version('1.2.3-pre0')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3-pre1'))
 
-        self.postPackageVersion('1.2.3-pre2')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3-pre2'))
+        self.post_package_version('1.2.3-pre2')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3-pre2'))
 
-    def testCreateSetsLatestPackageToOldVersionOverPrereleaseVersion(self):
-        self.beAdminUser()
+    def test_create_sets_latest_package_to_old_version_over_prerelease_version(self):
+        self.be_admin_user()
 
-        self.postPackageVersion('1.2.3-pre1')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3-pre1'))
+        self.post_package_version('1.2.3-pre1')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3-pre1'))
 
-        self.postPackageVersion('1.2.0')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.0'))
+        self.post_package_version('1.2.0')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.0'))
 
-        self.postPackageVersion('1.2.3-pre2')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.0'))
+        self.post_package_version('1.2.3-pre2')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.0'))
 
-    def testCreateDoesntSetLatestPackageForDecreasedVersionNumber(self):
-        self.beAdminUser()
+    def test_create_doesnt_set_latest_package_for_decreased_version_number(self):
+        self.be_admin_user()
 
-        self.postPackageVersion('1.2.3')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3'))
+        self.post_package_version('1.2.3')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
-        self.postPackageVersion('1.2.2')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3'))
+        self.post_package_version('1.2.2')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
-    def testCreateDoesntSetLatestPackageForPrereleaseVersionNumber(self):
-        self.beAdminUser()
+    def test_create_doesnt_set_latest_package_for_prerelease_version_number(self):
+        self.be_admin_user()
 
-        self.postPackageVersion('1.2.3')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3'))
+        self.post_package_version('1.2.3')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
-        self.postPackageVersion('1.2.5-pre')
-        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3'))
+        self.post_package_version('1.2.5-pre')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
-    def testShowPackageVersionTarGz(self):
-        version = self.packageVersion(self.package, '1.2.3')
+    def test_show_package_version_tar_gz(self):
+        version = self.package_version(self.package, '1.2.3')
         version.put()
 
         response = self.testapp.get(
@@ -125,10 +125,10 @@ class PackageVersionsTest(TestCase):
                          'application/octet-stream')
         self.assertEqual(response.headers['Content-Disposition'],
                          'attachment; filename=test-package-1.2.3.tar.gz')
-        self.assertEqual(response.body, self.tarPubspec(version.pubspec))
+        self.assertEqual(response.body, self.tar_pubspec(version.pubspec))
 
-    def testShowPackageVersionYaml(self):
-        version = self.packageVersion(self.package, '1.2.3',
+    def test_show_package_version_yaml(self):
+        version = self.package_version(self.package, '1.2.3',
             description="Test package!",
             dependencies={
                 "test-dep1": "1.2.3",
@@ -142,14 +142,15 @@ class PackageVersionsTest(TestCase):
                          'text/yaml;charset=utf-8')
         self.assertEqual(yaml.load(response.body), version.pubspec)
 
-    def postPackageVersion(self, version):
+    def post_package_version(self, version):
         get_response = self.testapp.get('/packages/test-package/versions/new')
         self.assertEqual(get_response.status_int, 200)
         form = get_response.form
         self.assertEqual(form.action, '/packages/test-package/versions')
         self.assertEqual(form.method, 'POST')
 
-        contents = self.tarPubspec({'name': 'test-package', 'version': version})
+        contents = self.tar_pubspec(
+            {'name': 'test-package', 'version': version})
         form['file'] = ('test-package-%s.tar.gz' % version, contents)
         post_response = form.submit()
 
@@ -159,5 +160,5 @@ class PackageVersionsTest(TestCase):
             'http://localhost:80/packages/test-package')
         self.assertTrue(post_response.cookies_set.has_key('flash'))
 
-    def latestVersion(self):
+    def latest_version(self):
         return Package.get_by_key_name('test-package').latest_version.version

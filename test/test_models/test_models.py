@@ -6,7 +6,7 @@ from testcase import TestCase
 import models
 
 class ModelTest(TestCase):
-    def testEllipsize(self):
+    def test_ellipsize(self):
         self.assertEquals("foo bar", models.ellipsize("foo bar", 7))
         self.assertEquals("foo...", models.ellipsize("foo bar baz", 7))
         self.assertEquals("foobarb...", models.ellipsize("foobarbaz", 7))

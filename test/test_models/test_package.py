@@ -6,29 +6,29 @@ from testcase import TestCase
 from models.package import Package
 
 class PackageTest(TestCase):
-    def testExists(self):
-        Package.new(name='test-package', owner=self.adminUser()).put()
+    def test_exists(self):
+        Package.new(name='test-package', owner=self.admin_user()).put()
 
         self.assertTrue(Package.exists('test-package'))
         self.assertFalse(Package.exists('other-package'))
 
-    def testHasVersion(self):
-        package = Package.new(name='test-package', owner=self.adminUser())
+    def test_has_version(self):
+        package = Package.new(name='test-package', owner=self.admin_user())
         package.put()
-        self.packageVersion(package, '1.2.3').put()
+        self.package_version(package, '1.2.3').put()
 
         self.assertTrue(package.has_version('1.2.3'))
         self.assertFalse(package.has_version('1.2.4'))
 
-    def testDescription(self):
-        package = Package.new(name='test-package', owner=self.adminUser())
+    def test_description(self):
+        package = Package.new(name='test-package', owner=self.admin_user())
         package.put()
 
         def get_description():
             return Package.get_by_key_name(package.name).description
 
         def set_latest_version(version, **additional_pubspec_fields):
-            version = self.packageVersion(
+            version = self.package_version(
                 package, version, **additional_pubspec_fields)
             package.latest_version = version
             version.put()
