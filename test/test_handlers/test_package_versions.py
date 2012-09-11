@@ -73,6 +73,30 @@ class PackageVersionsTest(TestCase):
         self.postPackageVersion('1.2.4')
         self.assertEqual(self.latestVersion(), SemanticVersion('1.2.4'))
 
+    def testCreateSetsLatestPackageForPrereleaseVersionsOnly(self):
+        self.beAdminUser()
+
+        self.postPackageVersion('1.2.3-pre1')
+        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3-pre1'))
+
+        self.postPackageVersion('1.2.3-pre0')
+        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3-pre1'))
+
+        self.postPackageVersion('1.2.3-pre2')
+        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3-pre2'))
+
+    def testCreateSetsLatestPackageToOldVersionOverPrereleaseVersion(self):
+        self.beAdminUser()
+
+        self.postPackageVersion('1.2.3-pre1')
+        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.3-pre1'))
+
+        self.postPackageVersion('1.2.0')
+        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.0'))
+
+        self.postPackageVersion('1.2.3-pre2')
+        self.assertEqual(self.latestVersion(), SemanticVersion('1.2.0'))
+
     def testCreateDoesntSetLatestPackageForDecreasedVersionNumber(self):
         self.beAdminUser()
 

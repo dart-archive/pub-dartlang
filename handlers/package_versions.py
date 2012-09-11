@@ -66,9 +66,7 @@ class PackageVersions(object):
                            (package.name, version.version))
             raise cherrypy.HTTPRedirect(failure_url)
 
-        if package.latest_version is None or \
-                (not version.version.is_prerelease and
-                 package.latest_version.version < version.version):
+        if self._should_update_latest_version(package.latest_version, version):
             package.latest_version = version
 
         with models.transaction():
@@ -78,6 +76,14 @@ class PackageVersions(object):
         handlers.flash('%s %s created successfully.' %
                        (package.name, version.version))
         raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
+
+    def _should_update_latest_version(self, old, new):
+        if old is None: return True
+        was_prerelease = old.version.is_prerelease
+        is_prerelease = new.version.is_prerelease
+        if was_prerelease and not is_prerelease: return True
+        if is_prerelease and not was_prerelease: return False
+        return old.version < new.version
 
     def show(self, package_id, id, format):
         """Retrieve the page describing a package version.
