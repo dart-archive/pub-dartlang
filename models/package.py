@@ -26,6 +26,11 @@ class Package(db.Model):
     updated = db.DateTimeProperty(auto_now=True)
     """When the package or any of its versions were last updated."""
 
+    # This should only reference a PackageVersion, but cyclic imports aren't
+    # allowed so we can't import PackageVersion here.
+    latest_version = db.ReferenceProperty()
+    """The most recent non-prerelease version of this package."""
+
     @classmethod
     def new(cls, **kwargs):
         """Construct a new package.

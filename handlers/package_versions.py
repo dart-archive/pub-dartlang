@@ -8,6 +8,7 @@ from google.appengine.ext import db
 from google.appengine.api import users
 
 import handlers
+import models
 from models.package import Package
 from models.package_version import PackageVersion
 
@@ -65,7 +66,14 @@ class PackageVersions(object):
                            (package.name, version.version))
             raise cherrypy.HTTPRedirect(failure_url)
 
-        version.put()
+        if package.latest_version is None or \
+                (not version.version.is_prerelease and
+                 package.latest_version.version < version.version):
+            package.latest_version = version
+
+        with models.transaction():
+            package.put()
+            version.put()
 
         handlers.flash('%s %s created successfully.' %
                        (package.name, version.version))
