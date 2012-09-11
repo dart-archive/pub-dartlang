@@ -80,10 +80,11 @@ class Packages(object):
         if format == 'json':
             package = handlers.request().package
             cherrypy.response.headers['Content-Type'] = 'application/json'
+            versions = [str(version.version) for version in package.version_set]
             return json.dumps({
                 "name": package.name,
                 "owner": package.owner.email(),
-                "versions": [version.version for version in package.version_set]
+                "versions": versions
             })
         elif format is 'html':
             package = handlers.request().package

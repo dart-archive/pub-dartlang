@@ -8,6 +8,7 @@ from google.appengine.api import users
 
 from testcase import TestCase
 from models.package import Package
+from models.semantic_version import SemanticVersion
 
 class PackagesTest(TestCase):
     def testAdminCreatesPackage(self):
@@ -37,7 +38,7 @@ class PackagesTest(TestCase):
 
         version = package.version_set.get()
         self.assertTrue(version is not None)
-        self.assertEqual(version.version, '0.0.1')
+        self.assertEqual(version.version, SemanticVersion('0.0.1'))
         self.assertEqual(version.package.name, 'test-package')
 
     def testNewRequiresLogin(self):

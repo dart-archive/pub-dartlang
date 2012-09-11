@@ -5,21 +5,17 @@
 from google.appengine.ext import db
 
 from testcase import TestCase
-from models.package import Package
+from models.semantic_version import SemanticVersion
 
-class PackageVersionTest(TestCase):
+class SemanticVersionTest(TestCase):
     def testVersionMatchesSemver(self):
-        package = Package.new(name='test-package', owner=self.adminUser())
-        package.put()
-
         def assertValidSemver(version):
-            # This just shouldn't raise an error
-            self.packageVersion(package, version)
+            self.assertEqual(version, str(SemanticVersion(version)))
 
         def assertInvalidSemver(version):
             self.assertRaises(
                 db.BadValueError,
-                lambda: self.packageVersion(package, version))
+                lambda: SemanticVersion(version))
 
         assertValidSemver("0.0.0")
         assertValidSemver("12.34.56")

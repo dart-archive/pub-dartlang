@@ -7,6 +7,7 @@ import yaml
 from testcase import TestCase
 from models.package import Package
 from models.package_version import PackageVersion
+from models.semantic_version import SemanticVersion
 
 class PackageVersionsTest(TestCase):
     def setUp(self):
@@ -49,7 +50,7 @@ class PackageVersionsTest(TestCase):
         version = PackageVersion.get_by_name_and_version(
             'test-package', '1.2.3')
         self.assertTrue(version is not None)
-        self.assertEqual(version.version, '1.2.3')
+        self.assertEqual(version.version, SemanticVersion('1.2.3'))
         self.assertEqual(version.package.name, 'test-package')
 
     def testCreateRequiresOwner(self):
