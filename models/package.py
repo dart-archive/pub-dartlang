@@ -4,6 +4,7 @@
 
 from google.appengine.ext import db
 
+import models
 from pubspec import Pubspec
 
 class Package(db.Model):
@@ -36,6 +37,15 @@ class Package(db.Model):
         """The short description of the package."""
         if self.latest_version is None: return None
         return self.latest_version.pubspec.get('description')
+
+    _MAX_DESCRIPTION_CHARS = 200
+
+    @property
+    def ellipsized_description(self):
+        """The short description of the package, truncated if necessary."""
+        description = self.description
+        if description is None: return None
+        return models.ellipsize(description, Package._MAX_DESCRIPTION_CHARS)
 
     @classmethod
     def new(cls, **kwargs):
