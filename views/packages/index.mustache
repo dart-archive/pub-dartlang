@@ -11,11 +11,13 @@
       <th>Last Updated</th>
     </tr>
   </thead>
-  {{#packages}}
-    <tr>
-      <td><strong><a href="/packages/{{name}}">{{name}}</a></strong></td>
-      <td>{{owner.nickname}}</td>
-      <td>{{updated}}</td>
-    </tr>
-  {{/packages}}
+  <tbody>
+    {{#packages}}
+      <tr>
+        <td><strong><a href="/packages/{{name}}">{{name}}</a></strong></td>
+        <td>{{owner.nickname}}</td>
+        <td>{{updated}}</td>
+      </tr>
+    {{/packages}}
+  </tbody>
 </table>
