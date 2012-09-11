@@ -7,6 +7,7 @@
   <thead>
     <tr>
       <th>Package</th>
+      <th>Description</th>
       <th>Owner</th>
       <th>Last Updated</th>
     </tr>
@@ -15,6 +16,7 @@
     {{#packages}}
       <tr>
         <td><strong><a href="/packages/{{name}}">{{name}}</a></strong></td>
+        <td>{{ellipsized_description}}</td>
         <td>{{owner.nickname}}</td>
         <td>{{updated}}</td>
       </tr>
