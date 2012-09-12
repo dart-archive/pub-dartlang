@@ -6,6 +6,7 @@ from google.appengine.ext import db
 import json
 
 from pubspec import Pubspec
+from semantic_version import SemanticVersion
 
 class DocumentProperty(db.Property):
     """A property that stores a JSON-encodable document."""
@@ -33,3 +34,18 @@ class PubspecProperty(DocumentProperty):
         """Load the pubspec from JSON."""
         contents = super(PubspecProperty, self).make_value_from_datastore(value)
         return Pubspec(contents)
+
+class VersionProperty(db.Property):
+    """A property that stores a semantic version."""
+
+    data_type = SemanticVersion
+
+    def get_value_for_datastore(self, model_instance):
+        value = super(VersionProperty, self) \
+            .get_value_for_datastore(model_instance)
+        return str(value)
+
+    def make_value_from_datastore(self, value):
+        if value is None:
+            return None
+        return SemanticVersion(value)

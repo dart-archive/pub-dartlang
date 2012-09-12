@@ -5,6 +5,7 @@
 """This module provides utility functions for models."""
 
 from contextlib import contextmanager
+import re
 
 from google.appengine.ext import db
 
@@ -15,3 +16,20 @@ def transaction():
 
     Meant to be used with the 'with' keyword."""
     yield
+
+_ELLIPSIZE_RE = re.compile(r"(\s+[^\s]*)?$")
+
+def ellipsize(string, max):
+    """Truncate a string and adds an ellipsis at the end.
+
+    This function ensures that the ellipsis appears between words if possible.
+
+    Arguments:
+      string: The string to truncate.
+      max: The maximum length of the string, over which it will be truncated.
+
+    Returns: The truncated string.
+    """
+
+    if len(string) <= max: return string
+    return _ELLIPSIZE_RE.sub("...", string[0:max])

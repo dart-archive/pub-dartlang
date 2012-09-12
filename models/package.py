@@ -4,6 +4,7 @@
 
 from google.appengine.ext import db
 
+import models
 from pubspec import Pubspec
 
 class Package(db.Model):
@@ -25,6 +26,26 @@ class Package(db.Model):
 
     updated = db.DateTimeProperty(auto_now=True)
     """When the package or any of its versions were last updated."""
+
+    # This should only reference a PackageVersion, but cyclic imports aren't
+    # allowed so we can't import PackageVersion here.
+    latest_version = db.ReferenceProperty()
+    """The most recent non-prerelease version of this package."""
+
+    @property
+    def description(self):
+        """The short description of the package."""
+        if self.latest_version is None: return None
+        return self.latest_version.pubspec.get('description')
+
+    _MAX_DESCRIPTION_CHARS = 200
+
+    @property
+    def ellipsized_description(self):
+        """The short description of the package, truncated if necessary."""
+        description = self.description
+        if description is None: return None
+        return models.ellipsize(description, Package._MAX_DESCRIPTION_CHARS)
 
     @classmethod
     def new(cls, **kwargs):
@@ -64,5 +85,6 @@ class Package(db.Model):
     def has_version(self, version):
         """Determine whether this package has a given version uploaded."""
         from package_version import PackageVersion
-        version = PackageVersion.get_by_name_and_version(self.name, version)
+        version = PackageVersion.get_by_name_and_version(
+            self.name, str(version))
         return version is not None

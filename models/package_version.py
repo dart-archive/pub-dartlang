@@ -8,8 +8,9 @@ import tarfile
 from google.appengine.ext import db
 import yaml
 
+from semantic_version import SemanticVersion
 from package import Package
-from properties import PubspecProperty
+from properties import PubspecProperty, VersionProperty
 from pubspec import Pubspec
 
 class PackageVersion(db.Model):
@@ -19,21 +20,8 @@ class PackageVersion(db.Model):
     the package.
     """
 
-    _SEMANTIC_VERSION_RE = re.compile(r"""
-      ^
-      (\d+)\.(\d+)\.(\d+)              # Version number.
-      (-([0-9a-z-]+(\.[0-9a-z-]+)*))?  # Pre-release.
-      (\+([0-9a-z-]+(\.[0-9a-z-]+)*))? # Build.
-      $                                # Consume entire string.
-      """, re.VERBOSE | re.IGNORECASE)
-
-    def _check_semver(value):
-        """Validate that value matches the semantic version spec."""
-        if PackageVersion._SEMANTIC_VERSION_RE.match(value): return
-        raise db.BadValueError('"%s" is not a valid semantic version.' % value)
-
-    version = db.StringProperty(required=True, validator=_check_semver)
-    """The version of the package, a valid semantic version."""
+    version = VersionProperty(required=True)
+    """The version of the package."""
 
     created = db.DateTimeProperty(auto_now_add=True)
     """When this package version was created."""
@@ -69,8 +57,12 @@ class PackageVersion(db.Model):
         if 'pubspec' in kwargs and 'version' not in kwargs:
             kwargs['version'] = kwargs['pubspec'].required('version')
 
+        if 'version' in kwargs and \
+                not isinstance(kwargs['version'], SemanticVersion):
+            kwargs['version'] = SemanticVersion(kwargs['version'])
+
         if not 'key_name' in kwargs and not 'key' in kwargs:
-            kwargs['key_name'] = kwargs['version']
+            kwargs['key_name'] = str(kwargs['version'])
 
         if not 'parent' in kwargs:
             kwargs['parent'] = kwargs['package']
@@ -100,8 +92,8 @@ class PackageVersion(db.Model):
                 'Name "%s" in pubspec doesn\'t match package name "%s"' %
                 (name_in_pubspec, self.package.name))
 
-        version_in_pubspec = self.pubspec.required('version')
+        version_in_pubspec = SemanticVersion(self.pubspec.required('version'))
         if version_in_pubspec != self.version:
             raise db.BadValueError(
                 'Version "%s" in pubspec doesn\'t match version "%s"' %
-                (name_in_pubspec, self.version))
+                (version_in_pubspec._key(), self.version._key()))

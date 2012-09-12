@@ -8,6 +8,7 @@ from google.appengine.ext import db
 from google.appengine.api import users
 
 import handlers
+import models
 from models.package import Package
 from models.package_version import PackageVersion
 
@@ -65,11 +66,24 @@ class PackageVersions(object):
                            (package.name, version.version))
             raise cherrypy.HTTPRedirect(failure_url)
 
-        version.put()
+        if self._should_update_latest_version(package.latest_version, version):
+            package.latest_version = version
+
+        with models.transaction():
+            package.put()
+            version.put()
 
         handlers.flash('%s %s created successfully.' %
                        (package.name, version.version))
         raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
+
+    def _should_update_latest_version(self, old, new):
+        if old is None: return True
+        was_prerelease = old.version.is_prerelease
+        is_prerelease = new.version.is_prerelease
+        if was_prerelease and not is_prerelease: return True
+        if is_prerelease and not was_prerelease: return False
+        return old.version < new.version
 
     def show(self, package_id, id, format):
         """Retrieve the page describing a package version.

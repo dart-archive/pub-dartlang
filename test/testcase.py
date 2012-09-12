@@ -56,7 +56,7 @@ class TestCase(unittest.TestCase):
         """
         self.testbed.deactivate()
 
-    def normalUser(self, name = None):
+    def normal_user(self, name = None):
         """Constructs a non-admin user object.
 
         Arguments:
@@ -78,7 +78,7 @@ class TestCase(unittest.TestCase):
         self.__users[name] = users.User(email = email)
         return self.__users[name]
 
-    def adminUser(self, name = None):
+    def admin_user(self, name = None):
         """Constructs an admin user object.
 
         Arguments:
@@ -100,7 +100,7 @@ class TestCase(unittest.TestCase):
         self.__admins[name] = users.User(email = email)
         return self.__admins[name]
 
-    def beNormalUser(self, name = None):
+    def be_normal_user(self, name = None):
         """Log in as a non-admin user.
 
         Arguments:
@@ -110,10 +110,10 @@ class TestCase(unittest.TestCase):
             non-admin users.
         """
         self.testbed.setup_env(
-            user_email = self.normalUser(name).email(),
+            user_email = self.normal_user(name).email(),
             overwrite = True)
 
-    def beAdminUser(self, name = None):
+    def be_admin_user(self, name = None):
         """Log in as an admin user.
 
         Arguments:
@@ -123,11 +123,11 @@ class TestCase(unittest.TestCase):
             non-admin users.
         """
         self.testbed.setup_env(
-            user_email = self.adminUser(name).email(),
+            user_email = self.admin_user(name).email(),
             user_is_admin = '1',
             overwrite = True)
 
-    def packageVersion(self, package, version,
+    def package_version(self, package, version,
                        **additional_pubspec_fields):
         """Create a package version object.
 
@@ -140,9 +140,9 @@ class TestCase(unittest.TestCase):
             version=version,
             package=package,
             pubspec=pubspec,
-            contents=self.tarPubspec(pubspec))
+            contents=self.tar_pubspec(pubspec))
 
-    def tarPubspec(self, pubspec):
+    def tar_pubspec(self, pubspec):
         """Return a tarfile containing the given pubspec.
 
         The pubspec is dumped to YAML, then placed in a tarfile. The tarfile is
@@ -159,14 +159,14 @@ class TestCase(unittest.TestCase):
 
         return tarfile_io.getvalue()
 
-    def uploadArchive(self, name, version, **additional_pubspec_fields):
+    def upload_archive(self, name, version, **additional_pubspec_fields):
         """Return a tuple representing a package archive upload."""
         pubspec = {'name': name, 'version': version}
         pubspec.update(additional_pubspec_fields)
-        contents = self.tarPubspec(pubspec)
+        contents = self.tar_pubspec(pubspec)
         return ('file', '%s-%s.tar.gz' % (name, version), contents)
 
-    def assertRequiresLogin(self, response):
+    def assert_requires_login(self, response):
         """Assert that the given response is requesting user authentication."""
         self.assertEqual(response.status_int, 302)
         self.assertTrue(
@@ -174,7 +174,7 @@ class TestCase(unittest.TestCase):
                 'https://www.google.com/accounts/Login?continue='),
             'expected response to redirect to the Google login page')
 
-    def assertErrorPage(self, response):
+    def assert_error_page(self, response):
         """Assert that the given response renders an HTTP error page.
 
         This only checks for HTTP errors; it will not detect flash error
@@ -200,7 +200,7 @@ class TestCase(unittest.TestCase):
         """
         return BeautifulSoup(response.body)
 
-    def assertLink(self, response, url):
+    def assert_link(self, response, url):
         """Assert that the response contains a link to the given url.
 
         Arguments:
@@ -208,9 +208,9 @@ class TestCase(unittest.TestCase):
           url: The link URL to look for.
         """
         error_msg = "expected response body to contain a link to '%s'" % url
-        self.assertTrue(self._linkExists(response, url), error_msg)
+        self.assertTrue(self._link_exists(response, url), error_msg)
 
-    def assertNoLink(self, response, url):
+    def assert_no_link(self, response, url):
         """Assert that the response doesn't contain a link to the given url.
 
         Arguments:
@@ -218,10 +218,10 @@ class TestCase(unittest.TestCase):
           url: The link URL to look for.
         """
         error_msg = "expected response body not to contain a link to '%s'" % url
-        self.assertFalse(self._linkExists(response, url), error_msg)
+        self.assertFalse(self._link_exists(response, url), error_msg)
 
 
-    def _linkExists(self, response, url):
+    def _link_exists(self, response, url):
         """Return whether or not the response contains a link to the given url.
 
         Arguments:
