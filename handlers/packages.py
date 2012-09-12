@@ -86,7 +86,7 @@ class Packages(object):
                 "owner": package.owner.email(),
                 "versions": versions
             })
-        elif format is 'html':
+        elif format == 'html':
             package = handlers.request().package
             return handlers.render(
                 "packages/show", package = package,
