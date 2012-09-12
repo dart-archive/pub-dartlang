@@ -88,10 +88,12 @@ class Packages(object):
             })
         elif format == 'html':
             package = handlers.request().package
+            version_count = package.version_set.count()
             return handlers.render(
-                "packages/show", package = package,
-                # TODO(nweiz): paginate
-                versions = package.version_set.fetch(10),
-                is_owner = package.owner == users.get_current_user())
+                "packages/show", package=package,
+                versions=package.version_set.order('-sort_order').fetch(10),
+                version_count=version_count,
+                show_versions_link=version_count > 10,
+                is_owner=package.owner == users.get_current_user())
         else:
             raise handlers.http_error(404)

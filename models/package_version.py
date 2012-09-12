@@ -36,6 +36,11 @@ class PackageVersion(db.Model):
                                    collection_name = "version_set")
     """The Package model for this package version."""
 
+    sort_order = db.IntegerProperty(default=-1)
+    """The sort order for this version.
+
+    Lower numbers indicate earlier versions."""
+
     @classmethod
     def new(cls, **kwargs):
         """Construct a new package version.

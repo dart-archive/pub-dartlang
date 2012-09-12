@@ -15,6 +15,13 @@
     </li>
   {{/versions}}
 </ul>
+{{#show_versions_link}}
+  <p>
+    <a href="/packages/{{package.name}}/versions">
+      All {{version_count}} versions
+    </a>
+  </p>
+{{/show_versions_link}}
 {{#is_owner}}
   <p><a href="/packages/{{package.name}}/versions/new">Add Version</a></p>
 {{/is_owner}}
