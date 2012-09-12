@@ -18,3 +18,10 @@ body {
   // Account for the fixed navbar height.
   padding-top: 50px;
 }
+
+footer {
+  @extend .well;
+  @extend .well-small;
+  font-size: 13px;
+  text-align: center;
+}

@@ -2350,7 +2350,7 @@ table .span24 {
   border-radius: 4px;
 }
 
-.well {
+.well, footer {
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
@@ -2364,7 +2364,7 @@ table .span24 {
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-.well blockquote {
+.well blockquote, footer blockquote {
   border-color: #ddd;
   border-color: rgba(0, 0, 0, 0.15);
 }
@@ -2376,7 +2376,7 @@ table .span24 {
   border-radius: 6px;
 }
 
-.well-small {
+.well-small, footer {
   padding: 9px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -4713,4 +4713,9 @@ a.label:hover, a.badge:hover {
 
 body {
   padding-top: 50px;
+}
+
+footer {
+  font-size: 13px;
+  text-align: center;
 }
