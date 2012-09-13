@@ -13,6 +13,9 @@ from lib import util
 class Pubspec(dict):
     """A parsed pubspec.yaml file."""
 
+    _STRING_FIELDS = ['name', 'version', 'author', 'homepage']
+    """Pubspec fields that must be strings if they're defined at all."""
+
     def __init__(self, *args, **kwargs):
         super(Pubspec, self).__init__(*args, **kwargs)
 
@@ -20,16 +23,20 @@ class Pubspec(dict):
             raise db.BadValueError(
                 'Pubspec cannot contain both "author" and "authors" fields.')
 
-        if 'author' in self and not util.is_str(self['author']):
-            raise db.BadValueError(
-                'Pubspec field "author" must be a string, was "%r"' %
-                self['author'])
+        for field in Pubspec._STRING_FIELDS:
+            if field in self and not util.is_str(self[field]):
+                raise db.BadValueError(
+                    'Pubspec field "%s" must be a string, was "%r"' %
+                    (field, self[field]))
 
         if 'authors' in self and not (util.is_str(self['authors']) or
                                       isinstance(self['authors'], list)):
             raise db.BadValueError(
                 'Pubspec field "authors" must be a string or list, was "%r"' %
                 self['authors'])
+
+    def _validate_string_field(self, field):
+        """Raise an error if the given field isn't a string or None."""
 
     @classmethod
     def from_archive(cls, file):

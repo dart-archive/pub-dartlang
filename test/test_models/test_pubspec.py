@@ -11,10 +11,10 @@ class PubspecTest(TestCase):
     def test_disallows_author_and_authors(self):
         self.assert_invalid_pubspec(author="Bob", authors="Nathan")
 
-    def test_disallows_non_string_author(self):
+    def test_requires_author_to_be_string(self):
         self.assert_invalid_pubspec(author=["Bob"])
 
-    def test_disallows_non_string_or_list_authors(self):
+    def test_requires_authors_to_be_string_or_list(self):
         self.assert_invalid_pubspec(author=12)
 
     def test_author(self):
@@ -30,6 +30,15 @@ class PubspecTest(TestCase):
     def test_authors(self):
         self.assertEqual(Pubspec(authors=["Nathan", "Bob"]).authors,
                          [("Nathan", None), ("Bob", None)])
+
+    def test_requires_name_to_be_string(self):
+        self.assert_invalid_pubspec(name=12)
+
+    def test_requires_version_to_be_string(self):
+        self.assert_invalid_pubspec(version=12)
+
+    def test_requires_homepage_to_be_string(self):
+        self.assert_invalid_pubspec(homepage=12)
 
     def assert_invalid_pubspec(self, **kwargs):
         self.assertRaises(db.BadValueError, lambda: Pubspec(**kwargs))
