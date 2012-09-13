@@ -2,13 +2,15 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+import base64
 import unittest
 from StringIO import StringIO
 
 import cherrypy
 import webtest
 from bs4 import BeautifulSoup
-from google.appengine.ext.testbed import Testbed
+from google.appengine.ext import deferred
+from google.appengine.ext.testbed import Testbed, TASKQUEUE_SERVICE_NAME
 from google.appengine.api import users
 import yaml
 import tarfile
@@ -221,6 +223,15 @@ class TestCase(unittest.TestCase):
         error_msg = "expected response body not to contain a link to '%s'" % url
         self.assertFalse(self._link_exists(response, url), error_msg)
 
+    def run_deferred_tasks(self, queue='default'):
+        """Run all tasks that have been deferred.
+
+        Arguments:
+          queue: The task queue in which the deferred tasks are queued.
+        """
+        taskqueue_stub = self.testbed.get_stub(TASKQUEUE_SERVICE_NAME)
+        for task in taskqueue_stub.GetTasks(queue):
+            deferred.run(base64.b64decode(task['body']))
 
     def _link_exists(self, response, url):
         """Return whether or not the response contains a link to the given url.
