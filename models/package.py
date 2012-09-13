@@ -50,6 +50,12 @@ class Package(db.Model):
         return models.ellipsize(description, Package._MAX_DESCRIPTION_CHARS)
 
     @property
+    def homepage(self):
+        """The home page URL for the package, or None."""
+        if self.latest_version is None: return None
+        return self.latest_version.pubspec.get('homepage')
+
+    @property
     def authors_html(self):
         """Inline HTML for the authors of this package."""
         if self.latest_version is None: return ''
