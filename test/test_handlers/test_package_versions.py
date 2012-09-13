@@ -32,8 +32,7 @@ class PackageVersionsTest(TestCase):
         self.be_admin_user()
         self.post_package_version('1.2.3')
 
-        version = PackageVersion.get_by_name_and_version(
-            'test-package', '1.2.3')
+        version = self.get_package_version('1.2.3')
         self.assertTrue(version is not None)
         self.assertEqual(version.version, SemanticVersion('1.2.3'))
         self.assertEqual(version.package.name, 'test-package')
@@ -60,8 +59,7 @@ class PackageVersionsTest(TestCase):
             'http://localhost:80/packages/test-package/versions/new')
         self.assertTrue(response.cookies_set.has_key('flash'))
 
-        version = PackageVersion.get_by_name_and_version(
-            'test-package', '1.2.3')
+        version = self.get_package_version('1.2.3')
         self.assertEqual(version.pubspec['description'], 'old')
 
     def test_create_sets_latest_package_for_increased_version_number(self):
@@ -115,6 +113,24 @@ class PackageVersionsTest(TestCase):
         self.post_package_version('1.2.5-pre')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
+    def test_create_sets_sort_order(self):
+        self.be_admin_user()
+
+        self.post_package_version('1.2.3')
+        self.run_deferred_tasks()
+        self.assertEqual(self.get_package_version('1.2.3').sort_order, 0)
+
+        self.post_package_version('1.2.4')
+        self.run_deferred_tasks()
+        self.assertEqual(self.get_package_version('1.2.3').sort_order, 0)
+        self.assertEqual(self.get_package_version('1.2.4').sort_order, 1)
+
+        self.post_package_version('1.2.4-pre')
+        self.run_deferred_tasks()
+        self.assertEqual(self.get_package_version('1.2.3').sort_order, 0)
+        self.assertEqual(self.get_package_version('1.2.4-pre').sort_order, 1)
+        self.assertEqual(self.get_package_version('1.2.4').sort_order, 2)
+
     def test_show_package_version_tar_gz(self):
         version = self.package_version(self.package, '1.2.3')
         version.put()
@@ -162,3 +178,6 @@ class PackageVersionsTest(TestCase):
 
     def latest_version(self):
         return Package.get_by_key_name('test-package').latest_version.version
+
+    def get_package_version(self, version):
+        return PackageVersion.get_by_name_and_version('test-package', version)

@@ -47,9 +47,43 @@ class SemanticVersion(object):
     def __lt__(self, other):
         return self._key() < other._key()
 
+    def __cmp__(self, other):
+        if not isinstance(other, SemanticVersion):
+            other = SemanticVersion(other)
+        return cmp(self._key(), other._key())
+
     def _key(self):
         """The key to use for equality and ordering comparisons."""
-        return (self.major, self.minor, self.patch, self.prerelease, self.build)
+        return (self.major, self.minor, self.patch,
+                self._prerelease_key(), self._build_key())
+
+    def _prerelease_key(self):
+        """The key to use for prerelease versions.
+
+        This is modified from the basic prerelease list to support the semantic
+        version spec's ordering requirements. The first element is 1 if no
+        prerelease components exists, and 0 if one does; this ensures that
+        prerelease components sort below release versions.
+
+        Each sub-component of the prerelease component is prefixed with a 0 for
+        integer components and a 1 for string components, since integers sort
+        below strings in semver."""
+
+        if self.prerelease is None: return [1]
+        return [0] + [(0 if isinstance(subcomponent, int) else 1, subcomponent)
+                      for subcomponent in self.prerelease]
+
+    def _build_key(self):
+        """The key to use for build versions.
+
+        This is modified from the basic build list to support the semantic
+        version spec's ordering requirements. Each sub-component of the build
+        component is prefixed with a 0 for integer components and a 1 for string
+        components, since integers sort below strings in semver."""
+
+        if self.build is None: return None
+        return [(0 if isinstance(subcomponent, int) else 1, subcomponent)
+                for subcomponent in self.build]
 
     def __str__(self):
         prerelease = ""

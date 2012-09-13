@@ -5,6 +5,7 @@
 import cherrypy
 import routes
 from google.appengine.ext import db
+from google.appengine.ext import deferred
 from google.appengine.api import users
 
 import handlers
@@ -17,6 +18,13 @@ class PackageVersions(object):
 
     This handler is in charge of individual versions of packages.
     """
+
+    def index(self, package_id):
+        """Retrieve a list of all versions for a given package."""
+        package = handlers.request().package
+        return handlers.render(
+            "packages/versions/index", package=package,
+            versions=package.version_set.order('-sort_order').run())
 
     def new(self, package_id):
         """Retrieve the page for uploading a package version.
@@ -73,9 +81,20 @@ class PackageVersions(object):
             package.put()
             version.put()
 
+        deferred.defer(self._compute_version_order, package)
+
         handlers.flash('%s %s created successfully.' %
                        (package.name, version.version))
         raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
+
+    def _compute_version_order(self, package):
+        """Compute the sort order for all versions of a given package."""
+        versions = list(package.version_set.run())
+        versions.sort(key=lambda version: version.version)
+        for i, version in enumerate(versions):
+            version.sort_order = i
+        with models.transaction():
+            for version in versions: version.put()
 
     def _should_update_latest_version(self, old, new):
         if old is None: return True
