@@ -6,7 +6,10 @@
 {{#package.description}}
   <p>{{package.description}}</p>
 {{/package.description}}
-<h3>Owned by {{package.owner.nickname}}</h3>
+{{#package.authors_html}}
+  <h3>Authors: {{& package.authors_html}}</h3>
+{{/package.authors_html}}
+<h4>Owner: {{package.owner.nickname}}</h2>
 <ul>
   {{#versions}}
     <li>

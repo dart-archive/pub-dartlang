@@ -8,7 +8,7 @@
     <tr>
       <th>Package</th>
       <th>Description</th>
-      <th>Owner</th>
+      <th>Author(s)</th>
       <th>Last Updated</th>
     </tr>
   </thead>
@@ -16,8 +16,8 @@
     {{#packages}}
       <tr>
         <td><strong><a href="/packages/{{name}}">{{name}}</a></strong></td>
-        <td>{{ellipsized_description}}</td>
-        <td>{{owner.nickname}}</td>
+        <td>{{#description}}{{ellipsized_description}}{{/description}}</td>
+        <td>{{& authors_html}}</td>
         <td>{{updated}}</td>
       </tr>
     {{/packages}}
