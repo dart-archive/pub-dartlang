@@ -35,9 +35,6 @@ class Pubspec(dict):
                 'Pubspec field "authors" must be a string or list, was "%r"' %
                 self['authors'])
 
-    def _validate_string_field(self, field):
-        """Raise an error if the given field isn't a string or None."""
-
     @classmethod
     def from_archive(cls, file):
         """Extract and return the parsed pubspec from a package archive.
