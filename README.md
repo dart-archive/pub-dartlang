@@ -49,34 +49,41 @@ Once everything is installed, you can run the tests by running:
 
     ./test.py
 
-### Modifying the CSS
+### Modifying the CSS and Documentation
 
 The CSS files are generated from the source [Sass][] files using [Compass][].
-To get ready to make changes, you'll need [Ruby][] and then:
+The HTML documentation files are generated from the source [Markdown][] using
+[Jekyll][]. To get ready to make changes, you'll need [Ruby][] and then:
 
 [ruby]: http://ruby-lang.org
 [sass]: http://sass-lang.com
 [compass]: http://compass-style.org
+[markdown]: http://daringfireball.net/projects/markdown/
+[jekyll]: http://jekyllrb.com/
 
  1. Ensure you have bundler installed:
 
         gem install bundler
 
- 2. Run this to install bootstrap and the other dependencies:
+ 2. Run this to install the dependencies:
 
         bundle install
 
-Note that this is only needed on your development machine to iterate on the CSS.
-The deployed server just uses the pre-compiled CSS and only requires Python.
+Note that this is only needed on your development machine to iterate on the CSS
+and documentation. The deployed server just uses the pre-compiled CSS and HTML
+and only requires Python.
 
-Once you have everything installed, to modify the styles:
+Once you have everything installed, to modify the styles and documentation:
 
- 1. Run compass to automatically regenerate the `.css` files when any Sass files
-    change:
+ 1. Run [Foreman][] to automatically regenerate the CSS and HTML files when any
+    Sass or Markdown files change:
 
-        bundle exec compass watch css
+        bundle exec foreman start
 
- 1. Edit the `.scss` files under `css/sass`.
+ 1. Edit the `.scss` files under `css/sass` and the `.markdown` files under
+    `doc`.
 
-When you make changes to .scss files, make sure check in the generated `.css`
-files with them.
+[foreman]: http://ddollar.github.com/foreman/
+
+When you make changes to SCSS or Markdown files, make sure check in the
+generated CSS or HTML files with them.
