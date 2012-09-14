@@ -1,0 +1,83 @@
+<h1 id="pub-install">pub install</h1>
+
+<aside class="note">
+  <a href="index.html" style="text-align: right;">
+    <i class="icon-hand-right icon-white">&nbsp;</i>
+    Looking for the quick start guide? Get started with pub
+  </a>
+</aside>
+
+<pre><code>$ pub install
+</code></pre>
+
+<p>This command installs all the dependencies listed in the
+<a href="pubspec.html"><code>pubspec.yaml</code></a> file in the current working directory, as well as
+their <a href="glossary.html#transitive-dependencies">transitive dependencies</a>, to a
+<code>packages</code> directory located next to the pubspec. For example:</p>
+
+<pre><code>$ pub install
+Dependencies installed!
+</code></pre>
+
+<p>Once the dependencies are installed, they may be referenced in Dart code. For
+example, if a package depends on <code>unittest</code>:</p>
+
+<p>When <code>pub install</code> installs new dependencies, it writes a
+<a href="glossary.html#lockfile">lockfile</a> to ensure that future installs will use the
+same versions of those dependencies. Application packages should check in the
+lockfile to source control; this ensures the application will use the exact same
+versions of all dependencies for all developers and when deployed to production.
+Library packages should not check in the lockfile, though, since they’re
+expected to work with a range of dependency versions.</p>
+
+<p>If a lockfile already exists, <code>pub install</code> uses the versions of dependencies
+locked in it if possible. If a dependency isn’t locked, pub will install the
+latest version of that dependency that satisfies all the version constraints.
+This is the primary difference between <code>pub install</code> and <a href="pub-update.html"><code>pub
+update</code></a>, which always tries to install the latest versions of
+all dependencies.</p>
+
+<h2 id="installing-a-new-dependency">Installing a new dependency</h2>
+
+<p>If a dependency is added to the pubspec and then <code>pub install</code> is run, it will
+install the new dependency and any of its transitive dependencies to the
+<code>packages</code> directory. However, it won’t change the versions of any
+already-installed dependencies unless that’s necessary to install the new
+dependency.</p>
+
+<h2 id="uninstalling-a-dependency">Uninstalling a dependency</h2>
+
+<p>If a dependency is removed from the pubspec and then <code>pub install</code> is run, it
+will remove the dependency from the <code>packages</code> directory, thus making it
+unavailable for importing. Any transitive dependencies of the removed dependency
+will also be removed, as long as no remaining immediate dependencies also depend
+on them. Removing a dependency will never change the versions of any
+already-installed dependencies.</p>
+
+<h2 id="linked-packages-directories">Linked <code>packages</code> directories</h2>
+
+<p>Every <a href="glossary.html#entrypoint">entrypoint</a> in a package needs to be next to a
+<code>packages</code> directory in order for it to import packages installed by Pub.
+However, it’s not convenient to put every entrypoint at the top level of the
+package alongside the main <code>packages</code> directory. You may have example scripts or
+tests that you want to be able to run from subdirectories.</p>
+
+<p><code>pub install</code> solves this issue by creating additional <code>packages</code> directories
+that link to the main <code>packages</code> directory at the root of your package. It
+assumes your package is laid out according to the <a href="package-layout.html">package layout
+guide</a>, and creates a linked <code>packages</code> directory in
+<code>bin/</code>, <code>test/</code>, and <code>example/</code>, as well as their subdirectories.</p>
+
+<h2 id="the-system-package-cache">The system package cache</h2>
+
+<p>Dependencies are not stored directly in the <code>packages</code> directory when they’re
+installed. Dependencies downloaded over the internet, such as those from Git and
+<a href="http://pub.dartlang.org">pub.dartlang.org</a>, are stored in a system-wide cache
+and linked to from the <code>packages</code> directory. This means that if multiple
+packages use the same version of the same dependency, it will only need to be
+downloaded and stored locally once. It also means that it’s safe to delete the
+<code>packages</code> directory without worrying about re-downloading packages.</p>
+
+<p>By default, the system package cache is located in the <code>.pub-cache</code> subdirectory
+of your home directory. However, it may be configured by setting the <code>PUB_CACHE</code>
+environment variable before running Pub.</p>

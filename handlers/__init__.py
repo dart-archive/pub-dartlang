@@ -29,8 +29,13 @@ def render(name, *context, **kwargs):
     This also surrounds the rendered template in the layout template (located in
     views/layout.mustache)."""
 
+    kwargs_for_layout = kwargs.pop('layout', {})
     content = _renderer.render(
         _renderer.load_template(name), *context, **kwargs)
+    return layout(content, **kwargs_for_layout)
+
+def layout(content, title=None):
+    """Renders a Mustache layout with the given content."""
 
     # We're about to display the flash message, so we should get rid of the
     # cookie containing it.
@@ -39,13 +44,20 @@ def render(name, *context, **kwargs):
     cherrypy.response.cookie['flash']['path'] = '/'
     flash = cherrypy.request.cookie.get('flash')
 
+    if title is not None:
+        title += ' | '
+    else:
+        title = ''
+    title = '%sPub Package Manager' % title
+
     return _renderer.render(
         _renderer.load_template("layout"),
-        content = content,
-        logged_in = users.get_current_user() is not None,
-        login_url = users.create_login_url(cherrypy.url()),
-        logout_url = users.create_logout_url(cherrypy.url()),
-        message = flash and flash.value)
+        content=content,
+        logged_in=users.get_current_user() is not None,
+        login_url=users.create_login_url(cherrypy.url()),
+        logout_url=users.create_logout_url(cherrypy.url()),
+        message=flash and flash.value,
+        title=title)
 
 def flash(message):
     """Records a message for the user.

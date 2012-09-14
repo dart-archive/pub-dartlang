@@ -1,0 +1,194 @@
+<h1 id="pub-package-layout-conventions">Pub: Package layout conventions</h1>
+
+<p>Part of a healthy code ecosystem is consistent conventions. When we all do the
+same thing the same way, it makes it easier for us to learn our way around
+each other’s work. It also makes it easier to write tools that can automatically
+do stuff for us.</p>
+
+<p>When you build a Pub package, we have a set of conventions we encourage you to
+follow. They describe how you organize the files and directories within your
+package, and how to name things. You don’t have to have every single thing
+these guidelines specify. If your package doesn’t have binaries, it doesn’t
+need a directory for them. But if it does, you’ll make everyone’s life easier
+if you call it <code>bin</code>.</p>
+
+<p>To give you a picture of the whole enchilada, here’s what a complete package
+(conveniently named <code>enchilada</code>) that uses every corner of these guidelines
+would look like:</p>
+
+<pre><code>enchilada/
+  pubspec.yaml
+  pubspec.lock *
+  README.md
+  LICENSE
+  enchilada.dart
+  tortilla.dart
+  bin/
+    enchilada
+    packages/ **
+  doc/
+    getting_started.md
+  example/
+    lunch.dart
+    packages/ **
+  lib/
+    beans.dart
+    queso.dart
+  packages/ **
+  test/
+    enchilada_test.dart
+    tortilla_test.dart
+    packages/ **
+</code></pre>
+
+<p>* The <code>pubspec.lock</code> will only be in source control if the package is an
+application package.</p>
+
+<p>** The <code>packages</code> directories will exist locally after you’re run
+<code>pub install</code>, but won’t be checked into source control.</p>
+
+<h2 id="the-basics">The basics</h2>
+
+<pre><code>enchilada/
+  pubspec.yaml
+  pubspec.lock
+</code></pre>
+
+<p>Every package will have a <a href="pubspec.html"><strong>pubspec</strong></a>, a file named
+<code>pubspec.yaml</code>, in the root directory of the package. That’s what <em>makes</em> it a
+package.</p>
+
+<p>Once you’ve run <a href="pub-install.html"><code>pub install</code></a> or
+<a href="pub-update.html"><code>pub update</code></a> on the package, you will also have a
+<strong>lockfile</strong>, named <code>pubspec.lock</code>. If your package is an application package,
+this will be checked into source control. Otherwise, it won’t be.</p>
+
+<pre><code>enchilada/
+  packages/
+    ...
+</code></pre>
+
+<p>Running pub will also generate a <code>packages</code> directory. You will <em>not</em> check
+this into source control, and you won’t need to worry too much about its
+contents. Consider it pub magic, but not scary magic.</p>
+
+<pre><code>enchilada/
+  README.md
+</code></pre>
+
+<p>The open source community has a few other files that commonly appear at the top
+level of a project: <code>README</code>, <code>LICENSE</code>, <code>AUTHORS</code>, etc. If you use any of
+those, they can go in the top level of the package too. The specific ones you
+use are up to you, but please do have a README.</p>
+
+<h2 id="public-libraries">Public libraries</h2>
+
+<pre><code>enchilada/
+  enchilada.dart
+  tortilla.dart
+</code></pre>
+
+<p>Many packages are <em>library packages</em>: they define Dart libraries that other
+packages can import and use. These public Dart library files go directly in the
+top level directory for the package.</p>
+
+<p>Most packages will define a single library that users can import. In that case,
+its name should usually be the same as the name of the package, like
+<code>enchilada.dart</code> in the example here. But you can also define other libraries
+with whatever names make sense for your package.</p>
+
+<p>When you do, users can import these libraries using the name of the package and
+the library file, like so:</p>
+
+<h2 id="implementation-files">Implementation files</h2>
+
+<pre><code>enchilada/
+  lib/
+    beans.dart
+    queso.dart
+</code></pre>
+
+<p>The top level of a package contains files that are “publicly” visible: other
+packages are free to import them. But much of a package’s code is internal
+implementation libraries that should only be imported and used by the package
+itself. Those go inside a directory called <code>lib</code>. You can create subdirectories
+in there if it helps you organize things.</p>
+
+<p>Other Dart files within this package (like top-level ones, scripts in <code>bin</code>,
+and tests) can import stuff from <code>lib</code>, but nothing outside the package should.</p>
+
+<!-- TODO(rnystrom): Re-enable this when #4820 is fixed.
+For files within the package, they can still use `"package:"` to import these
+libraries. This is a perfectly valid way to get to files in your *own* package:
+
+
+
+
+-->
+
+<h2 id="tests">Tests</h2>
+
+<pre><code>enchilada/
+  test/
+    enchilada_test.dart
+    tortilla_test.dart
+</code></pre>
+
+<p>Every self-respecting package should have tests. With pub, the convention is
+that these go in a <code>test</code> directory (or some directory inside it if you like)
+and have <code>_test</code> at the end of their file names.</p>
+
+<p>Typically, these use the <a href="http://api.dartlang.org/unittest.html">unittest</a>
+package but you can use whatever testing system that gets you excited.</p>
+
+<h2 id="documentation">Documentation</h2>
+
+<pre><code>enchilada/
+  doc/
+    getting_started.md
+</code></pre>
+
+<p>If you’ve got code and tests, the next piece you need to maximize your karma
+is good documentation. That goes inside a directory named <code>doc</code>.</p>
+
+<p>We don’t currently have any guidelines about format or organization within that.
+Use whatever markup format you like and be happy that you’re actually writing
+docs.</p>
+
+<h2 id="examples">Examples</h2>
+
+<pre><code>enchilada/
+  example/
+    lunch.dart
+</code></pre>
+
+<p>At this point, you’re going for the brass ring. Code, tests, docs, what else
+could your users want? Standalone example programs that use your package, of
+course! Those go inside the <code>example</code> directory. If the examples are complex
+and use multiple files, consider making a directory for each example. Otherwise,
+you can place each one right inside <code>example</code>.</p>
+
+<p>This is an important place to consider using <code>package:</code> to import files from
+your own package. That ensures the example code in your package looks exactly
+like code outside of your package would look.</p>
+
+<h2 id="shell-scripts">Shell scripts</h2>
+
+<pre><code>enchilada/
+  bin/
+    enchilada
+</code></pre>
+
+<p>Some packages define shell scripts, programs that can be run directly from the
+command line. These can be scripts written in an actual shell language, or any
+other scripting language, including Dart. The <code>pub</code> application itself is one
+example: it’s a simple shell script that invokes <code>pub.dart</code>.</p>
+
+<p>If your package defines stuff like this, put it in a directory named <code>bin</code>.</p>
+
+<aside class="alert alert-note">
+
+At some point, pub will support automatically adding that directory to your
+system path so that these scripts can be easily invoked.
+
+</aside>
