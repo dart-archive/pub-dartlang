@@ -24,6 +24,13 @@ class PubspecTest(TestCase):
         self.assertEqual(Pubspec(author="Nathan <nweiz@google.com>").authors,
                          [("Nathan", "nweiz@google.com")])
 
+    def test_empty_string_author(self):
+        self.assertEqual(Pubspec(author="").authors, [("", None)])
+
+    def test_weird_author_format(self):
+        self.assertEqual(Pubspec(author="Nathan <nweiz").authors,
+                         [("Nathan <nweiz", None)])
+
     def test_single_author_for_authors(self):
         self.assertEqual(Pubspec(authors="Nathan").authors, [("Nathan", None)])
 
