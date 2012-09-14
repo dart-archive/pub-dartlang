@@ -3,7 +3,11 @@
 # BSD-style license that can be found in the LICENSE file.
 
 import codecs
+import itertools
 import os
+import re
+
+import yaml
 
 import handlers
 
@@ -11,9 +15,30 @@ class Doc(object):
     """The handler for /doc/*."""
 
     def show(self, filename):
+        """Display a documentation page.
+
+        Each page is static HTML wrapped in a dynamic layout. The HTML is
+        generated from Markdown source files in /doc; the titles are loaded from
+        those source files as well.
+        """
+
         if filename == '': filename = 'index.html'
-        path = os.path.dirname(__file__) + '/../views/doc/' + filename
-        if not os.path.isfile(path):
+        root = os.path.join(os.path.dirname(__file__), '..')
+
+        html_path = os.path.join(root, 'views', 'doc', filename)
+        if not os.path.isfile(html_path):
             handlers.http_error(404)
-        with codecs.open(path, encoding='utf-8') as file:
-            return handlers.layout(file.read())
+
+        markdown_filename = re.sub("\.html$", ".markdown", filename)
+        markdown_path = os.path.join(root, 'doc', markdown_filename)
+        with codecs.open(markdown_path, encoding='utf-8') as f:
+            frontmatter = self._frontmatter(f)
+
+        with codecs.open(html_path, encoding='utf-8') as f:
+            return handlers.layout(f.read(), title=frontmatter['title'])
+
+    def _frontmatter(self, f):
+        """Parses the YAML frontmatter of a file."""
+        if f.readline() != '---\n': return {}
+        yaml_lines = itertools.takewhile(lambda line: line != '---\n', f)
+        return yaml.load(''.join(yaml_lines))
