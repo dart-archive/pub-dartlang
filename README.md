@@ -85,5 +85,5 @@ Once you have everything installed, to modify the styles and documentation:
 
 [foreman]: http://ddollar.github.com/foreman/
 
-When you make changes to SCSS or Markdown files, make sure check in the
+When you make changes to SCSS or Markdown files, make sure to check in the
 generated CSS or HTML files with them.

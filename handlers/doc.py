@@ -18,8 +18,8 @@ class Doc(object):
         """Display a documentation page.
 
         Each page is static HTML wrapped in a dynamic layout. The HTML is
-        generated from Markdown source files in /doc; the titles are loaded from
-        those source files as well.
+        generated offline from Markdown source files in /doc; the titles are
+        loaded from those source files as well.
         """
 
         if filename == '': filename = 'index.html'
