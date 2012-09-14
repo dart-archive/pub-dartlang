@@ -29,8 +29,11 @@ def render(name, *context, **kwargs):
     This also surrounds the rendered template in the layout template (located in
     views/layout.mustache)."""
 
-    content = _renderer.render(
-        _renderer.load_template(name), *context, **kwargs)
+    return layout(_renderer.render(
+        _renderer.load_template(name), *context, **kwargs))
+
+def layout(content):
+    """Renders a Mustache layout with the given content."""
 
     # We're about to display the flash message, so we should get rid of the
     # cookie containing it.

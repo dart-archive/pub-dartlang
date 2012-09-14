@@ -14,6 +14,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'third_party'))
 import cherrypy
 from google.appengine.ext.webapp.util import run_wsgi_app
 
+from handlers.doc import Doc
 from handlers.root import Root
 from handlers.packages import Packages
 from handlers.package_versions import PackageVersions
@@ -28,6 +29,10 @@ class Application(cherrypy.Application):
 
         # Configure routes
         self.dispatcher.connect('root', '/', Root(), action='index')
+        self.dispatcher.connect(
+            'doc', '/doc/{filename:.*?}', Doc(), action='show')
+        self.dispatcher.connect(
+            'doc', '/doc', Doc(), action='show', filename='index.html')
         self._resource('package', 'packages', Packages())
         self._resource(
             'version', 'versions', PackageVersions(), parent_resource={
