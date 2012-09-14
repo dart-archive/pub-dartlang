@@ -8,8 +8,6 @@ import tarfile
 from google.appengine.ext import db
 import yaml
 
-from lib import util
-
 class Pubspec(dict):
     """A parsed pubspec.yaml file."""
 
