@@ -24,12 +24,12 @@ class Pubspec(dict):
                 'Pubspec cannot contain both "author" and "authors" fields.')
 
         for field in Pubspec._STRING_FIELDS:
-            if field in self and not util.is_str(self[field]):
+            if field in self and not isinstance(self[field], basestring):
                 raise db.BadValueError(
                     'Pubspec field "%s" must be a string, was "%r"' %
                     (field, self[field]))
 
-        if 'authors' in self and not (util.is_str(self['authors']) or
+        if 'authors' in self and not (isinstance(self['authors'], basestring) or
                                       isinstance(self['authors'], list)):
             raise db.BadValueError(
                 'Pubspec field "authors" must be a string or list, was "%r"' %
