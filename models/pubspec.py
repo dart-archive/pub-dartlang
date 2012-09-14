@@ -2,13 +2,38 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+import re
 import tarfile
 
 from google.appengine.ext import db
 import yaml
 
+from lib import util
+
 class Pubspec(dict):
     """A parsed pubspec.yaml file."""
+
+    _STRING_FIELDS = ['name', 'version', 'author', 'homepage']
+    """Pubspec fields that must be strings if they're defined at all."""
+
+    def __init__(self, *args, **kwargs):
+        super(Pubspec, self).__init__(*args, **kwargs)
+
+        if 'author' in self and 'authors' in self:
+            raise db.BadValueError(
+                'Pubspec cannot contain both "author" and "authors" fields.')
+
+        for field in Pubspec._STRING_FIELDS:
+            if field in self and not isinstance(self[field], basestring):
+                raise db.BadValueError(
+                    'Pubspec field "%s" must be a string, was "%r"' %
+                    (field, self[field]))
+
+        if 'authors' in self and not (isinstance(self['authors'], basestring) or
+                                      isinstance(self['authors'], list)):
+            raise db.BadValueError(
+                'Pubspec field "authors" must be a string or list, was "%r"' %
+                self['authors'])
 
     @classmethod
     def from_archive(cls, file):
@@ -46,3 +71,24 @@ class Pubspec(dict):
         if key not in self:
             raise db.BadValueError("Pubspec is missing required key '%s'" % key)
         return self[key]
+
+    @property
+    def authors(self):
+        """Return a normalized list of authors as (name, email) tuples."""
+        if 'author' in self: return [self._parse_author(self['author'])]
+        if 'authors' not in self: return []
+
+        authors = self['authors']
+        if isinstance(authors, list): return map(self._parse_author, authors)
+        return [self._parse_author(authors)]
+
+    _AUTHOR_RE = re.compile(r'^(.*?)(?: <(.*)>)?$')
+
+    def _parse_author(self, name):
+        """Parse an author name/email pair.
+
+        Parses 'name <email>' into ('name', 'email') and 'name' into ('name,
+        None).
+        """
+        match = Pubspec._AUTHOR_RE.search(name)
+        return (match.group(1), match.group(2))

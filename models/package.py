@@ -2,6 +2,8 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+import cgi
+
 from google.appengine.ext import db
 
 import models
@@ -46,6 +48,24 @@ class Package(db.Model):
         description = self.description
         if description is None: return None
         return models.ellipsize(description, Package._MAX_DESCRIPTION_CHARS)
+
+    @property
+    def homepage(self):
+        """The home page URL for the package, or None."""
+        if self.latest_version is None: return None
+        return self.latest_version.pubspec.get('homepage')
+
+    @property
+    def authors_html(self):
+        """Inline HTML for the authors of this package."""
+        if self.latest_version is None: return ''
+
+        def author_html((author, email)):
+            if email is None: return cgi.escape(author)
+            return '<a href="mailto:%s">%s</a>' % \
+                (cgi.escape(email), cgi.escape(author))
+
+        return ', '.join(map(author_html, self.latest_version.pubspec.authors))
 
     @classmethod
     def new(cls, **kwargs):
