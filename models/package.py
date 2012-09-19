@@ -13,12 +13,14 @@ class Package(db.Model):
     """The model for a package.
 
     A package contains only metadata that applies to every version of the
-    package, such as its name and owner. Each individual version of the package
-    is represented by a PackageVersion model.
+    package, such as its name and uploader. Each individual version of the
+    package is represented by a PackageVersion model.
     """
 
+    # TODO(nweiz): This should more properly be called "uploader". Change the
+    # name once we support multiple uploaders for each package.
     owner = db.UserProperty(required=True, auto_current_user_add=True)
-    """The user who owns the package."""
+    """The user who is allowed to upload new versions of the package."""
 
     name = db.StringProperty(required=True)
     """The name of the package."""

@@ -12,7 +12,7 @@
 {{#package.authors_html}}
   <h3>Authors: {{& package.authors_html}}</h3>
 {{/package.authors_html}}
-<h4>Owner: {{package.owner.nickname}}</h2>
+<h4>Uploader: {{package.owner.nickname}}</h2>
 <ul>
   {{#versions}}
     <li>
@@ -28,6 +28,6 @@
     </a>
   </p>
 {{/show_versions_link}}
-{{#is_owner}}
+{{#is_uploader}}
   <p><a href="/packages/{{package.name}}/versions/new">Add Version</a></p>
-{{/is_owner}}
+{{/is_uploader}}
