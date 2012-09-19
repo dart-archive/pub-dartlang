@@ -19,7 +19,7 @@ class PackageVersionsTest(TestCase):
         response = self.testapp.get('/packages/test-package/versions/new')
         self.assert_requires_login(response)
 
-    def test_new_requires_ownership(self):
+    def test_new_requires_uploadership(self):
         self.be_normal_user()
 
         response = self.testapp.get('/packages/test-package/versions/new')
@@ -28,7 +28,7 @@ class PackageVersionsTest(TestCase):
                          'http://localhost:80/packages/test-package')
         self.assertTrue(response.cookies_set.has_key('flash'))
 
-    def test_owner_creates_package_version(self):
+    def test_uploader_creates_package_version(self):
         self.be_admin_user()
         self.post_package_version('1.2.3')
 
@@ -38,7 +38,7 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(version.package.name, 'test-package')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
-    def test_create_requires_owner(self):
+    def test_create_requires_uploader(self):
         self.be_normal_user()
         upload = self.upload_archive('test-package', '1.2.3')
         response = self.testapp.post(
