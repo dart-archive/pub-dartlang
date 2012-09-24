@@ -1,8 +1,5 @@
 ---
-layout: default
 title: "Pub: How does versioning work?"
-description: "How packages are versioned and how pub works with them."
-has-permalinks: true
 ---
 
 # {{ page.title }}

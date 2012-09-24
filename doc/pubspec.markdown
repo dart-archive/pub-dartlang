@@ -1,8 +1,5 @@
 ---
-layout: default
 title: "Pub: What is a Pubspec?"
-description: "More details about the pubspec format and contents."
-has-permalinks: true
 ---
 
 # {{ page.title }}

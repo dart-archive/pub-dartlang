@@ -1,8 +1,5 @@
 ---
-layout: default
 title: "pub install"
-description: "Reference documentation for the `pub install` command."
-has-permalinks: true
 ---
 
 # {{ page.title }}

@@ -1,8 +1,5 @@
 ---
-layout: default
 title: "Pub: Package layout conventions"
-description: "How to organize the files in your pub package."
-has-permalinks: true
 ---
 
 # {{ page.title }}
