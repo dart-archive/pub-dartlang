@@ -84,6 +84,10 @@ possible pubspec just contains the name of the package. Save the pubspec file as
 
 <p>Behold, the most simple <code>pubspec.yaml</code>:</p>
 
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my_app</span>
+</code></pre>
+</div>
+
 <p>Now <code>my_app</code> is a pub package!</p>
 
 <p><a href="pubspec.html">
@@ -102,6 +106,13 @@ on the <code>handle_stache</code> package.</p>
 
 <p>You specify your package’s dependencies in the pubspec file immediately after
 your package name. For example:</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my_app</span>
+<span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">handle_stache</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">git://github.com/munificent/handle_stache.git</span>
+</code></pre>
+</div>
 
 <p>Here, we are declaring a dependency on some (fictional) <code>handle_stache</code> package
 that we want to install from <a href="http://git-scm.com/">Git</a> using the given URL.</p>
@@ -147,6 +158,10 @@ single package your program needs in order to run.</p>
 it. To access a library in a another package, you will import it using the
 <code>package:</code> scheme:</p>
 
+<div class="highlight"><pre><code class="dart">#<span class="k">import</span><span class="p">(</span><span class="s1">&#39;package:handle_stache/handle_stache.dart&#39;</span><span class="p">);</span>
+</code></pre>
+</div>
+
 <p>This looks inside the <code>handle_stache</code> package for a top-level file named
 <code>handle_stache.dart</code>. Most packages just define a single entrypoint whose name
 is the same as the name of the package. Check the documentation for the package
@@ -174,6 +189,9 @@ For example, let's say your package is laid out like:
 The `parser_test` file *could* import `parser.dart` like this:
 
 
+<div class="highlight"><pre><code class="dart">#<span class="k">import</span><span class="p">(</span><span class="s1">&#39;../../lib/parser.dart&#39;</span><span class="p">);</span>
+</code></pre>
+</div>
 
 
 
@@ -182,6 +200,9 @@ up or down a directory, that path will break and you'll have to fix the code.
 Instead, you can do:
 
 
+<div class="highlight"><pre><code class="dart">#<span class="k">import</span><span class="p">(</span><span class="s1">&#39;package:handle_stache/lib/parser.dart&#39;</span><span class="p">);</span>
+</code></pre>
+</div>
 
 
 

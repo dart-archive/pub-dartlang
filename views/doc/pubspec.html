@@ -8,6 +8,18 @@ named <code>pubspec.yaml</code>. As you could guess, it is written in the
 
 <p>A simple but complete pubspec looks something like this:</p>
 
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">newtify</span>
+<span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1.2.3</span>
+<span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
+  <span class="no">Have you been turned into a newt? Would you like to be? This</span>
+  <span class="no">package can help: it has all of the newt-transmogrification</span>
+  <span class="no">functionality you&#39;ve been looking for.</span>
+<span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">efts</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=2.0.4</span><span class="nv"> </span><span class="s">&lt;3.0.0&#39;</span>
+  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0&#39;</span>
+</code></pre>
+</div>
+
 <p>At the top level are a series of fields. The currently supported ones are:</p>
 
 <dl class="dl-horizontal">
@@ -86,9 +98,19 @@ the package.</p>
 <p>There are a few different ways to specify dependencies based on how much of
 that data you need to provide. The shortest way is to just specify a name:</p>
 
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span>
+</code></pre>
+</div>
+
 <p>This creates a dependency on <code>transmogrify</code>. It allows any version, and looks
 it up using the default source (<a href="http://pub.dartlang.org">pub.dartlang.org</a>). To limit the
 dependency to a range of versions, you can provide a <em>version constraint</em>:</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=1.0.0</span><span class="nv"> </span><span class="s">&lt;2.0.0&#39;</span>
+</code></pre>
+</div>
 
 <p>This creates a dependency on <code>transmogrify</code> using the default source and
 allowing any version from <code>1.0.0</code> to <code>2.0.0</code> (but not including <code>2.0.0</code>). See
@@ -102,12 +124,27 @@ The default source isn't currently implemented, but it's coming very soon.
 
 <p>If you want to specify a source, the syntax looks a bit different:</p>
 
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">hosted</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://some-package-server.com</span>
+</code></pre>
+</div>
+
 <p>This depends on the <code>transmogrify</code> package using the <code>hosted</code> source.
 Everything under the source key (here, just a map with a <code>url:</code> key) is the
 description that gets passed to the source. Each source has its own description
 format, detailed below.</p>
 
 <p>You can also provide a version constraint:</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">hosted</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://some-package-server.com</span>
+    <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=1.0.0</span><span class="nv"> </span><span class="s">&lt;2.0.0&#39;</span>
+</code></pre>
+</div>
 
 <p>This long form is used when you don’t use the default source or when you have a
 complex description you need to specify. But in most cases, you’ll just use the
@@ -130,6 +167,11 @@ Hosted packages aren't currently implemented, but they are coming very soon.
 <a href="http://pub.dartlang.org">pub.dartlang.org</a> (or another HTTP server that speaks the same API).
 Most of your dependencies will be of this form. They look like this:</p>
 
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0</span><span class="nv"> </span><span class="s">&lt;1.0.0&#39;</span>
+</code></pre>
+</div>
+
 <p>Here, you’re saying your package depends on a hosted package named
 “transmogrify” and you’ll work with any version from 0.4.0 to 1.0.0 (but not
 1.0.0 itself).</p>
@@ -137,10 +179,24 @@ Most of your dependencies will be of this form. They look like this:</p>
 <p>If you want to use your own package server, you can use a description that
 specifies its URL:</p>
 
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">hosted</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://your-package-server.com</span>
+    <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0</span><span class="nv"> </span><span class="s">&lt;1.0.0&#39;</span>
+</code></pre>
+</div>
+
 <h3 id="sdk-packages">SDK packages</h3>
 
 <p>Some packages are a built-in part of the Dart SDK. These are the “batteries
 included” packages that you get for free when you install Dart.</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">i18n</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">sdk</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">i18n</span>
+</code></pre>
+</div>
 
 <p>The <code>sdk</code> here says this package should be found in the installed Dart SDK, and
 “i18n” is the name of the package to use.</p>
@@ -153,12 +209,26 @@ and is using other packages that are being developed at the same time. To make
 that easier, you can depend directly on a package stored in a <a href="http://git-scm.com/">Git</a>
 repository.</p>
 
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">kittens</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">git://github.com/munificent/kittens.git</span>
+</code></pre>
+</div>
+
 <p>The <code>git</code> here says this package is found using Git, and the URL after that is
 the Git URL that can be used to clone the package. Pub assumes that the package
 is in the root of the git repository.</p>
 
 <p>If you want to depend on a specific commit, branch, or tag, you can also
 provide a <code>ref</code> argument:</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">kittens</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span>
+      <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">git://github.com/munificent/kittens.git</span>
+      <span class="l-Scalar-Plain">ref</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">some-branch</span>
+</code></pre>
+</div>
 
 <p>The ref can be anything that Git allows to <a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#naming-commits">identify a commit</a>.</p>
 

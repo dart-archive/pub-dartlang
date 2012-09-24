@@ -100,6 +100,11 @@ with whatever names make sense for your package.</p>
 <p>When you do, users can import these libraries using the name of the package and
 the library file, like so:</p>
 
+<div class="highlight"><pre><code class="dart">#<span class="k">import</span><span class="p">(</span><span class="s2">&quot;package:enchilada/enchilada.dart&quot;</span><span class="p">);</span>
+#<span class="k">import</span><span class="p">(</span><span class="s2">&quot;package:enchilada/tortilla.dart&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+
 <h2 id="implementation-files">Implementation files</h2>
 
 <pre><code>enchilada/
@@ -122,6 +127,9 @@ For files within the package, they can still use `"package:"` to import these
 libraries. This is a perfectly valid way to get to files in your *own* package:
 
 
+<div class="highlight"><pre><code class="dart">#<span class="k">import</span><span class="p">(</span><span class="s2">&quot;package:enchilada/lib/beans.dart&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
 
 
 -->
