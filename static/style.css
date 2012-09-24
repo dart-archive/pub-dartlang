@@ -4966,6 +4966,11 @@ body {
   padding-top: 50px;
 }
 
+article h2, article h3, article h4 {
+  padding-top: 40px;
+  margin-top: -40px;
+}
+
 footer {
   font-size: 13px;
   text-align: center;

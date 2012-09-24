@@ -21,6 +21,13 @@ body {
   padding-top: 50px;
 }
 
+article {
+  h2, h3, h4 {
+    padding-top: 40px;
+    margin-top: -40px;
+  }
+}
+
 footer {
   @extend .well;
   @extend .well-small;
