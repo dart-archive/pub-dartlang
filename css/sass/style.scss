@@ -21,11 +21,24 @@ body {
   padding-top: 50px;
 }
 
+a.permalink {
+  margin-left: 0.5em;
+  display: none;
+}
+
 article {
   h2, h3, h4 {
     padding-top: 40px;
     margin-top: -40px;
+
+    &:hover a.permalink {
+      display: inline;
+    }
   }
+}
+
+.has-permalink:hover > a.permalink {
+  display:inline;
 }
 
 footer {
