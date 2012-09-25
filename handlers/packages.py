@@ -53,6 +53,7 @@ class Packages(object):
                            package.name)
             raise cherrypy.HTTPRedirect('/packages/new')
 
+        package.latest_version = version
         with models.transaction():
             package.put()
             version.put()
