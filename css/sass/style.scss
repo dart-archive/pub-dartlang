@@ -21,6 +21,28 @@ body {
   padding-top: 50px;
 }
 
+a.permalink {
+  margin-left: 0.5em;
+  display: none;
+}
+
+article {
+  h2, h3, h4 {
+    // Ensure that the headers don't get covered up by the navbar when the user
+    // clicks on the permalink.
+    padding-top: 40px;
+    margin-top: -40px;
+
+    &:hover a.permalink {
+      display: inline;
+    }
+  }
+}
+
+.has-permalink:hover > a.permalink {
+  display:inline;
+}
+
 footer {
   @extend .well;
   @extend .well-small;

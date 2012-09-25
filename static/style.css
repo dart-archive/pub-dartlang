@@ -4908,6 +4908,23 @@ body {
   padding-top: 50px;
 }
 
+a.permalink {
+  margin-left: 0.5em;
+  display: none;
+}
+
+article h2, article h3, article h4 {
+  padding-top: 40px;
+  margin-top: -40px;
+}
+article h2:hover a.permalink, article h3:hover a.permalink, article h4:hover a.permalink {
+  display: inline;
+}
+
+.has-permalink:hover > a.permalink {
+  display: inline;
+}
+
 footer {
   font-size: 13px;
   text-align: center;

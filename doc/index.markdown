@@ -1,8 +1,5 @@
 ---
-layout: default
 title: "Pub: Getting Started"
-description: "How to get up and running with pub."
-has-permalinks: true
 ---
 
 # {{ page.title }}
