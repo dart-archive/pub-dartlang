@@ -14,6 +14,8 @@ named <code>pubspec.yaml</code>. As you could guess, it is written in the
   <span class="no">Have you been turned into a newt? Would you like to be? This</span>
   <span class="no">package can help: it has all of the newt-transmogrification</span>
   <span class="no">functionality you&#39;ve been looking for.</span>
+<span class="l-Scalar-Plain">author</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Nathan Weizenbaum &lt;nweiz@google.com&gt;</span>
+<span class="l-Scalar-Plain">homepage</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://newtify.dartlang.org</span>
 <span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">efts</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=2.0.4</span><span class="nv"> </span><span class="s">&lt;3.0.0&#39;</span>
   <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0&#39;</span>
@@ -29,6 +31,10 @@ named <code>pubspec.yaml</code>. As you could guess, it is written in the
   <dd>Required for packages that will be hosted on pub.dartlang.org.</dd>
   <dt>Description</dt>
   <dd>Required for packages that will be hosted on pub.dartlang.org.</dd>
+  <dt>Author/Authors</dt>
+  <dd>Optional.</dd>
+  <dt>Homepage</dt>
+  <dd>Optional.</dd>
   <dt>Dependencies</dt>
   <dd>Can be omitted if your package has no dependencies.</dd>
 </dl>
@@ -81,6 +87,30 @@ tells a casual reader what they might want to know about your package.</p>
 <p>Think of the description as the sales pitch for your package. Users will see it
 when they browse <a href="http://pub.dartlang.org">pub.dartlang.org</a>. It should be simple plain text:
 no markdown or HTML. That’s what your README is for.</p>
+
+<h2 id="authorauthors">Author/Authors</h2>
+
+<p>You’re encouraged to use these fields to describe the author(s) of your package
+and provide contact information. <code>author</code> should be used if your package has a
+single author, while <code>authors</code> should be used with a YAML list if more than one
+person wrote the package. Each author can either be a single name (e.g. <code>Nathan
+Weizenbaum</code>) or a name and an email address (e.g. <code>Nathan Weizenbaum
+&lt;nweiz@google.com&gt;</code>). For example:</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">authors</span><span class="p-Indicator">:</span>
+<span class="p-Indicator">-</span> <span class="l-Scalar-Plain">Nathan Weizenbaum &lt;nweiz@google.com&gt;</span>
+<span class="p-Indicator">-</span> <span class="l-Scalar-Plain">Bob Nystrom &lt;rnystrom@google.com&gt;</span>
+</code></pre>
+</div>
+
+<p>The authors of a <a href="#hosted-packages">hosted package</a> will be displayed on
+<a href="http://pub.dartlang.org">pub.dartlang.org</a>.</p>
+
+<h2 id="homepage">Homepage</h2>
+
+<p>This is optional. It should be a URL pointing to the website for your package.
+For <a href="#hosted-packages">hosted packages</a>, this URL will be linked from the
+package’s page on <a href="http://pub.dartlang.org">pub.dartlang.org</a>.</p>
 
 <h2 id="dependencies">Dependencies</h2>
 
