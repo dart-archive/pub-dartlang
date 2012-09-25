@@ -28,6 +28,8 @@ a.permalink {
 
 article {
   h2, h3, h4 {
+    // Ensure that the headers don't get covered up by the navbar when the user
+    // clicks on the permalink.
     padding-top: 40px;
     margin-top: -40px;
 
