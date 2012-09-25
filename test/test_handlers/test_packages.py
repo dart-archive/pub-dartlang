@@ -41,6 +41,11 @@ class PackagesTest(TestCase):
         self.assertEqual(version.version, SemanticVersion('0.0.1'))
         self.assertEqual(version.package.name, 'test-package')
 
+        version = package.latest_version
+        self.assertTrue(version is not None)
+        self.assertEqual(version.version, SemanticVersion('0.0.1'))
+        self.assertEqual(version.package.name, 'test-package')
+
     def test_new_requires_login(self):
         response = self.testapp.get('/packages/new')
         self.assertEqual(response.status_int, 302)
