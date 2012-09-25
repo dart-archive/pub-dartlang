@@ -53,9 +53,11 @@ Once everything is installed, you can run the tests by running:
 
 The CSS files are generated from the source [Sass][] files using [Compass][].
 The HTML documentation files are generated from the source [Markdown][] using
-[Jekyll][]. To get ready to make changes, you'll need [Ruby][] and then:
+[Jekyll][]. To get ready to make changes, you'll need [Ruby][] and [Python][].
+Then:
 
 [ruby]: http://ruby-lang.org
+[python]: http://python.org
 [sass]: http://sass-lang.com
 [compass]: http://compass-style.org
 [markdown]: http://daringfireball.net/projects/markdown/
@@ -68,6 +70,10 @@ The HTML documentation files are generated from the source [Markdown][] using
  2. Run this to install the dependencies:
 
         bundle install
+
+ 3. Run this to install the latest version of Pygments for syntax highlighting:
+
+        sudo pip install --upgrade pygments
 
 Note that this is only needed on your development machine to iterate on the CSS
 and documentation. The deployed server just uses the pre-compiled CSS and HTML
