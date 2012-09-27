@@ -2,7 +2,15 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+import base64
+import hashlib
+
+from Crypto.Hash import SHA256
+from Crypto.PublicKey import RSA
+from Crypto.Signature import PKCS1_v1_5
 from google.appengine.ext import db
+
+import handlers
 
 class PrivateKey(db.Model):
     """A singleton model that stores the Google API private key for this app.
@@ -44,10 +52,19 @@ class PrivateKey(db.Model):
         # All Google API keys have "notasecret" as their passphrase
         value = cls.get()
         if value is None: raise "Private key has not been set."
-        key = RSA.importKey(value, passphrase='notasecret')
-        # TODO(nweiz): This currently doesn't work locally without modifying
-        # google/appengine/tools/dev_appserver_import_hook.py by adding
-        # 'AESCipher', 'blockalgo', and '_AES' to the
-        # __CRYPTO_CIPHER_ALLOWED_MODULES constant. I haven't tested whether it
-        # works on the remote server or not.
-        return base64.b64encode(PKCS1_v1_5.new(key).sign(SHA256.new(string)))
+        if handlers.production():
+            # TODO(nweiz): This currently doesn't work on the development server
+            # without adding 'AESCipher', 'blockalgo', and '_AES' to the
+            # __CRYPTO_CIPHER_ALLOWED_MODULES constant in
+            # google/appengine/tools/dev_appserver_import_hook.py. However, it
+            # does work in production, so to make it work locally, we just do a
+            # dumb hash of the private key and the string.
+            #
+            # See http://code.google.com/p/googleappengine/issues/detail?id=8188
+            key = RSA.importKey(value, passphrase='notasecret')
+            return base64.b64encode(PKCS1_v1_5.new(key).sign(SHA256.new(string)))
+        else:
+            m = hashlib.md5()
+            m.update(value)
+            m.update(string)
+            return base64.b64encode(m.digest())

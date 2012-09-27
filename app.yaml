@@ -17,3 +17,7 @@ handlers:
 
 - url: /.*
   script: pub_dartlang.app
+
+libraries:
+- name: pycrypto
+  version: "2.6"
