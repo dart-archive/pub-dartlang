@@ -27,11 +27,12 @@ def render(name, *context, **kwargs):
     itself. These templates are located in views/.
 
     This also surrounds the rendered template in the layout template (located in
-    views/layout.mustache)."""
+    views/layout.mustache), unless layout=False is passed."""
 
     kwargs_for_layout = kwargs.pop('layout', {})
     content = _renderer.render(
         _renderer.load_template(name), *context, **kwargs)
+    if kwargs_for_layout == False: return content
     return layout(content, **kwargs_for_layout)
 
 def layout(content, title=None):
