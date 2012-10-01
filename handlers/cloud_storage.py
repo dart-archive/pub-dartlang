@@ -8,7 +8,11 @@ from base64 import b64encode
 from urlparse import urlparse, parse_qs
 import handlers
 import json
+import urllib
 import time
+
+from google.appengine.api import app_identity
+from google.appengine.api import urlfetch
 
 from models.private_key import PrivateKey
 
@@ -17,6 +21,9 @@ _BUCKET = "pub.dartlang.org"
 
 # From https://code.google.com/apis/console
 _ACCESS_KEY = "818368855108@developer.gserviceaccount.com"
+
+# From https://developers.google.com/storage/docs/authentication
+_FULL_CONTROL_SCOPE = "https://www.googleapis.com/auth/devstorage.full_control"
 
 def upload_form(obj, lifetime=10*60, acl=None, cache_control=None,
                 content_disposition=None, content_encoding=None,
@@ -86,6 +93,52 @@ def upload_form(obj, lifetime=10*60, acl=None, cache_control=None,
     url = ("https://storage.googleapis.com" if handlers.production()
            else handlers.request().url(controller="packages", action="upload"))
     return handlers.render("signed_form", url=url, fields=fields, layout=False)
+
+def modify_object(obj, content_encoding=None, content_type=None,
+                  content_disposition=None, acl=None, copy_source=None,
+                  copy_source_if_match=None, copy_source_if_none_match=None,
+                  copy_source_if_modified_since=None,
+                  copy_source_if_unmodified_since=None,
+                  copy_metadata=True, metadata={}):
+    """Modifies or copies a cloud storage object.
+
+    Most arguments are identical to the form fields listed in
+    https://developers.google.com/storage/docs/reference-methods#putobject, but
+    there are a few differences:
+
+    * The copy_metadata argument can be True, indicating that the metadata
+      should be copied, or False, indicating that it should be replaced.
+    * The metadata argument is a dictionary of metadata header names to values.
+      Each one is transformed into an x-goog-meta- field. The keys should not
+      include "x-goog-meta-". Null values are ignored.
+    """
+
+    obj = _BUCKET + "/" + obj
+    if copy_source is not None: copy_source = _BUCKET + "/" + copy_source
+    auth = "OAuth " + app_identity.get_access_token(_FULL_CONTROL_SCOPE)[0]
+    headers = {
+        "Authorization": auth,
+        "Content-Encoding": content_encoding,
+        "Content-Type": content_type,
+        "Content-Disposition": content_disposition,
+        "x-goog-api-version": "2",
+        "x-goog-acl": acl,
+        "x-goog-copy-source": copy_source,
+        "x-goog-copy-source-if-match": copy_source_if_match,
+        "x-goog-copy-source-if-none-match": copy_source_if_none_match,
+        "x-goog-copy-source-if-modified-since": copy_source_if_modified_since,
+        "x-goog-copy-source-if-unmodified-since":
+            copy_source_if_unmodified_since,
+        "x-goog-copy-metadata-directive":
+            "COPY" if copy_metadata else "REPLACE"
+    }
+    for (key, value) in metadata.iteritems():
+        headers["x-goog-meta-" + key] = value
+    headers = {key: value for key, value in headers.iteritems()
+               if value is not None}
+
+    return urlfetch.fetch("https://storage.googleapis.com/" + urllib.quote(obj),
+                          method="PUT", headers=headers)
 
 def _iso8601(secs):
     """Returns the ISO8601 representation of the given time.
