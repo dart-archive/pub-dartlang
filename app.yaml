@@ -17,3 +17,8 @@ handlers:
 
 - url: /.*
   script: pub_dartlang.app
+
+- url: /(.*\.ico)
+  static_files: static/\1
+  expiration: 7d
+  upload: static/(.*\.ico)
