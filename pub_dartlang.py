@@ -33,7 +33,8 @@ class Application(cherrypy.Application):
             'doc', '/doc/{filename:.*?}', Doc(), action='show')
         self.dispatcher.connect(
             'doc', '/doc', Doc(), action='show', filename='index.html')
-        self._resource('package', 'packages', Packages())
+        self._resource('package', 'packages', Packages(),
+                       collection={'upload': 'POST'})
         self._resource(
             'version', 'versions', PackageVersions(), parent_resource={
                 'member_name': 'package',

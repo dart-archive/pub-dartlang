@@ -11,6 +11,9 @@ import handlers
 import sys
 import models
 from models.package import Package
+from models.private_key import PrivateKey
+
+from google.appengine.api import files
 
 class Packages(object):
     """The handler for /packages/*.
@@ -75,6 +78,30 @@ class Packages(object):
             raise cherrypy.HTTPRedirect('/packages')
 
         return handlers.render("packages/new")
+
+    def upload(self, file, key, acl=None, policy=None, signature=None,
+               success_action_redirect=None, **kwargs):
+        """A development-only action for uploading a package archive.
+
+        In production, package archives are uploaded directly to cloud storage,
+        using a signed form for authentication. The signed form doesn't work for
+        the development server, since it uses a local database in place of cloud
+        storage, so this action emulates it by manually saving the file to the
+        development database.
+        """
+
+        if handlers.production(): raise handlers.http_error(404)
+        if PrivateKey.sign(policy) != signature: raise handlers.http_error(403)
+
+        write_path = files.gs.create('/gs/' + key, acl=acl)
+        with files.open(write_path, 'a') as f:
+            f.write(file.file.read())
+        files.finalize(write_path)
+
+        if success_action_redirect:
+            raise cherrypy.HTTPRedirect(success_action_redirect)
+        cherrypy.response.status = 204
+        return ""
 
     def show(self, id, format='html'):
         """Retrieve the page describing a specific package."""

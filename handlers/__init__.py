@@ -100,6 +100,10 @@ def handle_validation_errors(fn, *args, **kwargs):
         # cherrypy.request.params
         raise cherrypy.HTTPRedirect(request().url(action=new_action))
 
+def production():
+    """Return whether we're running in production mode."""
+    return bool(os.environ.get('DATACENTER'))
+
 def request():
     """Return the current Request instance."""
     if not hasattr(cherrypy.request, 'pub_data'):

@@ -83,7 +83,9 @@ def upload_form(obj, lifetime=10*60, acl=None, cache_control=None,
     # Get the fields into a format mustache can iterate over
     fields = [{'key': key, 'value': value} for key, value in fields.iteritems()]
 
-    return handlers.render("signed_form", fields=fields, layout=False)
+    url = ("https://storage.googleapis.com" if handlers.production()
+           else handlers.request().url(controller="packages", action="upload"))
+    return handlers.render("signed_form", url=url, fields=fields, layout=False)
 
 def _iso8601(secs):
     """Returns the ISO8601 representation of the given time.

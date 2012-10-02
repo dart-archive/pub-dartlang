@@ -2,8 +2,7 @@
     for details. All rights reserved. Use of this source code is governed by a
     BSD-style license that can be found in the LICENSE file. }}
 
-<form method="POST" enctype="multipart/form-data"
-      action="https://storage.googleapis.com">
+<form method="POST" enctype="multipart/form-data" action="{{url}}">
   {{#fields}}
     {{#value}}<input type="hidden" name="{{key}}" value="{{value}}">{{/value}}
   {{/fields}}
