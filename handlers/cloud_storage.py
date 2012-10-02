@@ -12,6 +12,7 @@ import urllib
 import time
 
 from google.appengine.api import app_identity
+from google.appengine.api import files
 from google.appengine.api import urlfetch
 
 from models.private_key import PrivateKey
@@ -157,6 +158,10 @@ def modify_object(obj, content_encoding=None, content_type=None,
 
     return urlfetch.fetch("https://storage.googleapis.com/" + urllib.quote(obj),
                           method="PUT", headers=headers)
+
+def delete_object(obj):
+    """Deletes an object from cloud storage."""
+    files.delete('/gs/' + _BUCKET + '/' + obj)
 
 def _iso8601(secs):
     """Returns the ISO8601 representation of the given time.
