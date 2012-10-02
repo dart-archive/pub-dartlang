@@ -69,6 +69,11 @@ class Package(db.Model):
 
         return ', '.join(map(author_html, self.latest_version.pubspec.authors))
 
+    @property
+    def short_updated(self):
+        """The short updated time of the package."""
+        return self.updated.strftime('%Y-%m-%d')
+
     @classmethod
     def new(cls, **kwargs):
         """Construct a new package.
