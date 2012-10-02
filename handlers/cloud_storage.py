@@ -163,6 +163,10 @@ def delete_object(obj):
     """Deletes an object from cloud storage."""
     files.delete('/gs/' + _BUCKET + '/' + obj)
 
+def open(obj):
+    """Opens an object in cloud storage."""
+    return files.open('/gs/' + _BUCKET + '/' + obj, 'r')
+
 def _iso8601(secs):
     """Returns the ISO8601 representation of the given time.
 
