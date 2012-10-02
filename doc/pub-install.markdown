@@ -4,13 +4,6 @@ title: "pub install"
 
 # {{ page.title }}
 
-<aside class="note">
-  <a href="index.html" style="text-align: right;">
-    <i class="icon-hand-right icon-white">&nbsp;</i>
-    Looking for the quick start guide? Get started with pub
-  </a>
-</aside>
-
     $ pub install
 
 This command installs all the dependencies listed in the
