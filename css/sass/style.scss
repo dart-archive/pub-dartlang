@@ -18,7 +18,7 @@ table {
 
 body {
   // Account for the fixed navbar height.
-  padding-top: 50px;
+  padding-top: 60px;
 }
 
 a.permalink {
@@ -48,4 +48,42 @@ footer {
   @extend .well-small;
   font-size: 13px;
   text-align: center;
+}
+
+// We have two brands: the dart logo and "pub.dartlang.org". This keeps them
+// from being too spread out.
+.brand + .brand {
+  padding-left: 10px;
+}
+
+// Highlight the brand text on hover. This matches other navbar buttons and
+// makes it clearer that the logo links to something different.
+a.brand:hover {
+  color: white;
+}
+
+.hero-unit {
+  // Use same border as footer well.
+  @extend .well;
+  @extend .well-small;
+
+  margin-top: 10px;
+  padding: 40px;
+
+  h1 {
+    font-size: 40px;
+  }
+
+  p {
+    margin: 20px 0 0;
+    font-weight: 400;
+    line-height: 30px;
+  }
+}
+
+.dart-logo {
+  display: inline-block;
+  background-image: url("/static/img/dart.png");
+  width: 21px;
+  height: 21px;
 }

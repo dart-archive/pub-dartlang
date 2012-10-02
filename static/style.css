@@ -2543,7 +2543,7 @@ table .span24 {
   border-radius: 4px;
 }
 
-.well, footer {
+.well, footer, .hero-unit {
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
@@ -2557,7 +2557,7 @@ table .span24 {
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-.well blockquote, footer blockquote {
+.well blockquote, footer blockquote, .hero-unit blockquote {
   border-color: #ddd;
   border-color: rgba(0, 0, 0, 0.15);
 }
@@ -2569,7 +2569,7 @@ table .span24 {
   border-radius: 6px;
 }
 
-.well-small, footer {
+.well-small, footer, .hero-unit {
   padding: 9px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -4905,7 +4905,7 @@ a.label:hover, a.badge:hover {
 }
 
 body {
-  padding-top: 50px;
+  padding-top: 60px;
 }
 
 a.permalink {
@@ -4928,4 +4928,32 @@ article h2:hover a.permalink, article h3:hover a.permalink, article h4:hover a.p
 footer {
   font-size: 13px;
   text-align: center;
+}
+
+.brand + .brand {
+  padding-left: 10px;
+}
+
+a.brand:hover {
+  color: white;
+}
+
+.hero-unit {
+  margin-top: 10px;
+  padding: 40px;
+}
+.hero-unit h1 {
+  font-size: 40px;
+}
+.hero-unit p {
+  margin: 20px 0 0;
+  font-weight: 400;
+  line-height: 30px;
+}
+
+.dart-logo {
+  display: inline-block;
+  background-image: url("/static/img/dart.png");
+  width: 21px;
+  height: 21px;
 }
