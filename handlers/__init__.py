@@ -127,7 +127,7 @@ class Request(object):
         """
         params = self.route.copy()
         params.update(kwargs)
-        return routes.url_for(**params)
+        return self.request.base + routes.url_for(**params)
 
     @property
     def route(self):
@@ -148,6 +148,17 @@ class Request(object):
         This auto-detects the package name from the request parameters. If the
         package doesn't exist, throws a 404 error.
         """
+        package = self.maybe_package
+        if package: return package
+        http_error(404, "Package \"%s\" doesn't exist." % package_name)
+
+    @property
+    def maybe_package(self):
+        """Load the current package object.
+
+        This auto-detects the package name from the request parameters. If the
+        package doesn't exist, returns None.
+        """
 
         if self._package: return self._package
 
@@ -155,12 +166,11 @@ class Request(object):
             package_name = self.request.params['id']
         else:
             package_name = self.request.params['package_id']
-        if not package_name:
-            http_error(403, "No package name found.")
+        if not package_name: return None
 
         self._package = Package.get_by_key_name(package_name)
         if self._package: return self._package
-        http_error(404, "Package \"%s\" doesn't exist." % package_name)
+        return None
 
     def package_version(self, version):
         """Load the current package version object.

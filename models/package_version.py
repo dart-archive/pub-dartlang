@@ -3,7 +3,6 @@
 # BSD-style license that can be found in the LICENSE file.
 
 import re
-import tarfile
 
 from google.appengine.ext import db
 import yaml
@@ -75,6 +74,26 @@ class PackageVersion(db.Model):
         version = cls(**kwargs)
         version._validate_fields_match_pubspec()
         return version
+
+    @classmethod
+    def from_archive(cls, file):
+        """Load a package version from a .tar.gz archive.
+
+        If the package specified in the archive already exists, it will be
+        loaded and assigned as the package version's package. If it doesn't, a
+        new package will be created.
+
+        Arguments:
+          file: An open file object containing a .tar.gz archive.
+
+        Returns: Both the Package object and the PackageVersion object.
+        """
+        pubspec = Pubspec.from_archive(file)
+        name = pubspec.required('name')
+        package = Package.get_by_key_name(name)
+        if not package: package = Package.new(name=name)
+        return PackageVersion.new(
+            package=package, pubspec=pubspec, contents_file=file)
 
     @classmethod
     def get_by_name_and_version(cls, package_name, version):

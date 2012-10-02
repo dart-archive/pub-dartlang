@@ -17,6 +17,9 @@ class Package(db.Model):
     package is represented by a PackageVersion model.
     """
 
+    MAX_SIZE = 10 * 2**20 # 10MB
+    """The maximum package size, in bytes."""
+
     # TODO(nweiz): This should more properly be called "uploader". Change the
     # name once we support multiple uploaders for each package.
     owner = db.UserProperty(required=True, auto_current_user_add=True)
@@ -82,22 +85,6 @@ class Package(db.Model):
             kwargs['key_name'] = kwargs['name']
 
         return cls(**kwargs)
-
-    @classmethod
-    def from_archive(cls, file):
-        """Load a package and a package version from a .tar.gz archive.
-
-        Arguments:
-          file: An open file object containing a .tar.gz archive.
-
-        Returns: Both the Package object and the PackageVersion object.
-        """
-        from package_version import PackageVersion
-        pubspec = Pubspec.from_archive(file)
-        package = Package.new(name=pubspec.required('name'))
-        version = PackageVersion.new(
-            package=package, pubspec=pubspec, contents_file=file)
-        return package, version
 
     @classmethod
     def exists(cls, name):

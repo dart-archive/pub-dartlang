@@ -33,13 +33,28 @@ class Application(cherrypy.Application):
             'doc', '/doc/{filename:.*?}', Doc(), action='show')
         self.dispatcher.connect(
             'doc', '/doc', Doc(), action='show', filename='index.html')
-        self._resource('package', 'packages', Packages(),
-                       collection={'upload': 'POST'})
-        self._resource(
-            'version', 'versions', PackageVersions(), parent_resource={
-                'member_name': 'package',
-                'collection_name': 'packages'
-            })
+        self._resource('package', 'packages', Packages())
+
+        self._resource('version', 'versions', PackageVersions(),
+                       parent_resource={
+                         'member_name': 'package',
+                         'collection_name': 'packages'
+                       },
+                       collection={'upload': 'POST'},
+                       member={'create': 'GET'})
+
+        # Package version actions related to uploading a new package need to
+        # work without that package in the URL.
+        with self.dispatcher.mapper.submapper(controller='versions',
+                                              path_prefix='/packages/versions/',
+                                              package_id=None) as m:
+            m.connect('new', action='new',
+                      conditions={'method': ['GET', 'HEAD']})
+            m.connect(':id/create', action='create')
+            m.connect('update', action='upload', conditions={'method': 'POST'})
+        self.dispatcher.mapper.connect('/packages/versions/create',
+                                       controller='versions',
+                                       action='create')
 
     def _resource(self, member_name, collection_name, controller, **kwargs):
         """Configure routes for a resource.

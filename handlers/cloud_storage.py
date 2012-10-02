@@ -92,7 +92,7 @@ def upload_form(obj, lifetime=10*60, acl=None, cache_control=None,
     fields = [{'key': key, 'value': value} for key, value in fields.iteritems()]
 
     url = ("https://storage.googleapis.com" if handlers.production()
-           else handlers.request().url(controller="packages", action="upload"))
+           else handlers.request().url(controller="versions", action="upload"))
     return handlers.render("signed_form", url=url, fields=fields, layout=False)
 
 def modify_object(obj, content_encoding=None, content_type=None,
