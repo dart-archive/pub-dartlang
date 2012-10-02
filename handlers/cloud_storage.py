@@ -115,6 +115,24 @@ def modify_object(obj, content_encoding=None, content_type=None,
 
     obj = _BUCKET + "/" + obj
     if copy_source is not None: copy_source = _BUCKET + "/" + copy_source
+
+    if not handlers.production():
+        # The only way to modify an existing object using only the Python API
+        # seems to be to copy it over itself. It's not a big deal since this is
+        # only for development.
+        if copy_source is None: copy_source = obj
+        contents = None
+        with files.open('/gs/' + copy_source, 'r') as f: contents = f.read()
+
+        if content_type is None: content_type = 'application/octet-stream'
+        write_path = files.gs.create('/gs/' + obj, mime_type=content_type,
+                                     acl=acl, content_encoding=content_encoding,
+                                     content_disposition=content_disposition,
+                                     user_metadata=metadata)
+        with files.open(write_path, 'a') as f: f.write(contents)
+        files.finalize(write_path)
+        return
+
     auth = "OAuth " + app_identity.get_access_token(_FULL_CONTROL_SCOPE)[0]
     headers = {
         "Authorization": auth,
