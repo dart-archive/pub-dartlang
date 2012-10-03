@@ -83,8 +83,10 @@ $ <strong>pub install</strong>
 </pre>
         </li>
         <li><p>Import it in your code:</p>
-<pre>
-import 'package:<strong>{{package.name}}</strong>/<em>...</em>';
+{{!TODO(rynstrom): Should validate that the package exposes a library with its
+  name. Maybe show other libraries it exposes here too?}}
+<pre class="highlight">
+<span class="k">import</span> <span class="s">'package:<strong>{{package.name}}/<wbr/>{{package.name}}.dart</strong>'</span>;
 </pre>
         </li>
       </ol>

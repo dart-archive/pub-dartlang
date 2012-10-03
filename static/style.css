@@ -4987,8 +4987,10 @@ td.archive, th.archive {
 }
 .how-to-use pre {
   border: none;
-  padding: 3px;
+  padding: 3px 3px 3px 35px;
   background-color: #eee;
+  word-break: normal;
+  text-indent: -32px;
 }
 
 .author {
