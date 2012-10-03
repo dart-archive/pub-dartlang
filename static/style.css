@@ -4975,6 +4975,7 @@ td table td, td table th {
 
 td.archive, th.archive {
   text-align: center;
+  vertical-align: middle;
 }
 
 .inline-icon {
