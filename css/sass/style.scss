@@ -101,7 +101,7 @@ a.brand:hover {
 // When icons immediately follow paragraph text, we need to shift them a bit
 // to get them to line up.
 .inline-icon {
-  margin: 3px 2px 0 2px;
+  margin: 3px 0 0 2px;
 }
 
 .how-to-use {
@@ -116,4 +116,8 @@ a.brand:hover {
     padding: 3px;
     background-color: #eee;
   }
+}
+
+a.author {
+  white-space: nowrap;
 }
