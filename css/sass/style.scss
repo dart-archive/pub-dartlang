@@ -49,3 +49,9 @@ footer {
   font-size: 13px;
   text-align: center;
 }
+
+form#private-key textarea {
+  width: 550px;
+  height: 420px;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}

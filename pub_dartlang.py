@@ -18,6 +18,7 @@ from handlers.doc import Doc
 from handlers.root import Root
 from handlers.packages import Packages
 from handlers.package_versions import PackageVersions
+from handlers.private_keys import PrivateKeys
 
 class Application(cherrypy.Application):
     """The pub.dartlang.org WSGI application."""
@@ -34,6 +35,7 @@ class Application(cherrypy.Application):
         self.dispatcher.connect(
             'doc', '/doc', Doc(), action='show', filename='index.html')
         self._resource('package', 'packages', Packages())
+        self._resource('private-key', 'private-keys', PrivateKeys())
 
         self._resource('version', 'versions', PackageVersions(),
                        parent_resource={

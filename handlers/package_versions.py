@@ -16,6 +16,7 @@ import models
 from handlers import cloud_storage
 from models.package import Package
 from models.package_version import PackageVersion
+from models.private_key import PrivateKey
 
 class PackageVersions(object):
     """The handler for packages/*/versions/*.
@@ -48,6 +49,8 @@ class PackageVersions(object):
         elif not users.is_current_user_admin():
             handlers.flash('Currently only admins may create packages.')
             raise cherrypy.HTTPRedirect('/packages')
+        elif PrivateKey.get() is None:
+            raise cherrypy.HTTPRedirect('/private-keys/new')
 
         id = str(uuid4())
         redirect_url = handlers.request().url(action="create", id=id)
