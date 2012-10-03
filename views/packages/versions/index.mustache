@@ -4,13 +4,15 @@
     <tr>
       <th>Version</th>
       <th>Uploaded</th>
+      <th class="archive" width="80">Archive</th>
     </tr>
   </thead>
   <tbody>
     {{#versions}}
       <tr>
         <td><strong>{{version}}</strong></td>
-        <td>{{short_created}}
+        <td>{{short_created}}</td>
+        <td class="archive">
           <a href="{{download_url}}"
               title="Download {{package.name}} {{version}} archive">
             <i class="icon-download-alt download-icon"></i>

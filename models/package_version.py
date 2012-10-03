@@ -85,7 +85,7 @@ class PackageVersion(db.Model):
     @property
     def short_created(self):
         """The short created time of the package version."""
-        return self.created.strftime('%Y-%m-%d')
+        return self.created.strftime('%b %d, %Y')
 
     @property
     def download_url(self):

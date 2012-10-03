@@ -3,7 +3,8 @@ html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
+small,
+h1 .version, strike, strong, sub, sup, tt, var,
 b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
@@ -613,7 +614,7 @@ p {
   font-size: 14px;
   line-height: 24px;
 }
-p small {
+p small, p h1 .version, h1 p .version {
   font-size: 12px;
   color: #999999;
 }
@@ -632,7 +633,7 @@ h1, h2, h3, h4, h5, h6 {
   color: inherit;
   text-rendering: optimizelegibility;
 }
-h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
+h1 small, h1 .version, h2 small, h2 h1 .version, h1 h2 .version, h3 small, h3 h1 .version, h1 h3 .version, h4 small, h4 h1 .version, h1 h4 .version, h5 small, h5 h1 .version, h1 h5 .version, h6 small, h6 h1 .version, h1 h6 .version {
   font-weight: normal;
   color: #999999;
 }
@@ -641,7 +642,7 @@ h1 {
   font-size: 30px;
   line-height: 48px;
 }
-h1 small {
+h1 small, h1 .version {
   font-size: 18px;
 }
 
@@ -649,7 +650,7 @@ h2 {
   font-size: 24px;
   line-height: 48px;
 }
-h2 small {
+h2 small, h2 h1 .version, h1 h2 .version {
   font-size: 18px;
 }
 
@@ -657,7 +658,7 @@ h3 {
   font-size: 18px;
   line-height: 36px;
 }
-h3 small {
+h3 small, h3 h1 .version, h1 h3 .version {
   font-size: 14px;
 }
 
@@ -668,7 +669,7 @@ h4, h5, h6 {
 h4 {
   font-size: 14px;
 }
-h4 small {
+h4 small, h4 h1 .version, h1 h4 .version {
   font-size: 12px;
 }
 
@@ -793,12 +794,12 @@ blockquote p {
   font-weight: 300;
   line-height: 30px;
 }
-blockquote small {
+blockquote small, blockquote h1 .version, h1 blockquote .version {
   display: block;
   line-height: 24px;
   color: #999999;
 }
-blockquote small:before {
+blockquote small:before, blockquote h1 .version:before, h1 blockquote .version:before {
   content: '\2014 \00A0';
 }
 blockquote.pull-right {
@@ -809,7 +810,9 @@ blockquote.pull-right {
   border-left: 0;
 }
 blockquote.pull-right p,
-blockquote.pull-right small {
+blockquote.pull-right small,
+blockquote.pull-right h1 .version,
+h1 blockquote.pull-right .version {
   text-align: right;
 }
 
@@ -827,7 +830,7 @@ address {
   line-height: 24px;
 }
 
-small {
+small, h1 .version {
   font-size: 100%;
 }
 
@@ -906,7 +909,7 @@ legend {
   border: 0;
   border-bottom: 1px solid #eee;
 }
-legend small {
+legend small, legend h1 .version, h1 legend .version {
   font-size: 18px;
   color: #999999;
 }
@@ -4958,12 +4961,20 @@ a.brand:hover {
   height: 21px;
 }
 
-.embedded-versions {
+h1 .version {
+  font-size: 20px;
+}
+
+td table {
   margin: -4px;
 }
-.embedded-versions td, .embedded-versions th {
+td table td, td table th {
   border: none;
   padding: 4px;
+}
+
+td.archive, th.archive {
+  text-align: center;
 }
 
 .inline-icon {

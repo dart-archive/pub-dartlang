@@ -4,7 +4,9 @@
 
 <div class="row-fluid">
   <div class="span7">
-    <h1>{{package.name}} <small>{{package.latest_version.version}}</small></h1>
+    <h1>{{package.name}}
+      <span class="version">{{package.latest_version.version}}</span>
+    </h1>
     {{#package.description}}
       <p>{{package.description}}</p>
     {{/package.description}}
@@ -13,10 +15,12 @@
         <th>Authors</th>
         <td>{{& package.authors_html}}</td>
       </tr>
+      {{#package.homepage}}
       <tr>
         <th>Homepage</th>
         <td><a href="{{package.homepage}}">{{package.homepage}}</a></td>
       </tr>
+      {{/package.homepage}}
       <tr>
         <th>Uploader</th>
         <td>{{package.owner.nickname}}</td>
@@ -24,17 +28,19 @@
       <tr>
         <th>Versions</th>
         <td>
-          <table class="embedded-versions">
+          <table>
             <thead>
               <tr>
                 <th>Version</th>
                 <th>Uploaded</th>
+                <th class="archive" width="60">Archive</th>
               </tr>
             </thead>
             {{#versions}}
               <tr>
-                <td><strong>{{version}}</strong></td>
-                <td>{{short_created}}
+                <th>{{version}}</th>
+                <td>{{short_created}}</td>
+                <td class="archive">
                   <a href="{{download_url}}"
                       title="Download {{package.name}} {{version}} archive">
                     <i class="icon-download-alt inline-icon"></i>
@@ -57,35 +63,35 @@
     </table>
   </div>
   <div class="span5">
-  <div class="how-to-use">
-  <h3>To use {{package.name}}:</h3>
-  <ol>
-    <li><p>Add it to your <code>pubspec.yaml</code> file:</p>
+    <div class="how-to-use">
+      <h3>To use {{package.name}}:</h3>
+      <ol>
+        <li><p>Add it to your <code>pubspec.yaml</code> file:</p>
 <pre>
 dependencies:
   <strong>{{package.name}}: any</strong>
 </pre>
-    </li>
-    <li></p>Install it
-    (<a href="http://www.dartlang.org/docs/editor/">Dart Editor</a>):</p>
+        </li>
+        <li></p>Install it
+        (<a href="http://www.dartlang.org/docs/editor/">Dart Editor</a>):</p>
 <pre>
 Menu > Tools > <strong>Pub Install</strong>
 </pre>
-    <p>Install it (command line):</p>
+        <p>Install it (command line):</p>
 <pre>
 $ <strong>pub install</strong>
 </pre>
-    </li>
-    <li><p>Import it in your code:</p>
+        </li>
+        <li><p>Import it in your code:</p>
 <pre>
 import 'package:<strong>{{package.name}}</strong>/<em>&lt;library&gt;</em>.dart';
 </pre>
-    </li>
-  </ol>
-  </div>
+        </li>
+      </ol>
+    </div>
     {{#is_uploader}}
       <p><a class="btn" href="/packages/{{package.name}}/versions/new">
-        Upload Version
+      Upload Version
       </a></p>
     {{/is_uploader}}
   </div>

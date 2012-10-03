@@ -90,12 +90,21 @@ a.brand:hover {
   height: 21px;
 }
 
-.embedded-versions {
+h1 .version {
+  @extend small;
+  font-size: 20px;
+}
+
+td table {
   margin: -4px;
   td, th {
     border: none;
     padding: 4px;
   }
+}
+
+td.archive, th.archive {
+  text-align: center;
 }
 
 // When icons immediately follow paragraph text, we need to shift them a bit
