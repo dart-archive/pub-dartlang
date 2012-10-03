@@ -1843,7 +1843,7 @@ table .span24 {
   *margin-right: .3em;
   line-height: 14px;
   vertical-align: text-top;
-  background-image: url("../img/glyphicons-halflings.png");
+  background-image: url("img/glyphicons-halflings.png");
   background-position: 14px 14px;
   background-repeat: no-repeat;
 }
@@ -2543,7 +2543,7 @@ table .span24 {
   border-radius: 4px;
 }
 
-.well, footer, .hero-unit {
+.well, footer, .hero-unit, .how-to-use {
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
@@ -2557,7 +2557,7 @@ table .span24 {
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-.well blockquote, footer blockquote, .hero-unit blockquote {
+.well blockquote, footer blockquote, .hero-unit blockquote, .how-to-use blockquote {
   border-color: #ddd;
   border-color: rgba(0, 0, 0, 0.15);
 }
@@ -2569,7 +2569,7 @@ table .span24 {
   border-radius: 6px;
 }
 
-.well-small, footer, .hero-unit {
+.well-small, footer, .hero-unit, .how-to-use {
   padding: 9px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -4956,4 +4956,25 @@ a.brand:hover {
   background-image: url("/static/img/dart.png");
   width: 21px;
   height: 21px;
+}
+
+.embedded-versions {
+  margin: -4px;
+}
+.embedded-versions td, .embedded-versions th {
+  border: none;
+  padding: 4px;
+}
+
+.download-icon {
+  margin: 2px 0 0 2px;
+}
+
+.how-to-use {
+  margin-top: 12px;
+}
+.how-to-use pre {
+  border: none;
+  padding: 3px;
+  background-color: #eee;
 }

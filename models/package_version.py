@@ -83,6 +83,11 @@ class PackageVersion(db.Model):
         return cls.get_by_key_name(version, parent=parent_key)
 
     @property
+    def short_created(self):
+        """The short created time of the package version."""
+        return self.created.strftime('%Y-%m-%d')
+
+    @property
     def download_url(self):
         """The URL for downloading this package."""
         return "/packages/%s/versions/%s.tar.gz" % \

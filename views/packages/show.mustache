@@ -2,32 +2,91 @@
     for details. All rights reserved. Use of this source code is governed by a
     BSD-style license that can be found in the LICENSE file. }}
 
-<h1>{{package.name}}</h1>
-{{#package.description}}
-  <p>{{package.description}}</p>
-{{/package.description}}
-{{#package.homepage}}
-  <a href="{{package.homepage}}">Homepage</a>
-{{/package.homepage}}
-{{#package.authors_html}}
-  <h3>Authors: {{& package.authors_html}}</h3>
-{{/package.authors_html}}
-<h4>Uploader: {{package.owner.nickname}}</h2>
-<ul>
-  {{#versions}}
-    <li>
-      {{version}}
-      (<a href="{{download_url}}">Download</a>)
+<div class="row-fluid">
+  <div class="span7">
+    <h1>{{package.name}} <small>{{package.latest_version.version}}</small></h1>
+    {{#package.description}}
+      <p>{{package.description}}</p>
+    {{/package.description}}
+    <table>
+      <tr>
+        <th>Authors</th>
+        <td>{{& package.authors_html}}</td>
+      </tr>
+      <tr>
+        <th>Homepage</th>
+        <td><a href="{{package.homepage}}">{{package.homepage}}</a></td>
+      </tr>
+      <tr>
+        <th>Uploader</th>
+        <td>{{package.owner.nickname}}</td>
+      </tr>
+      <tr>
+        <th>Versions</th>
+        <td>
+          <table class="embedded-versions">
+            <thead>
+              <tr>
+                <th>Version</th>
+                <th>Uploaded</th>
+              </tr>
+            </thead>
+            {{#versions}}
+              <tr>
+                <td><strong>{{version}}</strong></td>
+                <td>{{short_created}}
+                  <a href="{{download_url}}"
+                      title="Download {{package.name}} {{version}} archive">
+                    <i class="icon-download-alt download-icon"></i>
+                  </a>
+                </td>
+              </tr>
+            {{/versions}}
+            {{#show_versions_link}}
+              <tr>
+                <td>
+                  <a href="/packages/{{package.name}}/versions">
+                    All {{version_count}} versions...
+                  </a>
+                </td>
+              </tr>
+            {{/show_versions_link}}
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="span5">
+  <div class="how-to-use">
+  <h3>To use {{package.name}}:</h3>
+  <ol>
+    <li><p>Add it to your <code>pubspec.yaml</code> file:</p>
+<pre>
+dependencies:
+  <strong>{{package.name}}: any</strong>
+</pre>
     </li>
-  {{/versions}}
-</ul>
-{{#show_versions_link}}
-  <p>
-    <a href="/packages/{{package.name}}/versions">
-      All {{version_count}} versions
-    </a>
-  </p>
-{{/show_versions_link}}
-{{#is_uploader}}
-  <p><a href="/packages/{{package.name}}/versions/new">Add Version</a></p>
-{{/is_uploader}}
+    <li></p>Install it
+    (<a href="http://www.dartlang.org/docs/editor/">Dart Editor</a>):</p>
+<pre>
+Menu > Tools > <strong>Pub Install</strong>
+</pre>
+    <p>Install it (command line):</p>
+<pre>
+$ <strong>pub install</strong>
+</pre>
+    </li>
+    <li><p>Import it in your code:</p>
+<pre>
+import 'package:<strong>{{package.name}}</strong>/<em>&lt;library&gt;</em>.dart';
+</pre>
+    </li>
+  </ol>
+  </div>
+    {{#is_uploader}}
+      <p><a class="btn" href="/packages/{{package.name}}/versions/new">
+        Upload Version
+      </a></p>
+    {{/is_uploader}}
+  </div>
+</div>

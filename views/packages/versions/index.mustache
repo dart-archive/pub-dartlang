@@ -1,9 +1,22 @@
 <h1>All versions of {{package.name}}</h1>
-<ul>
-  {{#versions}}
-    <li>
-      {{version}}
-      (<a href="{{download_url}}">Download</a>)
-    </li>
-  {{/versions}}
-</ul>
+<table>
+  <thead>
+    <tr>
+      <th>Version</th>
+      <th>Uploaded</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#versions}}
+      <tr>
+        <td><strong>{{version}}</strong></td>
+        <td>{{short_created}}
+          <a href="{{download_url}}"
+              title="Download {{package.name}} {{version}} archive">
+            <i class="icon-download-alt download-icon"></i>
+          </a>
+        </td>
+      </tr>
+    {{/versions}}
+  </tbody>
+</table>

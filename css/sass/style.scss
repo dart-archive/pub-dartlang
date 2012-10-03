@@ -9,6 +9,8 @@ $baseLineHeight: 24px;
 
 $sansFontFamily: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+$iconSpritePath: 'img/glyphicons-halflings.png';
+
 @import "compass_twitter_bootstrap";
 
 // Don't require nasty <table class="table"> that bootstrap expects.
@@ -86,4 +88,32 @@ a.brand:hover {
   background-image: url("/static/img/dart.png");
   width: 21px;
   height: 21px;
+}
+
+.embedded-versions {
+  margin: -4px;
+  td, th {
+    border: none;
+    padding: 4px;
+  }
+}
+
+// The tiny download icon needs to be positioned a bit to line up properly
+// with the text.
+.download-icon {
+  margin: 2px 0 0 2px;
+}
+
+.how-to-use {
+  @extend .well;
+  @extend .well-small;
+
+  // Align with top of header.
+  margin-top: 12px;
+
+  pre {
+    border: none;
+    padding: 3px;
+    background-color: #eee;
+  }
 }
