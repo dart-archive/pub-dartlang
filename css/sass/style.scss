@@ -98,10 +98,10 @@ a.brand:hover {
   }
 }
 
-// The tiny download icon needs to be positioned a bit to line up properly
-// with the text.
-.download-icon {
-  margin: 2px 0 0 2px;
+// When icons immediately follow paragraph text, we need to shift them a bit
+// to get them to line up.
+.inline-icon {
+  margin: 3px 2px 0 2px;
 }
 
 .how-to-use {
