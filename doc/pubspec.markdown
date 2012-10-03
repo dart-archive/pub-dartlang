@@ -1,5 +1,5 @@
 ---
-title: "Pub: What is a Pubspec?"
+title: "What is a Pubspec?"
 ---
 
 # {{ page.title }}

@@ -1,5 +1,5 @@
 ---
-title: "pub install"
+title: "Command: Install"
 ---
 
 # {{ page.title }}
