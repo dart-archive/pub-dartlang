@@ -25,7 +25,7 @@ class PackageVersion(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     """When this package version was created."""
 
-    contents = db.BlobProperty(required=True)
+    contents = db.BlobProperty()
     """The blob of code for this package version, a gzipped tar file."""
 
     pubspec = PubspecProperty(required=True, indexed=False)
@@ -52,11 +52,9 @@ class PackageVersion(db.Model):
         - The parent entity is set to the package.
         """
 
-        if 'contents_file' in kwargs:
+        if 'contents_file' in kwargs and 'pubspec' not in kwargs:
             file = kwargs['contents_file']
-            if 'pubspec' not in kwargs:
-                kwargs['pubspec'] = Pubspec.from_archive(file)
-            kwargs['contents'] = db.Blob(file.read())
+            kwargs['pubspec'] = Pubspec.from_archive(file)
 
         if 'pubspec' in kwargs and 'version' not in kwargs:
             kwargs['version'] = kwargs['pubspec'].required('version')
