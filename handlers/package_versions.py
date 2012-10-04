@@ -199,11 +199,7 @@ class PackageVersions(object):
         if id.endswith('.tar.gz'):
             id = id[0:-len('.tar.gz')]
             version = handlers.request().package_version(id)
-            cherrypy.response.headers['Content-Type'] = \
-                'application/octet-stream'
-            cherrypy.response.headers['Content-Disposition'] = \
-                'attachment; filename=%s-%s.tar.gz' % (package_id, id)
-            return version.contents
+            raise cherrypy.HTTPRedirect(version.download_url)
         elif id.endswith('.yaml'):
             id = id[0:-len('.yaml')]
             version = handlers.request().package_version(id)

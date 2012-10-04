@@ -30,6 +30,10 @@ class Application(cherrypy.Application):
 
         # Configure routes
         self.dispatcher.connect('root', '/', Root(), action='index')
+        self.dispatcher.mapper.connect('/gs_/{filename:.*?}',
+                                       controller='root',
+                                       action='serve')
+
         self.dispatcher.connect(
             'doc', '/doc/{filename:.*?}', Doc(), action='show')
         self.dispatcher.connect(

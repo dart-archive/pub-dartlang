@@ -176,6 +176,14 @@ def open(obj):
     """Opens an object in cloud storage."""
     return files.open('/gs/' + _BUCKET + '/' + obj, 'r')
 
+def object_url(obj):
+    """Returns the URL for an object in cloud storage."""
+    if handlers.is_production():
+        return 'http://commondatastorage.googleapis.com/%s/%s' % (
+            urllib.quote(_BUCKET), urllib.quote(obj))
+    else:
+        return '/gs_/' + urllib.quote(obj)
+
 def _iso8601(secs):
     """Returns the ISO8601 representation of the given time.
 

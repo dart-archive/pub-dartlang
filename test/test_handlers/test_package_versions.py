@@ -192,11 +192,10 @@ class PackageVersionsTest(TestCase):
 
         response = self.testapp.get(
             '/packages/test-package/versions/1.2.3.tar.gz')
-        self.assertEqual(response.headers['Content-Type'],
-                         'application/octet-stream')
-        self.assertEqual(response.headers['Content-Disposition'],
-                         'attachment; filename=test-package-1.2.3.tar.gz')
-        self.assertEqual(response.body, self.tar_pubspec(version.pubspec))
+        self.assertEqual(response.status_int, 302)
+        self.assertEqual(response.headers['Location'],
+                         'http://localhost:80/gs_/packages/' +
+                         'test-package-1.2.3.tar.gz')
 
     def test_show_package_version_yaml(self):
         version = self.package_version(self.package, '1.2.3',

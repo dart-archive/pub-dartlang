@@ -8,6 +8,7 @@ from google.appengine.ext import db
 import yaml
 
 from semantic_version import SemanticVersion
+from handlers import cloud_storage
 from package import Package
 from properties import PubspecProperty, VersionProperty
 from pubspec import Pubspec
@@ -107,8 +108,7 @@ class PackageVersion(db.Model):
     @property
     def download_url(self):
         """The URL for downloading this package."""
-        return "/packages/%s/versions/%s.tar.gz" % \
-            (self.package.name, self.version)
+        return cloud_storage.object_url(self.storage_path)
 
     @property
     def storage_path(self):
