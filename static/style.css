@@ -4933,6 +4933,12 @@ footer {
   text-align: center;
 }
 
+form#private-key textarea {
+  width: 550px;
+  height: 420px;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
 .brand + .brand {
   padding-left: 10px;
 }

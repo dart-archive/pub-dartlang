@@ -9,6 +9,8 @@ from StringIO import StringIO
 import cherrypy
 import webtest
 from bs4 import BeautifulSoup
+from Crypto.PublicKey import RSA
+from Crypto import Random
 from google.appengine.ext import deferred
 from google.appengine.ext.testbed import Testbed, TASKQUEUE_SERVICE_NAME
 from google.appengine.api import users
@@ -17,6 +19,7 @@ import tarfile
 
 from pub_dartlang import Application
 from models.package_version import PackageVersion
+from models.private_key import PrivateKey
 from models.pubspec import Pubspec
 
 class TestCase(unittest.TestCase):
@@ -45,11 +48,34 @@ class TestCase(unittest.TestCase):
 
         self.testbed = Testbed()
         self.testbed.activate()
+        self.testbed.init_app_identity_stub()
+        self.testbed.init_blobstore_stub()
         self.testbed.init_datastore_v3_stub()
-        self.testbed.init_user_stub()
+        self.testbed.init_files_stub()
         self.testbed.init_taskqueue_stub()
+        self.testbed.init_user_stub()
 
         self.testapp = webtest.TestApp(Application())
+
+        # This private key is not actually used for anything other than testing.
+        PrivateKey.set('''-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: DES-EDE3-CBC,CEB8C6541017AC8B
+
+q1SgqAfgHXK5cQvtdIF8rkSlbAS6a92T5tYMVKJIW24giF5cw+1++X7X6S5ECykC
+/iECExP7WfVlPDVoJMZpWGsYLMPhxncnKfUDICbVgwsO4KKeEv8lYTrvkY1sCZIx
+kSja/lGAWpyxBnmxwoLh0LbLJBGUxUgn2Uqv/8Iid+w0m3NlgrllV+kOo4gUYF9q
+bestH4nEQj6F0CeI8VPW0FxzMwn0vreHFBT5hul6xbNdB1vnRcz6ed4FiGXoAB5K
+/8/Q2qyy1UPe2Hr9IoC6wo4h2kXq7pmhy/rtzU9/gjsGPD33ByavbgHAen0ajY5p
+RmCx0AGidK9T6/SNoyDD9CMq7ypL+0JWoCeVoAEw2aZqN4rMJNbKMgPH+ajgiAXe
+AWuMVjWN6uTL5+QJmWQct6a6TF8GPKdTcOZfNIXU5U9drHB2hggLcy6XkCYGjVJv
+MvLascE4oAtOHnwz7WhrpcmX6F6Fww+TPnFzjk+IGJrnBUnAArEcM13IjiDUgg9B
+iLuKimwrqasdBBY3Ua3SRMoG8PJoNKdsk1hDGlpxLnqOVUCvPKZuz4QnFusnUJrR
+kiv+aqVBpZYymMh2Q1MWcogA7rL7LIowAkyLzS8dNwDhyk9jbO+1uoFSHKr5BTNv
+cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
+9jgARPpnDYsXH1lESxmiNZucHa50qI/ezNvQx8CbNa1/+JWoZ77yqM9qnDlXUwDY
+1Sxqx9+4kthG9oyCzzUwFvhf1kTEHd0RfIapgjJ16HBQmzLnEPtjPA==
+-----END RSA PRIVATE KEY-----''')
 
     def tearDown(self):
         """Deactivates the stubs initialized in setUp.
