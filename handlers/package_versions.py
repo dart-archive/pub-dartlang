@@ -103,45 +103,41 @@ class PackageVersions(object):
             try:
                 with cloud_storage.open('tmp/' + id) as f:
                     version = PackageVersion.from_archive(f)
-            except KeyError, ExistenceError:
+            except (KeyError, files.ExistenceError):
                 handlers.http_error(
                     403, "Package upload " + id + " does not exist.")
 
             if version.package.is_saved():
-                self._create_version_for_existing_package(version)
+                if version.package.owner != users.get_current_user():
+                    handlers.http_error(
+                        403, "You don't own package '%s'." % package.name)
+                elif version.package.has_version(version.version):
+                    handlers.flash('Package "%s" already has version "%s".' %
+                                   (version.package.name, version.version))
+                    url = handlers.request().url(
+                        action='new', package_id=version.package.name)
+                    raise cherrypy.HTTPRedirect(url)
+
+                if self._should_update_latest_version(version):
+                    version.package.latest_version = version
             else:
                 version.package.latest_version = version
-                with models.transaction():
-                    version.package.put()
-                    version.put()
+
+            cloud_storage.modify_object(version.storage_path,
+                                        acl='public-read',
+                                        copy_source='tmp/' + id)
+
+            with models.transaction():
+                version.package.put()
+                version.put()
+
+            deferred.defer(self._compute_version_order, version.package.name)
 
             handlers.flash('%s %s uploaded successfully.' %
                            (version.package.name, version.version))
             raise cherrypy.HTTPRedirect('/packages/%s' % version.package.name)
         finally:
             cloud_storage.delete_object('tmp/' + id)
-
-    def _create_version_for_existing_package(self, version):
-        """Creates a new version of an existing package."""
-
-        if version.package.owner != users.get_current_user():
-            handlers.http_error(
-                403, "You don't own package '%s'." % package.name)
-        elif version.package.has_version(version.version):
-            handlers.flash('Package "%s" already has version "%s".' %
-                           (version.package.name, version.version))
-            url = handlers.request().url(
-                action='new', package_id=version.package.name)
-            raise cherrypy.HTTPRedirect(url)
-
-        if self._should_update_latest_version(version):
-            version.package.latest_version = version
-
-        with models.transaction():
-            version.package.put()
-            version.put()
-
-        deferred.defer(self._compute_version_order, version.package.name)
 
     def _compute_version_order(self, name):
         """Compute the sort order for all versions of a given package."""

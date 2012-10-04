@@ -110,6 +110,11 @@ class PackageVersion(db.Model):
         return "/packages/%s/versions/%s.tar.gz" % \
             (self.package.name, self.version)
 
+    @property
+    def storage_path(self):
+        """The Cloud Storage path for this package."""
+        return 'packages/%s-%s.tar.gz' % (self.package.name, self.version)
+
     def _validate_fields_match_pubspec(self):
         """Assert that the fields in the pubspec match this object's fields."""
 
