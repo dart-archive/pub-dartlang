@@ -5044,6 +5044,10 @@ ol.toc {
   float: right;
   padding: 10px 20px 20px 40px;
 }
+ol.toc li {
+  font-size: 13px;
+  line-height: 21px;
+}
 
 .toc:before {
   content: "Contents";

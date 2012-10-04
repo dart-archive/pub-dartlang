@@ -166,6 +166,11 @@ ol.toc {
   float: right;
   // Tweak padding to handle list bullets and the spacing on the header.
   padding: 10px 20px 20px 40px;
+
+  li {
+    font-size: 13px;
+    line-height: 21px;
+  }
 }
 
 .toc:before {
