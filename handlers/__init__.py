@@ -150,7 +150,9 @@ class Request(object):
         """
         package = self.maybe_package
         if package: return package
-        http_error(404, "Package \"%s\" doesn't exist." % package_name)
+        name = self._package_name
+        if name is None: http_error(403, "No package name found.")
+        http_error(404, "Package \"%s\" doesn't exist." % name)
 
     @property
     def maybe_package(self):
@@ -162,15 +164,20 @@ class Request(object):
 
         if self._package: return self._package
 
-        if self.route['controller'] == 'packages':
-            package_name = self.request.params['id']
-        else:
-            package_name = self.request.params['package_id']
-        if not package_name: return None
+        name = self._package_name
+        if name is None: return None
 
-        self._package = Package.get_by_key_name(package_name)
+        self._package = Package.get_by_key_name(name)
         if self._package: return self._package
         return None
+
+    @property
+    def _package_name(self):
+        """Return the name of the current package."""
+        if self.route['controller'] == 'packages':
+            return self.request.params['id']
+        else:
+            return self.request.params['package_id']
 
     def package_version(self, version):
         """Load the current package version object.
