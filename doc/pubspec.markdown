@@ -68,7 +68,7 @@ It should be all lowercase, with underscores to separate words,
 with digits and isn't a reserved word).
 
 Try to pick a name that is clear, terse, and not already in use. A quick search
-[here](/packages) to make sure nothing else is using your name  can save you
+[here](/packages) to make sure nothing else is using your name can save you
 heartache later.
 
 ## Version
@@ -119,8 +119,8 @@ authors:
 - Bob Nystrom <rnystrom@google.com>
 {% endhighlight %}
 
-If you upload your package here, we will show this email address so make sure
-you're OK with that.
+If anyone uploads your package here, we will show this email address so make
+sure you're OK with that.
 
 ## Homepage
 
@@ -129,16 +129,18 @@ This should be a URL pointing to the website for your package. For
 package's page. While this is technically optional *please do* provide one. It
 helps users understand where your package is coming from. If nothing else, you
 can always use the URL where you host the source code:
-[github](http://github.com), [code.google.com](http://code.google.com/),
+[GitHub](http://github.com), [code.google.com](http://code.google.com/),
 whatever.
 
 ## Dependencies
 
 Finally, the pubspec's *raison d'être*:
 [dependencies](glossary.html#dependency). Here, you list each package that your
-package needs in order to work. You only list immediate dependencies, the stuff
-your package itself uses directly. Pub handles transitive dependencies
-automatically for you.
+package needs in order to work. You only list
+[immediate dependencies](glossary.html#immediate-dependency), the stuff your
+package itself uses directly. Pub handles
+[transitive dependencies](glossary.html#transitive-dependency) automatically
+for you.
 
 For each dependency, you specify the *name* of the package you depend on. For
 library packages, you specify the *range of versions* of that package that

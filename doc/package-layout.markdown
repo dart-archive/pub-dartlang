@@ -164,6 +164,9 @@ legit:
 #import("package:enchilada/src/beans.dart");
 {% endhighlight %}
 
+The name you use here (in this case `enchilada`) is the name you specify for
+your package in its [pubspec](pubspec.html).
+
 ## Tests
 
     enchilada/
