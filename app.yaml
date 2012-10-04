@@ -22,3 +22,7 @@ handlers:
   static_files: static/\1
   expiration: 7d
   upload: static/(.*\.ico)
+
+libraries:
+- name: pycrypto
+  version: "2.6"

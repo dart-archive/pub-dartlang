@@ -11,87 +11,6 @@ from models.package import Package
 from models.semantic_version import SemanticVersion
 
 class PackagesTest(TestCase):
-    def test_admin_creates_package(self):
-        self.be_admin_user()
-
-        get_response = self.testapp.get('/packages/new')
-        self.assertEqual(get_response.status_int, 200)
-        form = get_response.form
-        self.assertEqual(form.action, '/packages')
-        self.assertEqual(form.method, 'POST')
-
-        form['file'] = ('test-package-0.0.1.tar.gz', self.tar_pubspec({
-                'name': 'test-package',
-                'version': '0.0.1'
-            }))
-        post_response = form.submit()
-
-        self.assertEqual(post_response.status_int, 302)
-        self.assertEqual(post_response.headers['Location'],
-                         'http://localhost:80/packages/test-package')
-        self.assertTrue(post_response.cookies_set.has_key('flash'))
-
-        package = Package.get_by_key_name('test-package')
-        self.assertTrue(package is not None)
-        self.assertEqual(package.name, 'test-package')
-        self.assertEqual(package.owner, users.get_current_user())
-
-        version = package.version_set.get()
-        self.assertTrue(version is not None)
-        self.assertEqual(version.version, SemanticVersion('0.0.1'))
-        self.assertEqual(version.package.name, 'test-package')
-
-        version = package.latest_version
-        self.assertTrue(version is not None)
-        self.assertEqual(version.version, SemanticVersion('0.0.1'))
-        self.assertEqual(version.package.name, 'test-package')
-
-    def test_new_requires_login(self):
-        response = self.testapp.get('/packages/new')
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(response.headers['Location'],
-                         'https://www.google.com/accounts/Login?continue=http'
-                         '%3A//localhost%3A80/packages/new')
-
-    def test_new_requires_admin(self):
-        self.be_normal_user()
-
-        response = self.testapp.get('/packages/new')
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(response.headers['Location'],
-                         'http://localhost:80/packages')
-        self.assertTrue(response.cookies_set.has_key('flash'))
-
-    def test_create_requires_login(self):
-        upload = self.upload_archive('test-package', '0.0.1')
-        response = self.testapp.post(
-            '/packages', upload_files=[upload], status=403)
-        self.assert_error_page(response)
-
-    def test_create_requires_admin(self):
-        self.be_normal_user()
-
-        upload = self.upload_archive('test-package', '0.0.1')
-        response = self.testapp.post(
-            '/packages', upload_files=[upload], status=403)
-        self.assert_error_page(response)
-
-    def test_create_requires_new_package_name(self):
-        self.be_admin_user()
-
-        other_admin = self.admin_user('other')
-        Package.new(name='test-package', owner=other_admin).put()
-
-        upload = self.upload_archive('test-package', '0.0.1')
-        response = self.testapp.post('/packages', upload_files=[upload])
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(response.headers['Location'],
-                         'http://localhost:80/packages/new')
-        self.assertTrue(response.cookies_set.has_key('flash'))
-
-        package = Package.get_by_key_name('test-package')
-        self.assertEqual(package.owner, other_admin)
-
     def test_index_lists_packages_in_update_order(self):
         self.be_admin_user()
 
@@ -127,7 +46,7 @@ class PackagesTest(TestCase):
                 'llama', 'kangaroo', 'jaguar', 'ibex', 'headcrab', 'gorilla',
                 'frog', 'elephant', 'dragon', 'crocodile'])
 
-    def test_get_non_existant_package(self):
+    def test_get_non_existent_package(self):
         self.testapp.get('/packages/package/test-package', status=404)
 
     def test_get_unowned_package(self):

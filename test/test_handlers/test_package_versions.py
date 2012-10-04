@@ -2,11 +2,15 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+import re
 import yaml
+
+from google.appengine.api import users
 
 from testcase import TestCase
 from models.package import Package
 from models.package_version import PackageVersion
+from models.private_key import PrivateKey
 from models.semantic_version import SemanticVersion
 
 class PackageVersionsTest(TestCase):
@@ -15,9 +19,37 @@ class PackageVersionsTest(TestCase):
         self.package = Package.new(name='test-package', owner=self.admin_user())
         self.package.put()
 
+    def test_admin_creates_new_package(self):
+        self.be_admin_user()
+        self.post_package_version(name='new-package', version='0.0.1')
+
+        package = Package.get_by_key_name('new-package')
+        self.assertTrue(package is not None)
+        self.assertEqual(package.name, 'new-package')
+        self.assertEqual(package.owner, users.get_current_user())
+
+        version = package.version_set.get()
+        self.assertTrue(version is not None)
+        self.assertEqual(version.version, SemanticVersion('0.0.1'))
+        self.assertEqual(version.package.name, 'new-package')
+
+        version = package.latest_version
+        self.assertTrue(version is not None)
+        self.assertEqual(version.version, SemanticVersion('0.0.1'))
+        self.assertEqual(version.package.name, 'new-package')
+
     def test_new_requires_login(self):
         response = self.testapp.get('/packages/test-package/versions/new')
         self.assert_requires_login(response)
+
+    def test_new_requires_admin(self):
+        self.be_normal_user()
+
+        response = self.testapp.get('/packages/versions/new')
+        self.assertEqual(response.status_int, 302)
+        self.assertEqual(response.headers['Location'],
+                         'http://localhost:80/packages')
+        self.assertTrue(response.cookies_set.has_key('flash'))
 
     def test_new_requires_uploadership(self):
         self.be_normal_user()
@@ -27,6 +59,15 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(response.headers['Location'],
                          'http://localhost:80/packages/test-package')
         self.assertTrue(response.cookies_set.has_key('flash'))
+
+    def test_new_requires_private_key(self):
+        self.be_admin_user()
+        PrivateKey.get_by_key_name('singleton').delete()
+
+        response = self.testapp.get('/packages/test-package/versions/new')
+        self.assertEqual(response.status_int, 302)
+        self.assertEqual(response.headers['Location'],
+                         'http://localhost:80/private-keys/new')
 
     def test_uploader_creates_package_version(self):
         self.be_admin_user()
@@ -38,12 +79,27 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(version.package.name, 'test-package')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
-    def test_create_requires_uploader(self):
+    def test_create_requires_admin(self):
         self.be_normal_user()
-        upload = self.upload_archive('test-package', '1.2.3')
-        response = self.testapp.post(
-            '/packages/test-package/versions', upload_files=[upload],
-            status=403)
+
+        response = self.testapp.get('/packages/versions/abcd/create',
+                                    status=403)
+        self.assert_error_page(response)
+
+    def test_create_requires_uploader(self):
+        self.be_normal_user('owner')
+        Package.new(name='owned-package').put()
+        self.be_normal_user()
+
+        response = self.testapp.get(
+            '/packages/owned-package/versions/abcd/create', status=403)
+        self.assert_error_page(response)
+
+    def test_create_requires_valid_id(self):
+        self.be_admin_user()
+
+        response = self.testapp.get(
+            '/packages/versions/abcd/create', status=403)
         self.assert_error_page(response)
 
     def test_create_requires_new_version_number(self):
@@ -51,8 +107,7 @@ class PackageVersionsTest(TestCase):
         self.package_version(self.package, '1.2.3', description='old').put()
 
         upload = self.upload_archive('test-package', '1.2.3', description='new')
-        response = self.testapp.post('/packages/test-package/versions',
-                                     upload_files=[upload])
+        response = self.create_package(upload)
         self.assertEqual(response.status_int, 302)
         self.assertEqual(
             response.headers['Location'],
@@ -158,23 +213,32 @@ class PackageVersionsTest(TestCase):
                          'text/yaml;charset=utf-8')
         self.assertEqual(yaml.load(response.body), version.pubspec)
 
-    def post_package_version(self, version):
-        get_response = self.testapp.get('/packages/test-package/versions/new')
+    def post_package_version(self, version, name='test-package'):
+        response = self.create_package(
+            self.upload_archive(name, version))
+        self.assertEqual(response.status_int, 302)
+        self.assertEqual(
+            response.headers['Location'],
+            'http://localhost:80/packages/' + name)
+        self.assertTrue(response.cookies_set.has_key('flash'))
+
+    def create_package(self, upload, status=None):
+        get_response = self.testapp.get('/packages/versions/new')
         self.assertEqual(get_response.status_int, 200)
         form = get_response.form
-        self.assertEqual(form.action, '/packages/test-package/versions')
         self.assertEqual(form.method, 'POST')
 
-        contents = self.tar_pubspec(
-            {'name': 'test-package', 'version': version})
-        form['file'] = ('test-package-%s.tar.gz' % version, contents)
+        form['file'] = upload[1:]
         post_response = form.submit()
 
         self.assertEqual(post_response.status_int, 302)
-        self.assertEqual(
-            post_response.headers['Location'],
-            'http://localhost:80/packages/test-package')
-        self.assertTrue(post_response.cookies_set.has_key('flash'))
+        self.assertTrue(re.match(
+                r'^http://localhost:80/packages/versions/[^/]+/create$',
+                post_response.headers['Location']))
+
+        path = post_response.headers['Location'].replace(
+            'http://localhost:80', '')
+        return self.testapp.get(path, status=status)
 
     def latest_version(self):
         return Package.get_by_key_name('test-package').latest_version.version

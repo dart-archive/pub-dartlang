@@ -58,6 +58,12 @@ footer {
   text-align: center;
 }
 
+form#private-key textarea {
+  width: 550px;
+  height: 420px;
+  font-family: $monoFontFamily;
+}
+
 // We have two brands: the dart logo and "pub.dartlang.org". This keeps them
 // from being too spread out.
 .brand + .brand {
