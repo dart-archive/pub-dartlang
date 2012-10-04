@@ -30,4 +30,6 @@ class PrivateKeys(object):
         if not users.is_current_user_admin():
             handlers.http_error(403, "Only admins may set the private key.")
         already_set = PrivateKey.get() is not None
-        return handlers.render("private_keys/new", already_set=already_set)
+        return handlers.render("private_keys/new",
+                               production=handlers.is_production(),
+                               already_set=already_set)
