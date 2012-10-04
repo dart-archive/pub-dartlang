@@ -1,4 +1,15 @@
-<h1 id="pub-how-does-versioning-work">Pub: How does versioning work?</h1>
+<ol class="toc">
+  <li><a href="#a-name-and-a-number">A name and a number</a></li>
+  <li><a href="#shared-dependencies-and-unshared-libraries">Shared dependencies and unshared libraries</a></li>
+  <li><a href="#version-lock">Version lock</a></li>
+  <li><a href="#version-constraints">Version constraints</a></li>
+  <li><a href="#semantic-versions">Semantic versions</a></li>
+  <li><a href="#constraint-solving">Constraint solving</a></li>
+  <li><a href="#constraint-context">Constraint context</a></li>
+  <li><a href="#lockfiles">Lockfiles</a></li>
+  <li><a href="#when-things-go-wrong">When things go wrong</a></li>
+  <li><a href="#summary">Summary</a></li>
+</ol>
 
 <p>One of pub&rsquo;s core concerns is helping you work with versioning. Here, I&rsquo;ll
 explain a bit about the history of versioning and pub&rsquo;s approach to it.
@@ -171,10 +182,12 @@ evolution now. Let&rsquo;s see how they play together and what pub does.</p>
 <h2 id="constraint-solving">Constraint solving</h2>
 
 <p>When you define your package, you list its
-<strong>immediate dependencies</strong>&mdash;the packages it itself uses. For each one, you
-specify the range of versions it allows. Each of those dependent packages may
-in turn have their own dependencies (called <strong>transitive dependencies</strong>). Pub
-will traverse these and build up the entire deep dependency graph for your app.</p>
+<a href="glossary.html#immediate-dependency"><strong>immediate dependencies</strong></a>&mdash;the
+packages it itself uses. For each one, you specify the range of versions it
+allows. Each of those dependent packages may in turn have their own
+dependencies (called
+<a href="glossary.html#transitive-dependency"><strong>transitive dependencies</strong></a>. Pub will
+traverse these and  build up the entire deep dependency graph for your app.</p>
 
 <p>For each package in the graph, pub looks at everything that depends on it. It
 gathers together all of their version constraints and tries to simultaneously

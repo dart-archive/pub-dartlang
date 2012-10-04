@@ -1,8 +1,18 @@
 ---
-title: "Pub: How does versioning work?"
+title: "Pub's Versioning Philosophy"
 ---
 
-# {{ page.title }}
+1. [A name and a number](#a-name-and-a-number)
+1. [Shared dependencies and unshared libraries](#shared-dependencies-and-unshared-libraries)
+1. [Version lock](#version-lock)
+1. [Version constraints](#version-constraints)
+1. [Semantic versions](#semantic-versions)
+1. [Constraint solving](#constraint-solving)
+1. [Constraint context](#constraint-context)
+1. [Lockfiles](#lockfiles)
+1. [When things go wrong](#when-things-go-wrong)
+1. [Summary](#summary)
+{:.toc}
 
 One of pub's core concerns is helping you work with versioning. Here, I'll
 explain a bit about the history of versioning and pub's approach to it.
@@ -174,10 +184,12 @@ evolution now. Let's see how they play together and what pub does.
 ## Constraint solving
 
 When you define your package, you list its
-**immediate dependencies**&mdash;the packages it itself uses. For each one, you
-specify the range of versions it allows. Each of those dependent packages may
-in turn have their own dependencies (called **transitive dependencies**). Pub
-will traverse these and build up the entire deep dependency graph for your app.
+[**immediate dependencies**](glossary.html#immediate-dependency)&mdash;the
+packages it itself uses. For each one, you specify the range of versions it
+allows. Each of those dependent packages may in turn have their own
+dependencies (called
+[**transitive dependencies**](glossary.html#transitive-dependency). Pub will
+traverse these and  build up the entire deep dependency graph for your app.
 
 For each package in the graph, pub looks at everything that depends on it. It
 gathers together all of their version constraints and tries to simultaneously

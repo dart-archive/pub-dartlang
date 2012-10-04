@@ -66,7 +66,7 @@ class Package(db.Model):
             if email is None: return cgi.escape(author)
             return '''<span class="author">%s
                 <a href="mailto:%s" title="Email %s">
-                    <i class="icon-envelope inline-icon"></i>
+                    <i class="icon-envelope"></i>
                 </a></span>''' % \
                 (cgi.escape(author), cgi.escape(email), cgi.escape(email))
 

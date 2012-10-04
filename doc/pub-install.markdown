@@ -2,13 +2,11 @@
 title: "Command: Install"
 ---
 
-# {{ page.title }}
-
     $ pub install
 
 This command installs all the dependencies listed in the
 [`pubspec.yaml`](pubspec.html) file in the current working directory, as well as
-their [transitive dependencies](glossary.html#transitive-dependencies), to a
+their [transitive dependencies](glossary.html#transitive-dependency), to a
 `packages` directory located next to the pubspec. For example:
 
     $ pub install

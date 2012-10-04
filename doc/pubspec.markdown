@@ -1,30 +1,25 @@
 ---
-title: "What is a Pubspec?"
+title: "Pubspec Format"
 ---
 
-# {{ page.title }}
+1. [Name](#name)
+1. [Version](#version)
+1. [Description](#description)
+1. [Author/Authors](#authorauthors)
+1. [Homepage](#homepage)
+1. [Dependencies](#dependencies)
+1. [Dependency sources](#dependency-sources)
+    1. [Hosted packages](#hosted-packages)
+    1. [SDK packages](#sdk-packages)
+    1. [Git packages](#git-packages)
+1. [Version constraints](#version-constraints)
+{:.toc}
 
-Every pub package needs some metadata so it can specify its dependencies. Pub
-packages that are shared with others also need to provide some other
-information so users can discover them. Pub stores this in a "pubspec" in a file
-named `pubspec.yaml`. As you could guess, it is written in the
-[YAML](http://www.yaml.org/) language.
-
-A simple but complete pubspec looks something like this:
-
-{% highlight yaml %}
-name: newtify
-version: 1.2.3
-description: >
-  Have you been turned into a newt? Would you like to be? This
-  package can help: it has all of the newt-transmogrification
-  functionality you've been looking for.
-author: Nathan Weizenbaum <nweiz@google.com>
-homepage: http://newtify.dartlang.org
-dependencies:
-  efts: '>=2.0.4 <3.0.0'
-  transmogrify: '>=0.4.0'
-{% endhighlight %}
+Every pub package needs some metadata so it can specify its
+[dependencies](glossary.html#dependency). Pub packages that are shared with
+others also need to provide some other information so users can discover them.
+Pub stores this in a "pubspec" in a file named `pubspec.yaml`. As you could
+guess, it is written in the [YAML](http://www.yaml.org/) language.
 
 At the top level are a series of fields. The currently supported ones are:
 
@@ -43,14 +38,29 @@ At the top level are a series of fields. The currently supported ones are:
   <dd>Can be omitted if your package has no dependencies.</dd>
 </dl>
 
-All other fields will be ignored.
+All other fields will be ignored. A simple but complete pubspec looks something
+like this:
+
+{% highlight yaml %}
+name: newtify
+version: 1.2.3
+description: >
+  Have you been turned into a newt? Would you like to be? This
+  package can help: it has all of the newt-transmogrification
+  functionality you've been looking for.
+author: Nathan Weizenbaum <nweiz@google.com>
+homepage: http://newtify.dartlang.org
+dependencies:
+  efts: '>=2.0.4 <3.0.0'
+  transmogrify: '>=0.4.0'
+{% endhighlight %}
 
 ## Name
 
 Every package needs a name. When your stellar code gets props on
 the world stage, this is what they'll be hollering. Also, it's how other
-packages will refer to yours, and how it will appear on
-[pub.dartlang.org][pubsite], should you publish it.
+packages will refer to yours, and how it will appear here, should you publish
+it.
 
 It should be all lowercase, with underscores to separate words,
 `just_like_this`. Stick with basic Latin letters and Arabic digits:
@@ -58,19 +68,19 @@ It should be all lowercase, with underscores to separate words,
 with digits and isn't a reserved word).
 
 Try to pick a name that is clear, terse, and not already in use. A quick search
-on [pub.dartlang.org][pubsite] to make sure nothing else is using your name can
-save you heartache later.
+[here](/packages) to make sure nothing else is using your name  can save you
+heartache later.
 
 ## Version
 
-Every package has a version. A version number is required to host your package on
-[pub.dartlang.org][pubsite], but can be omitted for local-only packages. If you
-omit it, your package is implicitly versioned `0.0.0`.
+Every package has a version. A version number is required to host your package
+here, but can be omitted for local-only packages. If you omit it, your package
+is implicitly versioned `0.0.0`.
 
-No one really gets excited about versioning, but
-it's a necessary evil for reusing code while letting it evolve quickly. A
-version number is three numbers separated by dots, like `0.2.43`. It can also
-optionally have a build (`+hotfix.oopsie`) or pre-release (`-alpha.12`) suffix.
+No one really gets excited about versioning, but it's a necessary evil for
+reusing code while letting it evolve quickly. A version number is three numbers
+separated by dots, like `0.2.43`. It can also optionally have a build
+(`+hotfix.oopsie`) or pre-release (`-alpha.12`) suffix.
 
 Each time you publish your package, you will publish it at a specific version.
 Once that's been done, consider it hermetically sealed: you can't touch it
@@ -91,7 +101,7 @@ be relatively short&mdash;a few sentences, maybe a whole paragraph&mdash;and
 tells a casual reader what they might want to know about your package.
 
 Think of the description as the sales pitch for your package. Users will see it
-when they browse [pub.dartlang.org][pubsite]. It should be simple plain text:
+when they [browse for packages](/packages). It should be simple plain text:
 no markdown or HTML. That's what your README is for.
 
 ## Author/Authors
@@ -109,27 +119,32 @@ authors:
 - Bob Nystrom <rnystrom@google.com>
 {% endhighlight %}
 
-The authors of a [hosted package](#hosted-packages) will be displayed on
-[pub.dartlang.org][pubsite].
+If you upload your package here, we will show this email address so make sure
+you're OK with that.
 
 ## Homepage
 
-This is optional. It should be a URL pointing to the website for your package.
-For [hosted packages](#hosted-packages), this URL will be linked from the
-package's page on [pub.dartlang.org][pubsite].
+This should be a URL pointing to the website for your package. For
+[hosted packages](#hosted-packages), this URL will be linked from the
+package's page. While this is technically optional *please do* provide one. It
+helps users understand where your package is coming from. If nothing else, you
+can always use the URL where you host the source code:
+[github](http://github.com), [code.google.com](http://code.google.com/),
+whatever.
 
 ## Dependencies
 
-Finally, the pubspec's *raison d'être*: dependencies. Here, you list each
-package that your package needs in order to work. You only list immediate
-depedencies, the stuff your package itself uses directly. Pub handles
-transitive dependencies automatically for you.
+Finally, the pubspec's *raison d'être*:
+[dependencies](glossary.html#dependency). Here, you list each package that your
+package needs in order to work. You only list immediate dependencies, the stuff
+your package itself uses directly. Pub handles transitive dependencies
+automatically for you.
 
 For each dependency, you specify the *name* of the package you depend on. For
 library packages, you specify the *range of versions* of that package that
-you allow. You may also specify the *source* which tells pub how the package
-can be located, and any additional *description* that the source needs to find
-the package.
+you allow. You may also specify the [*source*](glossary.html#source) which
+tells pub how the package can be located, and any additional *description* that
+the source needs to find the package.
 
 There are a few different ways to specify dependencies based on how much of
 that data you need to provide. The shortest way is to just specify a name:
@@ -140,7 +155,7 @@ dependencies:
 {% endhighlight %}
 
 This creates a dependency on `transmogrify`. It allows any version, and looks
-it up using the default source ([pub.dartlang.org][pubsite]). To limit the
+it up using the default source, which is this site itself. To limit the
 dependency to a range of versions, you can provide a *version constraint*:
 
 {% highlight yaml %}
@@ -151,12 +166,6 @@ dependencies:
 This creates a dependency on `transmogrify` using the default source and
 allowing any version from `1.0.0` to `2.0.0` (but not including `2.0.0`). See
 [below](#version-constraints) for details on the version constraint syntax.
-
-<aside class="alert alert-warning">
-
-The default source isn't currently implemented, but it's coming very soon.
-
-</aside>
 
 If you want to specify a source, the syntax looks a bit different:
 
@@ -193,15 +202,9 @@ descriptions they allow:
 
 ### Hosted packages
 
-<aside class="alert alert-warning">
-
-Hosted packages aren't currently implemented, but they are coming very soon.
-
-</aside>
-
-A *hosted* package is one that can be downloaded from
-[pub.dartlang.org][pubsite] (or another HTTP server that speaks the same API).
-Most of your dependencies will be of this form. They look like this:
+A *hosted* package is one that can be downloaded from this site (or another
+HTTP server that speaks the same API). Most of your dependencies will be of
+this form. They look like this:
 
 {% highlight yaml %}
 dependencies:

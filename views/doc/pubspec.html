@@ -1,26 +1,25 @@
-<h1 id="what-is-a-pubspec">What is a Pubspec?</h1>
+<ol class="toc">
+  <li><a href="#name">Name</a></li>
+  <li><a href="#version">Version</a></li>
+  <li><a href="#description">Description</a></li>
+  <li><a href="#authorauthors">Author/Authors</a></li>
+  <li><a href="#homepage">Homepage</a></li>
+  <li><a href="#dependencies">Dependencies</a></li>
+  <li><a href="#dependency-sources">Dependency sources</a>
+    <ol>
+      <li><a href="#hosted-packages">Hosted packages</a></li>
+      <li><a href="#sdk-packages">SDK packages</a></li>
+      <li><a href="#git-packages">Git packages</a></li>
+    </ol>
+  </li>
+  <li><a href="#version-constraints">Version constraints</a></li>
+</ol>
 
-<p>Every pub package needs some metadata so it can specify its dependencies. Pub
-packages that are shared with others also need to provide some other
-information so users can discover them. Pub stores this in a &ldquo;pubspec&rdquo; in a file
-named <code>pubspec.yaml</code>. As you could guess, it is written in the
-<a href="http://www.yaml.org/">YAML</a> language.</p>
-
-<p>A simple but complete pubspec looks something like this:</p>
-
-<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">newtify</span>
-<span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1.2.3</span>
-<span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
-  <span class="no">Have you been turned into a newt? Would you like to be? This</span>
-  <span class="no">package can help: it has all of the newt-transmogrification</span>
-  <span class="no">functionality you&#39;ve been looking for.</span>
-<span class="l-Scalar-Plain">author</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Nathan Weizenbaum &lt;nweiz@google.com&gt;</span>
-<span class="l-Scalar-Plain">homepage</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://newtify.dartlang.org</span>
-<span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">efts</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=2.0.4</span><span class="nv"> </span><span class="s">&lt;3.0.0&#39;</span>
-  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0&#39;</span>
-</code></pre>
-</div>
+<p>Every pub package needs some metadata so it can specify its
+<a href="glossary.html#dependency">dependencies</a>. Pub packages that are shared with
+others also need to provide some other information so users can discover them.
+Pub stores this in a &ldquo;pubspec&rdquo; in a file named <code>pubspec.yaml</code>. As you could
+guess, it is written in the <a href="http://www.yaml.org/">YAML</a> language.</p>
 
 <p>At the top level are a series of fields. The currently supported ones are:</p>
 
@@ -39,14 +38,29 @@ named <code>pubspec.yaml</code>. As you could guess, it is written in the
   <dd>Can be omitted if your package has no dependencies.</dd>
 </dl>
 
-<p>All other fields will be ignored.</p>
+<p>All other fields will be ignored. A simple but complete pubspec looks something
+like this:</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">newtify</span>
+<span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1.2.3</span>
+<span class="l-Scalar-Plain">description</span><span class="p-Indicator">:</span> <span class="p-Indicator">&gt;</span>
+  <span class="no">Have you been turned into a newt? Would you like to be? This</span>
+  <span class="no">package can help: it has all of the newt-transmogrification</span>
+  <span class="no">functionality you&#39;ve been looking for.</span>
+<span class="l-Scalar-Plain">author</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Nathan Weizenbaum &lt;nweiz@google.com&gt;</span>
+<span class="l-Scalar-Plain">homepage</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://newtify.dartlang.org</span>
+<span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">efts</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=2.0.4</span><span class="nv"> </span><span class="s">&lt;3.0.0&#39;</span>
+  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0&#39;</span>
+</code></pre>
+</div>
 
 <h2 id="name">Name</h2>
 
 <p>Every package needs a name. When your stellar code gets props on
 the world stage, this is what they&rsquo;ll be hollering. Also, it&rsquo;s how other
-packages will refer to yours, and how it will appear on
-<a href="http://pub.dartlang.org">pub.dartlang.org</a>, should you publish it.</p>
+packages will refer to yours, and how it will appear here, should you publish
+it.</p>
 
 <p>It should be all lowercase, with underscores to separate words,
 <code>just_like_this</code>. Stick with basic Latin letters and Arabic digits:
@@ -54,19 +68,19 @@ packages will refer to yours, and how it will appear on
 with digits and isn&rsquo;t a reserved word).</p>
 
 <p>Try to pick a name that is clear, terse, and not already in use. A quick search
-on <a href="http://pub.dartlang.org">pub.dartlang.org</a> to make sure nothing else is using your name can
-save you heartache later.</p>
+<a href="/packages">here</a> to make sure nothing else is using your name  can save you
+heartache later.</p>
 
 <h2 id="version">Version</h2>
 
-<p>Every package has a version. A version number is required to host your package on
-<a href="http://pub.dartlang.org">pub.dartlang.org</a>, but can be omitted for local-only packages. If you
-omit it, your package is implicitly versioned <code>0.0.0</code>.</p>
+<p>Every package has a version. A version number is required to host your package
+here, but can be omitted for local-only packages. If you omit it, your package
+is implicitly versioned <code>0.0.0</code>.</p>
 
-<p>No one really gets excited about versioning, but
-it&rsquo;s a necessary evil for reusing code while letting it evolve quickly. A
-version number is three numbers separated by dots, like <code>0.2.43</code>. It can also
-optionally have a build (<code>+hotfix.oopsie</code>) or pre-release (<code>-alpha.12</code>) suffix.</p>
+<p>No one really gets excited about versioning, but it&rsquo;s a necessary evil for
+reusing code while letting it evolve quickly. A version number is three numbers
+separated by dots, like <code>0.2.43</code>. It can also optionally have a build
+(<code>+hotfix.oopsie</code>) or pre-release (<code>-alpha.12</code>) suffix.</p>
 
 <p>Each time you publish your package, you will publish it at a specific version.
 Once that&rsquo;s been done, consider it hermetically sealed: you can&rsquo;t touch it
@@ -85,7 +99,7 @@ be relatively short&mdash;a few sentences, maybe a whole paragraph&mdash;and
 tells a casual reader what they might want to know about your package.</p>
 
 <p>Think of the description as the sales pitch for your package. Users will see it
-when they browse <a href="http://pub.dartlang.org">pub.dartlang.org</a>. It should be simple plain text:
+when they <a href="/packages">browse for packages</a>. It should be simple plain text:
 no markdown or HTML. That&rsquo;s what your README is for.</p>
 
 <h2 id="authorauthors">Author/Authors</h2>
@@ -103,27 +117,32 @@ Weizenbaum</code>) or a name and an email address (e.g. <code>Nathan Weizenbaum
 </code></pre>
 </div>
 
-<p>The authors of a <a href="#hosted-packages">hosted package</a> will be displayed on
-<a href="http://pub.dartlang.org">pub.dartlang.org</a>.</p>
+<p>If you upload your package here, we will show this email address so make sure
+you&rsquo;re OK with that.</p>
 
 <h2 id="homepage">Homepage</h2>
 
-<p>This is optional. It should be a URL pointing to the website for your package.
-For <a href="#hosted-packages">hosted packages</a>, this URL will be linked from the
-package&rsquo;s page on <a href="http://pub.dartlang.org">pub.dartlang.org</a>.</p>
+<p>This should be a URL pointing to the website for your package. For
+<a href="#hosted-packages">hosted packages</a>, this URL will be linked from the
+package&rsquo;s page. While this is technically optional <em>please do</em> provide one. It
+helps users understand where your package is coming from. If nothing else, you
+can always use the URL where you host the source code:
+<a href="http://github.com">github</a>, <a href="http://code.google.com/">code.google.com</a>,
+whatever.</p>
 
 <h2 id="dependencies">Dependencies</h2>
 
-<p>Finally, the pubspec&rsquo;s <em>raison d&rsquo;être</em>: dependencies. Here, you list each
-package that your package needs in order to work. You only list immediate
-depedencies, the stuff your package itself uses directly. Pub handles
-transitive dependencies automatically for you.</p>
+<p>Finally, the pubspec&rsquo;s <em>raison d&rsquo;être</em>:
+<a href="glossary.html#dependency">dependencies</a>. Here, you list each package that your
+package needs in order to work. You only list immediate dependencies, the stuff
+your package itself uses directly. Pub handles transitive dependencies
+automatically for you.</p>
 
 <p>For each dependency, you specify the <em>name</em> of the package you depend on. For
 library packages, you specify the <em>range of versions</em> of that package that
-you allow. You may also specify the <em>source</em> which tells pub how the package
-can be located, and any additional <em>description</em> that the source needs to find
-the package.</p>
+you allow. You may also specify the <a href="glossary.html#source"><em>source</em></a> which
+tells pub how the package can be located, and any additional <em>description</em> that
+the source needs to find the package.</p>
 
 <p>There are a few different ways to specify dependencies based on how much of
 that data you need to provide. The shortest way is to just specify a name:</p>
@@ -134,7 +153,7 @@ that data you need to provide. The shortest way is to just specify a name:</p>
 </div>
 
 <p>This creates a dependency on <code>transmogrify</code>. It allows any version, and looks
-it up using the default source (<a href="http://pub.dartlang.org">pub.dartlang.org</a>). To limit the
+it up using the default source, which is this site itself. To limit the
 dependency to a range of versions, you can provide a <em>version constraint</em>:</p>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
@@ -145,12 +164,6 @@ dependency to a range of versions, you can provide a <em>version constraint</em>
 <p>This creates a dependency on <code>transmogrify</code> using the default source and
 allowing any version from <code>1.0.0</code> to <code>2.0.0</code> (but not including <code>2.0.0</code>). See
 <a href="#version-constraints">below</a> for details on the version constraint syntax.</p>
-
-<aside class="alert alert-warning">
-
-The default source isn't currently implemented, but it's coming very soon.
-
-</aside>
 
 <p>If you want to specify a source, the syntax looks a bit different:</p>
 
@@ -187,15 +200,9 @@ descriptions they allow:</p>
 
 <h3 id="hosted-packages">Hosted packages</h3>
 
-<aside class="alert alert-warning">
-
-Hosted packages aren't currently implemented, but they are coming very soon.
-
-</aside>
-
-<p>A <em>hosted</em> package is one that can be downloaded from
-<a href="http://pub.dartlang.org">pub.dartlang.org</a> (or another HTTP server that speaks the same API).
-Most of your dependencies will be of this form. They look like this:</p>
+<p>A <em>hosted</em> package is one that can be downloaded from this site (or another
+HTTP server that speaks the same API). Most of your dependencies will be of
+this form. They look like this:</p>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0</span><span class="nv"> </span><span class="s">&lt;1.0.0&#39;</span>

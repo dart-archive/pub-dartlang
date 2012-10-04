@@ -1,4 +1,12 @@
-<h1 id="pub-package-layout-conventions">Pub: Package layout conventions</h1>
+<ol class="toc">
+  <li><a href="#the-basics">The basics</a></li>
+  <li><a href="#public-libraries">Public libraries</a></li>
+  <li><a href="#implementation-files">Implementation files</a></li>
+  <li><a href="#tests">Tests</a></li>
+  <li><a href="#documentation">Documentation</a></li>
+  <li><a href="#examples">Examples</a></li>
+  <li><a href="#shell-scripts">Shell scripts</a></li>
+</ol>
 
 <p>Part of a healthy code ecosystem is consistent conventions. When we all do the
 same thing the same way, it makes it easier for us to learn our way around
@@ -21,8 +29,6 @@ would look like:</p>
   pubspec.lock *
   README.md
   LICENSE
-  enchilada.dart
-  tortilla.dart
   bin/
     enchilada
     packages/ **
@@ -32,8 +38,11 @@ would look like:</p>
     lunch.dart
     packages/ **
   lib/
-    beans.dart
-    queso.dart
+    enchilada.dart
+    tortilla.dart
+    src/
+      beans.dart
+      queso.dart
   packages/ **
   test/
     enchilada_test.dart
@@ -54,9 +63,15 @@ application package.</p>
   pubspec.lock
 </code></pre>
 
-<p>Every package will have a <a href="pubspec.html"><strong>pubspec</strong></a>, a file named
-<code>pubspec.yaml</code>, in the root directory of the package. That&rsquo;s what <em>makes</em> it a
-package.</p>
+<p>Every package will have a <strong>pubspec</strong>, a file named <code>pubspec.yaml</code>, in the root
+directory of the package. That&rsquo;s what <em>makes</em> it a package.</p>
+
+<div class="learn-more">
+  <a href="/doc/pubspec.html">
+    Learn more about pubspecs
+    <i class="icon-hand-right icon-white">&nbsp;</i>
+  </a>
+</div>
 
 <p>Once you&rsquo;ve run <a href="pub-install.html"><code>pub install</code></a> or
 <a href="pub-update.html"><code>pub update</code></a> on the package, you will also have a
@@ -84,13 +99,14 @@ use are up to you, but please do have a README.</p>
 <h2 id="public-libraries">Public libraries</h2>
 
 <pre><code>enchilada/
-  enchilada.dart
-  tortilla.dart
+  lib/
+    enchilada.dart
+    tortilla.dart
 </code></pre>
 
 <p>Many packages are <em>library packages</em>: they define Dart libraries that other
-packages can import and use. These public Dart library files go directly in the
-top level directory for the package.</p>
+packages can import and use. These public Dart library files go inside a
+directory called <code>lib</code>.</p>
 
 <p>Most packages will define a single library that users can import. In that case,
 its name should usually be the same as the name of the package, like
@@ -105,34 +121,51 @@ the library file, like so:</p>
 </code></pre>
 </div>
 
+<p>If you feel the need to organize your public libraries, you can also create
+subdirectories inside <code>lib</code>. If you do that, users will specify that path when
+they import it. Say you have a file hierarchy like this:</p>
+
+<pre><code>enchilada/
+  lib/
+    some/
+      path/
+        olives.dart
+</code></pre>
+
+<p>Users will import <code>olives.dart</code> like:</p>
+
+<div class="highlight"><pre><code class="dart">#<span class="k">import</span><span class="p">(</span><span class="s2">&quot;package:enchilada/some/path/olives.dart&quot;</span><span class="p">);</span>
+</code></pre>
+</div>
+
 <h2 id="implementation-files">Implementation files</h2>
 
 <pre><code>enchilada/
   lib/
-    beans.dart
-    queso.dart
+    src/
+      beans.dart
+      queso.dart
 </code></pre>
 
-<p>The top level of a package contains files that are &ldquo;publicly&rdquo; visible: other
-packages are free to import them. But much of a package&rsquo;s code is internal
-implementation libraries that should only be imported and used by the package
-itself. Those go inside a directory called <code>lib</code>. You can create subdirectories
-in there if it helps you organize things.</p>
+<p>The libraries inside &ldquo;lib&rdquo; are publicly visible: other packages are free to
+import them. But much of a package&rsquo;s code is internal implementation libraries
+that should only be imported and used by the package itself. Those go inside a
+subdirectory of <code>lib</code> called <code>src</code>. You can create subdirectories in there if
+it helps you organize things.</p>
 
-<p>Other Dart files within this package (like top-level ones, scripts in <code>bin</code>,
-and tests) can import stuff from <code>lib</code>, but nothing outside the package should.</p>
+<p>You are free to import libraries that live in <code>lib/src</code> from other libraries
+in the <em>same</em> package (like other libraries in <code>lib</code>, scripts in <code>bin</code>, and
+tests) but you should never import from another package&rsquo;s <code>lib/src</code> directory.
+Those files are not part of the package&rsquo;s public API, and they might change in
+ways that could break your code.</p>
 
-<!-- TODO(rnystrom): Re-enable this when #4820 is fixed.
-For files within the package, they can still use `"package:"` to import these
-libraries. This is a perfectly valid way to get to files in your *own* package:
+<p>When you use libraries from within your own package, even stuff in <code>src</code>, you
+can (and should) still use <code>"package:"</code> to import them. This is perfectly
+legit:</p>
 
-
-<div class="highlight"><pre><code class="dart">#<span class="k">import</span><span class="p">(</span><span class="s2">&quot;package:enchilada/lib/beans.dart&quot;</span><span class="p">);</span>
+<div class="highlight"><pre><code class="dart">#<span class="k">import</span><span class="p">(</span><span class="s2">&quot;package:enchilada/src/beans.dart&quot;</span><span class="p">);</span>
 </code></pre>
 </div>
-
-
--->
 
 <h2 id="tests">Tests</h2>
 
@@ -157,11 +190,16 @@ package but you can use whatever testing system that gets you excited.</p>
 </code></pre>
 
 <p>If you&rsquo;ve got code and tests, the next piece you need to maximize your karma
-is good documentation. That goes inside a directory named <code>doc</code>.</p>
+is good documentation. That goes inside a directory named <code>doc</code>. We don&rsquo;t
+currently have any guidelines about format or organization within that. Use
+whatever markup format you like and be happy that you&rsquo;re actually writing docs.</p>
 
-<p>We don&rsquo;t currently have any guidelines about format or organization within that.
-Use whatever markup format you like and be happy that you&rsquo;re actually writing
-docs.</p>
+<p>This directory should <em>not</em> just contain docs generated automatically from your
+source code using
+<a href="http://api.dartlang.org/docs/continuous/dartdoc.html">dartdoc</a>. Since that&rsquo;s
+pulled directly from the code already in the package, putting those docs in
+here would be redundant. Instead, this is for tutorials, guides, and other
+hand-authored documentation <em>in addition to</em> generated API references.</p>
 
 <h2 id="examples">Examples</h2>
 

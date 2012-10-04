@@ -1,8 +1,15 @@
 ---
-title: "Pub: Package layout conventions"
+title: "Package layout conventions"
 ---
 
-# {{ page.title }}
+1. [The basics](#the-basics)
+1. [Public libraries](#public-libraries)
+1. [Implementation files](#implementation-files)
+1. [Tests](#tests)
+1. [Documentation](#documentation)
+1. [Examples](#examples)
+1. [Shell scripts](#shell-scripts)
+{:.toc}
 
 Part of a healthy code ecosystem is consistent conventions. When we all do the
 same thing the same way, it makes it easier for us to learn our way around
@@ -25,8 +32,6 @@ would look like:
       pubspec.lock *
       README.md
       LICENSE
-      enchilada.dart
-      tortilla.dart
       bin/
         enchilada
         packages/ **
@@ -36,8 +41,11 @@ would look like:
         lunch.dart
         packages/ **
       lib/
-        beans.dart
-        queso.dart
+        enchilada.dart
+        tortilla.dart
+        src/
+          beans.dart
+          queso.dart
       packages/ **
       test/
         enchilada_test.dart
@@ -56,9 +64,15 @@ application package.
       pubspec.yaml
       pubspec.lock
 
-Every package will have a [**pubspec**](pubspec.html), a file named
-`pubspec.yaml`, in the root directory of the package. That's what *makes* it a
-package.
+Every package will have a **pubspec**, a file named `pubspec.yaml`, in the root
+directory of the package. That's what *makes* it a package.
+
+<div class="learn-more">
+  <a href="/doc/pubspec.html">
+    Learn more about pubspecs
+    <i class="icon-hand-right icon-white">&nbsp;</i>
+  </a>
+</div>
 
 Once you've run [`pub install`](pub-install.html) or
 [`pub update`](pub-update.html) on the package, you will also have a
@@ -84,12 +98,13 @@ use are up to you, but please do have a README.
 ## Public libraries
 
     enchilada/
-      enchilada.dart
-      tortilla.dart
+      lib/
+        enchilada.dart
+        tortilla.dart
 
 Many packages are *library packages*: they define Dart libraries that other
-packages can import and use. These public Dart library files go directly in the
-top level directory for the package.
+packages can import and use. These public Dart library files go inside a
+directory called `lib`.
 
 Most packages will define a single library that users can import. In that case,
 its name should usually be the same as the name of the package, like
@@ -104,30 +119,49 @@ the library file, like so:
 #import("package:enchilada/tortilla.dart");
 {% endhighlight %}
 
+If you feel the need to organize your public libraries, you can also create
+subdirectories inside `lib`. If you do that, users will specify that path when
+they import it. Say you have a file hierarchy like this:
+
+    enchilada/
+      lib/
+        some/
+          path/
+            olives.dart
+
+Users will import `olives.dart` like:
+
+{% highlight dart %}
+#import("package:enchilada/some/path/olives.dart");
+{% endhighlight %}
+
 ## Implementation files
 
     enchilada/
       lib/
-        beans.dart
-        queso.dart
+        src/
+          beans.dart
+          queso.dart
 
-The top level of a package contains files that are "publicly" visible: other
-packages are free to import them. But much of a package's code is internal
-implementation libraries that should only be imported and used by the package
-itself. Those go inside a directory called `lib`. You can create subdirectories
-in there if it helps you organize things.
+The libraries inside "lib" are publicly visible: other packages are free to
+import them. But much of a package's code is internal implementation libraries
+that should only be imported and used by the package itself. Those go inside a
+subdirectory of `lib` called `src`. You can create subdirectories in there if
+it helps you organize things.
 
-Other Dart files within this package (like top-level ones, scripts in `bin`,
-and tests) can import stuff from `lib`, but nothing outside the package should.
+You are free to import libraries that live in `lib/src` from other libraries
+in the *same* package (like other libraries in `lib`, scripts in `bin`, and
+tests) but you should never import from another package's `lib/src` directory.
+Those files are not part of the package's public API, and they might change in
+ways that could break your code.
 
-<!-- TODO(rnystrom): Re-enable this when #4820 is fixed.
-For files within the package, they can still use `"package:"` to import these
-libraries. This is a perfectly valid way to get to files in your *own* package:
+When you use libraries from within your own package, even stuff in `src`, you
+can (and should) still use `"package:"` to import them. This is perfectly
+legit:
 
 {% highlight dart %}
-#import("package:enchilada/lib/beans.dart");
+#import("package:enchilada/src/beans.dart");
 {% endhighlight %}
--->
 
 ## Tests
 
@@ -150,11 +184,16 @@ package but you can use whatever testing system that gets you excited.
         getting_started.md
 
 If you've got code and tests, the next piece you need to maximize your karma
-is good documentation. That goes inside a directory named `doc`.
+is good documentation. That goes inside a directory named `doc`. We don't
+currently have any guidelines about format or organization within that. Use
+whatever markup format you like and be happy that you're actually writing docs.
 
-We don't currently have any guidelines about format or organization within that.
-Use whatever markup format you like and be happy that you're actually writing
-docs.
+This directory should *not* just contain docs generated automatically from your
+source code using
+[dartdoc](http://api.dartlang.org/docs/continuous/dartdoc.html). Since that's
+pulled directly from the code already in the package, putting those docs in
+here would be redundant. Instead, this is for tutorials, guides, and other
+hand-authored documentation *in addition to* generated API references.
 
 ## Examples
 

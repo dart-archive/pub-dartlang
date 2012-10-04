@@ -2,8 +2,6 @@
 title: "Command: Update"
 ---
 
-# {{ page.title }}
-
     $ pub update [PACKAGE]
 
 Without any additional arguments, `pub update` installs the latest versions of

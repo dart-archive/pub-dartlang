@@ -10,6 +10,7 @@ $baseLineHeight: 24px;
 $sansFontFamily: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 $iconSpritePath: 'img/glyphicons-halflings.png';
+$iconWhiteSpritePath: 'img/glyphicons-halflings-white.png';
 
 @import "compass_twitter_bootstrap";
 
@@ -43,6 +44,11 @@ article {
 
 .has-permalink:hover > a.permalink {
   display:inline;
+}
+
+tt {
+  font-family: $monoFontFamily;
+  padding: 0 3px;
 }
 
 footer {
@@ -108,9 +114,9 @@ td.archive, th.archive {
   vertical-align: middle;
 }
 
-// When icons immediately follow paragraph text, we need to shift them a bit
-// to get them to line up.
-.inline-icon {
+// Need to shift the icons a bit to line the up with adjacent text.
+.icon-hand-right,
+.icon-envelope {
   margin: 3px 0 0 2px;
 }
 
@@ -134,4 +140,29 @@ td.archive, th.archive {
 
 .author {
   white-space: nowrap;
+}
+
+.learn-more {
+  text-align: right;
+  margin: 0 0 24px;
+
+  a {
+    @extend .btn;
+    @extend .btn-info;
+
+    display: inline-block;
+  }
+}
+
+ol.toc {
+  @extend .well;
+
+  float: right;
+  // Tweak padding to handle list bullets and the spacing on the header.
+  padding: 10px 20px 20px 40px;
+}
+
+.toc:before {
+  @extend h3;
+  content: "Contents";
 }

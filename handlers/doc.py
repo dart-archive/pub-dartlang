@@ -35,8 +35,11 @@ class Doc(object):
             frontmatter = self._frontmatter(f)
 
         with codecs.open(html_path, encoding='utf-8') as f:
-            html = "<article>\n%s\n</article>" % f.read()
-            return handlers.layout(html, title=frontmatter['title'])
+            html = """<article>
+                <h1>%s</h1>
+                %s
+                </article>""" % (frontmatter['title'], f.read())
+            return handlers.layout(html)
 
     def _frontmatter(self, f):
         """Parses the YAML frontmatter of a file."""
