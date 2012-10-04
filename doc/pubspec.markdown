@@ -18,8 +18,8 @@ title: "Pubspec Format"
 Every pub package needs some metadata so it can specify its
 [dependencies](glossary.html#dependency). Pub packages that are shared with
 others also need to provide some other information so users can discover them.
-Pub stores this in a "pubspec" in a file named `pubspec.yaml`. As you could
-guess, it is written in the [YAML](http://www.yaml.org/) language.
+Pub stores this in a file named `pubspec.yaml`, which (naturally) is written in
+the [YAML](http://www.yaml.org/) language.
 
 At the top level are a series of fields. The currently supported ones are:
 

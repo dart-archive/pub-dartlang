@@ -3,21 +3,21 @@
 <h3 id="dependency">Dependency</h3>
 
 <p>Another package that your package relies on. If your package wants to import
-code from some other package, that package is a dependency. Dependencies are
-specified in your package&rsquo;s pubspec.</p>
+code from some other package, that package must be a dependency. Dependencies
+are specified in your package&rsquo;s <a href="pubspec.html">pubspec</a>.</p>
 
 <h3 id="entrypoint">Entrypoint</h3>
 
 <p>&ldquo;Entrypoint&rdquo; is used to mean two things. In the general context of Dart, it is
 a Dart library that is directly invoked by a Dart implementation. When you
-reference a Dart library in a <code>&lt;script&gt;</code> tag, or pass it as a command line
+reference a Dart library in a <code>&lt;script&gt;</code> tag or pass it as a command line
 argument to the standalone Dart VM, that library is the entrypoint. In other
-words, it&rsquo;s usually the thing that contains <code>main()</code>.</p>
+words, it&rsquo;s usually the <code>.dart</code> file that contains <code>main()</code>.</p>
 
-<p>In the context of pub, an &ldquo;entrypoint package&rdquo;, or &ldquo;root package&rdquo; is the root
-of a dependency graph. It will usually be an application. If your app is using
-pub, then it will be the entrypoint package when you run it. Every other package
-your app depends on will not be an entrypoint in that context.</p>
+<p>In the context of pub, an &ldquo;entrypoint package&rdquo; or &ldquo;root package&rdquo; is the root
+of a dependency graph. It will usually be an application. When you run your app,
+it&rsquo;s the entrypoint package. Every other package it depends on will not be an
+entrypoint in that context.</p>
 
 <p>A package can be an entrypoint in some contexts and not in others. Lets say your
 app uses a library package A. When you run your app, A is not the entrypoint
@@ -27,7 +27,7 @@ context, it <em>is</em> the entrypoint since your app isn&rsquo;t involved.</p>
 <h3 id="immediate-dependency">Immediate dependency</h3>
 
 <p>A <a href="#dependency">dependency</a> that your package directly uses itself. The
-dependencies you like in your pubspec are your package&rsquo;s immediate dependencies.
+dependencies you list in your pubspec are your package&rsquo;s immediate dependencies.
 All other dependencies are <a href="#transitive-dependency">transitive dependencies</a>.</p>
 
 <h3 id="lockfile">Lockfile</h3>
@@ -39,15 +39,21 @@ relies on.</p>
 <p>Unlike the pubspec, which only lists immediate dependencies and allows version
 ranges, the lock file comprehensively pins down the entire dependency graph to
 specific versions of packages. A lockfile ensures that you can recreate the
-exactly configuration of packages used by an application.</p>
+exact configuration of packages used by an application.</p>
+
+<p>The lockfile is generated automatically for you by pub when you run
+<a href="pub-install.html"><code>pub install</code></a> or <a href="pub-update.html"><code>pub update</code></a>. If your
+package is an application package, you will typically check this into source
+control. For library packages, you usually won&rsquo;t.</p>
 
 <h3 id="source">Source</h3>
 
 <p>A kind of place that pub can download and install packages from. A source isn&rsquo;t
 a specific place like pub.dartlang.org or some specific Git URL. Each source
 describes a general procedure for accessing a package in some way. For example,
-&ldquo;git&rdquo; is one source. The git source knows how to download packages given a git
-URL.</p>
+&ldquo;git&rdquo; is one source. The git source knows how to download packages given a Git
+URL. There are a few different
+<a href="pubspec.html#dependency-sources">supported sources</a>.</p>
 
 <h3 id="system-cache">System cache</h3>
 

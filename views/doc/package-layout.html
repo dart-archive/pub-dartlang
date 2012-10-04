@@ -63,8 +63,9 @@ application package.</p>
   pubspec.lock
 </code></pre>
 
-<p>Every package will have a <strong>pubspec</strong>, a file named <code>pubspec.yaml</code>, in the root
-directory of the package. That&rsquo;s what <em>makes</em> it a package.</p>
+<p>Every package will have a <a href="pubspec.html"><strong>pubspec</strong></a>, a file named
+<code>pubspec.yaml</code>, in the root directory of the package. That&rsquo;s what <em>makes</em> it a
+package.</p>
 
 <div class="learn-more">
   <a href="/doc/pubspec.html">
@@ -153,8 +154,8 @@ that should only be imported and used by the package itself. Those go inside a
 subdirectory of <code>lib</code> called <code>src</code>. You can create subdirectories in there if
 it helps you organize things.</p>
 
-<p>You are free to import libraries that live in <code>lib/src</code> from other libraries
-in the <em>same</em> package (like other libraries in <code>lib</code>, scripts in <code>bin</code>, and
+<p>You are free to import libraries that live in <code>lib/src</code> from within other Dart
+code in the <em>same</em> package (like other libraries in <code>lib</code>, scripts in <code>bin</code>, and
 tests) but you should never import from another package&rsquo;s <code>lib/src</code> directory.
 Those files are not part of the package&rsquo;s public API, and they might change in
 ways that could break your code.</p>

@@ -23,17 +23,18 @@ yours.
 
 Pub is part of the [Dart SDK](http://dartlang.org/docs/sdk/), so if you have
 Dart installed, you have pub too. You can access pub through the
-[Dart Editor](/docs/editor/), or through the standalone `pub` command line app,
-which lives inside the `bin` directory in the Dart SDK. To make it easier to
-access `pub` (and other executables in there like the Dart VM), you may want to
-add `bin` to your system path. On Mac and Linux, add this to your shell's
-configuration file:
+[Dart Editor](http://www.dartlang.org/docs/editor/), or through the standalone
+`pub` command line app, which lives inside the `bin` directory in the Dart SDK.
+To make it easier to access `pub` (and other executables in there like the Dart
+VM), you may want to add `bin` to your system path. On Mac and Linux, add this
+to your shell's configuration file:
 
     export PATH=$PATH:<path to dart>/bin
 
 Here, `<path to dart>` is the path to the main `dart` directory of the SDK. If
-you installed the SDK with the [Dart Editor](/docs/editor/#download), this
-will be the `dart-sdk` directory inside the Editor's main directory.
+you installed the SDK with the
+[Dart Editor](http://www.dartlang.org/docs/editor/#download), this will be the
+`dart-sdk` directory inside the Editor's main directory.
 
 On Windows, you can set the system PATH environment variable through the
 Control Panel. A quick
@@ -103,7 +104,7 @@ dependencies:
   transmogrify:
 {% endhighlight %}
 
-Here, we are declaring a dependency on the `transmogrify` package.
+Here, we are declaring a dependency on the (fictional) `transmogrify` package.
 
 <div class="learn-more">
   <a href="/doc/pubspec.html#dependencies">
