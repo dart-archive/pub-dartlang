@@ -100,7 +100,7 @@ def handle_validation_errors(fn, *args, **kwargs):
         # cherrypy.request.params
         raise cherrypy.HTTPRedirect(request().url(action=new_action))
 
-def production():
+def is_production():
     """Return whether we're running in production mode."""
     return bool(os.environ.get('DATACENTER'))
 

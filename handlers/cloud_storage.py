@@ -78,12 +78,15 @@ def upload_form(obj, lifetime=10*60, acl=None, cache_control=None,
     policy = b64encode(json.dumps(policy))
     signature = PrivateKey.sign(policy)
 
-    fields = {'key': obj, 'acl': acl,
+    fields = {'key': obj,
+              'acl': acl,
               'Cache-Control': cache_control,
               'Content-Disposition': content_disposition,
               'Content-Encoding': content_encoding,
-              'Content-Type': content_type, 'expires': expires,
-              'GoogleAccessId': _ACCESS_KEY, 'policy': policy,
+              'Content-Type': content_type,
+              'expires': expires,
+              'GoogleAccessId': _ACCESS_KEY,
+              'policy': policy,
               'signature': signature,
               'success_action_redirect': success_redirect,
               'success_action_status': success_status}
@@ -91,16 +94,22 @@ def upload_form(obj, lifetime=10*60, acl=None, cache_control=None,
     # Get the fields into a format mustache can iterate over
     fields = [{'key': key, 'value': value} for key, value in fields.iteritems()]
 
-    url = ("https://storage.googleapis.com" if handlers.production()
+    url = ("https://storage.googleapis.com" if handlers.is_production()
            else handlers.request().url(controller="versions", action="upload"))
     return handlers.render("signed_form", url=url, fields=fields, layout=False)
 
-def modify_object(obj, content_encoding=None, content_type=None,
-                  content_disposition=None, acl=None, copy_source=None,
-                  copy_source_if_match=None, copy_source_if_none_match=None,
+def modify_object(obj,
+                  content_encoding=None,
+                  content_type=None,
+                  content_disposition=None,
+                  acl=None,
+                  copy_source=None,
+                  copy_source_if_match=None,
+                  copy_source_if_none_match=None,
                   copy_source_if_modified_since=None,
                   copy_source_if_unmodified_since=None,
-                  copy_metadata=True, metadata={}):
+                  copy_metadata=True,
+                  metadata={}):
     """Modifies or copies a cloud storage object.
 
     Most arguments are identical to the form fields listed in
@@ -117,7 +126,7 @@ def modify_object(obj, content_encoding=None, content_type=None,
     obj = _BUCKET + "/" + obj
     if copy_source is not None: copy_source = _BUCKET + "/" + copy_source
 
-    if not handlers.production():
+    if not handlers.is_production():
         # The only way to modify an existing object using only the Python API
         # seems to be to copy it over itself. It's not a big deal since this is
         # only for development.

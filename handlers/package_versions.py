@@ -3,6 +3,7 @@
 # BSD-style license that can be found in the LICENSE file.
 
 from uuid import uuid4
+import logging
 
 import cherrypy
 import routes
@@ -69,13 +70,13 @@ class PackageVersions(object):
     def _remove_tmp_package(self, id):
         """Try to remove an orphaned package upload."""
         try: cloud_storage.delete_object("tmp/" + id)
-        except: pass
+        except: logging.error('Error deleting temporary object ' + id)
 
     @handlers.handle_validation_errors
     def create(self, package_id, id):
         """Create a new package version.
 
-        This creates a single package version. It will also create as the
+        This creates a single package version. It will also create all the
         package metadata if that doesn't already exist. The package archive is
         uploaded to cloud storage separately.
 
@@ -175,7 +176,7 @@ class PackageVersions(object):
         development database.
         """
 
-        if handlers.production(): raise handlers.http_error(404)
+        if handlers.is_production(): raise handlers.http_error(404)
         if PrivateKey.sign(policy) != signature: raise handlers.http_error(403)
 
         write_path = files.gs.create('/gs/' + key, acl=acl)

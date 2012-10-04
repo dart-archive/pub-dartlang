@@ -52,7 +52,7 @@ class PrivateKey(db.Model):
         # All Google API keys have "notasecret" as their passphrase
         value = cls.get()
         if value is None: raise "Private key has not been set."
-        if handlers.production():
+        if handlers.is_production():
             # TODO(nweiz): This currently doesn't work on the development server
             # without adding 'AESCipher', 'blockalgo', and '_AES' to the
             # __CRYPTO_CIPHER_ALLOWED_MODULES constant in
