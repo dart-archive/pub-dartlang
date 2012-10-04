@@ -9,6 +9,8 @@ $baseLineHeight: 24px;
 
 $sansFontFamily: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+$iconSpritePath: 'img/glyphicons-halflings.png';
+
 @import "compass_twitter_bootstrap";
 
 // Don't require nasty <table class="table"> that bootstrap expects.
@@ -18,7 +20,7 @@ table {
 
 body {
   // Account for the fixed navbar height.
-  padding-top: 50px;
+  padding-top: 60px;
 }
 
 a.permalink {
@@ -54,4 +56,88 @@ form#private-key textarea {
   width: 550px;
   height: 420px;
   font-family: $monoFontFamily;
+}
+
+// We have two brands: the dart logo and "pub.dartlang.org". This keeps them
+// from being too spread out.
+.brand + .brand {
+  padding-left: 10px;
+}
+
+// Highlight the brand text on hover. This matches other navbar buttons and
+// makes it clearer that the logo links to something different.
+a.brand:hover {
+  color: white;
+}
+
+.hero-unit {
+  // Use same border as footer well.
+  @extend .well;
+  @extend .well-small;
+
+  margin-top: 10px;
+  padding: 40px;
+
+  h1 {
+    font-size: 40px;
+  }
+
+  p {
+    margin: 20px 0 0;
+    font-weight: 400;
+    line-height: 30px;
+  }
+}
+
+.dart-logo {
+  display: inline-block;
+  background-image: url("/static/img/dart.png");
+  width: 21px;
+  height: 21px;
+}
+
+h1 .version {
+  @extend small;
+  font-size: 20px;
+}
+
+td table {
+  margin: -4px;
+  td, th {
+    border: none;
+    padding: 4px;
+  }
+}
+
+td.archive, th.archive {
+  text-align: center;
+  vertical-align: middle;
+}
+
+// When icons immediately follow paragraph text, we need to shift them a bit
+// to get them to line up.
+.inline-icon {
+  margin: 3px 0 0 2px;
+}
+
+.how-to-use {
+  @extend .well;
+  @extend .well-small;
+
+  // Align with top of header.
+  margin-top: 12px;
+
+  pre {
+    border: none;
+    padding: 3px 3px 3px 35px;
+    background-color: #eee;
+
+    // So the import can wrap and the wrapped line is indented.
+    word-break: normal;
+    text-indent: -32px;
+  }
+}
+
+.author {
+  white-space: nowrap;
 }

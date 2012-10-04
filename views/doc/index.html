@@ -1,4 +1,4 @@
-<h1 id="pub-getting-started">Pub: Getting Started</h1>
+<h1 id="getting-started">Getting Started</h1>
 
 <!-- TODO(rnystrom): Link **terms** to glossary when that exists. -->
 
@@ -26,7 +26,7 @@ yours.</p>
 
 <p>Pub is part of the <a href="/docs/sdk/">Dart SDK</a>, so if you have Dart installed, you
 have pub too. You tell pub <em>where</em> you installed the Dart SDK by setting an
-environment variable. On Mac and Linux, add this to your shell’s configuration
+environment variable. On Mac and Linux, add this to your shell&rsquo;s configuration
 file:</p>
 
 <pre><code>export DART_SDK=&lt;path to dart&gt;
@@ -34,7 +34,7 @@ file:</p>
 
 <p>Here, <code>&lt;path to dart&gt;</code> is the path to the main <code>dart</code> directory of the SDK. If
 you installed the SDK with the <a href="/docs/editor/#download">Dart Editor</a>, this
-will be the <code>dart-sdk</code> directory inside the Editor’s main directory.</p>
+will be the <code>dart-sdk</code> directory inside the Editor&rsquo;s main directory.</p>
 
 <p>On Windows, you can set the environment variable through the Control Panel. A
 quick <a href="https://www.google.com/search?q=windows+set+environment+variable">search</a>
@@ -45,12 +45,12 @@ should turn up the right instructions for your particular version of Windows.</p
 <p>You primarily access pub through the <code>pub</code> command line app, which lives
 inside the <code>bin</code> directory in the Dart SDK. To make it easier to access <code>pub</code>
 (and other executables in there like the Dart VM), you may want to add <code>bin</code> to
-your system path. On Mac and Linux, add this to your shell’s configuration file:</p>
+your system path. On Mac and Linux, add this to your shell&rsquo;s configuration file:</p>
 
 <pre><code>export PATH=$PATH:$DART_SDK/bin
 </code></pre>
 
-<p>On Windows, you’ll go through the Control Panel and do something similar.</p>
+<p>On Windows, you&rsquo;ll go through the Control Panel and do something similar.</p>
 
 <h2 id="creating-a-package">Creating a package</h2>
 
@@ -63,16 +63,16 @@ app wants to use pub packages, it needs to be a package too.</p>
 are used slightly differently in practice. A <strong>library package</strong> is a package
 that is intended to be reused by other packages. It will usually have code that
 other packages import, and it will likely be hosted somewhere that people can
-get to. An <strong>application package</strong> only <em>consumes</em> packages but doesn’t itself
+get to. An <strong>application package</strong> only <em>consumes</em> packages but doesn&rsquo;t itself
 get reused. In other words, library packages will be used as dependencies, but
-application packages won’t.</p>
+application packages won&rsquo;t.</p>
 
-<p>In most cases, there’s no difference between the two and we’ll just say
-“package”. In the few places where it does matter, we’ll specify “library
-package” or “application package”.</p>
+<p>In most cases, there&rsquo;s no difference between the two and we&rsquo;ll just say
+&ldquo;package&rdquo;. In the few places where it does matter, we&rsquo;ll specify &ldquo;library
+package&rdquo; or &ldquo;application package&rdquo;.</p>
 
 <p><a href="package-layout.html" style="text-align: right;">
-  <i class="icon-hand-right icon-white"> </i>
+  <i class="icon-hand-right icon-white">&nbsp;</i>
   Learn more about packages
 </a></p>
 
@@ -91,20 +91,20 @@ possible pubspec just contains the name of the package. Save the pubspec file as
 <p>Now <code>my_app</code> is a pub package!</p>
 
 <p><a href="pubspec.html">
-  <i class="icon-hand-right icon-white"> </i>
+  <i class="icon-hand-right icon-white">&nbsp;</i>
   Learn more about the pubspec format
 </a></p>
 
 <h2 id="adding-a-dependency">Adding a dependency</h2>
 
-<p>One of pub’s main jobs is managing <strong>dependencies</strong>. A dependency is just
+<p>One of pub&rsquo;s main jobs is managing <strong>dependencies</strong>. A dependency is just
 another package that your package relies on. If your app is using some
-templating framework called “handle_stache”, then your app package will depend
+templating framework called &ldquo;handle_stache&rdquo;, then your app package will depend
 on the <code>handle_stache</code> package.</p>
 
 <!-- TODO(rnystrom): Use a real package here when we have one. -->
 
-<p>You specify your package’s dependencies in the pubspec file immediately after
+<p>You specify your package&rsquo;s dependencies in the pubspec file immediately after
 your package name. For example:</p>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my_app</span>
@@ -120,13 +120,13 @@ that we want to install from <a href="http://git-scm.com/">Git</a> using the giv
 <!-- TODO(rnystrom): Use a pub.dartlang.org dep when that's live. -->
 
 <p><a href="pubspec.html#dependencies">
-  <i class="icon-hand-right icon-white"> </i>
+  <i class="icon-hand-right icon-white">&nbsp;</i>
   Learn more about specifying dependencies
 </a></p>
 
 <h2 id="installing-dependencies">Installing dependencies</h2>
 
-<p>Once you’ve declared a dependency, you then tell pub to install it for you:</p>
+<p>Once you&rsquo;ve declared a dependency, you then tell pub to install it for you:</p>
 
 <pre><code>$ cd path/to/your_app
 $ pub install
@@ -148,7 +148,7 @@ on, recursively (these are your <strong>transitive dependencies</strong>).</p>
 single package your program needs in order to run.</p>
 
 <p><a href="pub-install.html">
-  <i class="icon-hand-right icon-white"> </i>
+  <i class="icon-hand-right icon-white">&nbsp;</i>
   Learn more about <tt>pub install</tt>
 </a></p>
 
@@ -220,7 +220,7 @@ importing file is.
 <h2 id="updating-a-dependency">Updating a dependency</h2>
 
 <p>The first time you install a new dependency for your package, pub will download
-the latest version of it that’s compatible with your other dependencies. It
+the latest version of it that&rsquo;s compatible with your other dependencies. It
 then locks your package to <em>always</em> use that version by creating a <strong>lockfile</strong>.
 This is a file named <code>pubspec.lock</code> that pub creates and stores next to your
 pubspec. It lists the specific versions of each dependency (immediate and
@@ -237,7 +237,7 @@ when you deploy your app to production.</p>
 </code></pre>
 
 <p>This tells pub to regenerate the lockfile using the newest available versions of
-your package’s dependencies. If you only want to update a specific dependency,
+your package&rsquo;s dependencies. If you only want to update a specific dependency,
 you can specify that too:</p>
 
 <pre><code>$ pub update handle_stache
@@ -247,15 +247,15 @@ you can specify that too:</p>
 the same.</p>
 
 <p><a href="pub-update.html">
-  <i class="icon-hand-right icon-white"> </i>
+  <i class="icon-hand-right icon-white">&nbsp;</i>
   Learn more about <tt>pub update</tt>
 </a></p>
 
 <h2 id="finding-packages-in-the-editor">Finding packages in the Editor</h2>
 
-<p>The <a href="/docs/editor/">Dart Editor</a> needs to know where your package’s <code>packages</code>
+<p>The <a href="/docs/editor/">Dart Editor</a> needs to know where your package&rsquo;s <code>packages</code>
 directory is so that it can understand <code>package:</code> imports too. To set this, go
-to <em>Preferences</em> and point the “Package directory” to the root directory of
+to <em>Preferences</em> and point the &ldquo;Package directory&rdquo; to the root directory of
 your package.</p>
 
 <aside class="alert alert-info">
@@ -265,6 +265,6 @@ In the future, you'll be able to set this per project, instead of globally.
 <h2 id="learning-more">Learning more</h2>
 
 <p><a href="versioning.html">
-  <i class="icon-hand-right icon-white"> </i>
-  Learn more about pub’s approach to versioning
+  <i class="icon-hand-right icon-white">&nbsp;</i>
+  Learn more about pub&rsquo;s approach to versioning
 </a></p>

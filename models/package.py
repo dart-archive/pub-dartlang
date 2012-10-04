@@ -67,10 +67,18 @@ class Package(db.Model):
 
         def author_html((author, email)):
             if email is None: return cgi.escape(author)
-            return '<a href="mailto:%s">%s</a>' % \
-                (cgi.escape(email), cgi.escape(author))
+            return '''<span class="author">%s
+                <a href="mailto:%s" title="Email %s">
+                    <i class="icon-envelope inline-icon"></i>
+                </a></span>''' % \
+                (cgi.escape(author), cgi.escape(email), cgi.escape(email))
 
         return ', '.join(map(author_html, self.latest_version.pubspec.authors))
+
+    @property
+    def short_updated(self):
+        """The short updated time of the package."""
+        return self.updated.strftime('%b %d, %Y')
 
     @classmethod
     def new(cls, **kwargs):

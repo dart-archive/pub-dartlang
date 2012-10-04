@@ -1,8 +1,8 @@
-<h1 id="pub-what-is-a-pubspec">Pub: What is a Pubspec?</h1>
+<h1 id="what-is-a-pubspec">What is a Pubspec?</h1>
 
 <p>Every pub package needs some metadata so it can specify its dependencies. Pub
 packages that are shared with others also need to provide some other
-information so users can discover them. Pub stores this in a “pubspec” in a file
+information so users can discover them. Pub stores this in a &ldquo;pubspec&rdquo; in a file
 named <code>pubspec.yaml</code>. As you could guess, it is written in the
 <a href="http://www.yaml.org/">YAML</a> language.</p>
 
@@ -44,14 +44,14 @@ named <code>pubspec.yaml</code>. As you could guess, it is written in the
 <h2 id="name">Name</h2>
 
 <p>Every package needs a name. When your stellar code gets props on
-the world stage, this is what they’ll be hollering. Also, it’s how other
+the world stage, this is what they&rsquo;ll be hollering. Also, it&rsquo;s how other
 packages will refer to yours, and how it will appear on
 <a href="http://pub.dartlang.org">pub.dartlang.org</a>, should you publish it.</p>
 
 <p>It should be all lowercase, with underscores to separate words,
 <code>just_like_this</code>. Stick with basic Latin letters and Arabic digits:
-<code>[a-z0-9_]</code> and ensure that it’s a valid Dart identifier (i.e. doesn’t start
-with digits and isn’t a reserved word).</p>
+<code>[a-z0-9_]</code> and ensure that it&rsquo;s a valid Dart identifier (i.e. doesn&rsquo;t start
+with digits and isn&rsquo;t a reserved word).</p>
 
 <p>Try to pick a name that is clear, terse, and not already in use. A quick search
 on <a href="http://pub.dartlang.org">pub.dartlang.org</a> to make sure nothing else is using your name can
@@ -64,33 +64,33 @@ save you heartache later.</p>
 omit it, your package is implicitly versioned <code>0.0.0</code>.</p>
 
 <p>No one really gets excited about versioning, but
-it’s a necessary evil for reusing code while letting it evolve quickly. A
+it&rsquo;s a necessary evil for reusing code while letting it evolve quickly. A
 version number is three numbers separated by dots, like <code>0.2.43</code>. It can also
 optionally have a build (<code>+hotfix.oopsie</code>) or pre-release (<code>-alpha.12</code>) suffix.</p>
 
 <p>Each time you publish your package, you will publish it at a specific version.
-Once that’s been done, consider it hermetically sealed: you can’t touch it
-anymore. To make more changes, you’ll need a new version.</p>
+Once that&rsquo;s been done, consider it hermetically sealed: you can&rsquo;t touch it
+anymore. To make more changes, you&rsquo;ll need a new version.</p>
 
 <p>When you select a version, follow <a href="http://semver.org/">semantic versioning</a>. When you do, the
-clouds will part and sunshine will pour into your soul. If you don’t, prepare
+clouds will part and sunshine will pour into your soul. If you don&rsquo;t, prepare
 yourself for hordes of angry users.</p>
 
 <h2 id="description">Description</h2>
 
 <p>This is optional for your own personal packages, but if you intend to share
-your package with the world (and you should because, let’s be honest with
-ourselves, it’s a thing of beauty) you must provide a description. This should
-be relatively short—a few sentences, maybe a whole paragraph—and
+your package with the world (and you should because, let&rsquo;s be honest with
+ourselves, it&rsquo;s a thing of beauty) you must provide a description. This should
+be relatively short&mdash;a few sentences, maybe a whole paragraph&mdash;and
 tells a casual reader what they might want to know about your package.</p>
 
 <p>Think of the description as the sales pitch for your package. Users will see it
 when they browse <a href="http://pub.dartlang.org">pub.dartlang.org</a>. It should be simple plain text:
-no markdown or HTML. That’s what your README is for.</p>
+no markdown or HTML. That&rsquo;s what your README is for.</p>
 
 <h2 id="authorauthors">Author/Authors</h2>
 
-<p>You’re encouraged to use these fields to describe the author(s) of your package
+<p>You&rsquo;re encouraged to use these fields to describe the author(s) of your package
 and provide contact information. <code>author</code> should be used if your package has a
 single author, while <code>authors</code> should be used with a YAML list if more than one
 person wrote the package. Each author can either be a single name (e.g. <code>Nathan
@@ -110,11 +110,11 @@ Weizenbaum</code>) or a name and an email address (e.g. <code>Nathan Weizenbaum
 
 <p>This is optional. It should be a URL pointing to the website for your package.
 For <a href="#hosted-packages">hosted packages</a>, this URL will be linked from the
-package’s page on <a href="http://pub.dartlang.org">pub.dartlang.org</a>.</p>
+package&rsquo;s page on <a href="http://pub.dartlang.org">pub.dartlang.org</a>.</p>
 
 <h2 id="dependencies">Dependencies</h2>
 
-<p>Finally, the pubspec’s <em>raison d’être</em>: dependencies. Here, you list each
+<p>Finally, the pubspec&rsquo;s <em>raison d&rsquo;être</em>: dependencies. Here, you list each
 package that your package needs in order to work. You only list immediate
 depedencies, the stuff your package itself uses directly. Pub handles
 transitive dependencies automatically for you.</p>
@@ -176,9 +176,9 @@ format, detailed below.</p>
 </code></pre>
 </div>
 
-<p>This long form is used when you don’t use the default source or when you have a
-complex description you need to specify. But in most cases, you’ll just use the
-simple “name: version” form.</p>
+<p>This long form is used when you don&rsquo;t use the default source or when you have a
+complex description you need to specify. But in most cases, you&rsquo;ll just use the
+simple &ldquo;name: version&rdquo; form.</p>
 
 <h2 id="dependency-sources">Dependency sources</h2>
 
@@ -202,8 +202,8 @@ Most of your dependencies will be of this form. They look like this:</p>
 </code></pre>
 </div>
 
-<p>Here, you’re saying your package depends on a hosted package named
-“transmogrify” and you’ll work with any version from 0.4.0 to 1.0.0 (but not
+<p>Here, you&rsquo;re saying your package depends on a hosted package named
+&ldquo;transmogrify&rdquo; and you&rsquo;ll work with any version from 0.4.0 to 1.0.0 (but not
 1.0.0 itself).</p>
 
 <p>If you want to use your own package server, you can use a description that
@@ -219,8 +219,8 @@ specifies its URL:</p>
 
 <h3 id="sdk-packages">SDK packages</h3>
 
-<p>Some packages are a built-in part of the Dart SDK. These are the “batteries
-included” packages that you get for free when you install Dart.</p>
+<p>Some packages are a built-in part of the Dart SDK. These are the &ldquo;batteries
+included&rdquo; packages that you get for free when you install Dart.</p>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">i18n</span><span class="p-Indicator">:</span>
@@ -229,11 +229,11 @@ included” packages that you get for free when you install Dart.</p>
 </div>
 
 <p>The <code>sdk</code> here says this package should be found in the installed Dart SDK, and
-“i18n” is the name of the package to use.</p>
+&ldquo;i18n&rdquo; is the name of the package to use.</p>
 
 <h3 id="git-packages">Git packages</h3>
 
-<p>Sometimes you live on the bleeding edge and you need to use stuff that hasn’t
+<p>Sometimes you live on the bleeding edge and you need to use stuff that hasn&rsquo;t
 been formally released yet. Maybe your package itself is still in development
 and is using other packages that are being developed at the same time. To make
 that easier, you can depend directly on a package stored in a <a href="http://git-scm.com/">Git</a>
@@ -264,9 +264,9 @@ provide a <code>ref</code> argument:</p>
 
 <h2 id="version-constraints">Version constraints</h2>
 
-<p>If your package is an application, you don’t usually need to specify version
+<p>If your package is an application, you don&rsquo;t usually need to specify version
 constraints for your dependencies. You will typically want to use the latest
-versions of the dependencies when you first create your app. Then you’ll create
+versions of the dependencies when you first create your app. Then you&rsquo;ll create
 and check in a lockfile that pins your dependencies to those specific versions.
 Specifying version constraints in your pubpsc then is usually redundant (though
 you can do it if you want).</p>
@@ -275,8 +275,8 @@ you can do it if you want).</p>
 to specify version constraints. That lets people using your package know which
 versions of its dependencies they can rely on to be compatible with your
 library. Your goal is to allow a range of versions as wide as possible to give
-your users’ flexibility. But it should be narrow enough to exclude versions
-that you know don’t work or haven’t been tested.</p>
+your users&rsquo; flexibility. But it should be narrow enough to exclude versions
+that you know don&rsquo;t work or haven&rsquo;t been tested.</p>
 
 <p>The Dart community uses <a href="http://semver.org/">semantic versioning</a>, which helps you know which
 versions should work. If you know that your package works fine with <code>1.2.3</code> of

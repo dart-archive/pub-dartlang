@@ -1,15 +1,8 @@
 ---
-title: "pub install"
+title: "Command: Update"
 ---
 
 # {{ page.title }}
-
-<aside class="note">
-  <a href="index.html" style="text-align: right;">
-    <i class="icon-hand-right icon-white">&nbsp;</i>
-    Get started with pub
-  </a>
-</aside>
 
     $ pub update [PACKAGE]
 

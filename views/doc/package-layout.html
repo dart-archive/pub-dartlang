@@ -2,17 +2,17 @@
 
 <p>Part of a healthy code ecosystem is consistent conventions. When we all do the
 same thing the same way, it makes it easier for us to learn our way around
-each other’s work. It also makes it easier to write tools that can automatically
+each other&rsquo;s work. It also makes it easier to write tools that can automatically
 do stuff for us.</p>
 
 <p>When you build a Pub package, we have a set of conventions we encourage you to
 follow. They describe how you organize the files and directories within your
-package, and how to name things. You don’t have to have every single thing
-these guidelines specify. If your package doesn’t have binaries, it doesn’t
-need a directory for them. But if it does, you’ll make everyone’s life easier
+package, and how to name things. You don&rsquo;t have to have every single thing
+these guidelines specify. If your package doesn&rsquo;t have binaries, it doesn&rsquo;t
+need a directory for them. But if it does, you&rsquo;ll make everyone&rsquo;s life easier
 if you call it <code>bin</code>.</p>
 
-<p>To give you a picture of the whole enchilada, here’s what a complete package
+<p>To give you a picture of the whole enchilada, here&rsquo;s what a complete package
 (conveniently named <code>enchilada</code>) that uses every corner of these guidelines
 would look like:</p>
 
@@ -44,8 +44,8 @@ would look like:</p>
 <p>* The <code>pubspec.lock</code> will only be in source control if the package is an
 application package.</p>
 
-<p>** The <code>packages</code> directories will exist locally after you’re run
-<code>pub install</code>, but won’t be checked into source control.</p>
+<p>** The <code>packages</code> directories will exist locally after you&rsquo;re run
+<code>pub install</code>, but won&rsquo;t be checked into source control.</p>
 
 <h2 id="the-basics">The basics</h2>
 
@@ -55,13 +55,13 @@ application package.</p>
 </code></pre>
 
 <p>Every package will have a <a href="pubspec.html"><strong>pubspec</strong></a>, a file named
-<code>pubspec.yaml</code>, in the root directory of the package. That’s what <em>makes</em> it a
+<code>pubspec.yaml</code>, in the root directory of the package. That&rsquo;s what <em>makes</em> it a
 package.</p>
 
-<p>Once you’ve run <a href="pub-install.html"><code>pub install</code></a> or
+<p>Once you&rsquo;ve run <a href="pub-install.html"><code>pub install</code></a> or
 <a href="pub-update.html"><code>pub update</code></a> on the package, you will also have a
 <strong>lockfile</strong>, named <code>pubspec.lock</code>. If your package is an application package,
-this will be checked into source control. Otherwise, it won’t be.</p>
+this will be checked into source control. Otherwise, it won&rsquo;t be.</p>
 
 <pre><code>enchilada/
   packages/
@@ -69,7 +69,7 @@ this will be checked into source control. Otherwise, it won’t be.</p>
 </code></pre>
 
 <p>Running pub will also generate a <code>packages</code> directory. You will <em>not</em> check
-this into source control, and you won’t need to worry too much about its
+this into source control, and you won&rsquo;t need to worry too much about its
 contents. Consider it pub magic, but not scary magic.</p>
 
 <pre><code>enchilada/
@@ -113,8 +113,8 @@ the library file, like so:</p>
     queso.dart
 </code></pre>
 
-<p>The top level of a package contains files that are “publicly” visible: other
-packages are free to import them. But much of a package’s code is internal
+<p>The top level of a package contains files that are &ldquo;publicly&rdquo; visible: other
+packages are free to import them. But much of a package&rsquo;s code is internal
 implementation libraries that should only be imported and used by the package
 itself. Those go inside a directory called <code>lib</code>. You can create subdirectories
 in there if it helps you organize things.</p>
@@ -156,11 +156,11 @@ package but you can use whatever testing system that gets you excited.</p>
     getting_started.md
 </code></pre>
 
-<p>If you’ve got code and tests, the next piece you need to maximize your karma
+<p>If you&rsquo;ve got code and tests, the next piece you need to maximize your karma
 is good documentation. That goes inside a directory named <code>doc</code>.</p>
 
-<p>We don’t currently have any guidelines about format or organization within that.
-Use whatever markup format you like and be happy that you’re actually writing
+<p>We don&rsquo;t currently have any guidelines about format or organization within that.
+Use whatever markup format you like and be happy that you&rsquo;re actually writing
 docs.</p>
 
 <h2 id="examples">Examples</h2>
@@ -170,7 +170,7 @@ docs.</p>
     lunch.dart
 </code></pre>
 
-<p>At this point, you’re going for the brass ring. Code, tests, docs, what else
+<p>At this point, you&rsquo;re going for the brass ring. Code, tests, docs, what else
 could your users want? Standalone example programs that use your package, of
 course! Those go inside the <code>example</code> directory. If the examples are complex
 and use multiple files, consider making a directory for each example. Otherwise,
@@ -190,7 +190,7 @@ like code outside of your package would look.</p>
 <p>Some packages define shell scripts, programs that can be run directly from the
 command line. These can be scripts written in an actual shell language, or any
 other scripting language, including Dart. The <code>pub</code> application itself is one
-example: it’s a simple shell script that invokes <code>pub.dart</code>.</p>
+example: it&rsquo;s a simple shell script that invokes <code>pub.dart</code>.</p>
 
 <p>If your package defines stuff like this, put it in a directory named <code>bin</code>.</p>
 

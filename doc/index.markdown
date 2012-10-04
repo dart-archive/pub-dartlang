@@ -1,5 +1,5 @@
 ---
-title: "Pub: Getting Started"
+title: "Getting Started"
 ---
 
 # {{ page.title }}

@@ -1,11 +1,4 @@
-<h1 id="pub-install">pub install</h1>
-
-<aside class="note">
-  <a href="index.html" style="text-align: right;">
-    <i class="icon-hand-right icon-white">&nbsp;</i>
-    Looking for the quick start guide? Get started with pub
-  </a>
-</aside>
+<h1 id="command-install">Command: Install</h1>
 
 <pre><code>$ pub install
 </code></pre>
@@ -31,11 +24,11 @@ example, if a package depends on <code>unittest</code>:</p>
 same versions of those dependencies. Application packages should check in the
 lockfile to source control; this ensures the application will use the exact same
 versions of all dependencies for all developers and when deployed to production.
-Library packages should not check in the lockfile, though, since they’re
+Library packages should not check in the lockfile, though, since they&rsquo;re
 expected to work with a range of dependency versions.</p>
 
 <p>If a lockfile already exists, <code>pub install</code> uses the versions of dependencies
-locked in it if possible. If a dependency isn’t locked, pub will install the
+locked in it if possible. If a dependency isn&rsquo;t locked, pub will install the
 latest version of that dependency that satisfies all the version constraints.
 This is the primary difference between <code>pub install</code> and <a href="pub-update.html"><code>pub
 update</code></a>, which always tries to install the latest versions of
@@ -45,8 +38,8 @@ all dependencies.</p>
 
 <p>If a dependency is added to the pubspec and then <code>pub install</code> is run, it will
 install the new dependency and any of its transitive dependencies to the
-<code>packages</code> directory. However, it won’t change the versions of any
-already-installed dependencies unless that’s necessary to install the new
+<code>packages</code> directory. However, it won&rsquo;t change the versions of any
+already-installed dependencies unless that&rsquo;s necessary to install the new
 dependency.</p>
 
 <h2 id="uninstalling-a-dependency">Uninstalling a dependency</h2>
@@ -62,7 +55,7 @@ already-installed dependencies.</p>
 
 <p>Every <a href="glossary.html#entrypoint">entrypoint</a> in a package needs to be next to a
 <code>packages</code> directory in order for it to import packages installed by Pub.
-However, it’s not convenient to put every entrypoint at the top level of the
+However, it&rsquo;s not convenient to put every entrypoint at the top level of the
 package alongside the main <code>packages</code> directory. You may have example scripts or
 tests that you want to be able to run from subdirectories.</p>
 
@@ -74,12 +67,12 @@ guide</a>, and creates a linked <code>packages</code> directory in
 
 <h2 id="the-system-package-cache">The system package cache</h2>
 
-<p>Dependencies are not stored directly in the <code>packages</code> directory when they’re
+<p>Dependencies are not stored directly in the <code>packages</code> directory when they&rsquo;re
 installed. Dependencies downloaded over the internet, such as those from Git and
 <a href="http://pub.dartlang.org">pub.dartlang.org</a>, are stored in a system-wide cache
 and linked to from the <code>packages</code> directory. This means that if multiple
 packages use the same version of the same dependency, it will only need to be
-downloaded and stored locally once. It also means that it’s safe to delete the
+downloaded and stored locally once. It also means that it&rsquo;s safe to delete the
 <code>packages</code> directory without worrying about re-downloading packages.</p>
 
 <p>By default, the system package cache is located in the <code>.pub-cache</code> subdirectory
