@@ -196,6 +196,7 @@ def read(obj):
         while data:
             io.write(data)
             data = f.read(_CHUNK_SIZE)
+        io.seek(0)
         return io
 
 def object_url(obj):
