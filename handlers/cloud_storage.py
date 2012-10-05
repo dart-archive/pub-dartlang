@@ -182,14 +182,21 @@ def open(obj):
     return files.open('/gs/' + _BUCKET + '/' + obj, 'r')
 
 def read(obj):
-    """Consumes and returns all data in an object in cloud storage."""
+    """Consumes and returns all data in an object in cloud storage.
+
+    The data is returned as a StringIO instance, so it may be used in place of a
+    file.
+
+    This can be necessary since many operations on the file object itself
+    require a network round trip."""
+
     with open(obj) as f:
         io = StringIO()
         data = f.read(_CHUNK_SIZE)
         while data:
             io.write(data)
             data = f.read(_CHUNK_SIZE)
-        return io.getvalue()
+        return io
 
 def object_url(obj):
     """Returns the URL for an object in cloud storage."""

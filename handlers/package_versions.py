@@ -3,6 +3,7 @@
 # BSD-style license that can be found in the LICENSE file.
 
 from cStringIO import StringIO
+from contextlib import closing
 from uuid import uuid4
 import logging
 
@@ -102,8 +103,8 @@ class PackageVersions(object):
                 handlers.http_error(403, "Only admins may create packages.")
 
             try:
-                contents = cloud_storage.read('tmp/' + id)
-                version = PackageVersion.from_archive(StringIO(contents))
+                with closing(cloud_storage.read('tmp/' + id)) as f:
+                    version = PackageVersion.from_archive(f)
             except (KeyError, files.ExistenceError):
                 handlers.http_error(
                     403, "Package upload " + id + " does not exist.")
