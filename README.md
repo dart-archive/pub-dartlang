@@ -23,15 +23,23 @@ it locally, perform the following steps:
 
   * Install the [App Engine SDK][].
   * Make sure the SDK is on your `$PATH`.
+  * Install [PyCrypto][pycrypto][^1]:
+
+        pip install pycrypto
+
   * From the root directory of this repository, run:
 
         dev_appserver.py .
 
 [app engine sdk]: https://developers.google.com/appengine/downloads
+[pycrypto]: https://www.dlitz.net/software/pycrypto/
 
 That's it. All the dependencies needed to run the app are included in the
 repository so that App Engine can use them, so no further installation is
 necessary.
+
+[^1]: Some Linux distributions come with PyCrypto installed by default. Make
+      sure you have at least version 2.6 installed.
 
 ### Running Tests
 

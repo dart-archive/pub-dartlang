@@ -8,6 +8,7 @@ from google.appengine.ext import db
 import yaml
 
 from semantic_version import SemanticVersion
+from handlers import cloud_storage
 from package import Package
 from properties import PubspecProperty, VersionProperty
 from pubspec import Pubspec
@@ -25,7 +26,8 @@ class PackageVersion(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     """When this package version was created."""
 
-    contents = db.BlobProperty(required=True)
+    # TODO(nweiz): remove this property after migrating to cloud storage.
+    contents = db.BlobProperty()
     """The blob of code for this package version, a gzipped tar file."""
 
     pubspec = PubspecProperty(required=True, indexed=False)
@@ -52,11 +54,9 @@ class PackageVersion(db.Model):
         - The parent entity is set to the package.
         """
 
-        if 'contents_file' in kwargs:
+        if 'contents_file' in kwargs and 'pubspec' not in kwargs:
             file = kwargs['contents_file']
-            if 'pubspec' not in kwargs:
-                kwargs['pubspec'] = Pubspec.from_archive(file)
-            kwargs['contents'] = db.Blob(file.read())
+            kwargs['pubspec'] = Pubspec.from_archive(file)
 
         if 'pubspec' in kwargs and 'version' not in kwargs:
             kwargs['version'] = kwargs['pubspec'].required('version')
@@ -109,8 +109,12 @@ class PackageVersion(db.Model):
     @property
     def download_url(self):
         """The URL for downloading this package."""
-        return "/packages/%s/versions/%s.tar.gz" % \
-            (self.package.name, self.version)
+        return cloud_storage.object_url(self.storage_path)
+
+    @property
+    def storage_path(self):
+        """The Cloud Storage path for this package."""
+        return 'packages/%s-%s.tar.gz' % (self.package.name, self.version)
 
     def _validate_fields_match_pubspec(self):
         """Assert that the fields in the pubspec match this object's fields."""

@@ -8,6 +8,10 @@
   <h4>Note: the private key has already been set.</h4>
 {{/already_set}}
 
+{{^production}}
+  <p>In development, the private key may be any string.</p>
+{{/production}}
+
 <form action="/private-keys" method="POST" id="private-key">
   <textarea name="key" cols="64"></textarea>
   <input type="submit" value="Set Key" />

@@ -30,6 +30,10 @@ class Application(cherrypy.Application):
 
         # Configure routes
         self.dispatcher.connect('root', '/', Root(), action='index')
+        self.dispatcher.mapper.connect('/gs_/{filename:.*?}',
+                                       controller='root',
+                                       action='serve')
+
         self.dispatcher.connect(
             'doc', '/doc/{filename:.*?}', Doc(), action='show')
         self.dispatcher.connect(
@@ -53,7 +57,8 @@ class Application(cherrypy.Application):
             m.connect('new', action='new',
                       conditions={'method': ['GET', 'HEAD']})
             m.connect(':id/create', action='create')
-            m.connect('update', action='upload', conditions={'method': 'POST'})
+            m.connect('upload', action='upload', conditions={'method': 'POST'})
+            m.connect('migrate', action='migrate')
         self.dispatcher.mapper.connect('/packages/versions/create',
                                        controller='versions',
                                        action='create')
