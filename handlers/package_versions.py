@@ -2,6 +2,7 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+from cStringIO import StringIO
 from uuid import uuid4
 import logging
 
@@ -101,8 +102,8 @@ class PackageVersions(object):
                 handlers.http_error(403, "Only admins may create packages.")
 
             try:
-                with cloud_storage.open('tmp/' + id) as f:
-                    version = PackageVersion.from_archive(f)
+                contents = cloud_storage.read('tmp/' + id)
+                version = PackageVersion.from_archive(StringIO(contents))
             except (KeyError, files.ExistenceError):
                 handlers.http_error(
                     403, "Package upload " + id + " does not exist.")
