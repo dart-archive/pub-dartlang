@@ -4,6 +4,7 @@
 
 """Utility functions for dealing with Google Cloud Storage."""
 
+from cStringIO import StringIO
 from base64 import b64encode
 from urlparse import urlparse, parse_qs
 import handlers
@@ -25,6 +26,10 @@ _ACCESS_KEY = "818368855108@developer.gserviceaccount.com"
 
 # From https://developers.google.com/storage/docs/authentication
 _FULL_CONTROL_SCOPE = "https://www.googleapis.com/auth/devstorage.full_control"
+
+# The maximum size (in bytes) of a chunk that can be read from cloud storage at
+# a time.
+_CHUNK_SIZE = 32 * 10**6
 
 def upload_form(obj, lifetime=10*60, acl=None, cache_control=None,
                 content_disposition=None, content_encoding=None,
@@ -175,6 +180,24 @@ def delete_object(obj):
 def open(obj):
     """Opens an object in cloud storage."""
     return files.open('/gs/' + _BUCKET + '/' + obj, 'r')
+
+def read(obj):
+    """Consumes and returns all data in an object in cloud storage.
+
+    The data is returned as a StringIO instance, so it may be used in place of a
+    file.
+
+    This can be necessary since many operations on the file object itself
+    require a network round trip."""
+
+    with open(obj) as f:
+        io = StringIO()
+        data = f.read(_CHUNK_SIZE)
+        while data:
+            io.write(data)
+            data = f.read(_CHUNK_SIZE)
+        io.seek(0)
+        return io
 
 def object_url(obj):
     """Returns the URL for an object in cloud storage."""

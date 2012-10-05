@@ -86,7 +86,7 @@ def handle_validation_errors(fn, *args, **kwargs):
     for said models.
     """
 
-    try: fn(*args, **kwargs)
+    try: return fn(*args, **kwargs)
     except (db.BadKeyError, db.BadValueError) as err:
         flash(err)
 
