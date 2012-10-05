@@ -207,22 +207,3 @@ class PackageVersions(object):
             return version.pubspec.to_yaml()
         else:
             handlers.http_error(404)
-
-    def migrate(self, package_id):
-        """Initiate a package version migration."""
-        if not users.is_current_user_admin(): handlers.http_error(403)
-        deferred.defer(self._migrate_versions)
-        return "Migrating package versions..."
-
-    def _migrate_versions(self):
-        """Migrate package version archives to cloud storage."""
-
-        for version in PackageVersion.all():
-            write_path = files.gs.create(
-                '/gs/pub.dartlang.org/' + version.storage_path,
-                acl='public-read')
-
-            with files.open(write_path, 'a') as f:
-                f.write(version.contents)
-
-            files.finalize(write_path)
