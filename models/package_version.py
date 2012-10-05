@@ -26,10 +26,6 @@ class PackageVersion(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     """When this package version was created."""
 
-    # TODO(nweiz): remove this property after migrating to cloud storage.
-    contents = db.BlobProperty()
-    """The blob of code for this package version, a gzipped tar file."""
-
     pubspec = PubspecProperty(required=True, indexed=False)
 
     package = db.ReferenceProperty(Package,
