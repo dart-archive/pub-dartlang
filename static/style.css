@@ -4989,10 +4989,13 @@ a.brand:hover {
 }
 
 .dart-logo {
-  display: inline-block;
-  background-image: url("/static/img/dart.png");
+  text-indent: -119988px;
+  overflow: hidden;
+  text-align: left;
+  background-image: url(/static/img/dart.png);
+  background-repeat: no-repeat;
+  background-position: 0 0;
   width: 21px;
-  height: 21px;
 }
 
 h1 .version {
@@ -5051,4 +5054,10 @@ ol.toc li {
 
 .toc:before {
   content: "Contents";
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  text-indent: -119988px;
+  overflow: hidden;
+  text-align: left;
 }

@@ -69,9 +69,10 @@ class Package(db.Model):
             if email is None: return cgi.escape(author)
             return '''<span class="author">%s
                 <a href="mailto:%s" title="Email %s">
-                    <i class="icon-envelope"></i>
+                    <i class="icon-envelope">Email %s</i>
                 </a></span>''' % \
-                (cgi.escape(author), cgi.escape(email), cgi.escape(email))
+                (cgi.escape(author), cgi.escape(email), cgi.escape(email),
+                 cgi.escape(email))
 
         return ', '.join(map(author_html, self.latest_version.pubspec.authors))
 
