@@ -32,4 +32,5 @@ class PrivateKeys(object):
         already_set = PrivateKey.get() is not None
         return handlers.render("private_keys/new",
                                production=handlers.is_production(),
-                               already_set=already_set)
+                               already_set=already_set,
+                               layout={'title': 'Set private key'})

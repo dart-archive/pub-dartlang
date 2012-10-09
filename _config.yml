@@ -5,4 +5,6 @@ server_port: 8080
 source: doc
 destination: views/doc
 markdown: kramdown
+kramdown:
+  entity_output: symbolic
 pygments: true
