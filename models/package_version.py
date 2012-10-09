@@ -118,6 +118,36 @@ class PackageVersion(db.Model):
         return cloud_storage.object_url(self.storage_path)
 
     @property
+    def has_libraries(self):
+        """Whether the package version has any libraries at all."""
+        return not not self.libraries
+
+    @property
+    def import_examples(self):
+        """The import examples to display for this package version.
+
+        If the version has a library that has the same name as the package,
+        that's considered to be the primary library and is the only one shown.
+        Otherwise, it will show all the top-level libraries. Only if there are
+        no top-level libraries will it show nested libraries.
+        """
+
+        primary_library = self.package.name + '.dart'
+        if primary_library in self.libraries:
+            return self._import_for_library(primary_library)
+
+        top_level = [self._import_for_library(library)
+                     for library in self.libraries
+                     if not '/' in library]
+        if top_level: return top_level
+
+        return map(self._import_for_library, self.libraries)
+
+    def _import_for_library(self, library):
+        """Return the import URL for a library in this package."""
+        return {'package': self.package.name, 'library': library}
+
+    @property
     def storage_path(self):
         """The Cloud Storage path for this package."""
         return 'packages/%s-%s.tar.gz' % (self.package.name, self.version)
