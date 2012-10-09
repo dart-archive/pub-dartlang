@@ -16,6 +16,10 @@ class Root(object):
         """Retrieves the front page of the package server."""
         return handlers.render('index')
 
+    def site_map(self):
+        """Retrieves a map of the site."""
+        return handlers.render('site_map', layout={'title': 'Site Map'})
+
     def serve(self, filename):
         """Serves a cloud storage file for the development server."""
 

@@ -184,3 +184,7 @@ ol.toc {
 [class^="icon-"], [class*=" icon-"] {
   @include hide-text;
 }
+
+ul ul {
+  list-style-type: circle;
+}
