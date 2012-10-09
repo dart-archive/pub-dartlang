@@ -14,6 +14,7 @@ import time
 
 from google.appengine.api import app_identity
 from google.appengine.api import files
+from google.appengine.api import namespace_manager
 from google.appengine.api import urlfetch
 
 from models.private_key import PrivateKey
@@ -57,7 +58,7 @@ def upload_form(obj, lifetime=10*60, acl=None, cache_control=None,
     bounds on the size of the uploaded file, in bytes.
     """
 
-    obj = _BUCKET + '/' + obj
+    obj = _object_path(obj)
 
     metadata = {'x-goog-meta-' + key: value for key, value
                 in metadata.iteritems()}
@@ -128,20 +129,20 @@ def modify_object(obj,
       include "x-goog-meta-". Null values are ignored.
     """
 
-    obj = _BUCKET + "/" + obj
-    if copy_source is not None: copy_source = _BUCKET + "/" + copy_source
-
     if not handlers.is_production():
         # The only way to modify an existing object using only the Python API
         # seems to be to copy it over itself. It's not a big deal since this is
         # only for development.
         if copy_source is None: copy_source = obj
         contents = None
-        with files.open('/gs/' + copy_source, 'r') as f: contents = f.read()
+        with files.open(_appengine_object_path(copy_source), 'r') as f:
+            contents = f.read()
 
         if content_type is None: content_type = 'application/octet-stream'
-        write_path = files.gs.create('/gs/' + obj, mime_type=content_type,
-                                     acl=acl, content_encoding=content_encoding,
+        write_path = files.gs.create(_appengine_object_path(obj),
+                                     mime_type=content_type,
+                                     acl=acl,
+                                     content_encoding=content_encoding,
                                      content_disposition=content_disposition,
                                      user_metadata=metadata)
         with files.open(write_path, 'a') as f: f.write(contents)
@@ -156,7 +157,7 @@ def modify_object(obj,
         "Content-Disposition": content_disposition,
         "x-goog-api-version": "2",
         "x-goog-acl": acl,
-        "x-goog-copy-source": copy_source,
+        "x-goog-copy-source": _object_path(copy_source),
         "x-goog-copy-source-if-match": copy_source_if_match,
         "x-goog-copy-source-if-none-match": copy_source_if_none_match,
         "x-goog-copy-source-if-modified-since": copy_source_if_modified_since,
@@ -170,16 +171,17 @@ def modify_object(obj,
     headers = {key: value for key, value in headers.iteritems()
                if value is not None}
 
-    return urlfetch.fetch("https://storage.googleapis.com/" + urllib.quote(obj),
+    return urlfetch.fetch("https://storage.googleapis.com/" +
+                            urllib.quote(_object_path(obj)),
                           method="PUT", headers=headers)
 
 def delete_object(obj):
     """Deletes an object from cloud storage."""
-    files.delete('/gs/' + _BUCKET + '/' + obj)
+    files.delete(_appengine_object_path(obj))
 
 def open(obj):
     """Opens an object in cloud storage."""
-    return files.open('/gs/' + _BUCKET + '/' + obj, 'r')
+    return files.open(_appengine_object_path(obj), 'r')
 
 def read(obj):
     """Consumes and returns all data in an object in cloud storage.
@@ -202,10 +204,19 @@ def read(obj):
 def object_url(obj):
     """Returns the URL for an object in cloud storage."""
     if handlers.is_production():
-        return 'http://commondatastorage.googleapis.com/%s/%s' % (
-            urllib.quote(_BUCKET), urllib.quote(obj))
+        return 'http://commondatastorage.googleapis.com/' + _object_path(obj)
     else:
         return '/gs_/' + urllib.quote(obj)
+
+def _object_path(obj):
+    """Returns the path for an object in cloud storage."""
+    ns = namespace_manager.get_namespace()
+    if ns == "": return _BUCKET + '/' + obj
+    return _BUCKET + '/ns/' + ns + '/' + obj
+
+def _appengine_object_path(obj):
+    """Returns the path for an object for use with the AppEngine APIs."""
+    return '/gs/' + _object_path(obj)
 
 def _iso8601(secs):
     """Returns the ISO8601 representation of the given time.
