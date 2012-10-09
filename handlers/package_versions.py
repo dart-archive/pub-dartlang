@@ -32,7 +32,8 @@ class PackageVersions(object):
         package = handlers.request().package
         return handlers.render(
             "packages/versions/index", package=package,
-            versions=package.version_set.order('-sort_order').run())
+            versions=package.version_set.order('-sort_order').run(),
+            layout={'title': 'All versions of %s' % package.name})
 
     def new(self, package_id):
         """Retrieve the form for uploading a package version.
@@ -66,8 +67,14 @@ class PackageVersions(object):
         # to cloud storage, but closes the browser before "create" is run.
         deferred.defer(self._remove_tmp_package, id, _countdown=5*60)
 
+        if package is not None:
+            title = 'Upload a new version of %s' % package.name
+        else:
+            title = 'Upload a new package'
+
         return handlers.render("packages/versions/new",
-                               form=form, package=package)
+                               form=form, package=package,
+                               layout={'title': title})
 
     def _remove_tmp_package(self, id):
         """Try to remove an orphaned package upload."""

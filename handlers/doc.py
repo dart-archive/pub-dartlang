@@ -39,7 +39,7 @@ class Doc(object):
                 <h1>%s</h1>
                 %s
                 </article>""" % (frontmatter['title'], f.read())
-            return handlers.layout(html)
+            return handlers.layout(html, title=frontmatter['title'])
 
     def _frontmatter(self, f):
         """Parses the YAML frontmatter of a file."""
