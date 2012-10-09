@@ -3,7 +3,6 @@
 # BSD-style license that can be found in the LICENSE file.
 
 import re
-import tarfile
 
 from google.appengine.ext import db
 import yaml
@@ -34,23 +33,19 @@ class Pubspec(dict):
                 self['authors'])
 
     @classmethod
-    def from_archive(cls, file):
+    def from_archive(cls, tar):
         """Extract and return the parsed pubspec from a package archive.
 
-        After consuming the file, this puts the cursor back at the beginning.
+        Arguments:
+          tar: A TarFile object.
         """
         try:
-            tar = tarfile.open(mode="r:gz", fileobj=file)
             pubspec = yaml.load(tar.extractfile("pubspec.yaml").read())
             if not isinstance(pubspec, dict):
                 raise db.BadValueError(
                     "Invalid pubspec, expected mapping at top level, was %s" %
                     pubspec)
-            file.seek(0)
             return cls(pubspec)
-        except (tarfile.TarError, KeyError) as err:
-            raise db.BadValueError(
-                "Error parsing package archive: %s" % err)
         except yaml.YAMLError as err:
             raise db.BadValueError("Error parsing pubspec: %s" % err)
 

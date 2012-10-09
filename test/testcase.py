@@ -4,7 +4,7 @@
 
 import base64
 import unittest
-from StringIO import StringIO
+from cStringIO import StringIO
 
 import cherrypy
 import webtest
@@ -168,22 +168,23 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         return PackageVersion.new(
             version=version,
             package=package,
-            pubspec=pubspec,
-            contents=self.tar_pubspec(pubspec))
+            pubspec=pubspec)
 
-    def tar_pubspec(self, pubspec):
+    def tar_package(self, pubspec, files={}):
         """Return a tarfile containing the given pubspec.
 
         The pubspec is dumped to YAML, then placed in a tarfile. The tarfile is
         then returned as a string.
         """
+        files['pubspec.yaml'] = yaml.dump(pubspec)
+
         tarfile_io = StringIO()
         tar = tarfile.open(fileobj=tarfile_io, mode='w:gz')
-
-        tarinfo = tarfile.TarInfo("pubspec.yaml")
-        pubspec_io = StringIO(yaml.dump(pubspec))
-        tarinfo.size = len(pubspec_io.getvalue())
-        tar.addfile(tarinfo, pubspec_io)
+        for name, contents in files.iteritems():
+            tarinfo = tarfile.TarInfo(name)
+            io = StringIO(contents)
+            tarinfo.size = len(contents)
+            tar.addfile(tarinfo, io)
         tar.close()
 
         return tarfile_io.getvalue()
@@ -192,7 +193,7 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         """Return a tuple representing a package archive upload."""
         pubspec = {'name': name, 'version': version}
         pubspec.update(additional_pubspec_fields)
-        contents = self.tar_pubspec(pubspec)
+        contents = self.tar_package(pubspec)
         return ('file', '%s-%s.tar.gz' % (name, version), contents)
 
     def assert_requires_login(self, response):
