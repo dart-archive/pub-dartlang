@@ -2,8 +2,6 @@
 title: "Glossary"
 ---
 
-# {{ page.title }}
-
 ### Dependency
 
 Another package that your package relies on. If your package wants to import
