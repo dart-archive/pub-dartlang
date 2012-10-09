@@ -47,7 +47,9 @@ class Packages(object):
         elif format == 'html':
             package = handlers.request().package
             version_count = package.version_set.count()
-            title = '%s %s' % (package.name, package.latest_version.version)
+            title = package.name
+            if package.latest_version:
+                title = '%s %s' % (package.name, package.latest_version.version)
             return handlers.render(
                 "packages/show", package=package,
                 versions=package.version_set.order('-sort_order').fetch(10),
