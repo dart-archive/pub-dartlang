@@ -4065,7 +4065,7 @@ input[type="submit"].btn.btn-mini {
   border-radius: 0 3px 3px 0;
 }
 
-.pagination-centered {
+.pagination-centered, .pagination {
   text-align: center;
 }
 
