@@ -8,6 +8,7 @@ import cherrypy
 from google.appengine.api import users
 
 import handlers
+from handlers.pager import Pager
 from models.package import Package
 
 class Packages(object):
@@ -17,15 +18,17 @@ class Packages(object):
     the responsibility of the PackageVersions class).
     """
 
-    def index(self, page = 1):
+    def index(self, page=1):
         """Retrieve a paginated list of uploaded packages.
 
         Arguments:
           page: The page of packages to get. Each page contains 10 packages.
         """
-        offset = (page - 1) * 10
-        packages = Package.all().order('-updated').fetch(10, offset)
-        return handlers.render("packages/index", packages=packages)
+        pager = Pager(
+            int(page), "/packages?page=%d", Package.all().order('-updated'))
+        return handlers.render("packages/index",
+                               packages=pager.get_items(),
+                               pagination=pager.render_pagination())
 
     def show(self, id, format='html'):
         """Retrieve the page describing a specific package."""

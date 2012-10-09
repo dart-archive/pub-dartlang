@@ -177,3 +177,7 @@ ol.toc {
   @extend h3;
   content: "Contents";
 }
+
+.pagination {
+  @extend .pagination-centered;
+}

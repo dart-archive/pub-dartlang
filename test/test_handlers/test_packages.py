@@ -46,6 +46,25 @@ class PackagesTest(TestCase):
                 'llama', 'kangaroo', 'jaguar', 'ibex', 'headcrab', 'gorilla',
                 'frog', 'elephant', 'dragon', 'crocodile'])
 
+    def test_page_two_lists_second_page_of_packages(self):
+        self.be_admin_user()
+
+        Package.new(name='armadillo').put()
+        Package.new(name='bat').put()
+        Package.new(name='crocodile').put()
+        Package.new(name='dragon').put()
+        Package.new(name='elephant').put()
+        Package.new(name='frog').put()
+        Package.new(name='gorilla').put()
+        Package.new(name='headcrab').put()
+        Package.new(name='ibex').put()
+        Package.new(name='jaguar').put()
+        Package.new(name='kangaroo').put()
+        Package.new(name='llama').put()
+
+        # Only the ten most recent packages should be listed
+        self.expect_lists_packages(['bat', 'armadillo'], page=2)
+
     def test_get_non_existent_package(self):
         self.testapp.get('/packages/package/test-package', status=404)
 
@@ -93,13 +112,15 @@ class PackagesTest(TestCase):
             "versions": ['1.1.0', '1.1.1', '1.2.0']
         })
 
-    def expect_lists_packages(self, expected_order):
+    def expect_lists_packages(self, expected_order, page=1):
         """Assert that the package index lists packages in a particular order.
 
         Arguments:
           expected_order: A list of package names.
         """
-        response = self.testapp.get('/packages')
+        url = '/packages'
+        if page != 1: url += '?page=%d' % page
+        response = self.testapp.get(url)
         for tr in self.html(response).select("tbody tr"):
             if not expected_order:
                 self.fail("more packages were listed than expected: %s" % tr)
