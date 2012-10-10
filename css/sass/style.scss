@@ -198,6 +198,10 @@ ol.toc {
   @extend .pagination-centered;
 }
 
+.progress {
+  @extend .progress-striped;
+}
+
 [class^="icon-"], [class*=" icon-"] {
   @include hide-text;
 }

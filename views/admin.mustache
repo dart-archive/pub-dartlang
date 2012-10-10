@@ -13,6 +13,19 @@
   </ul>
   <div>
     <div class="active" id="tab-packages">
+      {{#reload_status}}
+        <div class="reload">
+          <h3>
+            Reloading Packages:
+            <span class="count">{{count}}</span>/<span class="total">{{total}}</span>
+          </h3>
+
+          <div class="progress active">
+            <div class="bar" style="width: {{percentage}}"></div>
+          </div>
+        </div>
+      {{/reload_status}}
+
       <form method="POST" action="/packages/versions/reload">
         <button type="submit">Reload packages from the database.</button>
       </form>

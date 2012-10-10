@@ -12,6 +12,7 @@ import routes
 from google.appengine.ext import db
 from google.appengine.ext import deferred
 from google.appengine.api import files
+from google.appengine.api import memcache
 from google.appengine.api import users
 
 import handlers
@@ -216,3 +217,34 @@ class PackageVersions(object):
             return version.pubspec.to_yaml()
         else:
             handlers.http_error(404)
+
+    def reload(self, package_id):
+        """Reload all package versions from their tarballs."""
+        if not users.is_current_user_admin(): handlers.http_error(403)
+        versions_to_reload = 0
+        for key in PackageVersion.all(keys_only=True).run():
+            versions_to_reload += 1
+            deferred.defer(self._reload_version, key)
+        memcache.set('versions_to_reload', versions_to_reload)
+        memcache.set('versions_reloaded', 0)
+        raise cherrypy.HTTPRedirect('/admin#tab-packages')
+
+    def _reload_version(self, key):
+        """Reload a single package version from its tarball."""
+
+        version = PackageVersion.get(key)
+        with closing(cloud_storage.read(version.storage_path)) as f:
+            new_version = PackageVersion.from_archive(f)
+
+        with models.transaction():
+            # Reload the old version in case anything changed
+            version = PackageVersion.get(key)
+            if new_version.package.latest_version == version:
+                new_version.package.latest_version = new_version
+            new_version.created = version.created
+            new_version.sort_order = version.sort_order
+            version.delete()
+            new_version.put()
+            new_version.package.put()
+
+        memcache.incr('versions_reloaded')

@@ -4,6 +4,7 @@
 
 import os
 
+from google.appengine.api import memcache
 from google.appengine.api import users
 import cherrypy
 
@@ -30,7 +31,19 @@ class Root(object):
         elif not users.is_current_user_admin():
             raise handlers.http_error(403)
 
+        reload_status = None
+        versions_reloaded = memcache.get('versions_reloaded')
+        versions_to_reload = memcache.get('versions_to_reload')
+        if versions_to_reload is not None and \
+                versions_reloaded is not None and \
+                versions_to_reload != versions_reloaded:
+            percentage = '%d%%' % (100.0 * versions_reloaded/versions_to_reload)
+            reload_status = {'total': versions_to_reload,
+                             'count': versions_reloaded,
+                             'percentage': percentage}
+
         return handlers.render('admin',
+                               reload_status=reload_status,
                                private_key_set=PrivateKey.get() is not None,
                                production=handlers.is_production(),
                                layout={'title': 'Admin Console'})

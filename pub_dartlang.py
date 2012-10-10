@@ -61,6 +61,7 @@ class Application(cherrypy.Application):
                       conditions={'method': ['GET', 'HEAD']})
             m.connect(':id/create', action='create')
             m.connect('upload', action='upload', conditions={'method': 'POST'})
+            m.connect('reload', action='reload', conditions={'method': 'POST'})
         self.dispatcher.mapper.connect('/packages/versions/create',
                                        controller='versions',
                                        action='create')
