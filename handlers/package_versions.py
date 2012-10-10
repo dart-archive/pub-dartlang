@@ -5,6 +5,7 @@
 from cStringIO import StringIO
 from contextlib import closing
 from uuid import uuid4
+import json
 import logging
 
 import cherrypy
@@ -248,3 +249,17 @@ class PackageVersions(object):
             new_version.package.put()
 
         memcache.incr('versions_reloaded')
+
+    def reload_status(self, package_id):
+        """Return the status of the current package reload.
+
+        This is a JSON map. If the reload is finished, it will contain only a
+        'done' key with value true. If the reload is in progress, it will
+        contain 'count' and 'total' keys, indicating the total number of
+        packages to reload and the number that have been reloaded so far,
+        respectively.
+        """
+        if not users.is_current_user_admin(): cherrypy.http_error(403)
+        cherrypy.response.headers['Content-Type'] = 'application/json'
+        reload_status = PackageVersion.get_reload_status()
+        return json.dumps(reload_status or {'done': True})

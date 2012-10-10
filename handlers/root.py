@@ -4,11 +4,11 @@
 
 import os
 
-from google.appengine.api import memcache
 from google.appengine.api import users
 import cherrypy
 
 from handlers import cloud_storage
+from models.package_version import PackageVersion
 from models.private_key import PrivateKey
 import handlers
 
@@ -31,16 +31,10 @@ class Root(object):
         elif not users.is_current_user_admin():
             raise handlers.http_error(403)
 
-        reload_status = None
-        versions_reloaded = memcache.get('versions_reloaded')
-        versions_to_reload = memcache.get('versions_to_reload')
-        if versions_to_reload is not None and \
-                versions_reloaded is not None and \
-                versions_to_reload != versions_reloaded:
-            percentage = '%d%%' % (100.0 * versions_reloaded/versions_to_reload)
-            reload_status = {'total': versions_to_reload,
-                             'count': versions_reloaded,
-                             'percentage': percentage}
+        reload_status = PackageVersion.get_reload_status()
+        if reload_status is not None:
+            reload_status['percentage'] = '%d%%' % (
+                100.0 * reload_status['count']/reload_status['total'])
 
         return handlers.render('admin',
                                reload_status=reload_status,
