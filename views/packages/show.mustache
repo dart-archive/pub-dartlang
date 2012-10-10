@@ -71,8 +71,14 @@
         <li><p>Add it to your <code>pubspec.yaml</code> file:</p>
 <pre>
 dependencies:
-  <strong>{{package.name}}: any</strong>
+  <strong>{{package.name}}: {{package.latest_version.example_version_constraint}}</strong>
 </pre>
+          <p class="application-constraint-note">
+            {{! TODO(nweiz): link "apps" and "version constraint" to the
+            glossary once 5762 is fixed. }}
+            Apps should use <strong><code>any</code></strong> as the version
+            constraint.
+          </p>
         </li>
         <li></p>Install it
         (<a href="http://www.dartlang.org/docs/editor/">Dart Editor</a>):</p>

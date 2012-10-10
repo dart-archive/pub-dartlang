@@ -2,6 +2,8 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+import copy
+import json
 import tarfile
 
 from google.appengine.ext import db
@@ -146,6 +148,13 @@ class PackageVersion(db.Model):
     def _import_for_library(self, library):
         """Return the import information for a library in this package."""
         return {'package': self.package.name, 'library': library}
+
+    @property
+    def example_version_constraint(self):
+        """Return the example version constraint for this package."""
+        if self.version.in_initial_development: return str(self.version)
+        return json.dumps(
+            ">=%s <%d.0.0" % (self.version, self.version.major + 1))
 
     @property
     def storage_path(self):
