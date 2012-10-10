@@ -87,7 +87,7 @@ $ <strong>pub install</strong>
         {{#package.latest_version.has_libraries}}
           <li><p>Import it in your code:</p>
 <pre class="highlight">{{#package.latest_version.import_examples}}
-<span class="k">import</span> <span class="s">'package:<strong>{{package}}</strong>/<wbr/><strong>{{library}}</strong>'</span>;{{/package.latest_version.import_examples}}
+<span class="import-example"><span class="k">import</span> <span class="s">'package:<strong>{{package}}</strong>/<wbr/><strong>{{library}}</strong>'</span>;</span>{{/package.latest_version.import_examples}}
 </pre>
           </li>
         {{/package.latest_version.has_libraries}}

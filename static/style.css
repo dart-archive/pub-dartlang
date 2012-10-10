@@ -5025,10 +5025,14 @@ td.archive, th.archive {
 }
 .how-to-use pre {
   border: none;
-  padding: 3px 3px 3px 35px;
+  padding: 3px;
   background-color: #eee;
   word-break: normal;
-  text-indent: -32px;
+}
+.how-to-use .import-example {
+  display: inline-block;
+  padding-left: 16px;
+  text-indent: -16px;
 }
 
 .author {
