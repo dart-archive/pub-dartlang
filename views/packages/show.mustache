@@ -84,13 +84,13 @@ Menu > Tools > <strong>Pub Install</strong>
 $ <strong>pub install</strong>
 </pre>
         </li>
-        <li><p>Import it in your code:</p>
-{{!TODO(rynstrom): Should validate that the package exposes a library with its
-  name. Maybe show other libraries it exposes here too?}}
-<pre class="highlight">
-<span class="k">import</span> <span class="s">'package:<strong>{{package.name}}/<wbr/>{{package.name}}.dart</strong>'</span>;
+        {{#package.latest_version.has_libraries}}
+          <li><p>Import it in your code:</p>
+<pre class="highlight">{{#package.latest_version.import_examples}}
+<span class="import-example"><span class="k">import</span> <span class="s">'package:<strong>{{package}}</strong>/<wbr/><strong>{{library}}</strong>'</span>;</span>{{/package.latest_version.import_examples}}
 </pre>
-        </li>
+          </li>
+        {{/package.latest_version.has_libraries}}
       </ol>
     </div>
     {{#is_uploader}}

@@ -2,7 +2,7 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
-import re
+import tarfile
 
 from google.appengine.ext import db
 import yaml
@@ -27,6 +27,10 @@ class PackageVersion(db.Model):
     """When this package version was created."""
 
     pubspec = PubspecProperty(required=True, indexed=False)
+    """The package version's pubspec file."""
+
+    libraries = db.ListProperty(str)
+    """All libraries that can be imported from this package version."""
 
     package = db.ReferenceProperty(Package,
                                    required=True,
@@ -44,15 +48,10 @@ class PackageVersion(db.Model):
 
         Unlike __init__, this infers some properties from others. In particular:
 
-        - The pubspec is loaded from contents_file, if provided.
         - The version is inferred from the pubspec.
         - The key name is set to the version.
         - The parent entity is set to the package.
         """
-
-        if 'contents_file' in kwargs and 'pubspec' not in kwargs:
-            file = kwargs['contents_file']
-            kwargs['pubspec'] = Pubspec.from_archive(file)
 
         if 'pubspec' in kwargs and 'version' not in kwargs:
             kwargs['version'] = kwargs['pubspec'].required('version')
@@ -84,12 +83,23 @@ class PackageVersion(db.Model):
 
         Returns: Both the Package object and the PackageVersion object.
         """
-        pubspec = Pubspec.from_archive(file)
-        name = pubspec.required('name')
-        package = Package.get_by_key_name(name)
-        if not package: package = Package.new(name=name)
-        return PackageVersion.new(
-            package=package, pubspec=pubspec, contents_file=file)
+        try:
+            tar = tarfile.open(mode="r:gz", fileobj=file)
+            pubspec = Pubspec.from_archive(tar)
+            name = pubspec.required('name')
+            package = Package.get_by_key_name(name)
+            if not package: package = Package.new(name=name)
+
+            libraries = sorted(name[4:] for name in tar.getnames()
+                               if name.startswith('lib/') and
+                                   not name.startswith('lib/src/') and
+                                   name.endswith('.dart'))
+
+            return PackageVersion.new(
+                package=package, pubspec=pubspec, libraries=libraries)
+        except (tarfile.TarError, KeyError) as err:
+            raise db.BadValueError(
+                "Error parsing package archive: %s" % err)
 
     @classmethod
     def get_by_name_and_version(cls, package_name, version):
@@ -106,6 +116,36 @@ class PackageVersion(db.Model):
     def download_url(self):
         """The URL for downloading this package."""
         return cloud_storage.object_url(self.storage_path)
+
+    @property
+    def has_libraries(self):
+        """Whether the package version has any libraries at all."""
+        return bool(self.libraries)
+
+    @property
+    def import_examples(self):
+        """The import examples to display for this package version.
+
+        If the version has a library that has the same name as the package,
+        that's considered to be the primary library and is the only one shown.
+        Otherwise, it will show all the top-level libraries. Only if there are
+        no top-level libraries will it show nested libraries.
+        """
+
+        primary_library = self.package.name + '.dart'
+        if primary_library in self.libraries:
+            return self._import_for_library(primary_library)
+
+        top_level = [self._import_for_library(library)
+                     for library in self.libraries
+                     if not '/' in library]
+        if top_level: return top_level
+
+        return map(self._import_for_library, self.libraries)
+
+    def _import_for_library(self, library):
+        """Return the import information for a library in this package."""
+        return {'package': self.package.name, 'library': library}
 
     @property
     def storage_path(self):

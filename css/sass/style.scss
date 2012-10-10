@@ -134,12 +134,18 @@ td.archive, th.archive {
 
   pre {
     border: none;
-    padding: 3px 3px 3px 35px;
+    padding: 3px;
     background-color: #eee;
 
     // So the import can wrap and the wrapped line is indented.
     word-break: normal;
-    text-indent: -32px;
+  }
+
+  .import-example {
+    display: inline-block;
+    $indent-width: 16px;
+    padding-left: $indent-width;
+    text-indent: -$indent-width;
   }
 }
 
