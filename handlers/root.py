@@ -4,9 +4,11 @@
 
 import os
 
+from google.appengine.api import users
 import cherrypy
 
 from handlers import cloud_storage
+from models.private_key import PrivateKey
 import handlers
 
 class Root(object):
@@ -19,6 +21,19 @@ class Root(object):
     def site_map(self):
         """Retrieves a map of the site."""
         return handlers.render('site_map', layout={'title': 'Site Map'})
+
+    def admin(self):
+        """Retrieve a page for performing administrative tasks."""
+
+        if not users.get_current_user():
+            raise cherrypy.HTTPRedirect(users.create_login_url(cherrypy.url()))
+        elif not users.is_current_user_admin():
+            raise handlers.http_error(403)
+
+        return handlers.render('admin',
+                               private_key_set=PrivateKey.get() is not None,
+                               production=handlers.is_production(),
+                               layout={'title': 'Admin Console'})
 
     def serve(self, filename):
         """Serves a cloud storage file for the development server."""

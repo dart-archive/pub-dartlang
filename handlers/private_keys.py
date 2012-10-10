@@ -23,14 +23,4 @@ class PrivateKeys(object):
             handlers.http_error(403, "Only admins may set the private key.")
         PrivateKey.set(key)
         handlers.flash("Private key set successfully.")
-        raise cherrypy.HTTPRedirect("/")
-
-    def new(self):
-        """Retrieve the form for setting the private key."""
-        if not users.is_current_user_admin():
-            handlers.http_error(403, "Only admins may set the private key.")
-        already_set = PrivateKey.get() is not None
-        return handlers.render("private_keys/new",
-                               production=handlers.is_production(),
-                               already_set=already_set,
-                               layout={'title': 'Set private key'})
+        raise cherrypy.HTTPRedirect("/admin")

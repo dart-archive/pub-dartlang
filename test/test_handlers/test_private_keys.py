@@ -7,12 +7,6 @@ from testcase import TestCase
 from models.private_key import PrivateKey
 
 class PrivateKeysTest(TestCase):
-    def test_new_requires_admin(self):
-        self.be_normal_user()
-
-        response = self.testapp.get('/private-keys/new', status=403)
-        self.assert_error_page(response)
-
     def test_create_requires_admin(self):
         self.be_normal_user()
 
@@ -23,9 +17,9 @@ class PrivateKeysTest(TestCase):
     def test_admin_creates_key(self):
         self.be_admin_user()
 
-        get_response = self.testapp.get('/private-keys/new')
+        get_response = self.testapp.get('/admin')
         self.assertEqual(get_response.status_int, 200)
-        form = get_response.form
+        form = get_response.forms["private-key"]
         self.assertEqual(form.method, 'POST')
 
         form['key'] = 'key'
@@ -33,5 +27,5 @@ class PrivateKeysTest(TestCase):
 
         self.assertEqual(post_response.status_int, 302)
         self.assertEqual(post_response.headers['Location'],
-                         'http://localhost:80/')
+                         'http://localhost:80/admin')
         self.assertEqual(PrivateKey.get(), 'key')

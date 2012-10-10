@@ -54,7 +54,7 @@ class PackageVersions(object):
             handlers.flash('Currently only admins may create packages.')
             raise cherrypy.HTTPRedirect('/packages')
         elif PrivateKey.get() is None:
-            raise cherrypy.HTTPRedirect('/private-keys/new')
+            raise cherrypy.HTTPRedirect('/admin')
 
         id = str(uuid4())
         redirect_url = handlers.request().url(action="create", id=id)
