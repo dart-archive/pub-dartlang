@@ -212,6 +212,55 @@ class PackageVersionsTest(TestCase):
                          'text/yaml;charset=utf-8')
         self.assertEqual(yaml.load(response.body), version.pubspec)
 
+    def test_reload_requires_admin(self):
+        self.be_normal_user()
+
+        response = self.testapp.post('/packages/versions/reload', status=403)
+        self.assert_error_page(response)
+
+    def test_reload_reloads_a_package_version(self):
+        self.be_admin_user()
+        self.post_package_version('1.2.3')
+
+        version = PackageVersion.get_by_name_and_version(
+            'test-package', '1.2.3')
+        version.libraries = ["wrong"]
+        version.put()
+
+        response = self.testapp.post('/packages/versions/reload', status=302)
+        self.assertEqual(response.headers['Location'],
+                         'http://localhost:80/admin#tab-packages')
+
+        self.run_deferred_tasks()
+        version = PackageVersion.get_by_name_and_version(
+            'test-package', '1.2.3')
+        self.assertEqual([], version.libraries)
+
+        # The latest_version of the parent package should also be updated
+        version = Package.get_by_key_name('test-package').latest_version
+        self.assertEqual([], version.libraries)
+
+    def test_reload_preserves_sort_order(self):
+        self.be_admin_user()
+        self.post_package_version('1.2.3')
+        self.post_package_version('1.2.4')
+        self.post_package_version('1.2.4-pre')
+
+        self.testapp.post('/packages/versions/reload')
+        self.run_deferred_tasks()
+
+        version = PackageVersion.get_by_name_and_version(
+            'test-package', '1.2.3')
+        self.assertEqual(0, version.sort_order)
+
+        version = PackageVersion.get_by_name_and_version(
+            'test-package', '1.2.4-pre')
+        self.assertEqual(1, version.sort_order)
+
+        version = PackageVersion.get_by_name_and_version(
+            'test-package', '1.2.4')
+        self.assertEqual(2, version.sort_order)
+
     def post_package_version(self, version, name='test-package'):
         response = self.create_package(
             self.upload_archive(name, version))
