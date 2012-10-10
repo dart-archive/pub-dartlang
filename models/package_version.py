@@ -120,7 +120,7 @@ class PackageVersion(db.Model):
     @property
     def has_libraries(self):
         """Whether the package version has any libraries at all."""
-        return not not self.libraries
+        return bool(self.libraries)
 
     @property
     def import_examples(self):
@@ -144,7 +144,7 @@ class PackageVersion(db.Model):
         return map(self._import_for_library, self.libraries)
 
     def _import_for_library(self, library):
-        """Return the import URL for a library in this package."""
+        """Return the import information for a library in this package."""
         return {'package': self.package.name, 'library': library}
 
     @property
