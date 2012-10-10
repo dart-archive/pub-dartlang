@@ -37,6 +37,14 @@ class SemanticVersion(object):
         """Whether this is a prerelease version."""
         return self.prerelease is not None
 
+    @property
+    def in_initial_development(self):
+        """Whether this is a package in initial development.
+
+        A package is considered to be in initial development if its major
+        version is 0."""
+        return self.major == 0
+
     def __eq__(self, other):
         if not isinstance(other, SemanticVersion): return False
         return self._key() == other._key()
