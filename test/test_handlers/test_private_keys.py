@@ -27,5 +27,5 @@ class PrivateKeysTest(TestCase):
 
         self.assertEqual(post_response.status_int, 302)
         self.assertEqual(post_response.headers['Location'],
-                         'http://localhost:80/admin')
+                         'http://localhost:80/admin#tab-private-key')
         self.assertEqual(PrivateKey.get(), 'key')

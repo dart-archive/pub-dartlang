@@ -67,7 +67,7 @@ class PackageVersionsTest(TestCase):
         response = self.testapp.get('/packages/test-package/versions/new')
         self.assertEqual(response.status_int, 302)
         self.assertEqual(response.headers['Location'],
-                         'http://localhost:80/admin')
+                         'http://localhost:80/admin#tab-private-key')
 
     def test_uploader_creates_package_version(self):
         self.be_admin_user()

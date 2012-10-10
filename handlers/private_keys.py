@@ -23,4 +23,4 @@ class PrivateKeys(object):
             handlers.http_error(403, "Only admins may set the private key.")
         PrivateKey.set(key)
         handlers.flash("Private key set successfully.")
-        raise cherrypy.HTTPRedirect("/admin")
+        raise cherrypy.HTTPRedirect("/admin#tab-private-key")

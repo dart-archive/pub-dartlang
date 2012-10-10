@@ -6,4 +6,9 @@ $(function() {
   $("article").find("h2, h3, h4").each(function() {
     $(this).append($('<a class="permalink" title="Permalink" href="#' + $(this).attr('id') + '">#</a>'));
   });
+
+  // Allow the anchor to specify which tab of a tabbed control is shown.
+  if (window.location.hash !== "") {
+    $('a[href="' + window.location.hash + '"][data-toggle="tab"]').tab('show');
+  }
 });
