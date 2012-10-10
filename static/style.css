@@ -769,7 +769,7 @@ em {
   font-style: italic;
 }
 
-.muted {
+.muted, .how-to-use .application-constraint-note {
   color: #999999;
 }
 
@@ -5033,6 +5033,13 @@ td.archive, th.archive {
   display: inline-block;
   padding-left: 16px;
   text-indent: -16px;
+}
+.how-to-use .application-constraint-note {
+  font-size: 10px;
+}
+.how-to-use .application-constraint-note code {
+  color: #333;
+  font-size: 10px;
 }
 
 .author {

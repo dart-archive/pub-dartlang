@@ -147,6 +147,16 @@ td.archive, th.archive {
     padding-left: $indent-width;
     text-indent: -$indent-width;
   }
+
+  .application-constraint-note {
+    @extend .muted;
+    font-size: 10px;
+
+    code {
+      color: #333;
+      font-size: 10px
+    }
+  }
 }
 
 .author {
