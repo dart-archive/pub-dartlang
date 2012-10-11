@@ -210,6 +210,7 @@ class PackageVersions(object):
         if id.endswith('.tar.gz'):
             id = id[0:-len('.tar.gz')]
             version = handlers.request().package_version(id)
+            deferred.defer(self._count_download, version.key())
             raise cherrypy.HTTPRedirect(version.download_url)
         elif id.endswith('.yaml'):
             id = id[0:-len('.yaml')]
@@ -218,6 +219,15 @@ class PackageVersions(object):
             return version.pubspec.to_yaml()
         else:
             handlers.http_error(404)
+
+    def _count_download(self, key):
+        """Increment the download count for a package version."""
+        with models.transaction():
+            version = PackageVersion.get(key)
+            version.downloads += 1
+            version.package.downloads += 1
+            version.put()
+            version.package.put()
 
     def reload(self, package_id):
         """Reload all package versions from their tarballs."""

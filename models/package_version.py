@@ -40,6 +40,9 @@ class PackageVersion(db.Model):
                                    collection_name = "version_set")
     """The Package model for this package version."""
 
+    downloads = db.IntegerProperty(required=True, default=0)
+    """The number of times this package version has been downloaded."""
+
     sort_order = db.IntegerProperty(default=-1)
     """The sort order for this version.
 

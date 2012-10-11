@@ -34,6 +34,9 @@ class Package(db.Model):
     updated = db.DateTimeProperty(auto_now=True)
     """When the package or any of its versions were last updated."""
 
+    downloads = db.IntegerProperty(required=True, default=0)
+    """The number of times any version of this package has been downloaded."""
+
     # This should only reference a PackageVersion, but cyclic imports aren't
     # allowed so we can't import PackageVersion here.
     latest_version = db.ReferenceProperty()

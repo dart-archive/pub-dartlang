@@ -197,6 +197,11 @@ class PackageVersionsTest(TestCase):
                          'http://localhost:80/gs_/packages/' +
                          'test-package-1.2.3.tar.gz')
 
+        self.run_deferred_tasks()
+        version = self.get_package_version('1.2.3')
+        self.assertEqual(version.downloads, 1)
+        self.assertEqual(version.package.downloads, 1)
+
     def test_show_package_version_yaml(self):
         version = self.package_version(self.package, '1.2.3',
             description="Test package!",
