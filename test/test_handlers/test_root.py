@@ -25,3 +25,12 @@ class RootTest(TestCase):
         # Only the five most recent packages should be listed
         self.assert_list_in_html('/', 'tbody tr th',
             ['bat', 'headcrab', 'gorilla', 'frog', 'elephant'])
+
+    def test_admin_requires_login(self):
+        response = self.testapp.get('/admin')
+        self.assert_requires_login(response)
+
+    def test_admin_requires_admin(self):
+        self.be_normal_user()
+        response = self.testapp.get('/admin', status=403)
+        self.assert_error_page(response)

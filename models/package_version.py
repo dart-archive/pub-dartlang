@@ -6,6 +6,7 @@ import copy
 import json
 import tarfile
 
+from google.appengine.api import memcache
 from google.appengine.ext import db
 import yaml
 
@@ -108,6 +109,24 @@ class PackageVersion(db.Model):
         """Looks up a package version by its package name and version."""
         parent_key = db.Key.from_path('Package', package_name)
         return cls.get_by_key_name(version, parent=parent_key)
+
+    @classmethod
+    def get_reload_status(cls):
+        """Returns the status of the current package reload.
+
+        This is a map with keys 'total' and 'count', indicating the total number
+        of packages to reload and the number that have been reloaded so far,
+        respectively.
+
+        If the reload has already completed, or no reload has been started, this
+        will return None.
+        """
+        versions_reloaded = memcache.get('versions_reloaded')
+        versions_to_reload = memcache.get('versions_to_reload')
+        if versions_to_reload is None: return
+        if versions_reloaded is None: return
+        if versions_to_reload == versions_reloaded: return
+        return {'total': versions_to_reload, 'count': versions_reloaded}
 
     @property
     def short_created(self):
