@@ -51,7 +51,7 @@ would look like:</p>
 </code></pre>
 
 <p>* The <code>pubspec.lock</code> will only be in source control if the package is an
-application package.</p>
+<a href="glossary.html#application-package">application package</a>.</p>
 
 <p>** The <code>packages</code> directories will exist locally after you&rsquo;re run
 <code>pub install</code>, but won&rsquo;t be checked into source control.</p>
@@ -74,10 +74,11 @@ package.</p>
   </a>
 </div>
 
-<p>Once you&rsquo;ve run <a href="pub-install.html"><code>pub install</code></a> or
-<a href="pub-update.html"><code>pub update</code></a> on the package, you will also have a
-<strong>lockfile</strong>, named <code>pubspec.lock</code>. If your package is an application package,
-this will be checked into source control. Otherwise, it won&rsquo;t be.</p>
+<p>Once you&rsquo;ve run <a href="pub-install.html"><code>pub install</code></a> or <a href="pub-update.html"><code>pub
+update</code></a> on the package, you will also have a <strong>lockfile</strong>,
+named <code>pubspec.lock</code>. If your package is an <a href="glossary.html#application-package">application
+package</a>, this will be checked into source
+control. Otherwise, it won&rsquo;t be.</p>
 
 <pre><code>enchilada/
   packages/
@@ -105,9 +106,9 @@ use are up to you, but please do have a README.</p>
     tortilla.dart
 </code></pre>
 
-<p>Many packages are <em>library packages</em>: they define Dart libraries that other
-packages can import and use. These public Dart library files go inside a
-directory called <code>lib</code>.</p>
+<p>Many packages are <a href="glossary.html#library-package"><em>library packages</em></a>: they
+define Dart libraries that other packages can import and use. These public Dart
+library files go inside a directory called <code>lib</code>.</p>
 
 <p>Most packages will define a single library that users can import. In that case,
 its name should usually be the same as the name of the package, like

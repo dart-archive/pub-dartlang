@@ -46,13 +46,14 @@ that goes along with it like resources, tests, and docs. Frameworks and
 reusable libraries are obviously packages, but applications are too. If your
 app wants to use pub packages, it needs to be a package too.</p>
 
-<p>While everything is a package in pub, there are two flavors of packages that
-are used slightly differently in practice. A <strong>library package</strong> is a package
-that is intended to be reused by other packages. It will usually have code that
-other packages import, and it will likely be hosted somewhere that people can
-get to. An <strong>application package</strong> only <em>consumes</em> packages but doesn&rsquo;t itself
-get reused. In other words, library packages will be used as dependencies, but
-application packages won&rsquo;t.</p>
+<p>While everything is a package in pub, there are two flavors of packages that are
+used slightly differently in practice. A <a href="glossary.html#library-package"><strong>library
+package</strong></a> is a package that is intended to be
+reused by other packages. It will usually have code that other packages import,
+and it will likely be hosted somewhere that people can get to. An <a href="glossary.html#application-package"><strong>application
+package</strong></a> only <em>consumes</em> packages but
+doesn&rsquo;t itself get reused. In other words, library packages will be used as
+dependencies, but application packages won&rsquo;t.</p>
 
 <p>In most cases, there&rsquo;s no difference between the two and we&rsquo;ll just say
 &ldquo;package&rdquo;. In the few places where it does matter, we&rsquo;ll specify &ldquo;library

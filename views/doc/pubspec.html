@@ -141,10 +141,10 @@ package itself uses directly. Pub handles
 for you.</p>
 
 <p>For each dependency, you specify the <em>name</em> of the package you depend on. For
-library packages, you specify the <em>range of versions</em> of that package that
-you allow. You may also specify the <a href="glossary.html#source"><em>source</em></a> which
-tells pub how the package can be located, and any additional <em>description</em> that
-the source needs to find the package.</p>
+<a href="glossary.html#library-package">library packages</a>, you specify the <em>range of
+versions</em> of that package that you allow. You may also specify the
+<a href="glossary.html#source"><em>source</em></a> which tells pub how the package can be located,
+and any additional <em>description</em> that the source needs to find the package.</p>
 
 <p>There are a few different ways to specify dependencies based on how much of
 that data you need to provide. The shortest way is to just specify a name:</p>
@@ -273,19 +273,19 @@ provide a <code>ref</code> argument:</p>
 
 <h2 id="version-constraints">Version constraints</h2>
 
-<p>If your package is an application, you don&rsquo;t usually need to specify version
-constraints for your dependencies. You will typically want to use the latest
-versions of the dependencies when you first create your app. Then you&rsquo;ll create
-and check in a lockfile that pins your dependencies to those specific versions.
-Specifying version constraints in your pubpsc then is usually redundant (though
-you can do it if you want).</p>
+<p>If your package is an application, you don&rsquo;t usually need to specify <a href="glossary.html#version-constraint">version
+constraints</a> for your dependencies. You will
+typically want to use the latest versions of the dependencies when you first
+create your app. Then you&rsquo;ll create and check in a lockfile that pins your
+dependencies to those specific versions. Specifying version constraints in your
+pubpsc then is usually redundant (though you can do it if you want).</p>
 
-<p>For a library package that you want users to reuse, though, it is important
-to specify version constraints. That lets people using your package know which
-versions of its dependencies they can rely on to be compatible with your
-library. Your goal is to allow a range of versions as wide as possible to give
-your users&rsquo; flexibility. But it should be narrow enough to exclude versions
-that you know don&rsquo;t work or haven&rsquo;t been tested.</p>
+<p>For a <a href="glossary.html#library-package">library package</a> that you want users to
+reuse, though, it is important to specify version constraints. That lets people
+using your package know which versions of its dependencies they can rely on to
+be compatible with your library. Your goal is to allow a range of versions as
+wide as possible to give your users&rsquo; flexibility. But it should be narrow enough
+to exclude versions that you know don&rsquo;t work or haven&rsquo;t been tested.</p>
 
 <p>The Dart community uses <a href="http://semver.org/">semantic versioning</a>, which helps you know which
 versions should work. If you know that your package works fine with <code>1.2.3</code> of
