@@ -595,16 +595,16 @@ a:hover {
   clear: both;
 }
 
-.container-fluid {
+.container-fluid, .admin > div > div {
   padding-right: 20px;
   padding-left: 20px;
   *zoom: 1;
 }
-.container-fluid:before, .container-fluid:after {
+.container-fluid:before, .admin > div > div:before, .container-fluid:after, .admin > div > div:after {
   display: table;
   content: "";
 }
-.container-fluid:after {
+.container-fluid:after, .admin > div > div:after {
   clear: both;
 }
 
@@ -1426,10 +1426,14 @@ select:focus:required:invalid:focus {
 .input-prepend .btn,
 .input-prepend .learn-more a,
 .learn-more .input-prepend a,
+.input-prepend .admin form button,
+.admin form .input-prepend button,
 .input-append .add-on,
 .input-append .btn,
 .input-append .learn-more a,
-.learn-more .input-append a {
+.learn-more .input-append a,
+.input-append .admin form button,
+.admin form .input-append button {
   margin-left: -1px;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -1444,13 +1448,17 @@ select:focus:required:invalid:focus {
 .input-prepend .add-on,
 .input-prepend .btn,
 .input-prepend .learn-more a,
-.learn-more .input-prepend a {
+.learn-more .input-prepend a,
+.input-prepend .admin form button,
+.admin form .input-prepend button {
   margin-right: -1px;
 }
 .input-prepend .add-on:first-child,
 .input-prepend .btn:first-child,
 .input-prepend .learn-more a:first-child,
-.learn-more .input-prepend a:first-child {
+.learn-more .input-prepend a:first-child,
+.input-prepend .admin form button:first-child,
+.admin form .input-prepend button:first-child {
   -webkit-border-radius: 3px 0 0 3px;
   -moz-border-radius: 3px 0 0 3px;
   border-radius: 3px 0 0 3px;
@@ -1470,7 +1478,9 @@ select:focus:required:invalid:focus {
 .input-append .add-on:last-child,
 .input-append .btn:last-child,
 .input-append .learn-more a:last-child,
-.learn-more .input-append a:last-child {
+.learn-more .input-append a:last-child,
+.input-append .admin form button:last-child,
+.admin form .input-append button:last-child {
   -webkit-border-radius: 0 3px 3px 0;
   -moz-border-radius: 0 3px 3px 0;
   border-radius: 0 3px 3px 0;
@@ -1486,7 +1496,9 @@ select:focus:required:invalid:focus {
 .input-prepend.input-append .add-on:first-child,
 .input-prepend.input-append .btn:first-child,
 .input-prepend.input-append .learn-more a:first-child,
-.learn-more .input-prepend.input-append a:first-child {
+.learn-more .input-prepend.input-append a:first-child,
+.input-prepend.input-append .admin form button:first-child,
+.admin form .input-prepend.input-append button:first-child {
   margin-right: -1px;
   -webkit-border-radius: 3px 0 0 3px;
   -moz-border-radius: 3px 0 0 3px;
@@ -1495,7 +1507,9 @@ select:focus:required:invalid:focus {
 .input-prepend.input-append .add-on:last-child,
 .input-prepend.input-append .btn:last-child,
 .input-prepend.input-append .learn-more a:last-child,
-.learn-more .input-prepend.input-append a:last-child {
+.learn-more .input-prepend.input-append a:last-child,
+.input-prepend.input-append .admin form button:last-child,
+.admin form .input-prepend.input-append button:last-child {
   margin-left: -1px;
   -webkit-border-radius: 0 3px 3px 0;
   -moz-border-radius: 0 3px 3px 0;
@@ -2647,7 +2661,7 @@ button.close {
   -webkit-appearance: none;
 }
 
-.btn, .learn-more a {
+.btn, .learn-more a, .admin form button {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
@@ -2687,18 +2701,18 @@ button.close {
   -moz-box-shadow: "inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05)";
   box-shadow: "inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05)";
 }
-.btn:hover, .learn-more a:hover, .btn:active, .learn-more a:active, .btn.active, .learn-more a.active, .btn.disabled, .learn-more a.disabled, .btn[disabled], .learn-more a[disabled] {
+.btn:hover, .learn-more a:hover, .admin form button:hover, .btn:active, .learn-more a:active, .admin form button:active, .btn.active, .learn-more a.active, .admin form button.active, .btn.disabled, .learn-more a.disabled, .admin form button.disabled, .btn[disabled], .learn-more a[disabled], .admin form button[disabled] {
   background-color: #e6e6e6;
   *background-color: #d9d9d9;
 }
-.btn:active, .learn-more a:active, .btn.active, .learn-more a.active {
+.btn:active, .learn-more a:active, .admin form button:active, .btn.active, .learn-more a.active, .admin form button.active {
   background-color: #cccccc \9;
 }
-.btn:first-child, .learn-more a:first-child {
+.btn:first-child, .learn-more a:first-child, .admin form button:first-child {
   *margin-left: 0;
 }
 
-.btn:hover, .learn-more a:hover {
+.btn:hover, .learn-more a:hover, .admin form button:hover {
   color: #333333;
   text-decoration: none;
   background-color: #e6e6e6;
@@ -2712,15 +2726,16 @@ button.close {
   transition: background-position 0.1s linear;
 }
 
-.btn:focus, .learn-more a:focus {
+.btn:focus, .learn-more a:focus, .admin form button:focus {
   outline: thin dotted #333;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
 
-.btn.active, .learn-more a.active,
+.btn.active, .learn-more a.active, .admin form button.active,
 .btn:active,
-.learn-more a:active {
+.learn-more a:active,
+.admin form button:active {
   background-color: #e6e6e6;
   background-color: #d9d9d9 \9;
   background-image: none;
@@ -2730,9 +2745,10 @@ button.close {
   box-shadow: "inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05)";
 }
 
-.btn.disabled, .learn-more a.disabled,
+.btn.disabled, .learn-more a.disabled, .admin form button.disabled,
 .btn[disabled],
-.learn-more a[disabled] {
+.learn-more a[disabled],
+.admin form button[disabled] {
   cursor: default;
   background-color: #e6e6e6;
   background-image: none;
@@ -2800,7 +2816,7 @@ button.close {
   color: rgba(255, 255, 255, 0.75);
 }
 
-.btn, .learn-more a {
+.btn, .learn-more a, .admin form button {
   border-color: #ccc;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
@@ -2949,27 +2965,27 @@ button.close {
   background-color: #090909 \9;
 }
 
-button.btn,
+button.btn, .admin form button,
 input[type="submit"].btn {
   *padding-top: 2px;
   *padding-bottom: 2px;
 }
-button.btn::-moz-focus-inner,
+button.btn::-moz-focus-inner, .admin form button::-moz-focus-inner,
 input[type="submit"].btn::-moz-focus-inner {
   padding: 0;
   border: 0;
 }
-button.btn.btn-large,
+button.btn.btn-large, .admin form button.btn-large,
 input[type="submit"].btn.btn-large {
   *padding-top: 7px;
   *padding-bottom: 7px;
 }
-button.btn.btn-small,
+button.btn.btn-small, .admin form button.btn-small,
 input[type="submit"].btn.btn-small {
   *padding-top: 3px;
   *padding-bottom: 3px;
 }
-button.btn.btn-mini,
+button.btn.btn-mini, .admin form button.btn-mini,
 input[type="submit"].btn.btn-mini {
   *padding-top: 1px;
   *padding-bottom: 1px;
@@ -3006,7 +3022,7 @@ input[type="submit"].btn.btn-mini {
   *zoom: 1;
 }
 
-.btn-group > .btn, .learn-more .btn-group > a {
+.btn-group > .btn, .learn-more .btn-group > a, .admin form .btn-group > button {
   position: relative;
   float: left;
   margin-left: -1px;
@@ -3015,7 +3031,7 @@ input[type="submit"].btn.btn-mini {
   border-radius: 0;
 }
 
-.btn-group > .btn:first-child, .learn-more .btn-group > a:first-child {
+.btn-group > .btn:first-child, .learn-more .btn-group > a:first-child, .admin form .btn-group > button:first-child {
   margin-left: 0;
   -webkit-border-top-left-radius: 4px;
   -moz-border-radius-topleft: 4px;
@@ -3025,7 +3041,7 @@ input[type="submit"].btn.btn-mini {
   border-bottom-left-radius: 4px;
 }
 
-.btn-group > .btn:last-child, .learn-more .btn-group > a:last-child,
+.btn-group > .btn:last-child, .learn-more .btn-group > a:last-child, .admin form .btn-group > button:last-child,
 .btn-group > .dropdown-toggle {
   -webkit-border-top-right-radius: 4px;
   -moz-border-radius-topright: 4px;
@@ -3035,7 +3051,7 @@ input[type="submit"].btn.btn-mini {
   border-bottom-right-radius: 4px;
 }
 
-.btn-group > .btn.large:first-child, .learn-more .btn-group > a.large:first-child {
+.btn-group > .btn.large:first-child, .learn-more .btn-group > a.large:first-child, .admin form .btn-group > button.large:first-child {
   margin-left: 0;
   -webkit-border-top-left-radius: 6px;
   -moz-border-radius-topleft: 6px;
@@ -3045,7 +3061,7 @@ input[type="submit"].btn.btn-mini {
   border-bottom-left-radius: 6px;
 }
 
-.btn-group > .btn.large:last-child, .learn-more .btn-group > a.large:last-child,
+.btn-group > .btn.large:last-child, .learn-more .btn-group > a.large:last-child, .admin form .btn-group > button.large:last-child,
 .btn-group > .large.dropdown-toggle {
   -webkit-border-top-right-radius: 6px;
   -moz-border-radius-topright: 6px;
@@ -3055,13 +3071,16 @@ input[type="submit"].btn.btn-mini {
   border-bottom-right-radius: 6px;
 }
 
-.btn-group > .btn:hover, .learn-more .btn-group > a:hover,
+.btn-group > .btn:hover, .learn-more .btn-group > a:hover, .admin form .btn-group > button:hover,
 .btn-group > .btn:focus,
 .learn-more .btn-group > a:focus,
+.admin form .btn-group > button:focus,
 .btn-group > .btn:active,
 .learn-more .btn-group > a:active,
+.admin form .btn-group > button:active,
 .btn-group > .btn.active,
-.learn-more .btn-group > a.active {
+.learn-more .btn-group > a.active,
+.admin form .btn-group > button.active {
   z-index: 2;
 }
 
@@ -3101,7 +3120,7 @@ input[type="submit"].btn.btn-mini {
   -moz-box-shadow: "inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05)";
   box-shadow: "inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05)";
 }
-.btn-group.open .btn.dropdown-toggle, .btn-group.open .learn-more a.dropdown-toggle, .learn-more .btn-group.open a.dropdown-toggle {
+.btn-group.open .btn.dropdown-toggle, .btn-group.open .learn-more a.dropdown-toggle, .learn-more .btn-group.open a.dropdown-toggle, .btn-group.open .admin form button.dropdown-toggle, .admin form .btn-group.open button.dropdown-toggle {
   background-color: #e6e6e6;
 }
 .btn-group.open .btn-primary.dropdown-toggle {
@@ -3123,12 +3142,12 @@ input[type="submit"].btn.btn-mini {
   background-color: #222222;
 }
 
-.btn .caret, .learn-more a .caret {
+.btn .caret, .learn-more a .caret, .admin form button .caret {
   margin-top: 7px;
   margin-left: 0;
 }
 
-.btn:hover .caret, .learn-more a:hover .caret,
+.btn:hover .caret, .learn-more a:hover .caret, .admin form button:hover .caret,
 .open.btn-group .caret {
   opacity: 1;
   filter: alpha(opacity=100);
@@ -3223,26 +3242,26 @@ input[type="submit"].btn.btn-mini {
   margin-top: 5px;
 }
 
-.nav {
+.nav, .admin > ul {
   margin-left: 0;
   margin-bottom: 24px;
   list-style: none;
 }
 
-.nav > li > a {
+.nav > li > a, .admin > ul > li > a {
   display: block;
 }
 
-.nav > li > a:hover {
+.nav > li > a:hover, .admin > ul > li > a:hover {
   text-decoration: none;
   background-color: #eeeeee;
 }
 
-.nav > .pull-right {
+.nav > .pull-right, .admin > ul > .pull-right {
   float: right;
 }
 
-.nav .nav-header {
+.nav .nav-header, .admin > ul .nav-header {
   display: block;
   padding: 3px 15px;
   font-size: 11px;
@@ -3253,11 +3272,11 @@ input[type="submit"].btn.btn-mini {
   text-transform: uppercase;
 }
 
-.nav li + .nav-header {
+.nav li + .nav-header, .admin > ul li + .nav-header {
   margin-top: 9px;
 }
 
-.nav .nav-header {
+.nav .nav-header, .admin > ul .nav-header {
   display: block;
   padding: 3px 15px;
   font-size: 11px;
@@ -3268,7 +3287,7 @@ input[type="submit"].btn.btn-mini {
   text-transform: uppercase;
 }
 
-.nav li + .nav-header {
+.nav li + .nav-header, .admin > ul li + .nav-header {
   margin-top: 9px;
 }
 
@@ -3310,27 +3329,27 @@ input[type="submit"].btn.btn-mini {
   border-bottom: 1px solid white;
 }
 
-.nav-tabs,
+.nav-tabs, .admin > ul,
 .nav-pills {
   *zoom: 1;
 }
-.nav-tabs:before, .nav-tabs:after,
+.nav-tabs:before, .admin > ul:before, .nav-tabs:after, .admin > ul:after,
 .nav-pills:before,
 .nav-pills:after {
   display: table;
   content: "";
 }
-.nav-tabs:after,
+.nav-tabs:after, .admin > ul:after,
 .nav-pills:after {
   clear: both;
 }
 
-.nav-tabs > li,
+.nav-tabs > li, .admin > ul > li,
 .nav-pills > li {
   float: left;
 }
 
-.nav-tabs > li > a,
+.nav-tabs > li > a, .admin > ul > li > a,
 .nav-pills > li > a {
   padding-right: 12px;
   padding-left: 12px;
@@ -3338,15 +3357,15 @@ input[type="submit"].btn.btn-mini {
   line-height: 14px;
 }
 
-.nav-tabs {
+.nav-tabs, .admin > ul {
   border-bottom: 1px solid #ddd;
 }
 
-.nav-tabs > li {
+.nav-tabs > li, .admin > ul > li {
   margin-bottom: -1px;
 }
 
-.nav-tabs > li > a {
+.nav-tabs > li > a, .admin > ul > li > a {
   padding-top: 9px;
   padding-bottom: 9px;
   line-height: 24px;
@@ -3355,12 +3374,13 @@ input[type="submit"].btn.btn-mini {
   -moz-border-radius: 4px 4px 0 0;
   border-radius: 4px 4px 0 0;
 }
-.nav-tabs > li > a:hover {
+.nav-tabs > li > a:hover, .admin > ul > li > a:hover {
   border-color: #eeeeee #eeeeee #dddddd;
 }
 
-.nav-tabs > .active > a,
-.nav-tabs > .active > a:hover {
+.nav-tabs > .active > a, .admin > ul > .active > a,
+.nav-tabs > .active > a:hover,
+.admin > ul > .active > a:hover {
   color: #555555;
   background-color: white;
   border: 1px solid #ddd;
@@ -3392,30 +3412,30 @@ input[type="submit"].btn.btn-mini {
   margin-right: 0;
 }
 
-.nav-tabs.nav-stacked {
+.nav-tabs.nav-stacked, .admin > ul.nav-stacked {
   border-bottom: 0;
 }
 
-.nav-tabs.nav-stacked > li > a {
+.nav-tabs.nav-stacked > li > a, .admin > ul.nav-stacked > li > a {
   border: 1px solid #ddd;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
 }
 
-.nav-tabs.nav-stacked > li:first-child > a {
+.nav-tabs.nav-stacked > li:first-child > a, .admin > ul.nav-stacked > li:first-child > a {
   -webkit-border-radius: 4px 4px 0 0;
   -moz-border-radius: 4px 4px 0 0;
   border-radius: 4px 4px 0 0;
 }
 
-.nav-tabs.nav-stacked > li:last-child > a {
+.nav-tabs.nav-stacked > li:last-child > a, .admin > ul.nav-stacked > li:last-child > a {
   -webkit-border-radius: 0 0 4px 4px;
   -moz-border-radius: 0 0 4px 4px;
   border-radius: 0 0 4px 4px;
 }
 
-.nav-tabs.nav-stacked > li > a:hover {
+.nav-tabs.nav-stacked > li > a:hover, .admin > ul.nav-stacked > li > a:hover {
   border-color: #ddd;
   z-index: 2;
 }
@@ -3428,7 +3448,7 @@ input[type="submit"].btn.btn-mini {
   margin-bottom: 1px;
 }
 
-.nav-tabs .dropdown-menu {
+.nav-tabs .dropdown-menu, .admin > ul .dropdown-menu {
   -webkit-border-radius: 0 0 5px 5px;
   -moz-border-radius: 0 0 5px 5px;
   border-radius: 0 0 5px 5px;
@@ -3440,41 +3460,44 @@ input[type="submit"].btn.btn-mini {
   border-radius: 4px;
 }
 
-.nav-tabs .dropdown-toggle .caret,
+.nav-tabs .dropdown-toggle .caret, .admin > ul .dropdown-toggle .caret,
 .nav-pills .dropdown-toggle .caret {
   border-top-color: #0088cc;
   border-bottom-color: #0088cc;
   margin-top: 6px;
 }
 
-.nav-tabs .dropdown-toggle:hover .caret,
+.nav-tabs .dropdown-toggle:hover .caret, .admin > ul .dropdown-toggle:hover .caret,
 .nav-pills .dropdown-toggle:hover .caret {
   border-top-color: #005580;
   border-bottom-color: #005580;
 }
 
-.nav-tabs .active .dropdown-toggle .caret,
+.nav-tabs .active .dropdown-toggle .caret, .admin > ul .active .dropdown-toggle .caret,
 .nav-pills .active .dropdown-toggle .caret {
   border-top-color: #333333;
   border-bottom-color: #333333;
 }
 
-.nav > .dropdown.active > a:hover {
+.nav > .dropdown.active > a:hover, .admin > ul > .dropdown.active > a:hover {
   color: black;
   cursor: pointer;
 }
 
-.nav-tabs .open .dropdown-toggle,
+.nav-tabs .open .dropdown-toggle, .admin > ul .open .dropdown-toggle,
 .nav-pills .open .dropdown-toggle,
-.nav > li.dropdown.open.active > a:hover {
+.nav > li.dropdown.open.active > a:hover,
+.admin > ul > li.dropdown.open.active > a:hover {
   color: white;
   background-color: #999999;
   border-color: #999999;
 }
 
-.nav li.dropdown.open .caret,
+.nav li.dropdown.open .caret, .admin > ul li.dropdown.open .caret,
 .nav li.dropdown.open.active .caret,
-.nav li.dropdown.open a:hover .caret {
+.admin > ul li.dropdown.open.active .caret,
+.nav li.dropdown.open a:hover .caret,
+.admin > ul li.dropdown.open a:hover .caret {
   border-top-color: white;
   border-bottom-color: white;
   opacity: 1;
@@ -3485,115 +3508,124 @@ input[type="submit"].btn.btn-mini {
   border-color: #999999;
 }
 
-.tabbable {
+.tabbable, .admin {
   *zoom: 1;
 }
-.tabbable:before, .tabbable:after {
+.tabbable:before, .admin:before, .tabbable:after, .admin:after {
   display: table;
   content: "";
 }
-.tabbable:after {
+.tabbable:after, .admin:after {
   clear: both;
 }
 
-.tab-content {
+.tab-content, .admin > div {
   overflow: auto;
 }
 
-.tabs-below > .nav-tabs,
+.tabs-below > .nav-tabs, .admin.tabs-below > ul,
 .tabs-right > .nav-tabs,
-.tabs-left > .nav-tabs {
+.admin.tabs-right > ul,
+.tabs-left > .nav-tabs,
+.admin > .nav-tabs,
+.admin > ul {
   border-bottom: 0;
 }
 
-.tab-content > .tab-pane,
+.tab-content > .tab-pane, .admin > div > .tab-pane, .admin > div.tab-content > div, .admin > div > div,
 .pill-content > .pill-pane {
   display: none;
 }
 
-.tab-content > .active,
+.tab-content > .active, .admin > div > .active,
 .pill-content > .active {
   display: block;
 }
 
-.tabs-below > .nav-tabs {
+.tabs-below > .nav-tabs, .admin.tabs-below > ul {
   border-top: 1px solid #ddd;
 }
 
-.tabs-below > .nav-tabs > li {
+.tabs-below > .nav-tabs > li, .admin.tabs-below > ul > li {
   margin-top: -1px;
   margin-bottom: 0;
 }
 
-.tabs-below > .nav-tabs > li > a {
+.tabs-below > .nav-tabs > li > a, .admin.tabs-below > ul > li > a {
   -webkit-border-radius: 0 0 4px 4px;
   -moz-border-radius: 0 0 4px 4px;
   border-radius: 0 0 4px 4px;
 }
-.tabs-below > .nav-tabs > li > a:hover {
+.tabs-below > .nav-tabs > li > a:hover, .admin.tabs-below > ul > li > a:hover {
   border-bottom-color: transparent;
   border-top-color: #ddd;
 }
 
-.tabs-below > .nav-tabs > .active > a,
-.tabs-below > .nav-tabs > .active > a:hover {
+.tabs-below > .nav-tabs > .active > a, .admin.tabs-below > ul > .active > a,
+.tabs-below > .nav-tabs > .active > a:hover,
+.admin.tabs-below > ul > .active > a:hover {
   border-color: transparent #ddd #ddd #ddd;
 }
 
-.tabs-left > .nav-tabs > li,
-.tabs-right > .nav-tabs > li {
+.tabs-left > .nav-tabs > li, .admin > .nav-tabs > li, .admin > ul > li,
+.tabs-right > .nav-tabs > li,
+.admin.tabs-right > ul > li {
   float: none;
 }
 
-.tabs-left > .nav-tabs > li > a,
-.tabs-right > .nav-tabs > li > a {
+.tabs-left > .nav-tabs > li > a, .admin > .nav-tabs > li > a, .admin > ul > li > a,
+.tabs-right > .nav-tabs > li > a,
+.admin.tabs-right > ul > li > a {
   min-width: 74px;
   margin-right: 0;
   margin-bottom: 3px;
 }
 
-.tabs-left > .nav-tabs {
+.tabs-left > .nav-tabs, .admin > .nav-tabs, .admin > ul {
   float: left;
   margin-right: 19px;
   border-right: 1px solid #ddd;
 }
 
-.tabs-left > .nav-tabs > li > a {
+.tabs-left > .nav-tabs > li > a, .admin > .nav-tabs > li > a, .admin > ul > li > a {
   margin-right: -1px;
   -webkit-border-radius: 4px 0 0 4px;
   -moz-border-radius: 4px 0 0 4px;
   border-radius: 4px 0 0 4px;
 }
 
-.tabs-left > .nav-tabs > li > a:hover {
+.tabs-left > .nav-tabs > li > a:hover, .admin > .nav-tabs > li > a:hover, .admin > ul > li > a:hover {
   border-color: #eeeeee #dddddd #eeeeee #eeeeee;
 }
 
-.tabs-left > .nav-tabs .active > a,
-.tabs-left > .nav-tabs .active > a:hover {
+.tabs-left > .nav-tabs .active > a, .admin > .nav-tabs .active > a, .admin > ul .active > a,
+.tabs-left > .nav-tabs .active > a:hover,
+.admin > .nav-tabs .active > a:hover,
+.admin > ul .active > a:hover {
   border-color: #ddd transparent #ddd #ddd;
   *border-right-color: white;
 }
 
-.tabs-right > .nav-tabs {
+.tabs-right > .nav-tabs, .admin.tabs-right > ul {
   float: right;
   margin-left: 19px;
   border-left: 1px solid #ddd;
 }
 
-.tabs-right > .nav-tabs > li > a {
+.tabs-right > .nav-tabs > li > a, .admin.tabs-right > ul > li > a {
   margin-left: -1px;
   -webkit-border-radius: 0 4px 4px 0;
   -moz-border-radius: 0 4px 4px 0;
   border-radius: 0 4px 4px 0;
 }
 
-.tabs-right > .nav-tabs > li > a:hover {
+.tabs-right > .nav-tabs > li > a:hover, .admin.tabs-right > ul > li > a:hover {
   border-color: #eeeeee #eeeeee #eeeeee #dddddd;
 }
 
-.tabs-right > .nav-tabs .active > a,
-.tabs-right > .nav-tabs .active > a:hover {
+.tabs-right > .nav-tabs .active > a, .admin.tabs-right > ul .active > a,
+.tabs-right > .nav-tabs .active > a:hover,
+.admin.tabs-right > ul .active > a:hover {
   border-color: #ddd #ddd #ddd transparent;
   *border-left-color: white;
 }
@@ -3660,11 +3692,11 @@ input[type="submit"].btn.btn-mini {
 .navbar .navbar-link:hover {
   color: white;
 }
-.navbar .btn, .navbar .learn-more a, .learn-more .navbar a,
+.navbar .btn, .navbar .learn-more a, .learn-more .navbar a, .navbar .admin form button, .admin form .navbar button,
 .navbar .btn-group {
   margin-top: 5px;
 }
-.navbar .btn-group .btn, .navbar .btn-group .learn-more a, .learn-more .navbar .btn-group a {
+.navbar .btn-group .btn, .navbar .btn-group .learn-more a, .learn-more .navbar .btn-group a, .navbar .btn-group .admin form button, .admin form .navbar .btn-group button {
   margin: 0;
 }
 
@@ -3778,7 +3810,7 @@ input[type="submit"].btn.btn-mini {
   bottom: 0;
 }
 
-.navbar .nav {
+.navbar .nav, .navbar .admin > ul {
   position: relative;
   left: 0;
   display: block;
@@ -3786,16 +3818,16 @@ input[type="submit"].btn.btn-mini {
   margin: 0 10px 0 0;
 }
 
-.navbar .nav.pull-right {
+.navbar .nav.pull-right, .navbar .admin > ul.pull-right {
   float: right;
 }
 
-.navbar .nav > li {
+.navbar .nav > li, .navbar .admin > ul > li {
   display: block;
   float: left;
 }
 
-.navbar .nav > li > a {
+.navbar .nav > li > a, .navbar .admin > ul > li > a {
   float: none;
   padding: 9px 10px 11px;
   line-height: 19px;
@@ -3804,7 +3836,7 @@ input[type="submit"].btn.btn-mini {
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
-.navbar .btn, .navbar .learn-more a, .learn-more .navbar a {
+.navbar .btn, .navbar .learn-more a, .learn-more .navbar a, .navbar .admin form button, .admin form .navbar button {
   display: inline-block;
   padding: 4px 10px 4px;
   margin: 5px 5px 6px;
@@ -3816,14 +3848,15 @@ input[type="submit"].btn.btn-mini {
   padding: 5px 5px 6px;
 }
 
-.navbar .nav > li > a:hover {
+.navbar .nav > li > a:hover, .navbar .admin > ul > li > a:hover {
   background-color: transparent;
   color: white;
   text-decoration: none;
 }
 
-.navbar .nav .active > a,
-.navbar .nav .active > a:hover {
+.navbar .nav .active > a, .navbar .admin > ul .active > a,
+.navbar .nav .active > a:hover,
+.navbar .admin > ul .active > a:hover {
   color: white;
   text-decoration: none;
   background-color: #222222;
@@ -3838,7 +3871,7 @@ input[type="submit"].btn.btn-mini {
   border-right: 1px solid #333333;
 }
 
-.navbar .nav.pull-right {
+.navbar .nav.pull-right, .navbar .admin > ul.pull-right {
   margin-left: 10px;
   margin-right: 0;
 }
@@ -3928,24 +3961,27 @@ input[type="submit"].btn.btn-mini {
   top: auto;
 }
 
-.navbar .nav li.dropdown .dropdown-toggle .caret,
-.navbar .nav li.dropdown.open .caret {
+.navbar .nav li.dropdown .dropdown-toggle .caret, .navbar .admin > ul li.dropdown .dropdown-toggle .caret,
+.navbar .nav li.dropdown.open .caret,
+.navbar .admin > ul li.dropdown.open .caret {
   border-top-color: white;
   border-bottom-color: white;
 }
 
-.navbar .nav li.dropdown.active .caret {
+.navbar .nav li.dropdown.active .caret, .navbar .admin > ul li.dropdown.active .caret {
   opacity: 1;
   filter: alpha(opacity=100);
 }
 
-.navbar .nav li.dropdown.open > .dropdown-toggle,
+.navbar .nav li.dropdown.open > .dropdown-toggle, .navbar .admin > ul li.dropdown.open > .dropdown-toggle,
 .navbar .nav li.dropdown.active > .dropdown-toggle,
-.navbar .nav li.dropdown.open.active > .dropdown-toggle {
+.navbar .admin > ul li.dropdown.active > .dropdown-toggle,
+.navbar .nav li.dropdown.open.active > .dropdown-toggle,
+.navbar .admin > ul li.dropdown.open.active > .dropdown-toggle {
   background-color: transparent;
 }
 
-.navbar .nav li.dropdown.active > .dropdown-toggle:hover {
+.navbar .nav li.dropdown.active > .dropdown-toggle:hover, .navbar .admin > ul li.dropdown.active > .dropdown-toggle:hover {
   color: white;
 }
 
@@ -4228,11 +4264,11 @@ input[type="submit"].btn.btn-mini {
 .modal-footer:after {
   clear: both;
 }
-.modal-footer .btn + .btn, .modal-footer .learn-more a + .btn, .learn-more .modal-footer a + .btn, .modal-footer .learn-more .btn + a, .learn-more .modal-footer .btn + a, .modal-footer .learn-more a + a, .learn-more .modal-footer a + a {
+.modal-footer .btn + .btn, .modal-footer .learn-more a + .btn, .learn-more .modal-footer a + .btn, .modal-footer .admin form button + .btn, .admin form .modal-footer button + .btn, .modal-footer .learn-more .btn + a, .learn-more .modal-footer .btn + a, .modal-footer .learn-more a + a, .learn-more .modal-footer a + a, .modal-footer .admin form .learn-more button + a, .learn-more .modal-footer .admin form button + a, .admin form .modal-footer .learn-more button + a, .learn-more .admin form .modal-footer button + a, .modal-footer .admin form .btn + button, .admin form .modal-footer .btn + button, .modal-footer .learn-more .admin form a + button, .admin form .modal-footer .learn-more a + button, .learn-more .modal-footer .admin form a + button, .admin form .learn-more .modal-footer a + button, .modal-footer .admin form button + button, .admin form .modal-footer button + button {
   margin-left: 5px;
   margin-bottom: 0;
 }
-.modal-footer .btn-group .btn + .btn, .modal-footer .btn-group .learn-more a + .btn, .learn-more .modal-footer .btn-group a + .btn, .modal-footer .btn-group .learn-more .btn + a, .learn-more .modal-footer .btn-group .btn + a, .modal-footer .btn-group .learn-more a + a, .learn-more .modal-footer .btn-group a + a {
+.modal-footer .btn-group .btn + .btn, .modal-footer .btn-group .learn-more a + .btn, .learn-more .modal-footer .btn-group a + .btn, .modal-footer .btn-group .admin form button + .btn, .admin form .modal-footer .btn-group button + .btn, .modal-footer .btn-group .learn-more .btn + a, .learn-more .modal-footer .btn-group .btn + a, .modal-footer .btn-group .learn-more a + a, .learn-more .modal-footer .btn-group a + a, .modal-footer .btn-group .admin form .learn-more button + a, .learn-more .modal-footer .btn-group .admin form button + a, .admin form .modal-footer .btn-group .learn-more button + a, .learn-more .admin form .modal-footer .btn-group button + a, .modal-footer .btn-group .admin form .btn + button, .admin form .modal-footer .btn-group .btn + button, .modal-footer .btn-group .learn-more .admin form a + button, .admin form .modal-footer .btn-group .learn-more a + button, .learn-more .modal-footer .btn-group .admin form a + button, .admin form .learn-more .modal-footer .btn-group a + button, .modal-footer .btn-group .admin form button + button, .admin form .modal-footer .btn-group button + button {
   margin-left: -1px;
 }
 
@@ -4646,7 +4682,7 @@ a.label:hover, a.badge:hover {
   transition: width 0.6s ease;
 }
 
-.progress-striped .bar {
+.progress-striped .bar, .progress .bar {
   background-color: #149bdf;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
   background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
@@ -4680,7 +4716,7 @@ a.label:hover, a.badge:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ee5f5b', endColorstr='#c43c35', GradientType=0);
 }
 
-.progress-danger.progress-striped .bar {
+.progress-danger.progress-striped .bar, .progress-danger.progress .bar {
   background-color: #ee5f5b;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
   background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
@@ -4702,7 +4738,7 @@ a.label:hover, a.badge:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#62c462', endColorstr='#57a957', GradientType=0);
 }
 
-.progress-success.progress-striped .bar {
+.progress-success.progress-striped .bar, .progress-success.progress .bar {
   background-color: #62c462;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
   background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
@@ -4724,7 +4760,7 @@ a.label:hover, a.badge:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bc0de', endColorstr='#339bb9', GradientType=0);
 }
 
-.progress-info.progress-striped .bar {
+.progress-info.progress-striped .bar, .progress-info.progress .bar {
   background-color: #5bc0de;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
   background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
@@ -4746,7 +4782,7 @@ a.label:hover, a.badge:hover {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb450', endColorstr='#f89406', GradientType=0);
 }
 
-.progress-warning.progress-striped .bar {
+.progress-warning.progress-striped .bar, .progress-warning.progress .bar {
   background-color: #fbb450;
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
   background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);

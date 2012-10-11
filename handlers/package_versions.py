@@ -5,6 +5,7 @@
 from cStringIO import StringIO
 from contextlib import closing
 from uuid import uuid4
+import json
 import logging
 
 import cherrypy
@@ -12,6 +13,7 @@ import routes
 from google.appengine.ext import db
 from google.appengine.ext import deferred
 from google.appengine.api import files
+from google.appengine.api import memcache
 from google.appengine.api import users
 
 import handlers
@@ -54,7 +56,7 @@ class PackageVersions(object):
             handlers.flash('Currently only admins may create packages.')
             raise cherrypy.HTTPRedirect('/packages')
         elif PrivateKey.get() is None:
-            raise cherrypy.HTTPRedirect('/private-keys/new')
+            raise cherrypy.HTTPRedirect('/admin#tab-private-key')
 
         id = str(uuid4())
         redirect_url = handlers.request().url(action="create", id=id)
@@ -216,3 +218,48 @@ class PackageVersions(object):
             return version.pubspec.to_yaml()
         else:
             handlers.http_error(404)
+
+    def reload(self, package_id):
+        """Reload all package versions from their tarballs."""
+        if not users.is_current_user_admin(): handlers.http_error(403)
+        versions_to_reload = 0
+        for key in PackageVersion.all(keys_only=True).run():
+            versions_to_reload += 1
+            deferred.defer(self._reload_version, key)
+        memcache.set('versions_to_reload', versions_to_reload)
+        memcache.set('versions_reloaded', 0)
+        raise cherrypy.HTTPRedirect('/admin#tab-packages')
+
+    def _reload_version(self, key):
+        """Reload a single package version from its tarball."""
+
+        version = PackageVersion.get(key)
+        with closing(cloud_storage.read(version.storage_path)) as f:
+            new_version = PackageVersion.from_archive(f)
+
+        with models.transaction():
+            # Reload the old version in case anything (e.g. sort order) changed.
+            version = PackageVersion.get(key)
+            if new_version.package.latest_version == version:
+                new_version.package.latest_version = new_version
+            new_version.created = version.created
+            new_version.sort_order = version.sort_order
+            version.delete()
+            new_version.put()
+            new_version.package.put()
+
+        memcache.incr('versions_reloaded')
+
+    def reload_status(self, package_id):
+        """Return the status of the current package reload.
+
+        This is a JSON map. If the reload is finished, it will contain only a
+        'done' key with value true. If the reload is in progress, it will
+        contain 'count' and 'total' keys, indicating the total number of
+        packages to reload and the number that have been reloaded so far,
+        respectively.
+        """
+        if not users.is_current_user_admin(): cherrypy.http_error(403)
+        cherrypy.response.headers['Content-Type'] = 'application/json'
+        reload_status = PackageVersion.get_reload_status()
+        return json.dumps(reload_status or {'done': True})

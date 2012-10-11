@@ -198,10 +198,34 @@ ol.toc {
   @extend .pagination-centered;
 }
 
+.progress {
+  @extend .progress-striped;
+}
+
 [class^="icon-"], [class*=" icon-"] {
   @include hide-text;
 }
 
 ul ul {
   list-style-type: circle;
+}
+
+.admin {
+  @extend .tabbable, .tabs-left;
+
+  > ul {
+    @extend .nav, .nav-tabs;
+  }
+
+  > div {
+    @extend .tab-content;
+
+    > div {
+      @extend .tab-pane, .container-fluid;
+    }
+  }
+
+  form button {
+    @extend .btn;
+  }
 }
