@@ -10,12 +10,18 @@ class RootTest(TestCase):
     def test_index_lists_recent_packages_in_update_order(self):
         self.be_admin_user()
 
-        packages = ['armadillo', 'bat', 'crocodile', 'dragon', 'elephant',
-            'frog', 'gorilla', 'headcrab'
+        packages = [
+            'armadillo', 'bat', 'crocodile', 'dragon', 'elephant', 'frog',
+            'gorilla', 'headcrab'
         ]
 
         for package in packages:
             Package.new(name=package).put()
 
+
+        # Update a package so the update times are different from create times.
+        Package.get_by_key_name('bat').put()
+
         # Only the five most recent packages should be listed
-        self.assert_list_in_html('/', 'tbody tr th', packages[:5])
+        self.assert_list_in_html('/', 'tbody tr th',
+            ['bat', 'headcrab', 'gorilla', 'frog', 'elephant'])

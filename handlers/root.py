@@ -15,7 +15,8 @@ class Root(object):
 
     def index(self):
         """Retrieves the front page of the package server."""
-        return handlers.render('index', recent_packages=Package.all().fetch(5))
+        packages = Package.all().order('-updated').fetch(5)
+        return handlers.render('index', recent_packages=packages)
 
     def site_map(self):
         """Retrieves a map of the site."""

@@ -82,6 +82,15 @@ a.brand:hover {
   width: 21px;
 }
 
+.intro {
+  @extend .well;
+}
+
+.get-started {
+  @extend .btn;
+  @extend .btn-primary;
+}
+
 h1 .version {
   @extend small;
   font-size: 20px;
