@@ -12,8 +12,10 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), 'third_party'))
 
 import cherrypy
+from google.appengine.api import users
 from google.appengine.ext.webapp.util import run_wsgi_app
 
+import handlers
 from handlers.doc import Doc
 from handlers.root import Root
 from handlers.packages import Packages
@@ -68,6 +70,9 @@ class Application(cherrypy.Application):
                                        controller='versions',
                                        action='create')
 
+        # Set up custom error page.
+        cherrypy.config.update({'error_page.default': _error_page})
+
     def _resource(self, member_name, collection_name, controller, **kwargs):
         """Configure routes for a resource.
 
@@ -77,6 +82,16 @@ class Application(cherrypy.Application):
         """
         self.dispatcher.controllers[collection_name] = controller
         self.dispatcher.mapper.resource(member_name, collection_name, **kwargs)
+
+def _error_page(status, message, traceback, version):
+    if not users.is_current_user_admin():
+        traceback = None
+
+    return str(handlers.render('error',
+        status=status,
+        message=message,
+        traceback=traceback,
+        layout={'title': 'Error %s' % status}))
 
 app = Application()
 
