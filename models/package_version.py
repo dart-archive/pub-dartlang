@@ -26,9 +26,6 @@ class PackageVersion(db.Model):
     version = VersionProperty(required=True)
     """The version of the package."""
 
-    created = db.DateTimeProperty(auto_now_add=True)
-    """When this package version was created."""
-
     pubspec = PubspecProperty(required=True, indexed=False)
     """The package version's pubspec file."""
 
@@ -39,6 +36,16 @@ class PackageVersion(db.Model):
                                    required=True,
                                    collection_name = "version_set")
     """The Package model for this package version."""
+
+    # The following properties are not parsed from the pubspec. They need to be
+    # manually copied over to new PackageVersions in
+    # handlers.PackageVersions._reload_version.
+
+    created = db.DateTimeProperty(auto_now_add=True)
+    """When this package version was created."""
+
+    downloads = db.IntegerProperty(required=True, default=0)
+    """The number of times this package version has been downloaded."""
 
     sort_order = db.IntegerProperty(default=-1)
     """The sort order for this version.
