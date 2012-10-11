@@ -2,6 +2,21 @@
 title: "Glossary"
 ---
 
+### Application Package
+
+A package that is not intended to be used as a library. Application packages may
+have [dependencies](#dependency) on other packages, but are never depended on
+themselves. They are usually meant to be run directly, either on the command
+line or in a browser. The opposite of an application package is a [library
+package](#library-package).
+
+Application packages should check their [lockfiles](#lockfile) into source
+control, so that everyone working on the application and every location the
+application is deployed has a consistent set of dependencies. Because their
+dependencies are constrained by the lockfile, application packages usually
+specify `any` for their dependencies' [version
+constraints](#version-constraint).
+
 ### Dependency
 
 Another package that your package relies on. If your package wants to import
@@ -31,6 +46,27 @@ context, it *is* the entrypoint since your app isn't involved.
 A [dependency](#dependency) that your package directly uses itself. The
 dependencies you list in your pubspec are your package's immediate dependencies.
 All other dependencies are [transitive dependencies](#transitive-dependency).
+
+### Library Package
+
+A package that other packages will depend on. Library packages may have
+[dependencies](#dependency) on other packages *and* may be dependencies
+themselves. They may also include scripts that will be run directly. The
+opposite of a library package is an [application package](#application-package).
+
+Library packages should not check their [lockfile](#lockfile) into source
+control, since they should work with a wide variety of dependency versions.
+Their [immediate dependencies](#immediate-dependency)' [version
+constraints](#version-constraints) should be as wide as possible while still
+ensuring that the dependencies will compatible with the versions that were
+tested against.
+
+Since [semantic versioning](http://semver.org) requires that libraries increment
+their major version numbers for any backwards incompatible changes, library
+packages will usually require their dependencies' versions to be greater than or
+equal to the versions that were tested and less than the next major version. So
+if your library depended on the (fictional) `transmogrify` package and you
+tested it at version 1.2.1, your version constraint would be `">=1.2.1 <2.0.0"`.
 
 ### Lockfile
 
@@ -76,3 +112,20 @@ A dependency that your package indirectly uses because one of its dependencies
 requires it. If your package depends on A, which in turn depends on B which
 depends on C, then A is an [immediate dependency](#immediate-dependency) and B
 and C are transitive ones.
+
+### Version Constraint
+
+A constraint placed on a each [dependency](#dependency) of a package that
+specifies which versions of that dependency the package is expected to work
+with. This can be a single version (e.g. `0.3.0`), a range of versions (e.g.
+`">=1.2.1 <2.0.0"`), or `any` (or just empty) to specify that any version is
+allowed.
+
+[Library packages](#library-package) should always specify version constraints
+for all of their dependencies, but [application packages](#application-package)
+should usually allow any version of their dependencies, since they use the
+[lockfile](#lockfile) to manage their dependency versions.
+
+See also documentation on [version constraint
+formatting](/doc/pubspec.html#version-constraints) and [the philosophy behind
+Pub's versioning scheme](/doc/versioning.html).
