@@ -238,7 +238,7 @@ class PackageVersions(object):
             new_version = PackageVersion.from_archive(f)
 
         with models.transaction():
-            # Reload the old version in case anything changed
+            # Reload the old version in case anything (e.g. sort order) changed.
             version = PackageVersion.get(key)
             if new_version.package.latest_version == version:
                 new_version.package.latest_version = new_version

@@ -34,7 +34,7 @@ class Root(object):
         reload_status = PackageVersion.get_reload_status()
         if reload_status is not None:
             reload_status['percentage'] = '%d%%' % (
-                100.0 * reload_status['count']/reload_status['total'])
+                100.0 * reload_status['count'] / reload_status['total'])
 
         return handlers.render('admin',
                                reload_status=reload_status,
