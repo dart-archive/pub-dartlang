@@ -104,6 +104,14 @@ def is_production():
     """Return whether we're running in production mode."""
     return bool(os.environ.get('DATACENTER'))
 
+def is_dev_server():
+    """Return whether we're running on locally or on AppEngine.
+
+    Note that this returns True in tests so that the test appear to run in a
+    non-dev-server-like environment.
+    """
+    return os.environ['SERVER_SOFTWARE'].startswith('Development')
+
 def request():
     """Return the current Request instance."""
     if not hasattr(cherrypy.request, 'pub_data'):

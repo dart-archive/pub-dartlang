@@ -3,6 +3,7 @@
 # BSD-style license that can be found in the LICENSE file.
 
 import base64
+import os
 import unittest
 from cStringIO import StringIO
 
@@ -57,6 +58,11 @@ class TestCase(unittest.TestCase):
         self.testbed.init_user_stub()
 
         self.testapp = webtest.TestApp(Application())
+
+        # Pretend we are running on AppEngine so that things like the error
+        # page that behave differently when run locally act like they do in
+        # production.
+        os.environ['SERVER_SOFTWARE'] = 'Google App Engine/TESTING'
 
         # This private key is not actually used for anything other than testing.
         PrivateKey.set('''-----BEGIN RSA PRIVATE KEY-----
@@ -214,9 +220,8 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         Arguments:
           response: The webtest response object to check.
         """
-        # TODO(nweiz): Make a better error page that's easier to detect
-        error_pre = self.html(response).find('pre', id='traceback')
-        self.assertTrue(error_pre is not None, "expected error page")
+        error = self.html(response).find("p", "error-message")
+        self.assertTrue(error is not None, "expected error page")
 
     def html(self, response):
         """Parse a webtest response with BeautifulSoup.
