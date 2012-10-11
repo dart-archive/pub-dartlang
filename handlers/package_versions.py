@@ -253,6 +253,7 @@ class PackageVersions(object):
             if new_version.package.latest_version == version:
                 new_version.package.latest_version = new_version
             new_version.created = version.created
+            new_version.downloads = version.downloads
             new_version.sort_order = version.sort_order
             version.delete()
             new_version.put()

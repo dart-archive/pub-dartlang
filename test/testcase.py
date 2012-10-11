@@ -284,6 +284,7 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         taskqueue_stub = self.testbed.get_stub(TASKQUEUE_SERVICE_NAME)
         for task in taskqueue_stub.GetTasks(queue):
             deferred.run(base64.b64decode(task['body']))
+        taskqueue_stub.FlushQueue(queue)
 
     def _link_exists(self, response, url):
         """Return whether or not the response contains a link to the given url.

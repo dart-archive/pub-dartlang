@@ -197,10 +197,34 @@ class PackageVersionsTest(TestCase):
                          'http://localhost:80/gs_/packages/' +
                          'test-package-1.2.3.tar.gz')
 
+    def test_show_package_version_tar_gz_increments_downloads(self):
+        self.be_admin_user()
+        self.post_package_version('1.2.3')
+        self.post_package_version('1.2.4')
+
+        response = self.testapp.get(
+            '/packages/test-package/versions/1.2.3.tar.gz')
+        response = self.testapp.get(
+            '/packages/test-package/versions/1.2.4.tar.gz')
+
         self.run_deferred_tasks()
         version = self.get_package_version('1.2.3')
         self.assertEqual(version.downloads, 1)
-        self.assertEqual(version.package.downloads, 1)
+        self.assertEqual(version.package.downloads, 2)
+        version = self.get_package_version('1.2.4')
+        self.assertEqual(version.downloads, 1)
+        self.assertEqual(version.package.downloads, 2)
+
+        response = self.testapp.get(
+            '/packages/test-package/versions/1.2.3.tar.gz')
+
+        self.run_deferred_tasks()
+        version = self.get_package_version('1.2.3')
+        self.assertEqual(version.downloads, 2)
+        self.assertEqual(version.package.downloads, 3)
+        version = self.get_package_version('1.2.4')
+        self.assertEqual(version.downloads, 1)
+        self.assertEqual(version.package.downloads, 3)
 
     def test_show_package_version_yaml(self):
         version = self.package_version(self.package, '1.2.3',
@@ -265,6 +289,20 @@ class PackageVersionsTest(TestCase):
         version = PackageVersion.get_by_name_and_version(
             'test-package', '1.2.4')
         self.assertEqual(2, version.sort_order)
+
+    def test_reload_preserves_downloads(self):
+        self.be_admin_user()
+        self.post_package_version('1.2.3')
+
+        response = self.testapp.get(
+            '/packages/test-package/versions/1.2.3.tar.gz')
+
+        self.testapp.post('/packages/versions/reload')
+        self.run_deferred_tasks()
+
+        version = PackageVersion.get_by_name_and_version(
+            'test-package', '1.2.3')
+        self.assertEqual(1, version.downloads)
 
     def post_package_version(self, version, name='test-package'):
         response = self.create_package(
