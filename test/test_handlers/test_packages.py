@@ -120,16 +120,4 @@ class PackagesTest(TestCase):
         """
         url = '/packages'
         if page != 1: url += '?page=%d' % page
-        response = self.testapp.get(url)
-        for tr in self.html(response).select("tbody tr"):
-            if not expected_order:
-                self.fail("more packages were listed than expected: %s" % tr)
-            elif expected_order[0] in ''.join(tr.strings):
-                del expected_order[0]
-            else:
-                self.fail("expected package '%s' in element %s" %
-                          (expected_order[0], tr))
-
-        self.assertEqual(expected_order, [],
-                         "<tr>s not found for packages: %s" % expected_order)
-        
+        self.assert_list_in_html(url, "tbody tr", expected_order)

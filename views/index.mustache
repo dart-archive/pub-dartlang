@@ -2,16 +2,37 @@
     for details. All rights reserved. Use of this source code is governed by a
     BSD-style license that can be found in the LICENSE file. }}
 
-<div class="hero-unit">
+<div class="well">
   <h1>Welcome to pub.dartlang.org!</h1>
   <p>
     This is your friendly repository of packages of software for the
-    <a href="http://dartlang.org">Dart programming language</a>. Explore 
-    packages here and install them using <strong>pub</strong>, the package 
+    <a href="http://dartlang.org">Dart programming language</a>. Explore
+    packages here and install them using <strong>pub</strong>, the package
     manager for Dart.
   </p>
-  <p>
-    <a class="btn btn-primary btn-large" href="/doc">Learn more</a>
-    <a class="btn btn-primary btn-large" href="/packages">Browse packages</a>
-  </p>
+  <a class="btn btn-primary" href="/doc">Get started</a>
 </div>
+<h2>Recently updated packages</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Package</th>
+      <th>Version</th>
+      <th>Description</th>
+      <th width="100">Updated</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#recent_packages}}
+      <tr>
+        <th><a href="/packages/{{name}}">{{name}}</a></th>
+        <td><span class="version">{{latest_version.version}}</span></td>
+        <td>{{#description}}{{ellipsized_description}}{{/description}}</td>
+        <td>{{short_updated}}</td>
+      </tr>
+    {{/recent_packages}}
+    <tr>
+      <td colspan="4"><a href="/packages">More packages...</a></td>
+    </tr>
+  </tbody>
+</table>

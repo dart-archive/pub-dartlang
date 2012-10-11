@@ -8,13 +8,14 @@ import cherrypy
 
 from handlers import cloud_storage
 import handlers
+from models.package import Package
 
 class Root(object):
     """The handler for /*."""
 
     def index(self):
         """Retrieves the front page of the package server."""
-        return handlers.render('index')
+        return handlers.render('index', recent_packages=Package.all().fetch(5))
 
     def site_map(self):
         """Retrieves a map of the site."""

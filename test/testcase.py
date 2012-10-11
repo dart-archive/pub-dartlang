@@ -250,6 +250,26 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         error_msg = "expected response body not to contain a link to '%s'" % url
         self.assertFalse(self._link_exists(response, url), error_msg)
 
+    def assert_list_in_html(self, url, query, expected_items):
+        """Assert that the items matching the query match the given list. There
+        must be as many items in the query as in the list, and each query result
+        must contain the list item in its text.
+
+        Arguments:
+          expected_order: A list of package names.
+        """
+        response = self.testapp.get(url)
+        for html in self.html(response).select(query):
+            if not expected_items:
+                self.fail("more items were listed than expected: %s" % html)
+            elif expected_items[0] in ''.join(html.strings):
+                del expected_items[0]
+            else:
+                self.fail("expected '%s' in %s" % (expected_items[0], html))
+
+        self.assertEqual(expected_items, [],
+                "Query '%s' missing items: %s" % (query, expected_items))
+
     def run_deferred_tasks(self, queue='default'):
         """Run all tasks that have been deferred.
 
