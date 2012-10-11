@@ -84,7 +84,8 @@ class Application(cherrypy.Application):
         self.dispatcher.mapper.resource(member_name, collection_name, **kwargs)
 
 def _error_page(status, message, traceback, version):
-    if not users.is_current_user_admin():
+    # Don't show tracebacks to end users.
+    if not handlers.is_dev_server() and not users.is_current_user_admin():
         traceback = None
 
     return str(handlers.render('error',
