@@ -55,10 +55,10 @@ themselves. They may also include scripts that will be run directly. The
 opposite of a library package is an [application package](#application-package).
 
 Library packages should not check their [lockfile](#lockfile) into source
-control, since they should work with a wide variety of dependency versions.
-Their [immediate dependencies](#immediate-dependency)' [version
+control, since they should support a range of dependency versions. Their
+[immediate dependencies](#immediate-dependency)' [version
 constraints](#version-constraints) should be as wide as possible while still
-ensuring that the dependencies will compatible with the versions that were
+ensuring that the dependencies will be compatible with the versions that were
 tested against.
 
 Since [semantic versioning](http://semver.org) requires that libraries increment
@@ -115,7 +115,7 @@ and C are transitive ones.
 
 ### Version Constraint
 
-A constraint placed on a each [dependency](#dependency) of a package that
+A constraint placed on each [dependency](#dependency) of a package that
 specifies which versions of that dependency the package is expected to work
 with. This can be a single version (e.g. `0.3.0`), a range of versions (e.g.
 `">=1.2.1 <2.0.0"`), or `any` (or just empty) to specify that any version is

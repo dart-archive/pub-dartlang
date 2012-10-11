@@ -51,10 +51,10 @@ themselves. They may also include scripts that will be run directly. The
 opposite of a library package is an <a href="#application-package">application package</a>.</p>
 
 <p>Library packages should not check their <a href="#lockfile">lockfile</a> into source
-control, since they should work with a wide variety of dependency versions.
-Their <a href="#immediate-dependency">immediate dependencies</a>&rsquo; <a href="#version-constraints">version
+control, since they should support a range of dependency versions. Their
+<a href="#immediate-dependency">immediate dependencies</a>&rsquo; <a href="#version-constraints">version
 constraints</a> should be as wide as possible while still
-ensuring that the dependencies will compatible with the versions that were
+ensuring that the dependencies will be compatible with the versions that were
 tested against.</p>
 
 <p>Since <a href="http://semver.org">semantic versioning</a> requires that libraries increment
@@ -111,7 +111,7 @@ and C are transitive ones.</p>
 
 <h3 id="version-constraint">Version Constraint</h3>
 
-<p>A constraint placed on a each <a href="#dependency">dependency</a> of a package that
+<p>A constraint placed on each <a href="#dependency">dependency</a> of a package that
 specifies which versions of that dependency the package is expected to work
 with. This can be a single version (e.g. <code>0.3.0</code>), a range of versions (e.g.
 <code>"&gt;=1.2.1 &lt;2.0.0"</code>), or <code>any</code> (or just empty) to specify that any version is
