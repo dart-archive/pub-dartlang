@@ -29,10 +29,10 @@ expected to work with a range of dependency versions.
 
 If a lockfile already exists, `pub install` uses the versions of dependencies
 locked in it if possible. If a dependency isn't locked, pub will install the
-latest version of that dependency that satisfies all the version constraints.
-This is the primary difference between `pub install` and [`pub
-update`](pub-update.html), which always tries to install the latest versions of
-all dependencies.
+latest version of that dependency that satisfies all the [version
+constraints](glossary.html#version-constraint). This is the primary difference
+between `pub install` and [`pub update`](pub-update.html), which always tries to
+install the latest versions of all dependencies.
 
 ## Installing a new dependency
 

@@ -143,10 +143,10 @@ package itself uses directly. Pub handles
 for you.
 
 For each dependency, you specify the *name* of the package you depend on. For
-library packages, you specify the *range of versions* of that package that
-you allow. You may also specify the [*source*](glossary.html#source) which
-tells pub how the package can be located, and any additional *description* that
-the source needs to find the package.
+[library packages](glossary.html#library-package), you specify the *range of
+versions* of that package that you allow. You may also specify the
+[*source*](glossary.html#source) which tells pub how the package can be located,
+and any additional *description* that the source needs to find the package.
 
 There are a few different ways to specify dependencies based on how much of
 that data you need to provide. The shortest way is to just specify a name:
@@ -279,19 +279,19 @@ The ref can be anything that Git allows to [identify a commit][commit].
 
 ## Version constraints
 
-If your package is an application, you don't usually need to specify version
-constraints for your dependencies. You will typically want to use the latest
-versions of the dependencies when you first create your app. Then you'll create
-and check in a lockfile that pins your dependencies to those specific versions.
-Specifying version constraints in your pubpsc then is usually redundant (though
-you can do it if you want).
+If your package is an application, you don't usually need to specify [version
+constraints](glossary.html#version-constraint) for your dependencies. You will
+typically want to use the latest versions of the dependencies when you first
+create your app. Then you'll create and check in a lockfile that pins your
+dependencies to those specific versions. Specifying version constraints in your
+pubpsc then is usually redundant (though you can do it if you want).
 
-For a library package that you want users to reuse, though, it is important
-to specify version constraints. That lets people using your package know which
-versions of its dependencies they can rely on to be compatible with your
-library. Your goal is to allow a range of versions as wide as possible to give
-your users' flexibility. But it should be narrow enough to exclude versions
-that you know don't work or haven't been tested.
+For a [library package](glossary.html#library-package) that you want users to
+reuse, though, it is important to specify version constraints. That lets people
+using your package know which versions of its dependencies they can rely on to
+be compatible with your library. Your goal is to allow a range of versions as
+wide as possible to give your users' flexibility. But it should be narrow enough
+to exclude versions that you know don't work or haven't been tested.
 
 The Dart community uses [semantic versioning][], which helps you know which
 versions should work. If you know that your package works fine with `1.2.3` of

@@ -1,3 +1,18 @@
+<h3 id="application-package">Application Package</h3>
+
+<p>A package that is not intended to be used as a library. Application packages may
+have <a href="#dependency">dependencies</a> on other packages, but are never depended on
+themselves. They are usually meant to be run directly, either on the command
+line or in a browser. The opposite of an application package is a <a href="#library-package">library
+package</a>.</p>
+
+<p>Application packages should check their <a href="#lockfile">lockfiles</a> into source
+control, so that everyone working on the application and every location the
+application is deployed has a consistent set of dependencies. Because their
+dependencies are constrained by the lockfile, application packages usually
+specify <code>any</code> for their dependencies&rsquo; <a href="#version-constraint">version
+constraints</a>.</p>
+
 <h3 id="dependency">Dependency</h3>
 
 <p>Another package that your package relies on. If your package wants to import
@@ -27,6 +42,27 @@ context, it <em>is</em> the entrypoint since your app isn&rsquo;t involved.</p>
 <p>A <a href="#dependency">dependency</a> that your package directly uses itself. The
 dependencies you list in your pubspec are your package&rsquo;s immediate dependencies.
 All other dependencies are <a href="#transitive-dependency">transitive dependencies</a>.</p>
+
+<h3 id="library-package">Library Package</h3>
+
+<p>A package that other packages will depend on. Library packages may have
+<a href="#dependency">dependencies</a> on other packages <em>and</em> may be dependencies
+themselves. They may also include scripts that will be run directly. The
+opposite of a library package is an <a href="#application-package">application package</a>.</p>
+
+<p>Library packages should not check their <a href="#lockfile">lockfile</a> into source
+control, since they should support a range of dependency versions. Their
+<a href="#immediate-dependency">immediate dependencies</a>&rsquo; <a href="#version-constraints">version
+constraints</a> should be as wide as possible while still
+ensuring that the dependencies will be compatible with the versions that were
+tested against.</p>
+
+<p>Since <a href="http://semver.org">semantic versioning</a> requires that libraries increment
+their major version numbers for any backwards incompatible changes, library
+packages will usually require their dependencies&rsquo; versions to be greater than or
+equal to the versions that were tested and less than the next major version. So
+if your library depended on the (fictional) <code>transmogrify</code> package and you
+tested it at version 1.2.1, your version constraint would be <code>"&gt;=1.2.1 &lt;2.0.0"</code>.</p>
 
 <h3 id="lockfile">Lockfile</h3>
 
@@ -72,3 +108,20 @@ network.</p>
 requires it. If your package depends on A, which in turn depends on B which
 depends on C, then A is an <a href="#immediate-dependency">immediate dependency</a> and B
 and C are transitive ones.</p>
+
+<h3 id="version-constraint">Version Constraint</h3>
+
+<p>A constraint placed on each <a href="#dependency">dependency</a> of a package that
+specifies which versions of that dependency the package is expected to work
+with. This can be a single version (e.g. <code>0.3.0</code>), a range of versions (e.g.
+<code>"&gt;=1.2.1 &lt;2.0.0"</code>), or <code>any</code> (or just empty) to specify that any version is
+allowed.</p>
+
+<p><a href="#library-package">Library packages</a> should always specify version constraints
+for all of their dependencies, but <a href="#application-package">application packages</a>
+should usually allow any version of their dependencies, since they use the
+<a href="#lockfile">lockfile</a> to manage their dependency versions.</p>
+
+<p>See also documentation on <a href="/doc/pubspec.html#version-constraints">version constraint
+formatting</a> and <a href="/doc/versioning.html">the philosophy behind
+Pub&rsquo;s versioning scheme</a>.</p>

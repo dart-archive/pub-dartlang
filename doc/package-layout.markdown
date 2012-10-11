@@ -53,7 +53,7 @@ would look like:
         packages/ **
 
 \* The `pubspec.lock` will only be in source control if the package is an
-application package.
+[application package](glossary.html#application-package).
 
 \** The `packages` directories will exist locally after you're run
 `pub install`, but won't be checked into source control.
@@ -75,10 +75,11 @@ package.
   </a>
 </div>
 
-Once you've run [`pub install`](pub-install.html) or
-[`pub update`](pub-update.html) on the package, you will also have a
-**lockfile**, named `pubspec.lock`. If your package is an application package,
-this will be checked into source control. Otherwise, it won't be.
+Once you've run [`pub install`](pub-install.html) or [`pub
+update`](pub-update.html) on the package, you will also have a **lockfile**,
+named `pubspec.lock`. If your package is an [application
+package](glossary.html#application-package), this will be checked into source
+control. Otherwise, it won't be.
 
     enchilada/
       packages/
@@ -103,9 +104,9 @@ use are up to you, but please do have a README.
         enchilada.dart
         tortilla.dart
 
-Many packages are *library packages*: they define Dart libraries that other
-packages can import and use. These public Dart library files go inside a
-directory called `lib`.
+Many packages are [*library packages*](glossary.html#library-package): they
+define Dart libraries that other packages can import and use. These public Dart
+library files go inside a directory called `lib`.
 
 Most packages will define a single library that users can import. In that case,
 its name should usually be the same as the name of the package, like
