@@ -5,6 +5,7 @@
 from testcase import TestCase
 
 from models.package import Package
+from models.package_version import PackageVersion
 
 class RootTest(TestCase):
     def test_index_lists_recent_packages_in_update_order(self):
@@ -16,11 +17,10 @@ class RootTest(TestCase):
         ]
 
         for package in packages:
-            Package.new(name=package).put()
-
+            self.create_package(package, '1.0.0')
 
         # Update a package so the update times are different from create times.
-        Package.get_by_key_name('bat').put()
+        self.set_latest_version('bat', '1.0.1')
 
         # Only the five most recent packages should be listed
         self.assert_list_in_html('/', 'tbody tr th',
