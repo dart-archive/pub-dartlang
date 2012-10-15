@@ -31,9 +31,6 @@ class Package(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     """When the package was created."""
 
-    updated = db.DateTimeProperty(auto_now=True)
-    """When the package or any of its versions were last updated."""
-
     downloads = db.IntegerProperty(required=True, default=0)
     """The number of times any version of this package has been downloaded."""
 
@@ -97,6 +94,14 @@ class Package(db.Model):
             kwargs['key_name'] = kwargs['name']
 
         return cls(**kwargs)
+
+    @db.ComputedProperty
+    def updated(self):
+        """When the latest version of this package was uploaded.
+
+        This only counts latest_version; pre-release versions and older versions
+        will not affect this field."""
+        return self.latest_version and self.latest_version.created
 
     @classmethod
     def exists(cls, name):

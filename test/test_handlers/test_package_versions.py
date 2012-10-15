@@ -38,6 +38,8 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(version.version, SemanticVersion('0.0.1'))
         self.assertEqual(version.package.name, 'new-package')
 
+        self.assertEqual(package.updated, version.created)
+
     def test_new_requires_login(self):
         response = self.testapp.get('/packages/test-package/versions/new')
         self.assert_requires_login(response)
@@ -126,6 +128,8 @@ class PackageVersionsTest(TestCase):
         self.post_package_version('1.2.4')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.4'))
 
+        self.assert_package_updated_is_latest_version_created()
+
     def test_create_sets_latest_package_for_prerelease_versions_only(self):
         self.be_admin_user()
 
@@ -137,6 +141,8 @@ class PackageVersionsTest(TestCase):
 
         self.post_package_version('1.2.3-pre2')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3-pre2'))
+
+        self.assert_package_updated_is_latest_version_created()
 
     def test_create_sets_latest_package_to_old_version_over_prerelease_version(self):
         self.be_admin_user()
@@ -150,6 +156,8 @@ class PackageVersionsTest(TestCase):
         self.post_package_version('1.2.3-pre2')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.0'))
 
+        self.assert_package_updated_is_latest_version_created()
+
     def test_create_doesnt_set_latest_package_for_decreased_version_number(self):
         self.be_admin_user()
 
@@ -159,6 +167,8 @@ class PackageVersionsTest(TestCase):
         self.post_package_version('1.2.2')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
+        self.assert_package_updated_is_latest_version_created()
+
     def test_create_doesnt_set_latest_package_for_prerelease_version_number(self):
         self.be_admin_user()
 
@@ -167,6 +177,8 @@ class PackageVersionsTest(TestCase):
 
         self.post_package_version('1.2.5-pre')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
+
+        self.assert_package_updated_is_latest_version_created()
 
     def test_create_sets_sort_order(self):
         self.be_admin_user()
@@ -269,6 +281,8 @@ class PackageVersionsTest(TestCase):
         version = Package.get_by_key_name('test-package').latest_version
         self.assertEqual([], version.libraries)
 
+        self.assert_package_updated_is_latest_version_created()
+
     def test_reload_preserves_sort_order(self):
         self.be_admin_user()
         self.post_package_version('1.2.3')
@@ -336,3 +350,7 @@ class PackageVersionsTest(TestCase):
 
     def get_package_version(self, version):
         return PackageVersion.get_by_name_and_version('test-package', version)
+
+    def assert_package_updated_is_latest_version_created(self):
+        package = Package.get_by_key_name('test-package')
+        self.assertEqual(package.updated, package.latest_version.created)

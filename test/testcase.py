@@ -19,6 +19,7 @@ import yaml
 import tarfile
 
 from pub_dartlang import Application
+from models.package import Package
 from models.package_version import PackageVersion
 from models.private_key import PrivateKey
 from models.pubspec import Pubspec
@@ -162,6 +163,18 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
             user_email = self.admin_user(name).email(),
             user_is_admin = '1',
             overwrite = True)
+
+    def create_package(self, name, version):
+        """Create and save a package object with a version."""
+        Package.new(name=name).put()
+        self.set_latest_version(name, version)
+
+    def set_latest_version(self, package_name, version):
+        """Set the latest version of the given package."""
+        package = Package.get_by_key_name(package_name)
+        package.latest_version = self.package_version(package, version)
+        package.latest_version.put()
+        package.put()
 
     def package_version(self, package, version,
                        **additional_pubspec_fields):

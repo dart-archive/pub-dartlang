@@ -14,32 +14,26 @@ class PackagesTest(TestCase):
     def test_index_lists_packages_in_update_order(self):
         self.be_admin_user()
 
-        Package.new(name='armadillo').put()
-        Package.new(name='zebra').put()
-        mongoose = Package.new(name='mongoose')
-        mongoose.put()
-        Package.new(name='snail').put()
+        packages = ['armadillo', 'zebra', 'mongoose', 'snail']
+
+        for package in packages:
+            self.create_package(package, '1.0.0')
 
         # Make update time different than create time
-        mongoose.put()
+        self.set_latest_version('mongoose', '1.0.1')
 
         self.expect_lists_packages(['mongoose', 'snail', 'zebra', 'armadillo'])
 
     def test_index_lists_one_page_of_packages(self):
         self.be_admin_user()
 
-        Package.new(name='armadillo').put()
-        Package.new(name='bat').put()
-        Package.new(name='crocodile').put()
-        Package.new(name='dragon').put()
-        Package.new(name='elephant').put()
-        Package.new(name='frog').put()
-        Package.new(name='gorilla').put()
-        Package.new(name='headcrab').put()
-        Package.new(name='ibex').put()
-        Package.new(name='jaguar').put()
-        Package.new(name='kangaroo').put()
-        Package.new(name='llama').put()
+        packages = [
+            'armadillo', 'bat', 'crocodile', 'dragon', 'elephant', 'frog',
+            'gorilla', 'headcrab', 'ibex', 'jaguar', 'kangaroo', 'llama'
+        ]
+
+        for package in packages:
+            self.create_package(package, '1.0.0')
 
         # Only the ten most recent packages should be listed
         self.expect_lists_packages([
@@ -49,18 +43,13 @@ class PackagesTest(TestCase):
     def test_page_two_lists_second_page_of_packages(self):
         self.be_admin_user()
 
-        Package.new(name='armadillo').put()
-        Package.new(name='bat').put()
-        Package.new(name='crocodile').put()
-        Package.new(name='dragon').put()
-        Package.new(name='elephant').put()
-        Package.new(name='frog').put()
-        Package.new(name='gorilla').put()
-        Package.new(name='headcrab').put()
-        Package.new(name='ibex').put()
-        Package.new(name='jaguar').put()
-        Package.new(name='kangaroo').put()
-        Package.new(name='llama').put()
+        packages = [
+            'armadillo', 'bat', 'crocodile', 'dragon', 'elephant', 'frog',
+            'gorilla', 'headcrab', 'ibex', 'jaguar', 'kangaroo', 'llama'
+        ]
+
+        for package in packages:
+            self.create_package(package, '1.0.0')
 
         # Only the ten most recent packages should be listed
         self.expect_lists_packages(['bat', 'armadillo'], page=2)
