@@ -26,3 +26,6 @@ handlers:
 libraries:
 - name: pycrypto
   version: "2.6"
+
+inbound_services:
+- warmup
