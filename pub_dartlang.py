@@ -59,6 +59,8 @@ class Application(cherrypy.Application):
         with self.dispatcher.mapper.submapper(controller='versions',
                                               path_prefix='/packages/versions/',
                                               package_id=None) as m:
+            m.connect('new.:(format)', action='new',
+                      conditions={'method': ['GET', 'HEAD']})
             m.connect('new', action='new',
                       conditions={'method': ['GET', 'HEAD']})
             m.connect(':id/create', action='create')

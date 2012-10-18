@@ -71,6 +71,32 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(response.headers['Location'],
                          'http://localhost:80/admin#tab-private-key')
 
+    def test_new_json_requires_oauth(self):
+        response = self.testapp.get('/packages/test-package/versions/new.json',
+                                    status=403)
+        self.assert_json_error(response)
+
+    def test_new_json_requires_admin(self):
+        self.be_normal_oauth_user()
+        response = self.testapp.get('/packages/versions/new.json',
+                                    status=403)
+        self.assert_json_error(response)
+
+    def test_new_json_requires_uploadership(self):
+        self.be_normal_oauth_user()
+
+        response = self.testapp.get('/packages/test-package/versions/new.json',
+                                    status=403)
+        self.assert_json_error(response)
+
+    def test_new_json_requires_private_key(self):
+        self.be_admin_oauth_user()
+        PrivateKey.get_by_key_name('singleton').delete()
+
+        response = self.testapp.get('/packages/test-package/versions/new.json',
+                                    status=500)
+        self.assert_json_error(response)
+
     def test_uploader_creates_package_version(self):
         self.be_admin_user()
         self.post_package_version('1.2.3')

@@ -13,8 +13,12 @@ from bs4 import BeautifulSoup
 from Crypto.PublicKey import RSA
 from Crypto import Random
 from google.appengine.ext import deferred
-from google.appengine.ext.testbed import Testbed, TASKQUEUE_SERVICE_NAME
+from google.appengine.ext.testbed import Testbed
+from google.appengine.ext.testbed import TASKQUEUE_SERVICE_NAME
+from google.appengine.ext.testbed import USER_SERVICE_NAME
+from google.appengine.api.user_service_pb import UserServiceError
 from google.appengine.api import users
+import json
 import yaml
 import tarfile
 
@@ -84,6 +88,8 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
 9jgARPpnDYsXH1lESxmiNZucHa50qI/ezNvQx8CbNa1/+JWoZ77yqM9qnDlXUwDY
 1Sxqx9+4kthG9oyCzzUwFvhf1kTEHd0RfIapgjJ16HBQmzLnEPtjPA==
 -----END RSA PRIVATE KEY-----''')
+
+        self.dont_be_oauth_user()
 
     def tearDown(self):
         """Deactivates the stubs initialized in setUp.
@@ -164,6 +170,44 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
             user_is_admin = '1',
             overwrite = True)
 
+    def dont_be_oauth_user(self):
+        """Don't consider the user to be logged in via OAuth."""
+        self.testbed.setup_env(
+            oauth_error_code=str(UserServiceError.OAUTH_INVALID_REQUEST))
+
+    def be_normal_oauth_user(self, name=None):
+        """Log in as a non-admin OAuth user.
+
+        Arguments:
+          name: A string to distinguish this user from others. Users with
+            different names will be distinct, and the same name will always
+            refer to the same user. Admin users have a separate namespace from
+            non-admin users.
+        """
+        try: del os.environ['OAUTH_ERROR_CODE']
+        except KeyError: pass
+        self.set_oauth_user(self.normal_user(name))
+
+    def be_admin_oauth_user(self, name=None):
+        """Log in as an admin OAuth user.
+
+        Arguments:
+          name: A string to distinguish this user from others. Users with
+            different names will be distinct, and the same name will always
+            refer to the same user. Admin users have a separate namespace from
+            non-admin users.
+        """
+        try: del os.environ['OAUTH_ERROR_CODE']
+        except KeyError: pass
+        self.set_oauth_user(self.admin_user(name))
+
+    def set_oauth_user(self, user):
+        """Set the user that is logged in via OAuth."""
+        self.testbed.get_stub(USER_SERVICE_NAME).SetOAuthUser(
+            email=user.email(),
+            user_id=user.user_id() or '0',
+            is_admin=user.email().startswith('test-admin'))
+
     def create_package(self, name, version):
         """Create and save a package object with a version."""
         Package.new(name=name).put()
@@ -235,6 +279,10 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         """
         error = self.html(response).find("p", "error-message")
         self.assertTrue(error is not None, "expected error page")
+
+    def assert_json_error(self, response):
+        """Assert that the given response is a JSON error."""
+        self.assertTrue("error" in json.loads(response.body))
 
     def html(self, response):
         """Parse a webtest response with BeautifulSoup.

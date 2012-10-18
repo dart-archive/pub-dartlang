@@ -8,8 +8,10 @@ import os
 
 import cherrypy
 from decorator import decorator
+from google.appengine.api import oauth
 from google.appengine.api import users
 from google.appengine.ext import db
+import json
 import pystache
 import routes
 
@@ -77,6 +79,28 @@ def http_error(status, message=None):
     if message: message = message.encode('utf-8')
     raise cherrypy.HTTPError(status, message)
 
+def json_error(status, message):
+    """Throw an HTTP error for a JSON response.
+
+    This wraps the error message in a JSON object.
+    """
+    message = message.encode('utf-8')
+    raise JsonError(status, message)
+
+class JsonError(cherrypy.HTTPError):
+    """The error class for JSON responses.
+
+    This class causes a JSON-formatted response, with the correct content-type.
+    """
+
+    def set_response(self):
+        """Set the response data for this error."""
+        cherrypy.response.status = self.status
+        cherrypy.response.headers['Content-Type'] = 'application/json'
+        cherrypy.response.body = json.dumps({
+            "error": {"message": self._message}
+        })
+
 @decorator
 def handle_validation_errors(fn, *args, **kwargs):
     """Convert validation errors into user-friendly behavior.
@@ -99,6 +123,44 @@ def handle_validation_errors(fn, *args, **kwargs):
         # TODO(nweiz): auto-fill the form values from
         # cherrypy.request.params
         raise cherrypy.HTTPRedirect(request().url(action=new_action))
+
+def get_current_user():
+    """Return the current db.User object, or None.
+
+    Unlike users.get_current_user, this will return the user object for OAuth
+    requests as well.
+    """
+    user = users.get_current_user()
+    if user: return user
+    try: return oauth.get_current_user()
+    except oauth.OAuthRequestError, e: return None
+
+_OAUTH_ADMINS = [
+    'gram@google.com',
+    'jmesserly@google.com',
+    'nweiz@google.com',
+    'rnystrom@google.com',
+    'sethladd@google.com',
+    'sigmund@google.com',
+    'vsm@google.com',
+]
+"""Emails of administrators for this app.
+
+AppEngine keeps track of these automatically for normal browser requests, but it
+doesn't store the admin bit in a way that's accessible from OAuth, so we have to
+store a copy of these here.
+
+From https://appengine.google.com/permissions?&app_id=s~dartlang-pub.
+"""
+
+def is_current_user_admin():
+    """Return whether there is a logged-in admin.
+
+    Unlike users.is_current_user_admin, this will return true if an admin is
+    logged in via OAuth.
+    """
+    return users.is_current_user_admin() or \
+        os.environ.get('OAUTH_IS_ADMIN') == '1'
 
 def is_production():
     """Return whether we're running in production mode."""

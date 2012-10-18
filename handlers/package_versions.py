@@ -14,6 +14,7 @@ from google.appengine.ext import db
 from google.appengine.ext import deferred
 from google.appengine.api import files
 from google.appengine.api import memcache
+from google.appengine.api import oauth
 from google.appengine.api import users
 
 import handlers
@@ -37,46 +38,68 @@ class PackageVersions(object):
             versions=package.version_set.order('-sort_order').run(),
             layout={'title': 'All versions of %s' % package.name})
 
-    def new(self, package_id):
+    def new(self, package_id, format='html', **kwargs):
         """Retrieve the form for uploading a package version.
 
         If the user isn't logged in, this presents a login screen. If they are
         logged in but don't have admin priviliges or don't own the package, this
         redirects to /packages/.
+
+        This accepts arbitrary keyword arguments to support OAuth.
         """
-        user = users.get_current_user()
+        is_json = format == 'json'
+        user = handlers.get_current_user()
+
         package = handlers.request().maybe_package
         if not user:
-            raise cherrypy.HTTPRedirect(
-                users.create_login_url(cherrypy.url()))
+            if is_json:
+                handlers.json_error(403, 'OAuth authentication failed.')
+            else:
+                raise cherrypy.HTTPRedirect(
+                    users.create_login_url(cherrypy.url()))
         elif package and package.owner != user:
-            handlers.flash("You don't down package '%s'" % package.name)
-            raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
-        elif not users.is_current_user_admin():
-            handlers.flash('Currently only admins may create packages.')
-            raise cherrypy.HTTPRedirect('/packages')
+            message = "You don't own package '%s'." % package.name
+            if is_json:
+                handlers.json_error(403, message)
+            else:
+                handlers.flash(message)
+                raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
+        elif not handlers.is_current_user_admin():
+            message = 'Currently only admins may create packages.'
+            if is_json:
+                handlers.json_error(403, message)
+            else:
+                handlers.flash(message)
+                raise cherrypy.HTTPRedirect('/packages')
         elif PrivateKey.get() is None:
-            raise cherrypy.HTTPRedirect('/admin#tab-private-key')
+            if is_json:
+                handlers.json_error(500, 'No private key set.')
+            else:
+                raise cherrypy.HTTPRedirect('/admin#tab-private-key')
 
         id = str(uuid4())
         redirect_url = handlers.request().url(action="create", id=id)
-        form = cloud_storage.upload_form("tmp/" + id, acl="project-private",
-                                         size_range=(0, Package.MAX_SIZE),
-                                         success_redirect=redirect_url)
+        upload = cloud_storage.Upload("tmp/" + id, acl="project-private",
+                                      size_range=(0, Package.MAX_SIZE),
+                                      success_redirect=redirect_url)
 
         # If the package hasn't been validated and moved out of tmp in five
         # minutes, delete it. This could happen if the user uploads the package
         # to cloud storage, but closes the browser before "create" is run.
         deferred.defer(self._remove_tmp_package, id, _countdown=5*60)
 
+        if is_json:
+            cherrypy.response.headers['Content-Type'] = 'application/json'
+            return upload.to_json()
+
         if package is not None:
             title = 'Upload a new version of %s' % package.name
         else:
             title = 'Upload a new package'
 
-        return handlers.render("packages/versions/new",
-                               form=form, package=package,
-                               layout={'title': title})
+            return handlers.render("packages/versions/new",
+                                   form=upload.to_form(), package=package,
+                                   layout={'title': title})
 
     def _remove_tmp_package(self, id):
         """Try to remove an orphaned package upload."""
