@@ -107,7 +107,7 @@ class PackageVersions(object):
         except: logging.error('Error deleting temporary object ' + id)
 
     @handlers.handle_validation_errors
-    def create(self, package_id, id):
+    def create(self, package_id, id, **kwargs):
         """Create a new package version.
 
         This creates a single package version. It will also create all the
@@ -128,21 +128,22 @@ class PackageVersions(object):
             if 'id' in route: del route['id']
 
             package = handlers.request().maybe_package
-            if package and package.owner != users.get_current_user():
+            if package and package.owner != handlers.get_current_user():
                 handlers.http_error(
                     403, "You don't down package '%s'" % package.name)
-            elif not users.is_current_user_admin():
+            elif not handlers.is_current_user_admin():
                 handlers.http_error(403, "Only admins may create packages.")
 
             try:
                 with closing(cloud_storage.read('tmp/' + id)) as f:
-                    version = PackageVersion.from_archive(f)
+                    version = PackageVersion.from_archive(
+                        f, owner=handlers.get_current_user())
             except (KeyError, files.ExistenceError):
                 handlers.http_error(
                     403, "Package upload " + id + " does not exist.")
 
             if version.package.is_saved():
-                if version.package.owner != users.get_current_user():
+                if version.package.owner != handlers.get_current_user():
                     handlers.http_error(
                         403, "You don't own package '%s'." % package.name)
                 elif version.package.has_version(version.version):
