@@ -107,7 +107,7 @@ class PackageVersions(object):
         except: logging.error('Error deleting temporary object ' + id)
 
     @handlers.handle_validation_errors
-    def create(self, package_id, id, **kwargs):
+    def create(self, package_id, id, format='html', **kwargs):
         """Create a new package version.
 
         This creates a single package version. It will also create all the
@@ -124,31 +124,38 @@ class PackageVersions(object):
         """
 
         try:
+            is_json = format == 'json'
+
             route = handlers.request().route
             if 'id' in route: del route['id']
 
             package = handlers.request().maybe_package
             if package and package.owner != handlers.get_current_user():
-                handlers.http_error(
-                    403, "You don't down package '%s'" % package.name)
+                handlers.request().error(
+                    403, "You don't own package '%s'" % package.name)
             elif not handlers.is_current_user_admin():
-                handlers.http_error(403, "Only admins may create packages.")
+                handlers.request().error(
+                    403, "Only admins may create packages.")
 
             try:
                 with closing(cloud_storage.read('tmp/' + id)) as f:
                     version = PackageVersion.from_archive(
                         f, owner=handlers.get_current_user())
             except (KeyError, files.ExistenceError):
-                handlers.http_error(
+                handlers.request().error(
                     403, "Package upload " + id + " does not exist.")
 
             if version.package.is_saved():
                 if version.package.owner != handlers.get_current_user():
-                    handlers.http_error(
-                        403, "You don't own package '%s'." % package.name)
+                    handlers.request().error(
+                        403, "You don't own package '%s'." %
+                                 version.package.name)
                 elif version.package.has_version(version.version):
-                    handlers.flash('Package "%s" already has version "%s".' %
-                                   (version.package.name, version.version))
+                    message = 'Package "%s" already has version "%s".' % \
+                        (version.package.name, version.version)
+                    if is_json: handlers.json_error(400, message)
+
+                    handlers.flash(message)
                     url = handlers.request().url(
                         action='new', package_id=version.package.name)
                     raise cherrypy.HTTPRedirect(url)
@@ -168,8 +175,13 @@ class PackageVersions(object):
 
             deferred.defer(self._compute_version_order, version.package.name)
 
-            handlers.flash('%s %s uploaded successfully.' %
-                           (version.package.name, version.version))
+            message = '%s %s uploaded successfully.' % \
+                (version.package.name, version.version)
+            if is_json:
+                cherrypy.response.headers['Content-Type'] = 'application/json'
+                return json.dumps({"success": {"message": message}})
+
+            handlers.flash(message)
             raise cherrypy.HTTPRedirect('/packages/%s' % version.package.name)
         finally:
             cloud_storage.delete_object('tmp/' + id)

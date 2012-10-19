@@ -112,6 +112,8 @@ def handle_validation_errors(fn, *args, **kwargs):
 
     try: return fn(*args, **kwargs)
     except (db.BadKeyError, db.BadValueError) as err:
+        if request().is_json: json_error(400, str(err))
+
         flash(err)
 
         new_action = 'index'
@@ -210,6 +212,22 @@ class Request(object):
             mapper = routes.request_config().mapper
             self._route = mapper.match(self.request.path_info)
         return self._route
+
+    def error(self, status, message):
+        """Throw an appropriately-formatted error.
+
+        If this is a JSON request, a JSON error is thrown; otherwise, an HTML
+        error is thrown.
+        """
+        if self.is_json:
+            json_error(status, message)
+        else:
+            http_error(status, message)
+
+    @property
+    def is_json(self):
+        """Whether the current request is JSON-formatted."""
+        return self.request.params.get('format') == 'json'
 
     @property
     def package(self):

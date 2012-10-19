@@ -64,6 +64,7 @@ class Application(cherrypy.Application):
             m.connect('new', action='new',
                       conditions={'method': ['GET', 'HEAD']})
             m.connect(':id/create', action='create')
+            m.connect(':id/create.:(format)', action='create')
             m.connect('upload', action='upload', conditions={'method': 'POST'})
             m.connect('reload', action='reload', conditions={'method': 'POST'})
             m.connect('reload', action='reload_status',

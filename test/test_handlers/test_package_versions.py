@@ -3,10 +3,12 @@
 # BSD-style license that can be found in the LICENSE file.
 
 import re
+import json
 import yaml
 
 from google.appengine.api import users
 
+import handlers
 from testcase import TestCase
 from models.package import Package
 from models.package_version import PackageVersion
@@ -27,6 +29,27 @@ class PackageVersionsTest(TestCase):
         self.assertTrue(package is not None)
         self.assertEqual(package.name, 'new-package')
         self.assertEqual(package.owner, users.get_current_user())
+
+        version = package.version_set.get()
+        self.assertTrue(version is not None)
+        self.assertEqual(version.version, SemanticVersion('0.0.1'))
+        self.assertEqual(version.package.name, 'new-package')
+
+        version = package.latest_version
+        self.assertTrue(version is not None)
+        self.assertEqual(version.version, SemanticVersion('0.0.1'))
+        self.assertEqual(version.package.name, 'new-package')
+
+        self.assertEqual(package.updated, version.created)
+
+    def test_admin_creates_new_package_with_json(self):
+        self.be_admin_oauth_user()
+        self.post_package_version_with_json(name='new-package', version='0.0.1')
+
+        package = Package.get_by_key_name('new-package')
+        self.assertTrue(package is not None)
+        self.assertEqual(package.name, 'new-package')
+        self.assertEqual(package.owner, handlers.get_current_user())
 
         version = package.version_set.get()
         self.assertTrue(version is not None)
@@ -107,11 +130,30 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(version.package.name, 'test-package')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
+    def test_uploader_creates_package_version_with_json(self):
+        self.be_admin_user()
+        self.post_package_version_with_json('1.2.3')
+
+        version = self.get_package_version('1.2.3')
+        self.assertTrue(version is not None)
+        self.assertEqual(version.version, SemanticVersion('1.2.3'))
+        self.assertEqual(version.package.name, 'test-package')
+        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
+
     def test_create_requires_admin(self):
         self.be_normal_user()
 
         response = self.testapp.get('/packages/versions/abcd/create',
                                     status=403)
+        self.assert_error_page(response)
+
+    def test_create_requires_uploader(self):
+        self.be_normal_user('owner')
+        Package.new(name='owned-package').put()
+        self.be_normal_user()
+
+        response = self.testapp.get(
+            '/packages/owned-package/versions/abcd/create', status=403)
         self.assert_error_page(response)
 
     def test_create_requires_uploader(self):
@@ -141,6 +183,39 @@ class PackageVersionsTest(TestCase):
             response.headers['Location'],
             'http://localhost:80/packages/test-package/versions/new')
         self.assertTrue(response.cookies_set.has_key('flash'))
+
+        version = self.get_package_version('1.2.3')
+        self.assertEqual(version.pubspec['description'], 'old')
+
+    def test_create_json_requires_admin(self):
+        self.be_normal_oauth_user()
+
+        response = self.testapp.get('/packages/versions/abcd/create.json',
+                                    status=403)
+        self.assert_json_error(response)
+
+    def test_create_json_requires_uploader(self):
+        Package.new(name='owned-package', owner=self.normal_user('owner')).put()
+        self.be_normal_oauth_user()
+
+        response = self.testapp.get(
+            '/packages/owned-package/versions/abcd/create.json', status=403)
+        self.assert_json_error(response)
+
+    def test_create_json_requires_valid_id(self):
+        self.be_admin_oauth_user()
+
+        response = self.testapp.get(
+            '/packages/versions/abcd/create.json', status=403)
+        self.assert_json_error(response)
+
+    def test_create_json_requires_new_version_number(self):
+        self.be_admin_oauth_user()
+        self.package_version(self.package, '1.2.3', description='old').put()
+
+        upload = self.upload_archive('test-package', '1.2.3', description='new')
+        response = self.create_package_with_json(upload, status=400)
+        self.assert_json_error(response)
 
         version = self.get_package_version('1.2.3')
         self.assertEqual(version.pubspec['description'], 'old')
@@ -365,6 +440,29 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(post_response.status_int, 302)
         self.assertTrue(re.match(
                 r'^http://localhost:80/packages/versions/[^/]+/create$',
+                post_response.headers['Location']))
+
+        path = post_response.headers['Location'].replace(
+            'http://localhost:80', '')
+        return self.testapp.get(path, status=status)
+
+    def post_package_version_with_json(self, version, name='test-package'):
+        response = self.create_package_with_json(
+            self.upload_archive(name, version))
+        self.assertEqual(response.status_int, 200)
+        self.assertTrue("success" in json.loads(response.body))
+
+    def create_package_with_json(self, upload, status=None):
+        get_response = self.testapp.get('/packages/versions/new.json')
+        self.assertEqual(get_response.status_int, 200)
+        content = json.loads(get_response.body)
+        post_response = self.testapp.post(str(content['url']),
+                                          content['fields'],
+                                          upload_files=[upload])
+
+        self.assertEqual(post_response.status_int, 302)
+        self.assertTrue(re.match(
+                r'^http://localhost:80/packages/versions/[^/]+/create\.json$',
                 post_response.headers['Location']))
 
         path = post_response.headers['Location'].replace(
