@@ -59,9 +59,12 @@ class Application(cherrypy.Application):
         with self.dispatcher.mapper.submapper(controller='versions',
                                               path_prefix='/packages/versions/',
                                               package_id=None) as m:
+            m.connect('new.:(format)', action='new',
+                      conditions={'method': ['GET', 'HEAD']})
             m.connect('new', action='new',
                       conditions={'method': ['GET', 'HEAD']})
             m.connect(':id/create', action='create')
+            m.connect(':id/create.:(format)', action='create')
             m.connect('upload', action='upload', conditions={'method': 'POST'})
             m.connect('reload', action='reload', conditions={'method': 'POST'})
             m.connect('reload', action='reload_status',

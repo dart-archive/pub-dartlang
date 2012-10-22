@@ -81,7 +81,7 @@ class PackageVersion(db.Model):
         return version
 
     @classmethod
-    def from_archive(cls, file):
+    def from_archive(cls, file, owner=None):
         """Load a package version from a .tar.gz archive.
 
         If the package specified in the archive already exists, it will be
@@ -98,7 +98,11 @@ class PackageVersion(db.Model):
             pubspec = Pubspec.from_archive(tar)
             name = pubspec.required('name')
             package = Package.get_by_key_name(name)
-            if not package: package = Package.new(name=name)
+            if not package:
+                if owner:
+                    package = Package.new(name=name, owner=owner)
+                else:
+                    package = Package.new(name=name)
 
             libraries = sorted(name[4:] for name in tar.getnames()
                                if name.startswith('lib/') and
