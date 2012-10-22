@@ -210,7 +210,7 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
 
     def create_package(self, name, version):
         """Create and save a package object with a version."""
-        Package.new(name=name).put()
+        Package.new(name=name, uploaders=[users.get_current_user()]).put()
         self.set_latest_version(name, version)
 
     def set_latest_version(self, package_name, version):
@@ -232,7 +232,8 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         return PackageVersion.new(
             version=version,
             package=package,
-            pubspec=pubspec)
+            pubspec=pubspec,
+            uploader=package.uploaders[0])
 
     def tar_package(self, pubspec, files={}):
         """Return a tarfile containing the given pubspec.

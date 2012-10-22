@@ -41,7 +41,8 @@ class Packages(object):
             versions = [str(version.version) for version in package.version_set]
             return json.dumps({
                 "name": package.name,
-                "owner": package.owner.email(),
+                "uploaders": [uploader.email() for uploader
+                              in package.uploaders],
                 "versions": versions
             })
         elif format == 'html':
@@ -55,7 +56,7 @@ class Packages(object):
                 versions=package.version_set.order('-sort_order').fetch(10),
                 version_count=version_count,
                 show_versions_link=version_count > 10,
-                is_uploader=package.owner == users.get_current_user(),
+                is_uploader=users.get_current_user() in package.uploaders,
                 layout={'title': title})
         else:
             raise handlers.http_error(404)

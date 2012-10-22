@@ -18,7 +18,8 @@ from models.semantic_version import SemanticVersion
 class PackageVersionsTest(TestCase):
     def setUp(self):
         super(PackageVersionsTest, self).setUp()
-        self.package = Package.new(name='test-package', owner=self.admin_user())
+        self.package = Package.new(name='test-package',
+                                   uploaders=[self.admin_user()])
         self.package.put()
 
     def test_admin_creates_new_package(self):
@@ -28,7 +29,7 @@ class PackageVersionsTest(TestCase):
         package = Package.get_by_key_name('new-package')
         self.assertIsNotNone(package)
         self.assertEqual(package.name, 'new-package')
-        self.assertEqual(package.owner, users.get_current_user())
+        self.assertEqual(package.uploaders, [users.get_current_user()])
 
         version = package.version_set.get()
         self.assertIsNotNone(version)
@@ -49,7 +50,7 @@ class PackageVersionsTest(TestCase):
         package = Package.get_by_key_name('new-package')
         self.assertIsNotNone(package)
         self.assertEqual(package.name, 'new-package')
-        self.assertEqual(package.owner, handlers.get_current_user())
+        self.assertEqual(package.uploaders, [handlers.get_current_user()])
 
         version = package.version_set.get()
         self.assertIsNotNone(version)
@@ -148,8 +149,8 @@ class PackageVersionsTest(TestCase):
         self.assert_error_page(response)
 
     def test_create_requires_uploader(self):
-        self.be_normal_user('owner')
-        Package.new(name='owned-package').put()
+        Package.new(name='owned-package',
+                    uploaders=[self.normal_user('owner')]).put()
         self.be_normal_user()
 
         response = self.testapp.get(
@@ -157,8 +158,8 @@ class PackageVersionsTest(TestCase):
         self.assert_error_page(response)
 
     def test_create_requires_uploader(self):
-        self.be_normal_user('owner')
-        Package.new(name='owned-package').put()
+        Package.new(name='owned-package',
+                    uploaders=[self.normal_user('owner')]).put()
         self.be_normal_user()
 
         response = self.testapp.get(
@@ -195,7 +196,8 @@ class PackageVersionsTest(TestCase):
         self.assert_json_error(response)
 
     def test_create_json_requires_uploader(self):
-        Package.new(name='owned-package', owner=self.normal_user('owner')).put()
+        Package.new(name='owned-package',
+                    uploaders=[self.normal_user('owner')]).put()
         self.be_normal_oauth_user()
 
         response = self.testapp.get(

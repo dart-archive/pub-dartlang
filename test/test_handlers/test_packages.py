@@ -58,35 +58,34 @@ class PackagesTest(TestCase):
         self.testapp.get('/packages/package/test-package', status=404)
 
     def test_get_unowned_package(self):
-        self.be_admin_user()
-        Package.new(name='test-package').put()
+        Package.new(name='test-package', uploaders=[self.admin_user()]).put()
 
         self.be_normal_user()
         response = self.testapp.get('/packages/test-package')
         self.assert_no_link(response, '/packages/test-package/versions/new')
 
     def test_get_owned_package(self):
-        self.be_admin_user()
-        Package.new(name='test-package').put()
+        Package.new(name='test-package', uploaders=[self.admin_user()]).put()
 
+        self.be_admin_user()
         response = self.testapp.get('/packages/test-package')
         self.assert_link(response, '/packages/test-package/versions/new')
 
     def test_get_package_json_without_versions(self):
         admin = self.admin_user()
-        Package.new(name='test-package', owner=admin).put()
+        Package.new(name='test-package', uploaders=[admin]).put()
 
         response = self.testapp.get('/packages/test-package.json')
         self.assertEqual(response.headers['Content-Type'], 'application/json')
         self.assertEqual(json.loads(response.body), {
             "name": "test-package",
-            "owner": admin.email(),
+            "uploaders": [admin.email()],
             "versions": []
         })
 
     def test_get_package_json_with_versions(self):
         admin = self.admin_user()
-        package = Package.new(name='test-package', owner=admin)
+        package = Package.new(name='test-package', uploaders=[admin])
         package.put()
 
         self.package_version(package, '1.1.0').put()
@@ -97,7 +96,7 @@ class PackagesTest(TestCase):
         self.assertEqual(response.headers['Content-Type'], 'application/json')
         self.assertEqual(json.loads(response.body), {
             "name": "test-package",
-            "owner": admin.email(),
+            "uploaders": [admin.email()],
             "versions": ['1.1.0', '1.1.1', '1.2.0']
         })
 

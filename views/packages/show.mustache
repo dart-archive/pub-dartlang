@@ -12,7 +12,7 @@
     {{/package.description}}
     <table>
       <tr>
-        <th>Authors</th>
+        <th>{{package.authors_title}}</th>
         <td>{{& package.authors_html}}</td>
       </tr>
       {{#package.homepage}}
@@ -22,8 +22,8 @@
         </tr>
       {{/package.homepage}}
       <tr>
-        <th>Uploader</th>
-        <td>{{package.owner.nickname}}</td>
+        <th>{{package.uploaders_title}}</th>
+        <td>{{& package.uploaders_html}}</td>
       </tr>
       <tr>
         <th>Versions</th>

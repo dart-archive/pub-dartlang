@@ -33,3 +33,8 @@ def ellipsize(string, max):
 
     if len(string) <= max: return string
     return _ELLIPSIZE_RE.sub("...", string[0:max])
+
+def validate_not_empty(list):
+    """Validate that the value of a list property is not empty."""
+    if len(list) == 0:
+        raise db.BadValueError("List property must not be empty.")
