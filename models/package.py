@@ -69,9 +69,8 @@ class Package(db.Model):
     @property
     def authors_title(self):
         """The title for the authors list of the package."""
-        title = 'Author'
-        if len(self.latest_version.pubspec.authors) != 1: title += 's'
-        return title
+        return 'Author' if len(self.latest_version.pubspec.authors) == 1 \
+            else 'Authors'
 
     @property
     def authors_html(self):
@@ -92,9 +91,8 @@ class Package(db.Model):
     @property
     def uploaders_title(self):
         """The title for the uploaders list of the package."""
-        title = 'Uploader'
-        if len(self.uploaders) != 1: title += 's'
-        return title
+        return 'Uploader' if len(self.latest_version.pubspec.authors) == 1 \
+            else 'Uploaders'
 
     @property
     def uploaders_html(self):
