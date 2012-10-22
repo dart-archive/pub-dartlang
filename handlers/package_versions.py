@@ -288,22 +288,30 @@ class PackageVersions(object):
         with models.transaction():
             # Reload the old version in case anything (e.g. sort order) changed.
             version = PackageVersion.get(key)
+            package = version.package
+
+            if len(package.uploaders) > 0:
+                uploaders = package.uploaders
+            else:
+                uploaders = [package.owner]
+            package.uploaders = uploaders
 
             # We don't load new_version.package.latest_version here for two
             # reasons. One is to avoid a needless data store lookup; the other
             # is because it's possible that that version is being reloaded in
             # another transaction and thus in a weird transitional state.
             latest_version_key = Package.latest_version.get_value_for_datastore(
-                new_version.package)
+                package)
             if latest_version_key == key:
-                new_version.package.latest_version = new_version
+                package.latest_version = new_version
 
             new_version.created = version.created
             new_version.downloads = version.downloads
             new_version.sort_order = version.sort_order
+            new_version.uploader = new_version.uploader or uploaders[0]
             version.delete()
             new_version.put()
-            new_version.package.put()
+            package.put()
 
         memcache.incr('versions_reloaded')
 
