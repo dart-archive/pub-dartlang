@@ -9,8 +9,6 @@ from models.package_version import PackageVersion
 
 class PackageVersionTest(TestCase):
     def test_imports_from_archive(self):
-        self.be_admin_user()
-
         pubspec = {'name': 'test-package', 'version': '1.0.0'}
         archive = self.tar_package(pubspec, {
             'lib/foo.dart': '',
@@ -19,7 +17,8 @@ class PackageVersionTest(TestCase):
             'lib/zip': '',
             'lib/src/foo.dart': '',
         })
-        version = PackageVersion.from_archive(StringIO(archive))
+        version = PackageVersion.from_archive(StringIO(archive),
+                                              uploader=self.admin_user())
 
         self.assertEqual(['bar/foo.dart', 'bar/src/foo.dart', 'foo.dart'],
                          version.libraries)

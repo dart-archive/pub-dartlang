@@ -4,6 +4,7 @@
 
 import cgi
 
+from google.appengine.api import users
 from google.appengine.ext import db
 
 import models
@@ -20,10 +21,15 @@ class Package(db.Model):
     MAX_SIZE = 10 * 2**20 # 10MB
     """The maximum package size, in bytes."""
 
-    # TODO(nweiz): This should more properly be called "uploader". Change the
-    # name once we support multiple uploaders for each package.
-    owner = db.UserProperty(required=True, auto_current_user_add=True)
+    # TODO(nweiz): This property is deprecated. "uploaders" should be used
+    # instead.
+    owner = db.UserProperty(auto_current_user_add=True)
     """The user who is allowed to upload new versions of the package."""
+
+    # TODO(nweiz): This should have "validator=models.validate_not_empty" once
+    # all packages have migrated to use uploaders rather than owner.
+    uploaders = db.ListProperty(users.User)
+    """The users who are allowed to upload new versions of the package."""
 
     name = db.StringProperty(required=True)
     """The name of the package."""
@@ -75,6 +81,12 @@ class Package(db.Model):
                  cgi.escape(email))
 
         return ', '.join(map(author_html, self.latest_version.pubspec.authors))
+
+    @property
+    def uploaders_html(self):
+        """Inline HTML for the uploaders of this package."""
+        return ', '.join(cgi.escape(uploader.nickname())
+                         for uploader in self.uploaders)
 
     @property
     def short_updated(self):

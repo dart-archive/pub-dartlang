@@ -52,6 +52,11 @@ class PackageVersion(db.Model):
 
     Lower numbers indicate earlier versions."""
 
+    # TODO(nweiz): This should have "required=True" once all package versions
+    # have migrated to have uploaders.
+    uploader = db.UserProperty()
+    """The user who uploaded this package version."""
+
     @classmethod
     def new(cls, **kwargs):
         """Construct a new package version.
@@ -81,7 +86,7 @@ class PackageVersion(db.Model):
         return version
 
     @classmethod
-    def from_archive(cls, file, owner=None):
+    def from_archive(cls, file, uploader):
         """Load a package version from a .tar.gz archive.
 
         If the package specified in the archive already exists, it will be
@@ -90,6 +95,7 @@ class PackageVersion(db.Model):
 
         Arguments:
           file: An open file object containing a .tar.gz archive.
+          uploader: The user who uploaded this package archive.
 
         Returns: Both the Package object and the PackageVersion object.
         """
@@ -99,10 +105,8 @@ class PackageVersion(db.Model):
             name = pubspec.required('name')
             package = Package.get_by_key_name(name)
             if not package:
-                if owner:
-                    package = Package.new(name=name, owner=owner)
-                else:
-                    package = Package.new(name=name)
+                assert uploader is not None
+                package = Package.new(name=name, uploaders=[uploader])
 
             libraries = sorted(name[4:] for name in tar.getnames()
                                if name.startswith('lib/') and
@@ -110,7 +114,8 @@ class PackageVersion(db.Model):
                                    name.endswith('.dart'))
 
             return PackageVersion.new(
-                package=package, pubspec=pubspec, libraries=libraries)
+                package=package, pubspec=pubspec, libraries=libraries,
+                uploader=uploader)
         except (tarfile.TarError, KeyError) as err:
             raise db.BadValueError(
                 "Error parsing package archive: %s" % err)

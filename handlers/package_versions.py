@@ -57,8 +57,8 @@ class PackageVersions(object):
             else:
                 raise cherrypy.HTTPRedirect(
                     users.create_login_url(cherrypy.url()))
-        elif package and package.owner != user:
-            message = "You don't own package '%s'." % package.name
+        elif package and user not in package.uploaders:
+            message = "You aren't an uploader for package '%s'." % package.name
             if is_json:
                 handlers.json_error(403, message)
             else:
@@ -130,9 +130,10 @@ class PackageVersions(object):
             if 'id' in route: del route['id']
 
             package = handlers.request().maybe_package
-            if package and package.owner != handlers.get_current_user():
+            if package and handlers.get_current_user() not in package.uploaders:
                 handlers.request().error(
-                    403, "You don't own package '%s'" % package.name)
+                    403, "You aren't an uploader for package '%s'." %
+                             package.name)
             elif not handlers.is_current_user_admin():
                 handlers.request().error(
                     403, "Only admins may create packages.")
@@ -140,15 +141,15 @@ class PackageVersions(object):
             try:
                 with closing(cloud_storage.read('tmp/' + id)) as f:
                     version = PackageVersion.from_archive(
-                        f, owner=handlers.get_current_user())
+                        f, uploader=handlers.get_current_user())
             except (KeyError, files.ExistenceError):
                 handlers.request().error(
                     403, "Package upload " + id + " does not exist.")
 
             if version.package.is_saved():
-                if version.package.owner != handlers.get_current_user():
+                if handlers.get_current_user() not in version.package.uploaders:
                     handlers.request().error(
-                        403, "You don't own package '%s'." %
+                        403, "You aren't an uploader for package '%s'." %
                                  version.package.name)
                 elif version.package.has_version(version.version):
                     message = 'Package "%s" already has version "%s".' % \
@@ -281,7 +282,8 @@ class PackageVersions(object):
 
         version = PackageVersion.get(key)
         with closing(cloud_storage.read(version.storage_path)) as f:
-            new_version = PackageVersion.from_archive(f)
+            new_version = PackageVersion.from_archive(
+                f, uploader=version.uploader)
 
         with models.transaction():
             # Reload the old version in case anything (e.g. sort order) changed.
