@@ -7,6 +7,7 @@
 from contextlib import contextmanager
 import re
 
+from decorator import decorator
 from google.appengine.ext import db
 
 @contextmanager
@@ -16,6 +17,15 @@ def transaction():
 
     Meant to be used with the 'with' keyword."""
     yield
+
+@decorator
+def transactional(fn, *args, **kwargs):
+    """Like db.transactional, but preserves the original method signature.
+
+    This is useful for wrapping handler actions, since CherryPy inspects the
+    parameters to determine when to return a 404 response.
+    """
+    with transaction(): return fn(*args, **kwargs)
 
 _ELLIPSIZE_RE = re.compile(r"(\s+[^\s]*)?$")
 

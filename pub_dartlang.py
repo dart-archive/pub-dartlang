@@ -20,6 +20,7 @@ import handlers
 from handlers.doc import Doc
 from handlers.root import Root
 from handlers.packages import Packages
+from handlers.package_uploaders import PackageUploaders
 from handlers.package_versions import PackageVersions
 from handlers.private_keys import PrivateKeys
 
@@ -73,6 +74,12 @@ class Application(cherrypy.Application):
         self.dispatcher.mapper.connect('/packages/versions/create',
                                        controller='versions',
                                        action='create')
+
+        self._resource('uploader', 'uploaders', PackageUploaders(),
+                       parent_resource={
+                         'member_name': 'package',
+                         'collection_name': 'packages'
+                       })
 
         # Set up custom error page.
         cherrypy.config.update({'error_page.default': _error_page})
