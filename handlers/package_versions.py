@@ -290,8 +290,6 @@ class PackageVersions(object):
             version = PackageVersion.get(key)
             package = version.package
 
-            if len(package.uploaders) == 0: package.uploaders = [package.owner]
-
             # We don't load new_version.package.latest_version here for two
             # reasons. One is to avoid a needless data store lookup; the other
             # is because it's possible that that version is being reloaded in
@@ -304,7 +302,6 @@ class PackageVersions(object):
             new_version.created = version.created
             new_version.downloads = version.downloads
             new_version.sort_order = version.sort_order
-            new_version.uploader = new_version.uploader or package.uploaders[0]
             version.delete()
             new_version.put()
             package.put()

@@ -52,9 +52,7 @@ class PackageVersion(db.Model):
 
     Lower numbers indicate earlier versions."""
 
-    # TODO(nweiz): This should have "required=True" once all package versions
-    # have migrated to have uploaders.
-    uploader = db.UserProperty()
+    uploader = db.UserProperty(required=True)
     """The user who uploaded this package version."""
 
     @classmethod

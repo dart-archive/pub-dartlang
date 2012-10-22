@@ -21,14 +21,7 @@ class Package(db.Model):
     MAX_SIZE = 10 * 2**20 # 10MB
     """The maximum package size, in bytes."""
 
-    # TODO(nweiz): This property is deprecated. "uploaders" should be used
-    # instead.
-    owner = db.UserProperty(auto_current_user_add=True)
-    """The user who is allowed to upload new versions of the package."""
-
-    # TODO(nweiz): This should have "validator=models.validate_not_empty" once
-    # all packages have migrated to use uploaders rather than owner.
-    uploaders = db.ListProperty(users.User)
+    uploaders = db.ListProperty(users.User, validator=models.validate_not_empty)
     """The users who are allowed to upload new versions of the package."""
 
     name = db.StringProperty(required=True)
