@@ -7,6 +7,7 @@
 In development, this should be run using the App Engine dev_appserver.py script.
 """
 
+import json
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), 'third_party'))
@@ -90,6 +91,10 @@ def _error_page(status, message, traceback, version):
     # Don't show tracebacks to end users.
     if not handlers.is_dev_server() and not users.is_current_user_admin():
         traceback = None
+
+    if handlers.request().is_json:
+        cherrypy.response.headers['Content-Type'] = 'application/json'
+        return json.dumps({'error': {'message': message}})
 
     return str(handlers.render('error',
         status=status,
