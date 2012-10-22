@@ -134,8 +134,10 @@ def get_current_user():
     """
     user = users.get_current_user()
     if user: return user
-    try: return oauth.get_current_user()
-    except oauth.OAuthRequestError, e: return None
+    try:
+        return oauth.get_current_user()
+    except oauth.OAuthRequestError, e:
+        return None
 
 _OAUTH_ADMINS = [
     'gram@google.com',

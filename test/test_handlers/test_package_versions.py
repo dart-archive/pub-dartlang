@@ -26,17 +26,17 @@ class PackageVersionsTest(TestCase):
         self.post_package_version(name='new-package', version='0.0.1')
 
         package = Package.get_by_key_name('new-package')
-        self.assertTrue(package is not None)
+        self.assertIsNotNone(package)
         self.assertEqual(package.name, 'new-package')
         self.assertEqual(package.owner, users.get_current_user())
 
         version = package.version_set.get()
-        self.assertTrue(version is not None)
+        self.assertIsNotNone(version)
         self.assertEqual(version.version, SemanticVersion('0.0.1'))
         self.assertEqual(version.package.name, 'new-package')
 
         version = package.latest_version
-        self.assertTrue(version is not None)
+        self.assertIsNotNone(version)
         self.assertEqual(version.version, SemanticVersion('0.0.1'))
         self.assertEqual(version.package.name, 'new-package')
 
@@ -47,17 +47,17 @@ class PackageVersionsTest(TestCase):
         self.post_package_version_with_json(name='new-package', version='0.0.1')
 
         package = Package.get_by_key_name('new-package')
-        self.assertTrue(package is not None)
+        self.assertIsNotNone(package)
         self.assertEqual(package.name, 'new-package')
         self.assertEqual(package.owner, handlers.get_current_user())
 
         version = package.version_set.get()
-        self.assertTrue(version is not None)
+        self.assertIsNotNone(version)
         self.assertEqual(version.version, SemanticVersion('0.0.1'))
         self.assertEqual(version.package.name, 'new-package')
 
         version = package.latest_version
-        self.assertTrue(version is not None)
+        self.assertIsNotNone(version)
         self.assertEqual(version.version, SemanticVersion('0.0.1'))
         self.assertEqual(version.package.name, 'new-package')
 
@@ -125,7 +125,7 @@ class PackageVersionsTest(TestCase):
         self.post_package_version('1.2.3')
 
         version = self.get_package_version('1.2.3')
-        self.assertTrue(version is not None)
+        self.assertIsNotNone(version)
         self.assertEqual(version.version, SemanticVersion('1.2.3'))
         self.assertEqual(version.package.name, 'test-package')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
@@ -135,7 +135,7 @@ class PackageVersionsTest(TestCase):
         self.post_package_version_with_json('1.2.3')
 
         version = self.get_package_version('1.2.3')
-        self.assertTrue(version is not None)
+        self.assertIsNotNone(version)
         self.assertEqual(version.version, SemanticVersion('1.2.3'))
         self.assertEqual(version.package.name, 'test-package')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
