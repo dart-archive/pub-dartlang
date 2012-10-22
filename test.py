@@ -24,6 +24,9 @@ SDK_PATH    Path to the SDK installation.
             Auto-detected if dev_appserver.py is on $PATH."""
 
 parser = optparse.OptionParser(USAGE)
+parser.add_option('-n', '--name', help='the name of the test to run',
+                  metavar='NAME')
+
 options, args = parser.parse_args()
 sdk_path = None
 if len(args) > 1:
@@ -49,5 +52,6 @@ dev_appserver.fix_sys_path()
 import pub_dartlang
 
 test_path = os.path.join(os.path.dirname(__file__), 'test')
-suite = unittest.loader.TestLoader().discover(test_path)
-unittest.TextTestRunner(verbosity = 2).run(suite)
+loader = unittest.loader.TestLoader()
+if options.name: loader.testMethodPrefix = options.name
+unittest.TextTestRunner(verbosity = 2).run(loader.discover(test_path))
