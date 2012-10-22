@@ -139,6 +139,8 @@ def get_current_user():
     except oauth.OAuthRequestError, e:
         return None
 
+# TODO(nweiz): get rid of this once we no longer have any mixed OAuth/cookie
+# login actions.
 _OAUTH_ADMINS = [
     'gram@google.com',
     'jmesserly@google.com',
