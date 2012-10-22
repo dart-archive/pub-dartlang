@@ -38,6 +38,7 @@ class PackageVersions(object):
             versions=package.version_set.order('-sort_order').run(),
             layout={'title': 'All versions of %s' % package.name})
 
+    @handlers.json_action
     def new(self, package_id, format='html', **kwargs):
         """Retrieve the form for uploading a package version.
 
@@ -88,9 +89,7 @@ class PackageVersions(object):
         # to cloud storage, but closes the browser before "create" is run.
         deferred.defer(self._remove_tmp_package, id, _countdown=5*60)
 
-        if is_json:
-            cherrypy.response.headers['Content-Type'] = 'application/json'
-            return upload.to_json()
+        if is_json: return upload.to_json()
 
         if package is not None:
             title = 'Upload a new version of %s' % package.name
@@ -107,6 +106,7 @@ class PackageVersions(object):
         except: logging.error('Error deleting temporary object ' + id)
 
     @handlers.handle_validation_errors
+    @handlers.json_action
     def create(self, package_id, id, format='html', **kwargs):
         """Create a new package version.
 
@@ -178,9 +178,7 @@ class PackageVersions(object):
 
             message = '%s %s uploaded successfully.' % \
                 (version.package.name, version.version)
-            if is_json:
-                cherrypy.response.headers['Content-Type'] = 'application/json'
-                return json.dumps({"success": {"message": message}})
+            if is_json: return handlers.json_success(message)
 
             handlers.flash(message)
             raise cherrypy.HTTPRedirect('/packages/%s' % version.package.name)
@@ -308,7 +306,8 @@ class PackageVersions(object):
 
         memcache.incr('versions_reloaded')
 
-    def reload_status(self, package_id):
+    @handlers.json_action
+    def reload_status(self, package_id, format):
         """Return the status of the current package reload.
 
         This is a JSON map. If the reload is finished, it will contain only a
@@ -317,7 +316,7 @@ class PackageVersions(object):
         packages to reload and the number that have been reloaded so far,
         respectively.
         """
-        if not users.is_current_user_admin(): cherrypy.http_error(403)
-        cherrypy.response.headers['Content-Type'] = 'application/json'
+        if not users.is_current_user_admin():
+            handlers.json_error(403, "Permission denied.")
         reload_status = PackageVersion.get_reload_status()
         return json.dumps(reload_status or {'done': True})

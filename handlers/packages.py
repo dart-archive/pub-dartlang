@@ -33,11 +33,11 @@ class Packages(object):
                                pagination=pager.render_pagination(),
                                layout={'title': title})
 
+    @handlers.json_action
     def show(self, id, format='html'):
         """Retrieve the page describing a specific package."""
         if format == 'json':
             package = handlers.request().package
-            cherrypy.response.headers['Content-Type'] = 'application/json'
             versions = [str(version.version) for version in package.version_set]
             return json.dumps({
                 "name": package.name,

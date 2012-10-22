@@ -451,8 +451,7 @@ class PackageVersionsTest(TestCase):
     def post_package_version_with_json(self, version, name='test-package'):
         response = self.create_package_with_json(
             self.upload_archive(name, version))
-        self.assertEqual(response.status_int, 200)
-        self.assertTrue("success" in json.loads(response.body))
+        self.assert_json_success(response)
 
     def create_package_with_json(self, upload, status=None):
         get_response = self.testapp.get('/packages/versions/new.json')

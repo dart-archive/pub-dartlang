@@ -101,6 +101,15 @@ class JsonError(cherrypy.HTTPError):
             "error": {"message": self._message}
         })
 
+def json_success(message):
+    """Return a successful JSON response.
+
+    Unlike json_error, this doesn't raise an exception, so its return value must
+    be manually passed along.
+    """
+    cherrypy.response.headers['Content-Type'] = 'application/json'
+    return json.dumps({"success": {"message": message}})
+
 @decorator
 def handle_validation_errors(fn, *args, **kwargs):
     """Convert validation errors into user-friendly behavior.
@@ -125,6 +134,31 @@ def handle_validation_errors(fn, *args, **kwargs):
         # TODO(nweiz): auto-fill the form values from
         # cherrypy.request.params
         raise cherrypy.HTTPRedirect(request().url(action=new_action))
+
+@decorator
+def json_action(fn, *args, **kwargs):
+    """A decorator for actions that can be JSON-formatted.
+
+    If the current request is JSON-formatted, this sets the content-type and
+    ensures that any errors are JSON-formatted. Otherwise, the request proceeds
+    unaltered.
+    """
+
+    if not request().is_json: return fn(*args, **kwargs)
+
+    try:
+        cherrypy.response.headers['Content-Type'] = 'application/json'
+        return fn(*args, **kwargs)
+    except JsonError as err:
+        raise err
+    except cherrypy.HTTPError as err:
+        raise JsonError(err.status, err.message)
+    except (db.BadKeyError, db.BadValueError) as err:
+        raise JsonError(400, err.message)
+    except oauth.OAuthRequestError as err:
+        raise JsonError(403, "OAuth authentication failed.")
+    except Exception as err:
+        raise JsonError(500, err.message)
 
 def get_current_user():
     """Return the current db.User object, or None.
