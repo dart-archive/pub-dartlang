@@ -67,6 +67,13 @@ class Package(db.Model):
         return self.latest_version.pubspec.get('homepage')
 
     @property
+    def authors_title(self):
+        """The title for the authors list of the package."""
+        title = 'Author'
+        if len(self.latest_version.pubspec.authors) != 1: title += 's'
+        return title
+
+    @property
     def authors_html(self):
         """Inline HTML for the authors of this package."""
         if self.latest_version is None: return ''
@@ -81,6 +88,13 @@ class Package(db.Model):
                  cgi.escape(email))
 
         return ', '.join(map(author_html, self.latest_version.pubspec.authors))
+
+    @property
+    def uploaders_title(self):
+        """The title for the uploaders list of the package."""
+        title = 'Uploader'
+        if len(self.uploaders) != 1: title += 's'
+        return title
 
     @property
     def uploaders_html(self):
