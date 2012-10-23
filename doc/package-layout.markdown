@@ -117,8 +117,8 @@ When you do, users can import these libraries using the name of the package and
 the library file, like so:
 
 {% highlight dart %}
-#import("package:enchilada/enchilada.dart");
-#import("package:enchilada/tortilla.dart");
+import "package:enchilada/enchilada.dart";
+import "package:enchilada/tortilla.dart";
 {% endhighlight %}
 
 If you feel the need to organize your public libraries, you can also create
@@ -134,7 +134,7 @@ they import it. Say you have a file hierarchy like this:
 Users will import `olives.dart` like:
 
 {% highlight dart %}
-#import("package:enchilada/some/path/olives.dart");
+import "package:enchilada/some/path/olives.dart";
 {% endhighlight %}
 
 ## Implementation files
@@ -162,7 +162,7 @@ can (and should) still use `"package:"` to import them. This is perfectly
 legit:
 
 {% highlight dart %}
-#import("package:enchilada/src/beans.dart");
+import "package:enchilada/src/beans.dart";
 {% endhighlight %}
 
 The name you use here (in this case `enchilada`) is the name you specify for

@@ -16,7 +16,7 @@ Once the dependencies are installed, they may be referenced in Dart code. For
 example, if a package depends on `unittest`:
 
 {% highlight dart %}
-#import("package:unittest/unittest.dart);
+import "package:unittest/unittest.dart;
 {% endhighlight %}
 
 When `pub install` installs new dependencies, it writes a
