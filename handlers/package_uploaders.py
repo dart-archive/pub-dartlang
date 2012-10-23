@@ -33,3 +33,35 @@ class PackageUploaders(object):
         return handlers.json_success(
             "'%s' added as an uploader for package '%s'." %
                 (email, package.name))
+
+    @handlers.json_action
+    @models.transactional
+    def delete(self, package_id, id, format):
+        """Delete one of this package's uploaders.
+
+        Only uploaders may delete uploaders. If only one uploader remains, that
+        uploader may not be deleted until a new one is added.
+        """
+
+        package = handlers.request().package
+        if oauth.get_current_user() not in package.uploaders:
+            handlers.json_error(
+                403, "You aren't an uploader for package '%s'." %
+                         package.name)
+
+        user_to_delete = users.User(id)
+        if user_to_delete not in package.uploaders:
+            handlers.json_error(
+                400, "'%s' isn't an uploader for package '%s'." %
+                         (user_to_delete.nickname(), package.name))
+
+        if len(package.uploaders) == 1:
+            handlers.json_error(
+                400, ("Package '%s' only has one uploader, so that uploader " +
+                          "can't be removed.") % package.name)
+
+        package.uploaders.remove(user_to_delete)
+        package.put()
+        return handlers.json_success(
+            "'%s' is no longer an uploader for package '%s'." %
+                (id, package.name))
