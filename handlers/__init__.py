@@ -79,18 +79,12 @@ def http_error(status, message=None):
     if message: message = message.encode('utf-8')
     raise cherrypy.HTTPError(status, message)
 
-def json_error(status, message):
-    """Throw an HTTP error for a JSON response.
-
-    This wraps the error message in a JSON object.
-    """
-    message = message.encode('utf-8')
-    raise JsonError(status, message)
-
 class JsonError(cherrypy.HTTPError):
     """The error class for JSON responses.
 
     This class causes a JSON-formatted response, with the correct content-type.
+    It's usually unneccessary to throw this directly, since json_action takes
+    care of converting other exceptions.
     """
 
     def set_response(self):
@@ -102,11 +96,7 @@ class JsonError(cherrypy.HTTPError):
         })
 
 def json_success(message):
-    """Return a successful JSON response.
-
-    Unlike json_error, this doesn't raise an exception, so its return value must
-    be manually passed along.
-    """
+    """Return a successful JSON response."""
     cherrypy.response.headers['Content-Type'] = 'application/json'
     return json.dumps({"success": {"message": message}})
 
@@ -250,17 +240,6 @@ class Request(object):
             mapper = routes.request_config().mapper
             self._route = mapper.match(self.request.path_info)
         return self._route
-
-    def error(self, status, message):
-        """Throw an appropriately-formatted error.
-
-        If this is a JSON request, a JSON error is thrown; otherwise, an HTML
-        error is thrown.
-        """
-        if self.is_json:
-            json_error(status, message)
-        else:
-            http_error(status, message)
 
     @property
     def is_json(self):

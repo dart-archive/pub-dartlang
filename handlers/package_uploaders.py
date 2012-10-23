@@ -24,7 +24,7 @@ class PackageUploaders(object):
 
         package = handlers.request().package
         if oauth.get_current_user() not in package.uploaders:
-            handlers.json_error(
+            handlers.http_error(
                 403, "You aren't an uploader for package '%s'." %
                          package.name)
 
@@ -45,18 +45,18 @@ class PackageUploaders(object):
 
         package = handlers.request().package
         if oauth.get_current_user() not in package.uploaders:
-            handlers.json_error(
+            handlers.http_error(
                 403, "You aren't an uploader for package '%s'." %
                          package.name)
 
         user_to_delete = users.User(id)
         if user_to_delete not in package.uploaders:
-            handlers.json_error(
+            handlers.http_error(
                 400, "'%s' isn't an uploader for package '%s'." %
                          (user_to_delete.nickname(), package.name))
 
         if len(package.uploaders) == 1:
-            handlers.json_error(
+            handlers.http_error(
                 400, ("Package '%s' only has one uploader, so that uploader " +
                           "can't be removed.") % package.name)
 

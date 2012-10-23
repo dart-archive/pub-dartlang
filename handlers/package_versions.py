@@ -54,27 +54,27 @@ class PackageVersions(object):
         package = handlers.request().maybe_package
         if not user:
             if is_json:
-                handlers.json_error(403, 'OAuth authentication failed.')
+                handlers.http_error(403, 'OAuth authentication failed.')
             else:
                 raise cherrypy.HTTPRedirect(
                     users.create_login_url(cherrypy.url()))
         elif package and user not in package.uploaders:
             message = "You aren't an uploader for package '%s'." % package.name
             if is_json:
-                handlers.json_error(403, message)
+                handlers.http_error(403, message)
             else:
                 handlers.flash(message)
                 raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
         elif not handlers.is_current_user_admin():
             message = 'Currently only admins may create packages.'
             if is_json:
-                handlers.json_error(403, message)
+                handlers.http_error(403, message)
             else:
                 handlers.flash(message)
                 raise cherrypy.HTTPRedirect('/packages')
         elif PrivateKey.get() is None:
             if is_json:
-                handlers.json_error(500, 'No private key set.')
+                handlers.http_error(500, 'No private key set.')
             else:
                 raise cherrypy.HTTPRedirect('/admin#tab-private-key')
 
@@ -131,11 +131,11 @@ class PackageVersions(object):
 
             package = handlers.request().maybe_package
             if package and handlers.get_current_user() not in package.uploaders:
-                handlers.request().error(
+                handlers.http_error(
                     403, "You aren't an uploader for package '%s'." %
                              package.name)
             elif not handlers.is_current_user_admin():
-                handlers.request().error(
+                handlers.http_error(
                     403, "Only admins may create packages.")
 
             try:
@@ -143,18 +143,18 @@ class PackageVersions(object):
                     version = PackageVersion.from_archive(
                         f, uploader=handlers.get_current_user())
             except (KeyError, files.ExistenceError):
-                handlers.request().error(
+                handlers.http_error(
                     403, "Package upload " + id + " does not exist.")
 
             if version.package.is_saved():
                 if handlers.get_current_user() not in version.package.uploaders:
-                    handlers.request().error(
+                    handlers.http_error(
                         403, "You aren't an uploader for package '%s'." %
                                  version.package.name)
                 elif version.package.has_version(version.version):
                     message = 'Package "%s" already has version "%s".' % \
                         (version.package.name, version.version)
-                    if is_json: handlers.json_error(400, message)
+                    if is_json: handlers.http_error(400, message)
 
                     handlers.flash(message)
                     url = handlers.request().url(
@@ -317,6 +317,6 @@ class PackageVersions(object):
         respectively.
         """
         if not users.is_current_user_admin():
-            handlers.json_error(403, "Permission denied.")
+            handlers.http_error(403, "Permission denied.")
         reload_status = PackageVersion.get_reload_status()
         return json.dumps(reload_status or {'done': True})
