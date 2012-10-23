@@ -7,6 +7,7 @@
 In development, this should be run using the App Engine dev_appserver.py script.
 """
 
+import json
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), 'third_party'))
@@ -19,6 +20,7 @@ import handlers
 from handlers.doc import Doc
 from handlers.root import Root
 from handlers.packages import Packages
+from handlers.package_uploaders import PackageUploaders
 from handlers.package_versions import PackageVersions
 from handlers.private_keys import PrivateKeys
 
@@ -67,11 +69,17 @@ class Application(cherrypy.Application):
             m.connect(':id/create.:(format)', action='create')
             m.connect('upload', action='upload', conditions={'method': 'POST'})
             m.connect('reload', action='reload', conditions={'method': 'POST'})
-            m.connect('reload', action='reload_status',
+            m.connect('reload.:(format)', action='reload_status',
                       conditions={'method': 'GET'})
         self.dispatcher.mapper.connect('/packages/versions/create',
                                        controller='versions',
                                        action='create')
+
+        self._resource('uploader', 'uploaders', PackageUploaders(),
+                       parent_resource={
+                         'member_name': 'package',
+                         'collection_name': 'packages'
+                       })
 
         # Set up custom error page.
         cherrypy.config.update({'error_page.default': _error_page})
@@ -90,6 +98,10 @@ def _error_page(status, message, traceback, version):
     # Don't show tracebacks to end users.
     if not handlers.is_dev_server() and not users.is_current_user_admin():
         traceback = None
+
+    if handlers.request().is_json:
+        cherrypy.response.headers['Content-Type'] = 'application/json'
+        return json.dumps({'error': {'message': message}})
 
     return str(handlers.render('error',
         status=status,

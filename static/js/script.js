@@ -16,7 +16,7 @@ $(function() {
   if (reload.length != 0) {
     var reloadInterval = setInterval(function() {
       $.ajax({
-        url: "/packages/versions/reload",
+        url: "/packages/versions/reload.json",
         dataType: "json"
       }).done(function(data) {
         if (data['done']) {

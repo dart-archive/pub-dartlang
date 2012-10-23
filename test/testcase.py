@@ -285,6 +285,11 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         """Assert that the given response is a JSON error."""
         self.assertTrue("error" in json.loads(response.body))
 
+    def assert_json_success(self, response):
+        """Assert that the given response is a JSON success."""
+        self.assertEqual(response.status_int, 200)
+        self.assertTrue("success" in json.loads(response.body))
+
     def html(self, response):
         """Parse a webtest response with BeautifulSoup.
 
