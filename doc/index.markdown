@@ -152,7 +152,7 @@ it. To access a library in a another package, you will import it using the
 `package:` scheme:
 
 {% highlight dart %}
-#import('package:transmogrify/transmogrify.dart');
+import 'package:transmogrify/transmogrify.dart';
 {% endhighlight %}
 
 This looks inside the `transmogrify` package for a top-level file named
@@ -180,7 +180,7 @@ For example, let's say your package is laid out like:
 The `parser_test` file *could* import `parser.dart` like this:
 
 {% highlight dart %}
-#import('../../lib/parser.dart');
+import '../../lib/parser.dart';
 {% endhighlight %}
 
 But that's a pretty nasty relative path. If `parser_test.dart` is ever moved
@@ -188,7 +188,7 @@ up or down a directory, that path will break and you'll have to fix the code.
 Instead, you can do:
 
 {% highlight dart %}
-#import('package:transmogrify/parser.dart');
+import 'package:transmogrify/parser.dart';
 {% endhighlight %}
 
 This way, the import can always get to `parser.dart` regardless of where the
