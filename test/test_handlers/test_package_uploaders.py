@@ -26,6 +26,14 @@ class PackageUploadsTest(TestCase):
                                      status=403)
         self.assert_json_error(response)
 
+    def test_create_requires_new_uploader(self):
+        self.be_admin_oauth_user()
+        response = self.testapp.post(
+            '/packages/test-package/uploaders.json',
+            {'email': self.normal_user('uploader').email()},
+            status=400)
+        self.assert_json_error(response)
+
     def test_uploader_creates_new_uploader(self):
         self.be_admin_oauth_user()
         response = self.testapp.post('/packages/test-package/uploaders.json',

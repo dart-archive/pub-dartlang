@@ -28,7 +28,13 @@ class PackageUploaders(object):
                 403, "You aren't an uploader for package '%s'." %
                          package.name)
 
-        package.uploaders.append(users.User(email))
+        user_to_add = users.User(email)
+        if user_to_add in package.uploaders:
+            handlers.http_error(
+                400, "User '%s' is already an uploader for package '%s'." %
+                         (email, package.name))
+
+        package.uploaders.append(user_to_add)
         package.put()
         return handlers.json_success(
             "'%s' added as an uploader for package '%s'." %
