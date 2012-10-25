@@ -168,10 +168,8 @@ def get_oauth_user():
 
     Throws an oauth.OAuthRequestError if the OAuth request is invalid.
     """
-    user = oauth.get_current_user(
+    return oauth.get_current_user(
         'https://www.googleapis.com/auth/userinfo.email')
-    print "OAuth user: %s" % user
-    return user
 
 # TODO(nweiz): get rid of this once we no longer have any mixed OAuth/cookie
 # login actions.
