@@ -173,7 +173,8 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
     def dont_be_oauth_user(self):
         """Don't consider the user to be logged in via OAuth."""
         self.testbed.setup_env(
-            oauth_error_code=str(UserServiceError.OAUTH_INVALID_REQUEST))
+            oauth_error_code=str(UserServiceError.OAUTH_INVALID_REQUEST),
+            oauth_last_scope='https://www.googleapis.com/auth/userinfo.email')
 
     def be_normal_oauth_user(self, name=None):
         """Log in as a non-admin OAuth user.

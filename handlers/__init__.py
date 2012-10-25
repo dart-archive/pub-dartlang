@@ -159,9 +159,17 @@ def get_current_user():
     user = users.get_current_user()
     if user: return user
     try:
-        return oauth.get_current_user()
+        return get_oauth_user()
     except oauth.OAuthRequestError, e:
         return None
+
+def get_oauth_user():
+    """Return the OAuth db.User object.
+
+    Throws an oauth.OAuthRequestError if the OAuth request is invalid.
+    """
+    return oauth.get_current_user(
+        'https://www.googleapis.com/auth/userinfo.email')
 
 # TODO(nweiz): get rid of this once we no longer have any mixed OAuth/cookie
 # login actions.

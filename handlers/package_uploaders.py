@@ -23,7 +23,7 @@ class PackageUploaders(object):
         Only other uploaders may add new uploaders."""
 
         package = handlers.request().package
-        if oauth.get_current_user() not in package.uploaders:
+        if handlers.get_oauth_user() not in package.uploaders:
             handlers.http_error(
                 403, "You aren't an uploader for package '%s'." %
                          package.name)
@@ -50,7 +50,7 @@ class PackageUploaders(object):
         """
 
         package = handlers.request().package
-        if oauth.get_current_user() not in package.uploaders:
+        if handlers.get_oauth_user() not in package.uploaders:
             handlers.http_error(
                 403, "You aren't an uploader for package '%s'." %
                          package.name)
