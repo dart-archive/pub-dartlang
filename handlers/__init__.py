@@ -197,8 +197,12 @@ def is_current_user_admin():
     Unlike users.is_current_user_admin, this will return true if an admin is
     logged in via OAuth.
     """
-    return users.is_current_user_admin() or \
-        os.environ.get('OAUTH_IS_ADMIN') == '1'
+    if users.is_current_user_admin(): return True
+
+    # The OAUTH_IS_ADMIN variable is only set once oauth.get_current_user is
+    # called.
+    get_current_user()
+    return os.environ.get('OAUTH_IS_ADMIN') == '1'
 
 def is_production():
     """Return whether we're running in production mode."""
