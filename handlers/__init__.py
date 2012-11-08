@@ -142,7 +142,7 @@ def json_action(fn, *args, **kwargs):
     except JsonError as err:
         raise err
     except cherrypy.HTTPError as err:
-        raise JsonError(err.status, err.message)
+        raise JsonError(err.status, err._message)
     except (db.BadKeyError, db.BadValueError) as err:
         raise JsonError(400, err.message)
     except oauth.OAuthRequestError as err:
