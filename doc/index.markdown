@@ -7,10 +7,7 @@ title: "Getting Started"
 1. [Adding a dependency](#adding-a-dependency)
 1. [Installing dependencies](#installing-dependencies)
 1. [Importing code from a dependency](#importing-code-from-a-dependency)
-1. [Installing dependencies](#installing-dependencies)
 1. [Updating a dependency](#updating-a-dependency)
-1. [Finding packages in the Editor](#finding-packages-in-the-editor)
-1. [Learning more](#learning-more)
 {:.toc}
 
 *Pub* is a package mananger for Dart. It helps you reuse existing Dart code
