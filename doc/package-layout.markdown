@@ -6,7 +6,7 @@ title: "Package layout conventions"
 1. [Public libraries](#public-libraries)
 1. [Implementation files](#implementation-files)
 1. [Web files](#web-files)
-1. [Command line apps](#command-line-apps)
+1. [Command-line apps](#command-line-apps)
 1. [Tests](#tests)
 1. [Documentation](#documentation)
 1. [Examples](#examples)
@@ -189,33 +189,28 @@ your package in its [pubspec](pubspec.html).
         main.dart
         style.css
 
-Dart is a web language, so most pub packages will be doing web stuff. That
-means HTML, CSS, images, client-side Dart code and, heck, probably even some
-JavaScript.
+Dart is a web language, so many pub packages will be doing web stuff. That
+means HTML, CSS, images, and, heck, probably even some JavaScript. All of that
+goes into your package's `web` directory. You're free to organize the contents
+of that to your heart's content. Go crazy with subdirectories if that makes you
+happy.
 
-All of that goes into your package's `web` directory. You're free to organize
-the contents of that to your heart's content. Go crazy with subdirectories if
-that makes you happy.
-
-The most important part is that any Dart web entrypoints (in other words, Dart
+Also, and this is important, any Dart web entrypoints (in other words, Dart
 scripts that are referred to in a `<script>` tag) go under `web` and not `lib`.
 That ensures that there is a nearby `packages` directory so that `package:`
 imports can be resolved correctly.
 
-If your entrypoint Dart scripts in `web` import other Dart libraries in your
-package, you can put those libraries in `web`, `lib`, or `lib/src`.
-
 (You may be asking yourself, "Self, where should I put my web-based example
 programs? `example` or `web`?" Put those in `example`.)
 
-## Command line apps
+## Command-line apps
 
     enchilada/
       bin/
         enchilada
 
 Some packages define programs that can be run directly from the command line.
-These can be shells scripts or any other scripting language, including Dart.
+These can be shell scripts or any other scripting language, including Dart.
 The `pub` application itself is one example: it's a simple shell script that
 invokes `pub.dart`.
 
