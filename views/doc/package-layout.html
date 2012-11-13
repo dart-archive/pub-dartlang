@@ -5,7 +5,8 @@
   <li><a href="#tests">Tests</a></li>
   <li><a href="#documentation">Documentation</a></li>
   <li><a href="#examples">Examples</a></li>
-  <li><a href="#shell-scripts">Shell scripts</a></li>
+  <li><a href="#command-line-apps">Command line apps</a></li>
+  <li><a href="#internal-tools-and-scripts">Internal tools and scripts</a></li>
 </ol>
 
 <p>Part of a healthy code ecosystem is consistent conventions. When we all do the
@@ -48,6 +49,8 @@ would look like:</p>
     enchilada_test.dart
     tortilla_test.dart
     packages/ **
+  tool/
+    generate_docs.dart
 </code></pre>
 
 <p>* The <code>pubspec.lock</code> will only be in source control if the package is an
@@ -223,17 +226,17 @@ you can place each one right inside <code>example</code>.</p>
 your own package. That ensures the example code in your package looks exactly
 like code outside of your package would look.</p>
 
-<h2 id="shell-scripts">Shell scripts</h2>
+<h2 id="command-line-apps">Command line apps</h2>
 
 <pre><code>enchilada/
   bin/
     enchilada
 </code></pre>
 
-<p>Some packages define shell scripts, programs that can be run directly from the
-command line. These can be scripts written in an actual shell language, or any
-other scripting language, including Dart. The <code>pub</code> application itself is one
-example: it&rsquo;s a simple shell script that invokes <code>pub.dart</code>.</p>
+<p>Some packages define programs that can be run directly from the command line.
+These can be shells scripts or any other scripting language, including Dart.
+The <code>pub</code> application itself is one example: it&rsquo;s a simple shell script that
+invokes <code>pub.dart</code>.</p>
 
 <p>If your package defines stuff like this, put it in a directory named <code>bin</code>.</p>
 
@@ -243,3 +246,17 @@ At some point, pub will support automatically adding that directory to your
 system path so that these scripts can be easily invoked.
 
 </aside>
+
+<h2 id="internal-tools-and-scripts">Internal tools and scripts</h2>
+
+<pre><code>enchilada/
+  tool/
+    generate_docs.dart
+</code></pre>
+
+<p>Mature packages often have little helper scripts and programs that people
+run while developing the package itself. Think things like test runners,
+documentation generators, or other bits of automation.</p>
+
+<p>Unlike the scripts in <code>bin</code>, these are <em>not</em> for external users of the package.
+If you have any of these, place them in a directory called <code>tool</code>.</p>

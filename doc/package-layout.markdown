@@ -8,7 +8,8 @@ title: "Package layout conventions"
 1. [Tests](#tests)
 1. [Documentation](#documentation)
 1. [Examples](#examples)
-1. [Shell scripts](#shell-scripts)
+1. [Command line apps](#command-line-apps)
+1. [Internal tools and scripts](#internal-tools-and-scripts)
 {:.toc}
 
 Part of a healthy code ecosystem is consistent conventions. When we all do the
@@ -51,6 +52,8 @@ would look like:
         enchilada_test.dart
         tortilla_test.dart
         packages/ **
+      tool/
+        generate_docs.dart
 
 \* The `pubspec.lock` will only be in source control if the package is an
 [application package](glossary.html#application-package).
@@ -216,16 +219,16 @@ This is an important place to consider using `package:` to import files from
 your own package. That ensures the example code in your package looks exactly
 like code outside of your package would look.
 
-## Shell scripts
+## Command line apps
 
     enchilada/
       bin/
         enchilada
 
-Some packages define shell scripts, programs that can be run directly from the
-command line. These can be scripts written in an actual shell language, or any
-other scripting language, including Dart. The `pub` application itself is one
-example: it's a simple shell script that invokes `pub.dart`.
+Some packages define programs that can be run directly from the command line.
+These can be shells scripts or any other scripting language, including Dart.
+The `pub` application itself is one example: it's a simple shell script that
+invokes `pub.dart`.
 
 If your package defines stuff like this, put it in a directory named `bin`.
 
@@ -235,3 +238,16 @@ At some point, pub will support automatically adding that directory to your
 system path so that these scripts can be easily invoked.
 
 </aside>
+
+## Internal tools and scripts
+
+    enchilada/
+      tool/
+        generate_docs.dart
+
+Mature packages often have little helper scripts and programs that people
+run while developing the package itself. Think things like test runners,
+documentation generators, or other bits of automation.
+
+Unlike the scripts in `bin`, these are *not* for external users of the package.
+If you have any of these, place them in a directory called `tool`.
