@@ -5,10 +5,11 @@ title: "Package layout conventions"
 1. [The basics](#the-basics)
 1. [Public libraries](#public-libraries)
 1. [Implementation files](#implementation-files)
+1. [Web files](#web-files)
+1. [Command line apps](#command-line-apps)
 1. [Tests](#tests)
 1. [Documentation](#documentation)
 1. [Examples](#examples)
-1. [Command line apps](#command-line-apps)
 1. [Internal tools and scripts](#internal-tools-and-scripts)
 {:.toc}
 
@@ -54,6 +55,10 @@ would look like:
         packages/ **
       tool/
         generate_docs.dart
+      web/
+        index.html
+        main.dart
+        style.css
 
 \* The `pubspec.lock` will only be in source control if the package is an
 [application package](glossary.html#application-package).
@@ -67,16 +72,15 @@ would look like:
       pubspec.yaml
       pubspec.lock
 
+<div class="learn-more">
+  <a href="/doc/pubspec.html">
+    Learn more about pubspecs &rarr;
+  </a>
+</div>
+
 Every package will have a [**pubspec**](pubspec.html), a file named
 `pubspec.yaml`, in the root directory of the package. That's what *makes* it a
 package.
-
-<div class="learn-more">
-  <a href="/doc/pubspec.html">
-    Learn more about pubspecs
-    <i class="icon-hand-right icon-white">&nbsp;</i>
-  </a>
-</div>
 
 Once you've run [`pub install`](pub-install.html) or [`pub
 update`](pub-update.html) on the package, you will also have a **lockfile**,
@@ -177,6 +181,53 @@ import "package:enchilada/src/beans.dart";
 The name you use here (in this case `enchilada`) is the name you specify for
 your package in its [pubspec](pubspec.html).
 
+## Web files
+
+    enchilada/
+      web/
+        index.html
+        main.dart
+        style.css
+
+Dart is a web language, so most pub packages will be doing web stuff. That
+means HTML, CSS, images, client-side Dart code and, heck, probably even some
+JavaScript.
+
+All of that goes into your package's `web` directory. You're free to organize
+the contents of that to your heart's content. Go crazy with subdirectories if
+that makes you happy.
+
+The most important part is that any Dart web entrypoints (in other words, Dart
+scripts that are referred to in a `<script>` tag) go under `web` and not `lib`.
+That ensures that there is a nearby `packages` directory so that `package:`
+imports can be resolved correctly.
+
+If your entrypoint Dart scripts in `web` import other Dart libraries in your
+package, you can put those libraries in `web`, `lib`, or `lib/src`.
+
+(You may be asking yourself, "Self, where should I put my web-based example
+programs? `example` or `web`?" Put those in `example`.)
+
+## Command line apps
+
+    enchilada/
+      bin/
+        enchilada
+
+Some packages define programs that can be run directly from the command line.
+These can be shells scripts or any other scripting language, including Dart.
+The `pub` application itself is one example: it's a simple shell script that
+invokes `pub.dart`.
+
+If your package defines stuff like this, put it in a directory named `bin`.
+
+<aside class="alert alert-note">
+
+At some point, pub will support automatically adding that directory to your
+system path so that these scripts can be easily invoked.
+
+</aside>
+
 ## Tests
 
     enchilada/
@@ -224,26 +275,6 @@ you can place each one right inside `example`.
 This is an important place to consider using `package:` to import files from
 your own package. That ensures the example code in your package looks exactly
 like code outside of your package would look.
-
-## Command line apps
-
-    enchilada/
-      bin/
-        enchilada
-
-Some packages define programs that can be run directly from the command line.
-These can be shells scripts or any other scripting language, including Dart.
-The `pub` application itself is one example: it's a simple shell script that
-invokes `pub.dart`.
-
-If your package defines stuff like this, put it in a directory named `bin`.
-
-<aside class="alert alert-note">
-
-At some point, pub will support automatically adding that directory to your
-system path so that these scripts can be easily invoked.
-
-</aside>
 
 ## Internal tools and scripts
 

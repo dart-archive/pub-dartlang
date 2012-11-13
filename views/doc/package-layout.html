@@ -2,10 +2,11 @@
   <li><a href="#the-basics">The basics</a></li>
   <li><a href="#public-libraries">Public libraries</a></li>
   <li><a href="#implementation-files">Implementation files</a></li>
+  <li><a href="#web-files">Web files</a></li>
+  <li><a href="#command-line-apps">Command line apps</a></li>
   <li><a href="#tests">Tests</a></li>
   <li><a href="#documentation">Documentation</a></li>
   <li><a href="#examples">Examples</a></li>
-  <li><a href="#command-line-apps">Command line apps</a></li>
   <li><a href="#internal-tools-and-scripts">Internal tools and scripts</a></li>
 </ol>
 
@@ -51,6 +52,10 @@ would look like:</p>
     packages/ **
   tool/
     generate_docs.dart
+  web/
+    index.html
+    main.dart
+    style.css
 </code></pre>
 
 <p>* The <code>pubspec.lock</code> will only be in source control if the package is an
@@ -66,16 +71,15 @@ would look like:</p>
   pubspec.lock
 </code></pre>
 
+<div class="learn-more">
+  <a href="/doc/pubspec.html">
+    Learn more about pubspecs &rarr;
+  </a>
+</div>
+
 <p>Every package will have a <a href="pubspec.html"><strong>pubspec</strong></a>, a file named
 <code>pubspec.yaml</code>, in the root directory of the package. That&rsquo;s what <em>makes</em> it a
 package.</p>
-
-<div class="learn-more">
-  <a href="/doc/pubspec.html">
-    Learn more about pubspecs
-    <i class="icon-hand-right icon-white">&nbsp;</i>
-  </a>
-</div>
 
 <p>Once you&rsquo;ve run <a href="pub-install.html"><code>pub install</code></a> or <a href="pub-update.html"><code>pub
 update</code></a> on the package, you will also have a <strong>lockfile</strong>,
@@ -181,6 +185,55 @@ legit:</p>
 <p>The name you use here (in this case <code>enchilada</code>) is the name you specify for
 your package in its <a href="pubspec.html">pubspec</a>.</p>
 
+<h2 id="web-files">Web files</h2>
+
+<pre><code>enchilada/
+  web/
+    index.html
+    main.dart
+    style.css
+</code></pre>
+
+<p>Dart is a web language, so most pub packages will be doing web stuff. That
+means HTML, CSS, images, client-side Dart code and, heck, probably even some
+JavaScript.</p>
+
+<p>All of that goes into your package&rsquo;s <code>web</code> directory. You&rsquo;re free to organize
+the contents of that to your heart&rsquo;s content. Go crazy with subdirectories if
+that makes you happy.</p>
+
+<p>The most important part is that any Dart web entrypoints (in other words, Dart
+scripts that are referred to in a <code>&lt;script&gt;</code> tag) go under <code>web</code> and not <code>lib</code>.
+That ensures that there is a nearby <code>packages</code> directory so that <code>package:</code>
+imports can be resolved correctly.</p>
+
+<p>If your entrypoint Dart scripts in <code>web</code> import other Dart libraries in your
+package, you can put those libraries in <code>web</code>, <code>lib</code>, or <code>lib/src</code>.</p>
+
+<p>(You may be asking yourself, &ldquo;Self, where should I put my web-based example
+programs? <code>example</code> or <code>web</code>?&rdquo; Put those in <code>example</code>.)</p>
+
+<h2 id="command-line-apps">Command line apps</h2>
+
+<pre><code>enchilada/
+  bin/
+    enchilada
+</code></pre>
+
+<p>Some packages define programs that can be run directly from the command line.
+These can be shells scripts or any other scripting language, including Dart.
+The <code>pub</code> application itself is one example: it&rsquo;s a simple shell script that
+invokes <code>pub.dart</code>.</p>
+
+<p>If your package defines stuff like this, put it in a directory named <code>bin</code>.</p>
+
+<aside class="alert alert-note">
+
+At some point, pub will support automatically adding that directory to your
+system path so that these scripts can be easily invoked.
+
+</aside>
+
 <h2 id="tests">Tests</h2>
 
 <pre><code>enchilada/
@@ -231,27 +284,6 @@ you can place each one right inside <code>example</code>.</p>
 <p>This is an important place to consider using <code>package:</code> to import files from
 your own package. That ensures the example code in your package looks exactly
 like code outside of your package would look.</p>
-
-<h2 id="command-line-apps">Command line apps</h2>
-
-<pre><code>enchilada/
-  bin/
-    enchilada
-</code></pre>
-
-<p>Some packages define programs that can be run directly from the command line.
-These can be shells scripts or any other scripting language, including Dart.
-The <code>pub</code> application itself is one example: it&rsquo;s a simple shell script that
-invokes <code>pub.dart</code>.</p>
-
-<p>If your package defines stuff like this, put it in a directory named <code>bin</code>.</p>
-
-<aside class="alert alert-note">
-
-At some point, pub will support automatically adding that directory to your
-system path so that these scripts can be easily invoked.
-
-</aside>
 
 <h2 id="internal-tools-and-scripts">Internal tools and scripts</h2>
 
