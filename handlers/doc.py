@@ -7,12 +7,16 @@ import itertools
 import os
 import re
 
+import cherrypy
 import yaml
 
 import handlers
 
 class Doc(object):
     """The handler for /doc/*."""
+
+    def index(self):
+        raise cherrypy.HTTPRedirect('/doc/')
 
     def show(self, filename):
         """Display a documentation page.

@@ -41,10 +41,10 @@ class Application(cherrypy.Application):
         self.dispatcher.mapper.connect(
             '/gs_/{filename:.*?}', controller='root', action='serve')
 
+        self.dispatcher.connect('doc', '/doc', Doc(), action='index')
         self.dispatcher.connect(
             'doc', '/doc/{filename:.*?}', Doc(), action='show')
-        self.dispatcher.connect(
-            'doc', '/doc', Doc(), action='show', filename='index.html')
+
         self._resource('package', 'packages', Packages())
         self._resource('private-key', 'private-keys', PrivateKeys())
 
