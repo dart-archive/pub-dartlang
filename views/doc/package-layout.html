@@ -143,6 +143,12 @@ they import it. Say you have a file hierarchy like this:</p>
 </code></pre>
 </div>
 
+<p>Note that only <em>libraries</em> should be in <code>lib</code>. <em>Entrypoints</em>&mdash;Dart scripts
+with a <code>main()</code> function&mdash;cannot go in <code>lib</code>. If you place a Dart script
+inside <code>lib</code>, you will discover that any <code>package:</code> imports it contains don&rsquo;t
+resolve. Instead, your entrypoints should go in <code>bin</code>, <code>example</code>, <code>test</code>,
+<code>tool</code>, or <code>web</code>, whichever is most appropriate.</p>
+
 <h2 id="implementation-files">Implementation files</h2>
 
 <pre><code>enchilada/

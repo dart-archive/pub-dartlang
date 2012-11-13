@@ -140,6 +140,12 @@ Users will import `olives.dart` like:
 import "package:enchilada/some/path/olives.dart";
 {% endhighlight %}
 
+Note that only *libraries* should be in `lib`. *Entrypoints*&mdash;Dart scripts
+with a `main()` function&mdash;cannot go in `lib`. If you place a Dart script
+inside `lib`, you will discover that any `package:` imports it contains don't
+resolve. Instead, your entrypoints should go in `bin`, `example`, `test`,
+`tool`, or `web`, whichever is most appropriate.
+
 ## Implementation files
 
     enchilada/
