@@ -467,7 +467,7 @@ a:hover {
   margin-left: 580px;
 }
 
-.span8 {
+.span8, article {
   width: 620px;
 }
 
@@ -561,7 +561,7 @@ a:hover {
   width: 57.44681%;
   *width: 57.39362%;
 }
-.row-fluid .span8 {
+.row-fluid .span8, .row-fluid article {
   width: 65.95745%;
   *width: 65.90426%;
 }
@@ -1181,7 +1181,7 @@ input.span7, textarea.span7, .uneditable-input.span7 {
   width: 530px;
 }
 
-input.span8, textarea.span8, .uneditable-input.span8 {
+input.span8, textarea.span8, .uneditable-input.span8, article.uneditable-input {
   width: 610px;
 }
 
@@ -1787,7 +1787,7 @@ table .span7 {
   width: 524px;
   margin-left: 0;
 }
-table .span8 {
+table .span8, table article {
   float: none;
   width: 604px;
   margin-left: 0;
@@ -2781,13 +2781,13 @@ button.close {
   margin-top: 1px;
 }
 
-.btn-small {
+.btn-small, .learn-more a {
   padding: 5px 9px;
   font-size: 12px;
   line-height: 22px;
 }
 
-.btn-small [class^="icon-"] {
+.btn-small [class^="icon-"], .learn-more a [class^="icon-"] {
   margin-top: -1px;
 }
 
@@ -2807,9 +2807,7 @@ button.close {
 .btn-success,
 .btn-success:hover,
 .btn-info,
-.learn-more a,
 .btn-info:hover,
-.learn-more a:hover,
 .btn-inverse,
 .btn-inverse:hover {
   color: white;
@@ -2821,7 +2819,6 @@ button.close {
 .btn-danger.active,
 .btn-success.active,
 .btn-info.active,
-.learn-more a.active,
 .btn-inverse.active {
   color: rgba(255, 255, 255, 0.75);
 }
@@ -2927,7 +2924,7 @@ button.close {
   background-color: #408140 \9;
 }
 
-.btn-info, .learn-more a {
+.btn-info {
   background-color: #49afcd;
   background-image: -moz-linear-gradient(top, #5bc0de, #2f96b4);
   background-image: -ms-linear-gradient(top, #5bc0de, #2f96b4);
@@ -2943,11 +2940,11 @@ button.close {
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
-.btn-info:hover, .learn-more a:hover, .btn-info:active, .learn-more a:active, .btn-info.active, .learn-more a.active, .btn-info.disabled, .learn-more a.disabled, .btn-info[disabled], .learn-more a[disabled] {
+.btn-info:hover, .btn-info:active, .btn-info.active, .btn-info.disabled, .btn-info[disabled] {
   background-color: #2f96b4;
   *background-color: #2a85a0;
 }
-.btn-info:active, .learn-more a:active, .btn-info.active, .learn-more a.active {
+.btn-info:active, .btn-info.active {
   background-color: #24748c \9;
 }
 
@@ -3122,7 +3119,7 @@ input[type="submit"].btn-mini.get-started {
   padding-right: 5px;
 }
 
-.btn-group > .btn-small.dropdown-toggle {
+.btn-group > .btn-small.dropdown-toggle, .learn-more .btn-group > a.dropdown-toggle {
   *padding-top: 4px;
   *padding-bottom: 4px;
 }
@@ -3153,7 +3150,7 @@ input[type="submit"].btn-mini.get-started {
 .btn-group.open .btn-success.dropdown-toggle {
   background-color: #51a351;
 }
-.btn-group.open .btn-info.dropdown-toggle, .btn-group.open .learn-more a.dropdown-toggle, .learn-more .btn-group.open a.dropdown-toggle {
+.btn-group.open .btn-info.dropdown-toggle {
   background-color: #2f96b4;
 }
 .btn-group.open .btn-inverse.dropdown-toggle {
@@ -3175,7 +3172,7 @@ input[type="submit"].btn-mini.get-started {
   margin-top: 5px;
 }
 
-.btn-small .caret {
+.btn-small .caret, .learn-more a .caret {
   margin-top: 6px;
 }
 
@@ -3195,7 +3192,6 @@ input[type="submit"].btn-mini.get-started {
 .btn-warning .caret,
 .btn-danger .caret,
 .btn-info .caret,
-.learn-more a .caret,
 .btn-success .caret,
 .btn-inverse .caret {
   border-top-color: white;
@@ -4993,6 +4989,9 @@ a.permalink {
   display: none;
 }
 
+article {
+  position: relative;
+}
 article h2, article h3, article .toc:before, article h4 {
   padding-top: 40px;
   margin-top: -40px;
@@ -5087,15 +5086,19 @@ td.archive, th.archive {
   white-space: nowrap;
 }
 
-.learn-more {
-  text-align: right;
-  margin: 0 0 24px;
-}
 .learn-more a {
+  color: #0088cc;
+  float: right;
+  position: absolute;
+  width: 270px;
+  right: -320px;
   display: inline-block;
 }
 
 ol.toc {
+  position: absolute;
+  right: -320px;
+  width: 230px;
   float: right;
   padding: 10px 20px 20px 40px;
 }

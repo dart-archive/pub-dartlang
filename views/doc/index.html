@@ -38,6 +38,12 @@ should turn up the right instructions for your particular version of Windows.</p
 
 <h2 id="creating-a-package">Creating a package</h2>
 
+<div class="learn-more">
+  <a href="/doc/package-layout.html">
+    Learn more about packages &rarr;
+  </a>
+</div>
+
 <p>A <strong>package</strong> in pub is a directory that contains Dart code and any other stuff
 that goes along with it like resources, tests, and docs. Frameworks and
 reusable libraries are obviously packages, but applications are too. If your
@@ -57,9 +63,8 @@ dependencies, but application packages won&rsquo;t.</p>
 package&rdquo; or &ldquo;application package&rdquo;.</p>
 
 <div class="learn-more">
-  <a href="/doc/package-layout.html">
-    Learn more about packages
-    <i class="icon-hand-right icon-white">&nbsp;</i>
+  <a href="/doc/pubspec.html">
+    Learn more about pubspecs &rarr;
   </a>
 </div>
 
@@ -77,14 +82,13 @@ possible pubspec just contains the name of the package. Save the pubspec file as
 
 <p>Now <code>my_app</code> is a pub package!</p>
 
+<h2 id="adding-a-dependency">Adding a dependency</h2>
+
 <div class="learn-more">
-  <a href="/doc/pubspec.html">
-    Learn more about the pubspec format
-    <i class="icon-hand-right icon-white">&nbsp;</i>
+  <a href="/doc/pubspec.html#dependencies">
+    Learn more about dependencies &rarr;
   </a>
 </div>
-
-<h2 id="adding-a-dependency">Adding a dependency</h2>
 
 <p>One of pub&rsquo;s main jobs is managing <strong>dependencies</strong>. A dependency is just
 another package that your package relies on. If your app is using some
@@ -102,14 +106,13 @@ your package name. For example:</p>
 
 <p>Here, we are declaring a dependency on the (fictional) <code>transmogrify</code> package.</p>
 
+<h2 id="installing-dependencies">Installing dependencies</h2>
+
 <div class="learn-more">
-  <a href="/doc/pubspec.html#dependencies">
-    Learn more about specifying dependencies
-    <i class="icon-hand-right icon-white">&nbsp;</i>
+  <a href="/doc/pub-install.html">
+    Learn more about <tt>pub install</tt> &rarr;
   </a>
 </div>
-
-<h2 id="installing-dependencies">Installing dependencies</h2>
 
 <p>Once you&rsquo;ve declared a dependency, you then tell pub to install it for you. If
 you&rsquo;re using the Editor, select &ldquo;Pub Install&rdquo; from the &ldquo;Tools&rdquo; menu. If you&rsquo;re
@@ -133,13 +136,6 @@ on, recursively (these are your <strong>transitive dependencies</strong>).</p>
 
 <p>When this is done, you will have a <code>packages</code> directory that contains every
 single package your program needs in order to run.</p>
-
-<div class="learn-more">
-  <a href="/doc/pub-install.html">
-    Learn more about <tt>pub install</tt>
-    <i class="icon-hand-right icon-white">&nbsp;</i>
-  </a>
-</div>
 
 <h2 id="importing-code-from-a-dependency">Importing code from a dependency</h2>
 
@@ -202,6 +198,12 @@ importing file is.</p>
 
 <h2 id="updating-a-dependency">Updating a dependency</h2>
 
+<div class="learn-more">
+  <a href="/doc/pub-update.html">
+  Learn more about <tt>pub update</tt> &rarr;
+  </a>
+</div>
+
 <p>The first time you install a new dependency for your package, pub will download
 the latest version of it that&rsquo;s compatible with your other dependencies. It
 then locks your package to <em>always</em> use that version by creating a <strong>lockfile</strong>.
@@ -228,10 +230,3 @@ you can specify that too:</p>
 
 <p>This updates <code>transmogrify</code> to the latest version but leave everything else
 the same.</p>
-
-<div class="learn-more">
-  <a href="/doc/pub-update.html">
-  Learn more about <tt>pub update</tt>
-    <i class="icon-hand-right icon-white">&nbsp;</i>
-  </a>
-</div>
