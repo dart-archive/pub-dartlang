@@ -189,6 +189,7 @@ You can also provide a version constraint:
 dependencies:
   transmogrify:
     hosted:
+      name: transmogrify
       url: http://some-package-server.com
     version: '>=1.0.0 <2.0.0'
 {% endhighlight %}
@@ -224,6 +225,7 @@ specifies its URL:
 dependencies:
   transmogrify:
     hosted:
+      name: transmogrify
       url: http://your-package-server.com
     version: '>=0.4.0 <1.0.0'
 {% endhighlight %}
