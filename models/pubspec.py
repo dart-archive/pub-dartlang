@@ -13,6 +13,8 @@ class Pubspec(dict):
     _STRING_FIELDS = ['name', 'version', 'author', 'homepage']
     """Pubspec fields that must be strings if they're defined at all."""
 
+    _HOMEPAGE_SCHEME_RE = re.compile(r'^https?:')
+
     def __init__(self, *args, **kwargs):
         super(Pubspec, self).__init__(*args, **kwargs)
 
@@ -31,6 +33,12 @@ class Pubspec(dict):
             raise db.BadValueError(
                 'Pubspec field "authors" must be a string or list, was "%r"' %
                 self['authors'])
+
+        if 'homepage' in self and not Pubspec._HOMEPAGE_SCHEME_RE.match(
+                self['homepage']):
+            raise db.BadValueError(
+                'Pubspec field "homepage" can only use "http" or "https" ' +
+                'schemes.')
 
     @classmethod
     def from_archive(cls, tar):
