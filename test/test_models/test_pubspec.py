@@ -47,6 +47,16 @@ class PubspecTest(TestCase):
     def test_requires_homepage_to_be_string(self):
         self.assert_invalid_pubspec(homepage=12)
 
+    def test_requires_homepage_to_use_http_or_https(self):
+        self.assertEqual(Pubspec(homepage="http://dartlang.org")["homepage"],
+                 "http://dartlang.org")
+        self.assertEqual(Pubspec(homepage="https://dartlang.org")["homepage"],
+                 "https://dartlang.org")
+
+        self.assert_invalid_pubspec(homepage="ftp://badscheme.com")
+        self.assert_invalid_pubspec(homepage="javascript:alert('!!!')")
+        self.assert_invalid_pubspec(homepage="data:image/png;base64,somedata")
+        self.assert_invalid_pubspec(homepage="no-scheme.com")
+
     def assert_invalid_pubspec(self, **kwargs):
         self.assertRaises(db.BadValueError, lambda: Pubspec(**kwargs))
-        
