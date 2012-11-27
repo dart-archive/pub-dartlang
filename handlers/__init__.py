@@ -56,6 +56,7 @@ def layout(content, title=None):
     return _renderer.render(
         _renderer.load_template("layout"),
         content=content,
+        can_upload=is_current_user_dogfooder(),
         logged_in=users.get_current_user() is not None,
         login_url=users.create_login_url(cherrypy.url()),
         logout_url=users.create_logout_url(cherrypy.url()),
@@ -203,6 +204,21 @@ def is_current_user_admin():
     # called.
     get_current_user()
     return os.environ.get('OAUTH_IS_ADMIN') == '1'
+
+def is_current_user_dogfooder():
+    """Return whether the logged-in user has dogfood permissions.
+
+    Dogfooders have more permissions than unknown users, but fewer than full-on
+    admins. They exist to test features before they're ready to be rolled out to
+    everyone.
+    """
+
+    # Admins have all permissions dogfooders do.
+    if is_current_user_admin(): return True
+
+    # Currently only Googlers are dogfooders.
+    user = get_current_user()
+    return user and user.email().endswith('@google.com')
 
 def is_production():
     """Return whether we're running in production mode."""
