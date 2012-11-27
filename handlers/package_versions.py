@@ -65,18 +65,18 @@ class PackageVersions(object):
             else:
                 handlers.flash(message)
                 raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
-        elif not handlers.is_current_user_admin():
-            message = 'Currently only admins may create packages.'
+        elif not handlers.is_current_user_dogfooder():
+            message = "You don't have permission to upload packages."
             if is_json:
                 handlers.http_error(403, message)
             else:
                 handlers.flash(message)
                 raise cherrypy.HTTPRedirect('/packages')
         elif PrivateKey.get() is None:
-            if is_json:
-                handlers.http_error(500, 'No private key set.')
-            else:
+            if not is_json and users.is_current_user_admin():
                 raise cherrypy.HTTPRedirect('/admin#tab-private-key')
+            else:
+                handlers.http_error(500, 'No private key set.')
 
         id = str(uuid4())
         redirect_url = handlers.request().url(action="create", id=id)
@@ -134,9 +134,9 @@ class PackageVersions(object):
                 handlers.http_error(
                     403, "You aren't an uploader for package '%s'." %
                              package.name)
-            elif not handlers.is_current_user_admin():
+            elif not handlers.is_current_user_dogfooder():
                 handlers.http_error(
-                    403, "Only admins may create packages.")
+                    403, "You don't have permission to upload packages.")
 
             try:
                 with closing(cloud_storage.read('tmp/' + id)) as f:
@@ -266,7 +266,7 @@ class PackageVersions(object):
 
     def reload(self, package_id):
         """Reload all package versions from their tarballs."""
-        if not users.is_current_user_admin(): handlers.http_error(403)
+        if not users.is_current_user_dogfooder(): handlers.http_error(403)
         versions_to_reload = 0
         for key in PackageVersion.all(keys_only=True).run():
             versions_to_reload += 1
