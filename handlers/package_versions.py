@@ -39,6 +39,7 @@ class PackageVersions(object):
             layout={'title': 'All versions of %s' % package.name})
 
     @handlers.json_action
+    @handlers.requires_uploader
     def new(self, package_id, format='html', **kwargs):
         """Retrieve the form for uploading a package version.
 
@@ -51,28 +52,7 @@ class PackageVersions(object):
         is_json = format == 'json'
         user = handlers.get_current_user()
 
-        package = handlers.request().maybe_package
-        if not user:
-            if is_json:
-                handlers.http_error(403, 'OAuth authentication failed.')
-            else:
-                raise cherrypy.HTTPRedirect(
-                    users.create_login_url(cherrypy.url()))
-        elif package and user not in package.uploaders:
-            message = "You aren't an uploader for package '%s'." % package.name
-            if is_json:
-                handlers.http_error(403, message)
-            else:
-                handlers.flash(message)
-                raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
-        elif not handlers.is_current_user_dogfooder():
-            message = "You don't have permission to upload packages."
-            if is_json:
-                handlers.http_error(403, message)
-            else:
-                handlers.flash(message)
-                raise cherrypy.HTTPRedirect('/packages')
-        elif PrivateKey.get() is None:
+        if PrivateKey.get() is None:
             if not is_json and users.is_current_user_admin():
                 raise cherrypy.HTTPRedirect('/admin#tab-private-key')
             else:
@@ -91,6 +71,7 @@ class PackageVersions(object):
 
         if is_json: return upload.to_json()
 
+        package = handlers.request().maybe_package
         if package is not None:
             title = 'Upload a new version of %s' % package.name
         else:
@@ -107,6 +88,7 @@ class PackageVersions(object):
 
     @handlers.handle_validation_errors
     @handlers.json_action
+    @handlers.requires_uploader
     def create(self, package_id, id, format='html', **kwargs):
         """Create a new package version.
 
@@ -128,15 +110,6 @@ class PackageVersions(object):
 
             route = handlers.request().route
             if 'id' in route: del route['id']
-
-            package = handlers.request().maybe_package
-            if package and handlers.get_current_user() not in package.uploaders:
-                handlers.http_error(
-                    403, "You aren't an uploader for package '%s'." %
-                             package.name)
-            elif not handlers.is_current_user_dogfooder():
-                handlers.http_error(
-                    403, "You don't have permission to upload packages.")
 
             try:
                 with closing(cloud_storage.read('tmp/' + id)) as f:

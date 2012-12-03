@@ -90,6 +90,18 @@ class JsonError(cherrypy.HTTPError):
 
     def set_response(self):
         """Set the response data for this error."""
+        authenticate = 'Bearer'
+        if request().has_oauth and self.status in [400, 401, 403]:
+            authenticate += ' error="%s"' % {
+                400: 'invalid_request',
+                401: 'invalid_token',
+                403: 'insufficient_scope'
+            }[self.status]
+            authenticate += ', scope="%s"' % OAUTH2_SCOPE
+            if self.message:
+                authenticate += ', error_description="%s"' % self.message
+        cherrypy.response.headers['WWW-Authenticate'] = authenticate
+
         cherrypy.response.status = self.status
         cherrypy.response.headers['Content-Type'] = 'application/json'
         cherrypy.response.body = json.dumps({
@@ -147,9 +159,56 @@ def json_action(fn, *args, **kwargs):
     except (db.BadKeyError, db.BadValueError) as err:
         raise JsonError(400, err.message)
     except oauth.OAuthRequestError as err:
-        raise JsonError(403, "OAuth authentication failed.")
+        raise JsonError(403, "OAuth2 authentication failed.")
     except Exception as err:
         raise JsonError(500, err.message)
+
+@decorator
+def requires_user(fn, *args, **kwargs):
+    """A decorator for actions that require a logged-in user.
+
+    For JSON actions, this checks for an OAuth2 user. If none is found, this
+    raises an appropriately-formatted 401 error.
+
+    For HTML actions, this checks for a user logged in via cookies. If none is
+    found, this redirects to the login page.
+    """
+
+    user = get_current_user()
+    if user: return fn(*args, **kwargs)
+
+    if request().is_json:
+        http_error(401, 'OAuth2 authentication failed.')
+    else:
+        raise cherrypy.HTTPRedirect(users.create_login_url(cherrypy.url()))
+
+@decorator
+@requires_user
+def requires_uploader(fn, *args, **kwargs):
+    """A decorator for actions that require an uploader of the current package.
+
+    This implies requires_user. It does not require that a package exist; if
+    none does, it only checks that the user has permission to upload packages at
+    all.
+    """
+
+    package = request().maybe_package
+    if package and get_current_user() not in package.uploaders:
+        message = "You aren't an uploader for package '%s'." % package.name
+        if request().is_json:
+            http_error(403, message)
+        else:
+            flash(message)
+            raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
+    elif not is_current_user_dogfooder():
+        message = "You don't have permission to upload packages."
+        if request().is_json:
+            http_error(403, message)
+        else:
+            flash(message)
+            raise cherrypy.HTTPRedirect('/packages')
+
+    return fn(*args, **kwargs)
 
 def get_current_user():
     """Return the current db.User object, or None.
@@ -164,13 +223,15 @@ def get_current_user():
     except oauth.OAuthRequestError, e:
         return None
 
+OAUTH2_SCOPE = 'https://www.googleapis.com/auth/userinfo.email'
+"""The scope needed for OAuth2 requests."""
+
 def get_oauth_user():
     """Return the OAuth db.User object.
 
     Throws an oauth.OAuthRequestError if the OAuth request is invalid.
     """
-    return oauth.get_current_user(
-        'https://www.googleapis.com/auth/userinfo.email')
+    return oauth.get_current_user(OAUTH2_SCOPE)
 
 # TODO(nweiz): get rid of this once we no longer have any mixed OAuth/cookie
 # login actions.
@@ -311,6 +372,23 @@ class Request(object):
             return self.request.params['id']
         else:
             return self.request.params['package_id']
+
+    @property
+    def has_oauth(self):
+        """Return whether the request contains OAuth2 credentials.
+
+        This doesn't check whether the credentials are valid, just that
+        something that looks like credentials was sent.
+        """
+        try:
+            get_oauth_user()
+            return True
+        except oauth.InvalidOAuthParametersError, e:
+            # This is the exception raised when no OAuth2 credentials are found
+            # at all.
+            return False
+        except oauth.OAuthRequestError, e:
+            return True
 
     def package_version(self, version):
         """Load the current package version object.

@@ -97,14 +97,18 @@ class PackageVersionsTest(TestCase):
 
     def test_new_json_requires_oauth(self):
         response = self.testapp.get('/packages/test-package/versions/new.json',
-                                    status=403)
+                                    status=401)
         self.assert_json_error(response)
+        # Since we didn't send any OAuth2 credentials, the WWW-Authenticate
+        # header shouldn't have OAuth2-specific fields.
+        self.assertEqual(response.headers['WWW-Authenticate'], 'Bearer')
 
     def test_new_json_requires_admin(self):
         self.be_normal_oauth_user()
         response = self.testapp.get('/packages/versions/new.json',
                                     status=403)
         self.assert_json_error(response)
+        self.assert_oauth_error(response)
 
     def test_new_json_requires_uploadership(self):
         self.be_normal_oauth_user()
@@ -112,6 +116,7 @@ class PackageVersionsTest(TestCase):
         response = self.testapp.get('/packages/test-package/versions/new.json',
                                     status=403)
         self.assert_json_error(response)
+        self.assert_oauth_error(response)
 
     def test_new_json_requires_private_key(self):
         self.be_admin_oauth_user()
@@ -144,9 +149,11 @@ class PackageVersionsTest(TestCase):
     def test_create_requires_admin(self):
         self.be_normal_user()
 
-        response = self.testapp.get('/packages/versions/abcd/create',
-                                    status=403)
-        self.assert_error_page(response)
+        response = self.testapp.get('/packages/versions/abcd/create')
+        self.assertEqual(response.status_int, 302)
+        self.assertEqual(response.headers['Location'],
+                         'http://localhost:80/packages')
+        self.assertTrue(response.cookies_set.has_key('flash'))
 
     def test_create_requires_uploader(self):
         Package.new(name='owned-package',
@@ -154,17 +161,11 @@ class PackageVersionsTest(TestCase):
         self.be_normal_user()
 
         response = self.testapp.get(
-            '/packages/owned-package/versions/abcd/create', status=403)
-        self.assert_error_page(response)
-
-    def test_create_requires_uploader(self):
-        Package.new(name='owned-package',
-                    uploaders=[self.normal_user('owner')]).put()
-        self.be_normal_user()
-
-        response = self.testapp.get(
-            '/packages/owned-package/versions/abcd/create', status=403)
-        self.assert_error_page(response)
+            '/packages/owned-package/versions/abcd/create')
+        self.assertEqual(response.status_int, 302)
+        self.assertEqual(response.headers['Location'],
+                         'http://localhost:80/packages/owned-package')
+        self.assertTrue(response.cookies_set.has_key('flash'))
 
     def test_create_requires_valid_id(self):
         self.be_admin_user()

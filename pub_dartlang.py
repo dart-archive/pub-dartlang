@@ -102,8 +102,8 @@ def _error_page(status, message, traceback, version):
         traceback = None
 
     if handlers.request().is_json:
-        cherrypy.response.headers['Content-Type'] = 'application/json'
-        return json.dumps({'error': {'message': message}})
+        handlers.JsonError(status, message).set_response()
+        return cherrypy.response.body
 
     return str(handlers.render('error',
         status=status,
