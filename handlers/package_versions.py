@@ -266,7 +266,7 @@ class PackageVersions(object):
 
     def reload(self, package_id):
         """Reload all package versions from their tarballs."""
-        if not users.is_current_user_dogfooder(): handlers.http_error(403)
+        if not handlers.is_current_user_dogfooder(): handlers.http_error(403)
         versions_to_reload = 0
         for key in PackageVersion.all(keys_only=True).run():
             versions_to_reload += 1
