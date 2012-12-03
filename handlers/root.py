@@ -21,6 +21,11 @@ class Root(object):
         packages = Package.all().order('-updated').fetch(5)
         return handlers.render('index', recent_packages=packages)
 
+    def authorized(self):
+        """Retrieves the client authorization landing page."""
+        return handlers.render(
+            'authorized', layout={'title': 'Pub Authorized Successfully'})
+
     def site_map(self):
         """Retrieves a map of the site."""
         return handlers.render('site_map', layout={'title': 'Site Map'})

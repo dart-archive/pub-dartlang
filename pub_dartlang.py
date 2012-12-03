@@ -35,6 +35,8 @@ class Application(cherrypy.Application):
         # Configure routes
         self.dispatcher.connect('root', '/', Root(), action='index')
         self.dispatcher.mapper.connect(
+            '/authorized', controller='root', action='authorized')
+        self.dispatcher.mapper.connect(
             '/site-map', controller='root', action='site_map')
         self.dispatcher.mapper.connect(
             '/admin', controller='root', action='admin')
