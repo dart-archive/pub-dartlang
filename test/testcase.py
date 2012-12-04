@@ -291,6 +291,12 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         self.assertEqual(response.status_int, 200)
         self.assertTrue("success" in json.loads(response.body))
 
+    def assert_oauth_error(self, response):
+        """Assert that the given response is an OAuth2 error."""
+        print(response.headers)
+        self.assertTrue(response.headers['WWW-Authenticate'].startswith(
+                'Bearer error="'))
+
     def html(self, response):
         """Parse a webtest response with BeautifulSoup.
 
