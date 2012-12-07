@@ -8,6 +8,7 @@ title: "Getting Started"
 1. [Installing dependencies](#installing-dependencies)
 1. [Importing code from a dependency](#importing-code-from-a-dependency)
 1. [Updating a dependency](#updating-a-dependency)
+1. [Publishing a package](#publishing-a-package)
 {:.toc}
 
 *Pub* is a package mananger for Dart. It helps you reuse existing Dart code
@@ -228,3 +229,28 @@ you can specify that too:
 
 This updates `transmogrify` to the latest version but leave everything else
 the same.
+
+## Publishing a package
+
+<div class="learn-more">
+  <a href="/doc/pub-lish.html">
+  Learn more about <tt>pub publish</tt> &rarr;
+  </a>
+</div>
+
+Pub isn't just for using other people's packages. It also allows you to share
+your packages with the world. Once you've written some useful code and you want
+everyone else to be able to use it, just run:
+
+    $ pub publish
+
+Pub will check to make sure that your package follows the [pubspec
+format](pubspec.html) and [package layout conventions](package-layout.html), and
+then upload your package to [pub.dartlang.org](http://pub.dartlang.org). Then
+any Pub user will be able to download it or depend on it in their pubspecs. For
+example, if you just published version 1.0.0 of a package named `transmogrify`:
+
+{% highlight dart %}
+dependencies:
+  transmogrify: ">= 1.0.0 < 2.0.0"
+{% endhighlight %}
