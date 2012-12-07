@@ -5,6 +5,7 @@
   <li><a href="#installing-dependencies">Installing dependencies</a></li>
   <li><a href="#importing-code-from-a-dependency">Importing code from a dependency</a></li>
   <li><a href="#updating-a-dependency">Updating a dependency</a></li>
+  <li><a href="#publishing-a-package">Publishing a package</a></li>
 </ol>
 
 <p><em>Pub</em> is a package mananger for Dart. It helps you reuse existing Dart code
@@ -228,5 +229,38 @@ you can specify that too:</p>
 <pre><code>$ pub update transmogrify
 </code></pre>
 
-<p>This updates <code>transmogrify</code> to the latest version but leave everything else
-the same.</p>
+<p>This updates <code>transmogrify</code> to the latest version but leaves everything else the
+same.</p>
+
+<h2 id="publishing-a-package">Publishing a package</h2>
+
+<div class="learn-more">
+  <a href="/doc/pub-lish.html">
+  Learn more about <tt>pub publish</tt> &rarr;
+  </a>
+</div>
+
+<p>Pub isn&rsquo;t just for using other people&rsquo;s packages. It also allows you to share
+your packages with the world. Once you&rsquo;ve written some useful code and you want
+everyone else to be able to use it, just run:</p>
+
+<pre><code>$ pub publish
+</code></pre>
+
+<p>Pub will check to make sure that your package follows the <a href="pubspec.html">pubspec
+format</a> and <a href="package-layout.html">package layout conventions</a>, and
+then upload your package to <a href="http://pub.dartlang.org">pub.dartlang.org</a>. Then
+any Pub user will be able to download it or depend on it in their pubspecs. For
+example, if you just published version 1.0.0 of a package named <code>transmogrify</code>,
+then they can write:</p>
+
+<div class="highlight"><pre><code class="dart"><span class="nl">dependencies:</span>
+  <span class="nl">transmogrify:</span> <span class="s2">&quot;&gt;= 1.0.0 &lt; 2.0.0&quot;</span>
+</code></pre>
+</div>
+
+<p>Keep in mind that publishing is forever. As soon as you publish your awesome
+package, users will be able to depend on it. Once they start doing that,
+removing the package would break theirs. To avoid that, pub strongly discourages
+deleting packages. You can always upload new versions of your package, but old
+ones will continue to be available for users that aren&rsquo;t ready to upgrade yet.</p>
