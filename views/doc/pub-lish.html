@@ -5,30 +5,40 @@
 <a href="http://pub.dartlang.org">pub.dartlang.org</a> for anyone to download and depend
 on. For example, if your package is named transmogrify, it will be listed on
 <code>http://pub.dartlang.org/packages/transmogify</code>, and users can depend on it in
-their pubspecs and get it via <a href="pub-install.html">pub install</a>. For example:</p>
+their pubspecs and get it via <a href="pub-install.html">pub install</a> using something
+like:</p>
 
 <div class="highlight"><pre><code class="dart"><span class="nl">dependencies:</span>
   <span class="nl">transmogrify:</span> <span class="s2">&quot;&gt;= 1.0.0 &lt; 2.0.0&quot;</span>
 </code></pre>
 </div>
 
-<p>When publishing a package, try to follow the <a href="pubspec.html">pubspec format</a> and
-<a href="package-layout.html">package layout conventions</a>. <code>pub publish</code> will let you
-know about anything you can do to clean up your package before uploading.</p>
+<p>When publishing a package, it&rsquo;s important to follow the <a href="pubspec.html">pubspec
+format</a> and <a href="package-layout.html">package layout conventions</a>.
+Some of these are required in order for others to be able to use your package.
+Others are suggestions to help make it easier for users to understand and work
+with your package. In both cases, pub will try to help you by pointing out what
+changes will help make your package play nicer with the Dart ecosystem.
+There are a couple of additional requirements for uploading a package:</p>
 
-<p>There are a couple of additional requirements for uploading a package. You must
-include a license file (named <code>LICENSE</code>, <code>COPYING</code>, or some variation) that
-contains an <a href="http://opensource.org/">open-source license</a>. We recommend the <a href="http://opensource.org/licenses/BSD-2-Clause">BSD
-license</a>, which is used by Dart
-itself. You must also have the legal right to redistribute anything that you
-upload as part of your package.</p>
+<ul>
+  <li>
+    <p>You must include a license file (named <code>LICENSE</code>, <code>COPYING</code>, or some
+variation) that contains an <a href="http://opensource.org/">open-source license</a>. We
+recommend the <a href="http://opensource.org/licenses/BSD-2-Clause">BSD license</a>,
+which is used by Dart itself. You must also have the legal right to
+redistribute anything that you upload as part of your package.</p>
+  </li>
+  <li>
+    <p>Your package must be less than ten megabytes large after gzip compression. If
+it&rsquo;s too large, consider splitting it into multiple packages, or cutting down
+on the number of included resources or examples.</p>
+  </li>
+</ul>
 
-<p>Your package must also be less than ten megabytes large after gzip compression.
-If it&rsquo;s too large, consider cutting down on the number of included
-resources or splitting it into multiple packages.</p>
-
-<p>Be aware that your Google account and Gmail address will be displayed along with
-any packages you upload.</p>
+<p>Be aware that the email address associated with your Google account will be
+displayed on <a href="http://pub.dartlang.org">pub.dartlang.org</a> along with any packages
+you upload.</p>
 
 <h2 id="what-files-are-published">What files are published?</h2>
 

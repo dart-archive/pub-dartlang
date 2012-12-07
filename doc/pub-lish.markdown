@@ -8,30 +8,35 @@ This command publishes your package on
 [pub.dartlang.org](http://pub.dartlang.org) for anyone to download and depend
 on. For example, if your package is named transmogrify, it will be listed on
 `http://pub.dartlang.org/packages/transmogify`, and users can depend on it in
-their pubspecs and get it via [pub install](pub-install.html). For example:
+their pubspecs and get it via [pub install](pub-install.html) using something
+like:
 
 {% highlight dart %}
 dependencies:
   transmogrify: ">= 1.0.0 < 2.0.0"
 {% endhighlight %}
 
-When publishing a package, try to follow the [pubspec format](pubspec.html) and
-[package layout conventions](package-layout.html). `pub publish` will let you
-know about anything you can do to clean up your package before uploading.
+When publishing a package, it's important to follow the [pubspec
+format](pubspec.html) and [package layout conventions](package-layout.html).
+Some of these are required in order for others to be able to use your package.
+Others are suggestions to help make it easier for users to understand and work
+with your package. In both cases, pub will try to help you by pointing out what
+changes will help make your package play nicer with the Dart ecosystem.
+There are a couple of additional requirements for uploading a package:
 
-There are a couple of additional requirements for uploading a package. You must
-include a license file (named `LICENSE`, `COPYING`, or some variation) that
-contains an [open-source license](http://opensource.org/). We recommend the [BSD
-license](http://opensource.org/licenses/BSD-2-Clause), which is used by Dart
-itself. You must also have the legal right to redistribute anything that you
-upload as part of your package.
+* You must include a license file (named `LICENSE`, `COPYING`, or some
+  variation) that contains an [open-source license](http://opensource.org/). We
+  recommend the [BSD license](http://opensource.org/licenses/BSD-2-Clause),
+  which is used by Dart itself. You must also have the legal right to
+  redistribute anything that you upload as part of your package.
 
-Your package must also be less than ten megabytes large after gzip compression.
-If it's too large, consider cutting down on the number of included
-resources or splitting it into multiple packages.
+* Your package must be less than ten megabytes large after gzip compression. If
+  it's too large, consider splitting it into multiple packages, or cutting down
+  on the number of included resources or examples.
 
-Be aware that your Google account and Gmail address will be displayed along with
-any packages you upload.
+Be aware that the email address associated with your Google account will be
+displayed on [pub.dartlang.org](http://pub.dartlang.org) along with any packages
+you upload.
 
 ## What files are published?
 
