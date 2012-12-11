@@ -40,7 +40,7 @@ class PackageVersions(object):
 
     @handlers.json_action
     @handlers.requires_uploader
-    def new(self, package_id, format='html', **kwargs):
+    def new(self, package_id, format='json', **kwargs):
         """Retrieve the form for uploading a package version.
 
         If the user isn't logged in, this presents a login screen. If they are
@@ -49,14 +49,10 @@ class PackageVersions(object):
 
         This accepts arbitrary keyword arguments to support OAuth.
         """
-        is_json = format == 'json'
-        user = handlers.get_current_user()
+        user = handlers.get_oauth_user()
 
         if PrivateKey.get() is None:
-            if not is_json and users.is_current_user_admin():
-                raise cherrypy.HTTPRedirect('/admin#tab-private-key')
-            else:
-                handlers.http_error(500, 'No private key set.')
+            handlers.http_error(500, 'No private key set.')
 
         id = str(uuid4())
         redirect_url = handlers.request().url(action="create", id=id)
@@ -69,17 +65,7 @@ class PackageVersions(object):
         # to cloud storage, but closes the browser before "create" is run.
         deferred.defer(self._remove_tmp_package, id, _countdown=5*60)
 
-        if is_json: return upload.to_json()
-
-        package = handlers.request().maybe_package
-        if package is not None:
-            title = 'Upload a new version of %s' % package.name
-        else:
-            title = 'Upload a new package'
-
-            return handlers.render("packages/versions/new",
-                                   form=upload.to_form(), package=package,
-                                   layout={'title': title})
+        return upload.to_json()
 
     def _remove_tmp_package(self, id):
         """Try to remove an orphaned package upload."""
@@ -106,33 +92,26 @@ class PackageVersions(object):
         """
 
         try:
-            is_json = format == 'json'
-
             route = handlers.request().route
             if 'id' in route: del route['id']
 
             try:
                 with closing(cloud_storage.read('tmp/' + id)) as f:
                     version = PackageVersion.from_archive(
-                        f, uploader=handlers.get_current_user())
+                        f, uploader=handlers.get_oauth_user())
             except (KeyError, files.ExistenceError):
                 handlers.http_error(
                     403, "Package upload " + id + " does not exist.")
 
             if version.package.is_saved():
-                if handlers.get_current_user() not in version.package.uploaders:
+                if handlers.get_oauth_user() not in version.package.uploaders:
                     handlers.http_error(
                         403, "You aren't an uploader for package '%s'." %
                                  version.package.name)
                 elif version.package.has_version(version.version):
                     message = 'Package "%s" already has version "%s".' % \
                         (version.package.name, version.version)
-                    if is_json: handlers.http_error(400, message)
-
-                    handlers.flash(message)
-                    url = handlers.request().url(
-                        action='new', package_id=version.package.name)
-                    raise cherrypy.HTTPRedirect(url)
+                    handlers.http_error(400, message)
 
                 if self._should_update_latest_version(version):
                     version.package.latest_version = version
@@ -149,12 +128,8 @@ class PackageVersions(object):
 
             deferred.defer(self._compute_version_order, version.package.name)
 
-            message = '%s %s uploaded successfully.' % \
-                (version.package.name, version.version)
-            if is_json: return handlers.json_success(message)
-
-            handlers.flash(message)
-            raise cherrypy.HTTPRedirect('/packages/%s' % version.package.name)
+            return handlers.json_success('%s %s uploaded successfully.' %
+                (version.package.name, version.version))
         finally:
             cloud_storage.delete_object('tmp/' + id)
 

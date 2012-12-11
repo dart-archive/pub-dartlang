@@ -33,7 +33,7 @@ class Packages(object):
                                pagination=pager.render_pagination(),
                                layout={'title': title})
 
-    @handlers.json_action
+    @handlers.json_or_html_action
     def show(self, id, format='html'):
         """Retrieve the page describing a specific package."""
         if format == 'json':
@@ -56,7 +56,6 @@ class Packages(object):
                 versions=package.version_set.order('-sort_order').fetch(10),
                 version_count=version_count,
                 show_versions_link=version_count > 10,
-                is_uploader=users.get_current_user() in package.uploaders,
                 layout={'title': title})
         else:
             raise handlers.http_error(404)

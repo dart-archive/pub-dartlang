@@ -23,29 +23,8 @@ class PackageVersionsTest(TestCase):
         self.package.put()
 
     def test_admin_creates_new_package(self):
-        self.be_admin_user()
-        self.post_package_version(name='new-package', version='0.0.1')
-
-        package = Package.get_by_key_name('new-package')
-        self.assertIsNotNone(package)
-        self.assertEqual(package.name, 'new-package')
-        self.assertEqual(package.uploaders, [users.get_current_user()])
-
-        version = package.version_set.get()
-        self.assertIsNotNone(version)
-        self.assertEqual(version.version, SemanticVersion('0.0.1'))
-        self.assertEqual(version.package.name, 'new-package')
-
-        version = package.latest_version
-        self.assertIsNotNone(version)
-        self.assertEqual(version.version, SemanticVersion('0.0.1'))
-        self.assertEqual(version.package.name, 'new-package')
-
-        self.assertEqual(package.updated, version.created)
-
-    def test_admin_creates_new_package_with_json(self):
         self.be_admin_oauth_user()
-        self.post_package_version_with_json(name='new-package', version='0.0.1')
+        self.post_package_version(name='new-package', version='0.0.1')
 
         package = Package.get_by_key_name('new-package')
         self.assertIsNotNone(package)
@@ -64,38 +43,7 @@ class PackageVersionsTest(TestCase):
 
         self.assertEqual(package.updated, version.created)
 
-    def test_new_requires_login(self):
-        response = self.testapp.get('/packages/test-package/versions/new')
-        self.assert_requires_login(response)
-
-    def test_new_requires_admin(self):
-        self.be_normal_user()
-
-        response = self.testapp.get('/packages/versions/new')
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(response.headers['Location'],
-                         'http://localhost:80/packages')
-        self.assertTrue(response.cookies_set.has_key('flash'))
-
-    def test_new_requires_uploadership(self):
-        self.be_normal_user()
-
-        response = self.testapp.get('/packages/test-package/versions/new')
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(response.headers['Location'],
-                         'http://localhost:80/packages/test-package')
-        self.assertTrue(response.cookies_set.has_key('flash'))
-
-    def test_new_requires_private_key(self):
-        self.be_admin_user()
-        PrivateKey.get_by_key_name('singleton').delete()
-
-        response = self.testapp.get('/packages/test-package/versions/new')
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(response.headers['Location'],
-                         'http://localhost:80/admin#tab-private-key')
-
-    def test_new_json_requires_oauth(self):
+    def test_new_requires_oauth(self):
         response = self.testapp.get('/packages/test-package/versions/new.json',
                                     status=401)
         self.assert_json_error(response)
@@ -103,14 +51,14 @@ class PackageVersionsTest(TestCase):
         # header shouldn't have OAuth2-specific fields.
         self.assertEqual(response.headers['WWW-Authenticate'], 'Bearer')
 
-    def test_new_json_requires_admin(self):
+    def test_new_requires_admin(self):
         self.be_normal_oauth_user()
         response = self.testapp.get('/packages/versions/new.json',
                                     status=403)
         self.assert_json_error(response)
         self.assert_oauth_error(response)
 
-    def test_new_json_requires_uploadership(self):
+    def test_new_requires_uploadership(self):
         self.be_normal_oauth_user()
 
         response = self.testapp.get('/packages/test-package/versions/new.json',
@@ -118,7 +66,7 @@ class PackageVersionsTest(TestCase):
         self.assert_json_error(response)
         self.assert_oauth_error(response)
 
-    def test_new_json_requires_private_key(self):
+    def test_new_requires_private_key(self):
         self.be_admin_oauth_user()
         PrivateKey.get_by_key_name('singleton').delete()
 
@@ -127,7 +75,7 @@ class PackageVersionsTest(TestCase):
         self.assert_json_error(response)
 
     def test_uploader_creates_package_version(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
         self.post_package_version('1.2.3')
 
         version = self.get_package_version('1.2.3')
@@ -136,67 +84,14 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(version.package.name, 'test-package')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
 
-    def test_uploader_creates_package_version_with_json(self):
-        self.be_admin_user()
-        self.post_package_version_with_json('1.2.3')
-
-        version = self.get_package_version('1.2.3')
-        self.assertIsNotNone(version)
-        self.assertEqual(version.version, SemanticVersion('1.2.3'))
-        self.assertEqual(version.package.name, 'test-package')
-        self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
-
     def test_create_requires_admin(self):
-        self.be_normal_user()
-
-        response = self.testapp.get('/packages/versions/abcd/create')
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(response.headers['Location'],
-                         'http://localhost:80/packages')
-        self.assertTrue(response.cookies_set.has_key('flash'))
-
-    def test_create_requires_uploader(self):
-        Package.new(name='owned-package',
-                    uploaders=[self.normal_user('owner')]).put()
-        self.be_normal_user()
-
-        response = self.testapp.get(
-            '/packages/owned-package/versions/abcd/create')
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(response.headers['Location'],
-                         'http://localhost:80/packages/owned-package')
-        self.assertTrue(response.cookies_set.has_key('flash'))
-
-    def test_create_requires_valid_id(self):
-        self.be_admin_user()
-
-        response = self.testapp.get(
-            '/packages/versions/abcd/create', status=403)
-        self.assert_error_page(response)
-
-    def test_create_requires_new_version_number(self):
-        self.be_admin_user()
-        self.package_version(self.package, '1.2.3', description='old').put()
-
-        upload = self.upload_archive('test-package', '1.2.3', description='new')
-        response = self.create_package(upload)
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(
-            response.headers['Location'],
-            'http://localhost:80/packages/test-package/versions/new')
-        self.assertTrue(response.cookies_set.has_key('flash'))
-
-        version = self.get_package_version('1.2.3')
-        self.assertEqual(version.pubspec['description'], 'old')
-
-    def test_create_json_requires_admin(self):
         self.be_normal_oauth_user()
 
         response = self.testapp.get('/packages/versions/abcd/create.json',
                                     status=403)
         self.assert_json_error(response)
 
-    def test_create_json_requires_uploader(self):
+    def test_create_requires_uploader(self):
         Package.new(name='owned-package',
                     uploaders=[self.normal_user('owner')]).put()
         self.be_normal_oauth_user()
@@ -205,26 +100,26 @@ class PackageVersionsTest(TestCase):
             '/packages/owned-package/versions/abcd/create.json', status=403)
         self.assert_json_error(response)
 
-    def test_create_json_requires_valid_id(self):
+    def test_create_requires_valid_id(self):
         self.be_admin_oauth_user()
 
         response = self.testapp.get(
             '/packages/versions/abcd/create.json', status=403)
         self.assert_json_error(response)
 
-    def test_create_json_requires_new_version_number(self):
+    def test_create_requires_new_version_number(self):
         self.be_admin_oauth_user()
         self.package_version(self.package, '1.2.3', description='old').put()
 
         upload = self.upload_archive('test-package', '1.2.3', description='new')
-        response = self.create_package_with_json(upload, status=400)
+        response = self.create_package(upload, status=400)
         self.assert_json_error(response)
 
         version = self.get_package_version('1.2.3')
         self.assertEqual(version.pubspec['description'], 'old')
 
     def test_create_sets_latest_package_for_increased_version_number(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
 
         self.post_package_version('1.2.3')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
@@ -235,7 +130,7 @@ class PackageVersionsTest(TestCase):
         self.assert_package_updated_is_latest_version_created()
 
     def test_create_sets_latest_package_for_prerelease_versions_only(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
 
         self.post_package_version('1.2.3-pre1')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3-pre1'))
@@ -249,7 +144,7 @@ class PackageVersionsTest(TestCase):
         self.assert_package_updated_is_latest_version_created()
 
     def test_create_sets_latest_package_to_old_version_over_prerelease_version(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
 
         self.post_package_version('1.2.3-pre1')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3-pre1'))
@@ -263,7 +158,7 @@ class PackageVersionsTest(TestCase):
         self.assert_package_updated_is_latest_version_created()
 
     def test_create_doesnt_set_latest_package_for_decreased_version_number(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
 
         self.post_package_version('1.2.3')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
@@ -274,7 +169,7 @@ class PackageVersionsTest(TestCase):
         self.assert_package_updated_is_latest_version_created()
 
     def test_create_doesnt_set_latest_package_for_prerelease_version_number(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
 
         self.post_package_version('1.2.3')
         self.assertEqual(self.latest_version(), SemanticVersion('1.2.3'))
@@ -285,7 +180,7 @@ class PackageVersionsTest(TestCase):
         self.assert_package_updated_is_latest_version_created()
 
     def test_create_sets_sort_order(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
 
         self.post_package_version('1.2.3')
         self.run_deferred_tasks()
@@ -314,7 +209,7 @@ class PackageVersionsTest(TestCase):
                          'test-package-1.2.3.tar.gz')
 
     def test_show_package_version_tar_gz_increments_downloads(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
         self.post_package_version('1.2.3')
         self.post_package_version('1.2.4')
 
@@ -364,7 +259,7 @@ class PackageVersionsTest(TestCase):
         self.assert_error_page(response)
 
     def test_reload_reloads_a_package_version(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
         self.post_package_version('1.2.3')
 
         version = PackageVersion.get_by_name_and_version(
@@ -372,6 +267,7 @@ class PackageVersionsTest(TestCase):
         version.libraries = ["wrong"]
         version.put()
 
+        self.be_admin_user()
         response = self.testapp.post('/packages/versions/reload', status=302)
         self.assertEqual(response.headers['Location'],
                          'http://localhost:80/admin#tab-packages')
@@ -388,11 +284,12 @@ class PackageVersionsTest(TestCase):
         self.assert_package_updated_is_latest_version_created()
 
     def test_reload_preserves_sort_order(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
         self.post_package_version('1.2.3')
         self.post_package_version('1.2.4')
         self.post_package_version('1.2.4-pre')
 
+        self.be_admin_user()
         self.testapp.post('/packages/versions/reload')
         self.run_deferred_tasks()
 
@@ -409,12 +306,13 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(2, version.sort_order)
 
     def test_reload_preserves_downloads(self):
-        self.be_admin_user()
+        self.be_admin_oauth_user()
         self.post_package_version('1.2.3')
 
         response = self.testapp.get(
             '/packages/test-package/versions/1.2.3.tar.gz')
 
+        self.be_admin_user()
         self.testapp.post('/packages/versions/reload')
         self.run_deferred_tasks()
 
@@ -423,38 +321,10 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(1, version.downloads)
 
     def post_package_version(self, version, name='test-package'):
-        response = self.create_package(
-            self.upload_archive(name, version))
-        self.assertEqual(response.status_int, 302)
-        self.assertEqual(
-            response.headers['Location'],
-            'http://localhost:80/packages/' + name)
-        self.assertTrue(response.cookies_set.has_key('flash'))
-
-    def create_package(self, upload, status=None):
-        get_response = self.testapp.get('/packages/versions/new')
-        self.assertEqual(get_response.status_int, 200)
-        form = get_response.form
-        self.assertEqual(form.method, 'POST')
-
-        form['file'] = upload[1:]
-        post_response = form.submit()
-
-        self.assertEqual(post_response.status_int, 302)
-        self.assertTrue(re.match(
-                r'^http://localhost:80/packages/versions/[^/]+/create$',
-                post_response.headers['Location']))
-
-        path = post_response.headers['Location'].replace(
-            'http://localhost:80', '')
-        return self.testapp.get(path, status=status)
-
-    def post_package_version_with_json(self, version, name='test-package'):
-        response = self.create_package_with_json(
-            self.upload_archive(name, version))
+        response = self.create_package(self.upload_archive(name, version))
         self.assert_json_success(response)
 
-    def create_package_with_json(self, upload, status=None):
+    def create_package(self, upload, status=None):
         get_response = self.testapp.get('/packages/versions/new.json')
         self.assertEqual(get_response.status_int, 200)
         content = json.loads(get_response.body)

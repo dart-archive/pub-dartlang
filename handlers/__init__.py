@@ -56,7 +56,6 @@ def layout(content, title=None):
     return _renderer.render(
         _renderer.load_template("layout"),
         content=content,
-        can_upload=is_current_user_dogfooder(),
         logged_in=users.get_current_user() is not None,
         login_url=users.create_login_url(cherrypy.url()),
         logout_url=users.create_logout_url(cherrypy.url()),
@@ -139,7 +138,7 @@ def handle_validation_errors(fn, *args, **kwargs):
         raise cherrypy.HTTPRedirect(request().url(action=new_action))
 
 @decorator
-def json_action(fn, *args, **kwargs):
+def json_or_html_action(fn, *args, **kwargs):
     """A decorator for actions that can be JSON-formatted.
 
     If the current request is JSON-formatted, this sets the content-type and
@@ -162,6 +161,16 @@ def json_action(fn, *args, **kwargs):
         raise JsonError(403, "OAuth2 authentication failed.")
     except Exception as err:
         raise JsonError(500, err.message)
+
+@decorator
+@json_or_html_action
+def json_action(fn, *args, **kwargs):
+    """A decorator for actions that support only JSON.
+
+    This implies json_or_html_action.
+    """
+    if not request().is_json: http_error(404)
+    return fn(*args, **kwargs)
 
 @decorator
 def requires_user(fn, *args, **kwargs):

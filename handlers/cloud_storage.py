@@ -111,16 +111,6 @@ class Upload(object):
             self._url = handlers.request().url(
                 controller="versions", action="upload")
 
-    def to_form(self):
-        """Return the HTML for a form for uploading a file to cloud storage."""
-
-        # Get the fields into a format mustache can iterate over
-        fields = [{'key': key, 'value': value}
-                  for key, value in self._fields.iteritems()]
-
-        return handlers.render(
-            "signed_form", url=self._url, fields=fields, layout=False)
-
     def to_json(self):
         """Return a JSON encoding of the upload data.
 
