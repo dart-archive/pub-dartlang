@@ -22,8 +22,8 @@ class PackageVersionsTest(TestCase):
                                    uploaders=[self.admin_user()])
         self.package.put()
 
-    def test_admin_creates_new_package(self):
-        self.be_admin_oauth_user()
+    def test_user_creates_new_package(self):
+        self.be_normal_oauth_user()
         self.post_package_version(name='new-package', version='0.0.1')
 
         package = Package.get_by_key_name('new-package')
@@ -50,13 +50,6 @@ class PackageVersionsTest(TestCase):
         # Since we didn't send any OAuth2 credentials, the WWW-Authenticate
         # header shouldn't have OAuth2-specific fields.
         self.assertEqual(response.headers['WWW-Authenticate'], 'Bearer')
-
-    def test_new_requires_admin(self):
-        self.be_normal_oauth_user()
-        response = self.testapp.get('/packages/versions/new.json',
-                                    status=403)
-        self.assert_json_error(response)
-        self.assert_oauth_error(response)
 
     def test_new_requires_uploadership(self):
         self.be_normal_oauth_user()
