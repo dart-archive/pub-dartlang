@@ -62,14 +62,6 @@ class PackagesTest(TestCase):
 
         self.be_normal_user()
         response = self.testapp.get('/packages/test-package')
-        self.assert_no_link(response, '/packages/test-package/versions/new')
-
-    def test_get_owned_package(self):
-        Package.new(name='test-package', uploaders=[self.admin_user()]).put()
-
-        self.be_admin_user()
-        response = self.testapp.get('/packages/test-package')
-        self.assert_link(response, '/packages/test-package/versions/new')
 
     def test_get_package_json_without_versions(self):
         admin = self.admin_user()

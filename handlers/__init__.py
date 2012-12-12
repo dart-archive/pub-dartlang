@@ -209,13 +209,6 @@ def requires_uploader(fn, *args, **kwargs):
         else:
             flash(message)
             raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
-    elif not is_current_user_dogfooder():
-        message = "You don't have permission to upload packages."
-        if request().is_json:
-            http_error(403, message)
-        else:
-            flash(message)
-            raise cherrypy.HTTPRedirect('/packages')
 
     return fn(*args, **kwargs)
 
