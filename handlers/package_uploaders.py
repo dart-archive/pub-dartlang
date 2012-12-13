@@ -16,6 +16,7 @@ class PackageUploaders(object):
     """
 
     @handlers.json_action
+    @handlers.requires_uploader
     @models.transactional
     def create(self, package_id, format, email):
         """Add a new uploader for this package.
@@ -23,11 +24,6 @@ class PackageUploaders(object):
         Only other uploaders may add new uploaders."""
 
         package = handlers.request().package
-        if handlers.get_oauth_user() not in package.uploaders:
-            handlers.http_error(
-                403, "You aren't an uploader for package '%s'." %
-                         package.name)
-
         user_to_add = users.User(email)
         if user_to_add in package.uploaders:
             handlers.http_error(
@@ -41,6 +37,7 @@ class PackageUploaders(object):
                 (email, package.name))
 
     @handlers.json_action
+    @handlers.requires_uploader
     @models.transactional
     def delete(self, package_id, id, format):
         """Delete one of this package's uploaders.
@@ -50,11 +47,6 @@ class PackageUploaders(object):
         """
 
         package = handlers.request().package
-        if handlers.get_oauth_user() not in package.uploaders:
-            handlers.http_error(
-                403, "You aren't an uploader for package '%s'." %
-                         package.name)
-
         user_to_delete = users.User(id)
         if user_to_delete not in package.uploaders:
             handlers.http_error(

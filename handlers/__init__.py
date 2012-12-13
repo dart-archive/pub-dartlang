@@ -199,7 +199,11 @@ def requires_uploader(fn, *args, **kwargs):
     This implies requires_user. It does not require that a package exist; if
     none does, it only checks that the user has permission to upload packages at
     all.
+
+    Admins have uploader rights for all packages.
     """
+
+    if is_current_user_admin(): return fn(*args, **kwargs)
 
     package = request().maybe_package
     if package and get_current_user() not in package.uploaders:
