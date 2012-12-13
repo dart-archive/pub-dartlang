@@ -18,20 +18,35 @@ class Packages(object):
     the responsibility of the PackageVersions class).
     """
 
-    def index(self, page=1):
+    @handlers.json_or_html_action
+    def index(self, page=1, format='html'):
         """Retrieve a paginated list of uploaded packages.
 
         Arguments:
           page: The page of packages to get. Each page contains 10 packages.
         """
-        pager = Pager(
-            int(page), "/packages?page=%d", Package.all().order('-updated'))
-        title = 'All Packages'
-        if page != 1: title = 'Page %s | %s' % (page, title)
-        return handlers.render("packages/index",
-                               packages=pager.get_items(),
-                               pagination=pager.render_pagination(),
-                               layout={'title': title})
+        if format == 'json':
+            pager = Pager(int(page), "/packages.json?page=%d",
+                          Package.all().order('-updated'),
+                          per_page=50)
+            return json.dumps({
+                "packages": [
+                    handlers.request().url(action='show', id=package.name)
+                    for package in pager.get_items()
+                ],
+                "prev": pager.prev_url,
+                "next": pager.next_url,
+                "pages": pager.page_count
+            })
+        else:
+            pager = Pager(int(page), "/packages?page=%d",
+                          Package.all().order('-updated'))
+            title = 'All Packages'
+            if page != 1: title = 'Page %s | %s' % (page, title)
+            return handlers.render("packages/index",
+                                   packages=pager.get_items(),
+                                   pagination=pager.render_pagination(),
+                                   layout={'title': title})
 
     @handlers.json_or_html_action
     def show(self, id, format='html'):

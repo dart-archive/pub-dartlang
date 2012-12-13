@@ -5,6 +5,7 @@
 import math
 
 import handlers
+import cherrypy
 
 class Pager(object):
     """A class for paginating a model.
@@ -72,6 +73,23 @@ class Pager(object):
         """Return the HTML for the pagination control."""
         return handlers.render("pagination", page_links=self._page_links,
                                layout=False)
+
+    @property
+    def page_count(self):
+        """The total number of pages."""
+        return self._page_count
+
+    @property
+    def prev_url(self):
+        """The URL for the previous page, or None if this is the first page."""
+        if self._page == 1: return None
+        return cherrypy.request.base + (self._href_pattern % (self._page - 1))
+
+    @property
+    def next_url(self):
+        """The URL for the ext page, or None if this is the last page."""
+        if self._page == self._page_count: return None
+        return cherrypy.request.base + (self._href_pattern % (self._page + 1))
 
     @property
     def _page_links(self):
