@@ -87,7 +87,7 @@ class Pager(object):
 
     @property
     def next_url(self):
-        """The URL for the ext page, or None if this is the last page."""
+        """The URL for the next page, or None if this is the last page."""
         if self._page == self._page_count: return None
         return cherrypy.request.base + (self._href_pattern % (self._page + 1))
 
