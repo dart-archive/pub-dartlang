@@ -54,6 +54,46 @@ class PackagesTest(TestCase):
         # Only the ten most recent packages should be listed
         self.expect_lists_packages(['bat', 'armadillo'], page=2)
 
+    def test_index_json_lists_one_page_of_packages(self):
+        self.be_admin_user()
+
+        packages = ['package%d' % i for i in range(0, 100)]
+
+        for package in packages:
+            self.create_package(package, '1.0.0')
+
+        response = self.testapp.get('/packages.json')
+        self.assertEqual(response.status_int, 200)
+        result = json.loads(response.body)
+        self.assertEqual(result['prev'], None)
+        self.assertEqual(
+            result['next'], 'http://localhost:80/packages.json?page=2')
+        self.assertEqual(result['pages'], 2)
+        self.assertEqual(result['packages'], [
+            'http://localhost:80/packages/package%d.json' % i
+            for i in reversed(range(50, 100))
+        ])
+
+    def test_page_two_json_lists_second_page_of_packages(self):
+        self.be_admin_user()
+
+        packages = ['package%d' % i for i in range(0, 100)]
+
+        for package in packages:
+            self.create_package(package, '1.0.0')
+
+        response = self.testapp.get('/packages.json?page=2')
+        self.assertEqual(response.status_int, 200)
+        result = json.loads(response.body)
+        self.assertEqual(
+            result['prev'], 'http://localhost:80/packages.json?page=1')
+        self.assertEqual(result['next'], None)
+        self.assertEqual(result['pages'], 2)
+        self.assertEqual(result['packages'], [
+            'http://localhost:80/packages/package%d.json' % i
+            for i in reversed(range(0, 50))
+        ])
+
     def test_get_non_existent_package(self):
         self.testapp.get('/packages/package/test-package', status=404)
 
