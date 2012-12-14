@@ -48,6 +48,26 @@ class PackageUploadersTest(TestCase):
             self.normal_user()
         ])
 
+    def test_create_is_case_insensitive(self):
+        self.be_normal_oauth_user('uploader1')
+        response = self.testapp.post(
+            '/packages/test-package/uploaders.json',
+            {'email': self.normal_user('NAme').email()})
+        self.assert_json_success(response)
+
+        response = self.testapp.post(
+            '/packages/test-package/uploaders.json',
+            {'email': self.normal_user('naME').email()},
+            status=400)
+        self.assert_json_error(response)
+
+        package = Package.get_by_key_name('test-package')
+        self.assertEquals(package.uploaders, [
+            self.normal_user('uploader1'),
+            self.normal_user('uploader2'),
+            self.normal_user('NAme')
+        ])
+
     def test_admin_creates_new_uploader(self):
         self.be_admin_oauth_user()
         response = self.testapp.post('/packages/test-package/uploaders.json',
@@ -100,6 +120,17 @@ class PackageUploadersTest(TestCase):
         response = self.testapp.delete(
             '/packages/test-package/uploaders/%s.json' %
                 self.normal_user('uploader1').email())
+        self.assert_json_success(response)
+
+        package = Package.get_by_key_name('test-package')
+        self.assertEquals(
+            package.uploaders, [self.normal_user('uploader2')])
+
+    def test_delete_is_case_insensitive(self):
+        self.be_normal_oauth_user('uploader1')
+        response = self.testapp.delete(
+            '/packages/test-package/uploaders/%s.json' %
+                self.normal_user('UpLoAdEr1').email())
         self.assert_json_success(response)
 
         package = Package.get_by_key_name('test-package')
