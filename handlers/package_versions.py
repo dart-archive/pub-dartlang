@@ -104,7 +104,7 @@ class PackageVersions(object):
                     403, "Package upload " + id + " does not exist.")
 
             if version.package.is_saved():
-                if handlers.get_oauth_user() not in version.package.uploaders:
+                if not version.package.has_uploader(handlers.get_oauth_user()):
                     handlers.http_error(
                         403, "You aren't an uploader for package '%s'." %
                                  version.package.name)

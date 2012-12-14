@@ -43,6 +43,29 @@ class PackageVersionsTest(TestCase):
 
         self.assertEqual(package.updated, version.created)
 
+    def test_uploadership_is_case_insensitive(self):
+        self.be_normal_oauth_user('NAme')
+        self.post_package_version(name='new-package', version='0.0.1')
+
+        package = Package.get_by_key_name('new-package')
+        self.assertIsNotNone(package)
+        self.assertEqual(package.name, 'new-package')
+
+        version = package.latest_version
+        self.assertIsNotNone(version)
+        self.assertEqual(version.version, SemanticVersion('0.0.1'))
+
+        self.be_normal_oauth_user('naME')
+        self.post_package_version(name='new-package', version='0.0.2')
+
+        package = Package.get_by_key_name('new-package')
+        self.assertIsNotNone(package)
+        self.assertEqual(package.name, 'new-package')
+
+        version = package.latest_version
+        self.assertIsNotNone(version)
+        self.assertEqual(version.version, SemanticVersion('0.0.2'))
+
     def test_new_requires_oauth(self):
         response = self.testapp.get('/packages/test-package/versions/new.json',
                                     status=401)

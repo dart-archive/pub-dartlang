@@ -131,3 +131,14 @@ class Package(db.Model):
         version = PackageVersion.get_by_name_and_version(
             self.name, str(version))
         return version is not None
+
+    def has_uploader(self, uploader):
+        """Determine whether the given user is an uploader for this package.
+
+        This compares users via case-insensitive email comparison.
+
+        Although admins have uploader privileges for all packages, this will not
+        return True for admins.
+        """
+        return uploader.email().lower() in \
+            [u.email().lower() for u in self.uploaders]

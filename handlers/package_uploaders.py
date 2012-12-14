@@ -25,7 +25,7 @@ class PackageUploaders(object):
 
         package = handlers.request().package
         user_to_add = users.User(email)
-        if user_to_add in package.uploaders:
+        if package.has_uploader(user_to_add):
             handlers.http_error(
                 400, "User '%s' is already an uploader for package '%s'." %
                          (email, package.name))
@@ -48,7 +48,7 @@ class PackageUploaders(object):
 
         package = handlers.request().package
         user_to_delete = users.User(id)
-        if user_to_delete not in package.uploaders:
+        if not package.has_uploader(user_to_delete):
             handlers.http_error(
                 400, "'%s' isn't an uploader for package '%s'." %
                          (user_to_delete.nickname(), package.name))
@@ -58,7 +58,9 @@ class PackageUploaders(object):
                 400, ("Package '%s' only has one uploader, so that uploader " +
                           "can't be removed.") % package.name)
 
-        package.uploaders.remove(user_to_delete)
+        email_to_delete = user_to_delete.email().lower()
+        package.uploaders = [uploader for uploader in package.uploaders
+                             if uploader.email().lower() != email_to_delete]
         package.put()
         return handlers.json_success(
             "'%s' is no longer an uploader for package '%s'." %

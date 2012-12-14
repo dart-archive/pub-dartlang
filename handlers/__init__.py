@@ -206,7 +206,7 @@ def requires_uploader(fn, *args, **kwargs):
     if is_current_user_admin(): return fn(*args, **kwargs)
 
     package = request().maybe_package
-    if package and get_current_user() not in package.uploaders:
+    if package and not package.has_uploader(get_current_user()):
         message = "You aren't an uploader for package '%s'." % package.name
         if request().is_json:
             http_error(403, message)
@@ -238,26 +238,6 @@ def get_oauth_user():
     Throws an oauth.OAuthRequestError if the OAuth request is invalid.
     """
     return oauth.get_current_user(OAUTH2_SCOPE)
-
-# TODO(nweiz): get rid of this once we no longer have any mixed OAuth/cookie
-# login actions.
-_OAUTH_ADMINS = [
-    'gram@google.com',
-    'jmesserly@google.com',
-    'nweiz@google.com',
-    'rnystrom@google.com',
-    'sethladd@google.com',
-    'sigmund@google.com',
-    'vsm@google.com',
-]
-"""Emails of administrators for this app.
-
-AppEngine keeps track of these automatically for normal browser requests, but it
-doesn't store the admin bit in a way that's accessible from OAuth, so we have to
-store a copy of these here.
-
-From https://appengine.google.com/permissions?&app_id=s~dartlang-pub.
-"""
 
 def is_current_user_admin():
     """Return whether there is a logged-in admin.
