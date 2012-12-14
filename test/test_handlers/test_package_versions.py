@@ -47,22 +47,14 @@ class PackageVersionsTest(TestCase):
         self.be_normal_oauth_user('NAme')
         self.post_package_version(name='new-package', version='0.0.1')
 
-        package = Package.get_by_key_name('new-package')
-        self.assertIsNotNone(package)
-        self.assertEqual(package.name, 'new-package')
-
-        version = package.latest_version
+        version = Package.get_by_key_name('new-package').latest_version
         self.assertIsNotNone(version)
         self.assertEqual(version.version, SemanticVersion('0.0.1'))
 
         self.be_normal_oauth_user('naME')
         self.post_package_version(name='new-package', version='0.0.2')
 
-        package = Package.get_by_key_name('new-package')
-        self.assertIsNotNone(package)
-        self.assertEqual(package.name, 'new-package')
-
-        version = package.latest_version
+        version = Package.get_by_key_name('new-package').latest_version
         self.assertIsNotNone(version)
         self.assertEqual(version.version, SemanticVersion('0.0.2'))
 
