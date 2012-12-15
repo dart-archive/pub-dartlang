@@ -55,14 +55,15 @@
               </li>
               <li><a href="/packages">Packages</a></li>
             </ul>
-            <ul class="nav pull-right">
-              {{#logged_in}}
-                <li><a href="{{logout_url}}">Log Out</a></li>
-              {{/logged_in}}
-              {{^logged_in}}
-                <li><a href="{{login_url}}">Log In</a></li>
-              {{/logged_in}}
-            </ul>
+            <form class="navbar-search pull-right" action="/search"
+                  id="cse-search-box">
+              <input type="hidden" name="cx"
+                     value="009011925481577436976:h931xn2j7o0">
+              <input type="hidden" name="ie" value="UTF-8">
+              <input type="hidden" name="hl" value="en">
+              <input type="search" name="q" class="search-query" id="q"
+                     autocomplete="off" placeholder="Search">
+            </form>
           </div>
         </div>
       </div>

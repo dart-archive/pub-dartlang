@@ -5000,6 +5000,10 @@ article h2:hover a.permalink, article h3:hover a.permalink, article .toc:hover:b
   display: inline;
 }
 
+.navbar-search {
+  margin-top: 3px;
+}
+
 .has-permalink:hover > a.permalink {
   display: inline;
 }

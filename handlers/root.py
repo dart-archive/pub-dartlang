@@ -30,6 +30,10 @@ class Root(object):
         """Retrieves a map of the site."""
         return handlers.render('site_map', layout={'title': 'Site Map'})
 
+    def search(self, **kwargs):
+        """Exposes an embedded Google search."""
+        return handlers.render('search', layout={'title': 'Search Pub'})
+
     def admin(self):
         """Retrieve a page for performing administrative tasks."""
 
