@@ -43,10 +43,11 @@ you upload.
 **All files** in your package will be included in the published package, with
 the following exceptions:
 
-* "Hidden" files (that is, files whose names begin with `.`).
 * Any `packages` directories.
 * Your package's [lockfile](glossary.html#lockfile).
 * If you're using Git, any files ignored by your `.gitignore` file.
+* If you aren't using Git, all "hidden" files (that is, files whose names begin
+  with `.`).
 
 If there are other files you don't want to include, be sure to delete them (or
 add them to `.gitignore`) before running `pub publish`.
