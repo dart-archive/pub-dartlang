@@ -6,7 +6,7 @@ import os
 
 from google.appengine.api import namespace_manager
 
-_PRODUCTION_DATABASE_VERSIONS = ['1', 'preview', 'coming-soon']
+_PRODUCTION_DATABASE_VERSIONS = ['1', 'm2', 'preview', 'coming-soon']
 """The versions of pub.dartlang.org that should use the production database."""
 
 def namespace_manager_default_namespace_for_request():
