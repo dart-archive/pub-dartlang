@@ -39,6 +39,8 @@ class Application(cherrypy.Application):
         self.dispatcher.mapper.connect(
             '/site-map', controller='root', action='site_map')
         self.dispatcher.mapper.connect(
+            '/search', controller='root', action='search')
+        self.dispatcher.mapper.connect(
             '/admin', controller='root', action='admin')
         self.dispatcher.mapper.connect(
             '/gs_/{filename:.*?}', controller='root', action='serve')
