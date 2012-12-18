@@ -5001,7 +5001,14 @@ article h2:hover a.permalink, article h3:hover a.permalink, article .toc:hover:b
 }
 
 .navbar-search {
-  margin-top: 3px;
+  margin-top: 4px;
+}
+.navbar-search .search-query {
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  height: 20px;
+  line-height: inherit;
 }
 
 .has-permalink:hover > a.permalink {

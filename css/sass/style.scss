@@ -48,7 +48,15 @@ article {
 }
 
 .navbar-search {
-  margin-top: 3px;
+  margin-top: 4px;
+
+  .search-query {
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    height: 20px;
+    line-height: inherit;
+  }
 }
 
 .has-permalink:hover > a.permalink {
