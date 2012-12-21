@@ -57,8 +57,10 @@ class Application(cherrypy.Application):
                          'member_name': 'package',
                          'collection_name': 'packages'
                        },
-                       collection={'upload': 'POST'},
-                       member={'create': 'GET'})
+                       member={
+                         'create': 'GET',
+                         'new_dartdoc': 'GET'
+                       })
 
         # Package version actions related to uploading a new package need to
         # work without that package in the URL.
