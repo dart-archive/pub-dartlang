@@ -5024,6 +5024,11 @@ footer {
   font-size: 13px;
   text-align: center;
 }
+footer .login, footer .logout {
+  display: inline-block;
+  float: right;
+  color: #d0d0d0;
+}
 
 form#private-key textarea {
   width: 550px;

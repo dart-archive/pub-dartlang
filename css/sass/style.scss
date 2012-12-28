@@ -73,6 +73,14 @@ footer {
   @extend .well-small;
   font-size: 13px;
   text-align: center;
+
+  .login, .logout {
+    display: inline-block;
+    float: right;
+    // #f5f5f5 is the background-color of the footer, which isn't a variable
+    // for some reason.
+    color: scale-color(#f5f5f5, $lightness: -15%);
+  }
 }
 
 form#private-key textarea {
