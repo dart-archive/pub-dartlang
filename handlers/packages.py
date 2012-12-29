@@ -63,14 +63,19 @@ class Packages(object):
         elif format == 'html':
             package = handlers.request().package
             version_count = package.version_set.count()
+
             title = package.name
+            readme = None
             if package.latest_version:
                 title = '%s %s' % (package.name, package.latest_version.version)
+                readme = package.latest_version.readme.render()
+
             return handlers.render(
                 "packages/show", package=package,
                 versions=package.version_set.order('-sort_order').fetch(10),
                 version_count=version_count,
                 show_versions_link=version_count > 10,
+                readme=readme,
                 layout={'title': title})
         else:
             raise handlers.http_error(404)

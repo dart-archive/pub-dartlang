@@ -2,11 +2,18 @@
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
 
+import cgi
 import os
 import re
 
+import markdown
+
 class Readme(object):
     """A README file with associated format information."""
+
+    class Format(object):
+        """An enum of possible README formats."""
+        TEXT, MARKDOWN = range(2)
 
     def __init__(self, text, filename):
         self.text = text
@@ -30,3 +37,28 @@ class Readme(object):
         filename = min(readmes, key=lambda(name): name.count('.'))
         text = tar.extractfile(filename).read()
         return Readme(text, filename)
+
+    @property
+    def format(self):
+        """Returns the format of the README as a value of Format."""
+        return {
+            ".md":       Readme.Format.MARKDOWN,
+            ".markdown": Readme.Format.MARKDOWN,
+            ".mdown":    Readme.Format.MARKDOWN,
+        }.get(os.path.splitext(self.filename)[1], Readme.Format.TEXT)
+
+    def render(self):
+        """Renders the README to HTML."""
+        return {
+            Readme.Format.MARKDOWN: _render_markdown,
+            Readme.Format.TEXT:     _render_text,
+        }[self.format](self.text)
+
+def _render_markdown(text):
+    return markdown.markdown(
+        text, output_format="html5", safe_mode='escape', extensions=[
+            'fenced_code', 'tables', 'smart_strong', 'nl2br', 'sane_lists',
+        ])
+
+def _render_text(text):
+    return '<pre>%s</pre>' % cgi.escape(text)
