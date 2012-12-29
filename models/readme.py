@@ -58,6 +58,7 @@ def _render_markdown(text):
     return markdown.markdown(
         text, output_format="html5", safe_mode='escape', extensions=[
             'fenced_code', 'tables', 'smart_strong', 'nl2br', 'sane_lists',
+            'codehilite(guess_lang=False, css_class=highlight)', 
         ])
 
 def _render_text(text):
