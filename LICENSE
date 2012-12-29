@@ -8,6 +8,7 @@ Routes     - in third_party/routes
 repoze.lru - in third_party/repoze/lru
 decorator  - in third_party/decorator.py
 PyYaml     - in third_party/yaml
+Markdown   - in third_party/markdown
 
 The libraries may have their own licenses; we recommend you read them,
 as their terms may differ from the terms below.
