@@ -13,8 +13,9 @@ import yaml
 from semantic_version import SemanticVersion
 from handlers import cloud_storage
 from package import Package
-from properties import PubspecProperty, VersionProperty
+from properties import PubspecProperty, ReadmeProperty, VersionProperty
 from pubspec import Pubspec
+from readme import Readme
 
 class PackageVersion(db.Model):
     """The model for a single version of a package.
@@ -29,6 +30,9 @@ class PackageVersion(db.Model):
     pubspec = PubspecProperty(required=True, indexed=False)
     """The package version's pubspec file."""
 
+    readme = ReadmeProperty()
+    """The README file."""
+
     libraries = db.ListProperty(str)
     """All libraries that can be imported from this package version."""
 
@@ -37,8 +41,8 @@ class PackageVersion(db.Model):
                                    collection_name = "version_set")
     """The Package model for this package version."""
 
-    # The following properties are not parsed from the pubspec. They need to be
-    # manually copied over to new PackageVersions in
+    # The following properties are not parsed from the package archive. They
+    # need to be manually copied over to new PackageVersions in
     # handlers.PackageVersions._reload_version.
 
     created = db.DateTimeProperty(auto_now_add=True)
@@ -99,6 +103,7 @@ class PackageVersion(db.Model):
         """
         try:
             tar = tarfile.open(mode="r:gz", fileobj=file)
+            readme = Readme.from_archive(tar)
             pubspec = Pubspec.from_archive(tar)
             name = pubspec.required('name')
             package = Package.get_by_key_name(name)
@@ -112,8 +117,8 @@ class PackageVersion(db.Model):
                                    name.endswith('.dart'))
 
             return PackageVersion.new(
-                package=package, pubspec=pubspec, libraries=libraries,
-                uploader=uploader)
+                package=package, readme=readme, pubspec=pubspec,
+                libraries=libraries, uploader=uploader)
         except (tarfile.TarError, KeyError) as err:
             raise db.BadValueError(
                 "Error parsing package archive: %s" % err)

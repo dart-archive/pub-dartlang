@@ -4,8 +4,10 @@
 
 from google.appengine.ext import db
 import json
+import pickle
 
 from pubspec import Pubspec
+from readme import Readme
 from semantic_version import SemanticVersion
 
 class DocumentProperty(db.Property):
@@ -34,6 +36,26 @@ class PubspecProperty(DocumentProperty):
         """Load the pubspec from JSON."""
         contents = super(PubspecProperty, self).make_value_from_datastore(value)
         return Pubspec(contents)
+
+class PickledProperty(db.Property):
+    """A property that stores a picklable object."""
+
+    def get_value_for_datastore(self, model_instance):
+        """Pickle the document."""
+        value = super(PickledProperty, self) \
+            .get_value_for_datastore(model_instance)
+        return db.Blob(pickle.dumps(value, 2))
+
+    def make_value_from_datastore(self, value):
+        """Load the document from JSON."""
+        if value is None:
+            return None
+        return pickle.loads(value)
+
+class ReadmeProperty(PickledProperty):
+    """A property that stores a README file."""
+
+    data_type = Readme
 
 class VersionProperty(db.Property):
     """A property that stores a semantic version."""
