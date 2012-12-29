@@ -111,7 +111,8 @@ class Upload(object):
         else:
             self._url = routes.url_for(controller="versions",
                                        action="upload",
-                                       package_id=None)
+                                       package_id=None,
+                                       qualified=True)
 
     def to_json(self):
         """Return a JSON encoding of the upload data.
