@@ -18,8 +18,10 @@ from models.semantic_version import SemanticVersion
 class PackageVersionsTest(TestCase):
     def setUp(self):
         super(PackageVersionsTest, self).setUp()
-        self.package = Package.new(name='test-package',
-                                   uploaders=[self.admin_user()])
+        self.package = Package.new(
+            name='test-package',
+            uploaders=[self.admin_user(),
+                       self.normal_user('other-uploader')])
         self.package.put()
 
     def test_user_creates_new_package(self):
@@ -83,7 +85,7 @@ class PackageVersionsTest(TestCase):
         self.assert_json_error(response)
 
     def test_uploader_creates_package_version(self):
-        self.be_admin_oauth_user()
+        self.be_normal_oauth_user('other-uploader')
         self.post_package_version('1.2.3')
 
         version = self.get_package_version('1.2.3')
@@ -259,6 +261,45 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(response.headers['Content-Type'],
                          'text/yaml;charset=utf-8')
         self.assertEqual(yaml.load(response.body), version.pubspec)
+
+    def test_dartdoc_requires_private_key(self):
+        self.be_admin_oauth_user()
+        self.post_package_version('1.2.3')
+        PrivateKey.get_by_key_name('singleton').delete()
+
+        response = self.testapp.get(
+            '/packages/test-package/versions/1.2.3/new_dartdoc.json',
+            status=500)
+        self.assert_json_error(response)
+
+    def test_dartdoc_requires_uploadership(self):
+        self.be_admin_oauth_user()
+        self.post_package_version('1.2.3')
+
+        self.be_normal_oauth_user()
+        response = self.testapp.get(
+            '/packages/test-package/versions/1.2.3/new_dartdoc.json',
+            status=403)
+        self.assert_json_error(response)
+
+    def test_uploader_gets_dartdoc_form(self):
+        self.be_normal_oauth_user('other-uploader')
+        self.post_package_version('1.2.3')
+
+        response = self.testapp.get(
+            '/packages/test-package/versions/1.2.3/new_dartdoc.json')
+        content = json.loads(response.body)
+        self.assertEqual(content['fields']['key'], 'pub.dartlang.org/ns' +
+            '/staging/packages/test-package-1.2.3/dartdoc.json')
+        self.assertEqual(content['fields']['acl'], 'public-read')
+
+    def test_uploader_gets_dartdoc_form_for_nonexistent_package(self):
+        self.be_normal_oauth_user('other-uploader')
+
+        response = self.testapp.get(
+            '/packages/not-package/versions/1.2.3/new_dartdoc.json',
+            status=404)
+        self.assert_json_error(response)
 
     def test_reload_requires_admin(self):
         self.be_normal_user()
