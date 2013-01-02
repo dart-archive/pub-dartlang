@@ -17,6 +17,7 @@ import routes
 
 from models.package import Package
 from models.package_version import PackageVersion
+from models.private_key import PrivateKey
 
 _renderer = pystache.Renderer(search_dirs = [
         os.path.join(os.path.dirname(__file__), '../views')])
@@ -212,6 +213,12 @@ def requires_uploader(fn, *args, **kwargs):
             flash(message)
             raise cherrypy.HTTPRedirect('/packages/%s' % package.name)
 
+    return fn(*args, **kwargs)
+
+@decorator
+def requires_private_key(fn, *args, **kwargs):
+    """A decorator for actions that require a private key to be set."""
+    if PrivateKey.get() is None: http_error(500, 'No private key set.')
     return fn(*args, **kwargs)
 
 def get_current_user():
