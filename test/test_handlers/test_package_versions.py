@@ -293,6 +293,14 @@ class PackageVersionsTest(TestCase):
             '/staging/packages/test-package-1.2.3/dartdoc.json')
         self.assertEqual(content['fields']['acl'], 'public-read')
 
+    def test_uploader_gets_dartdoc_form_for_nonexistent_package(self):
+        self.be_normal_oauth_user('other-uploader')
+
+        response = self.testapp.get(
+            '/packages/not-package/versions/1.2.3/new_dartdoc.json',
+            status=404)
+        self.assert_json_error(response)
+
     def test_reload_requires_admin(self):
         self.be_normal_user()
 
