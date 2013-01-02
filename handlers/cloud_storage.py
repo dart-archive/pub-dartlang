@@ -9,6 +9,7 @@ from base64 import b64encode
 from urlparse import urlparse, parse_qs
 import handlers
 import json
+import routes
 import urllib
 import time
 
@@ -108,8 +109,9 @@ class Upload(object):
         if handlers.is_production():
             self._url = "https://storage.googleapis.com"
         else:
-            self._url = handlers.request().url(
-                controller="versions", action="upload")
+            self._url = routes.url_for(controller="versions",
+                                       action="upload",
+                                       package_id=None)
 
     def to_json(self):
         """Return a JSON encoding of the upload data.

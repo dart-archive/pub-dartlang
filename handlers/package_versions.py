@@ -43,14 +43,8 @@ class PackageVersions(object):
     def new(self, package_id, format='json', **kwargs):
         """Retrieve the form for uploading a package version.
 
-        If the user isn't logged in, this presents a login screen. If they are
-        logged in but don't have admin priviliges or don't own the package, this
-        redirects to /packages/.
-
         This accepts arbitrary keyword arguments to support OAuth.
         """
-        user = handlers.get_oauth_user()
-
         if PrivateKey.get() is None:
             handlers.http_error(500, 'No private key set.')
 
@@ -155,8 +149,8 @@ class PackageVersions(object):
         if is_prerelease and not was_prerelease: return False
         return old.version < new.version
 
-    def upload(self, package_id, file, key, acl=None, policy=None,
-               signature=None, success_action_redirect=None, **kwargs):
+    def upload(self, file, key, acl=None, policy=None, signature=None,
+               success_action_redirect=None, **kwargs):
         """A development-only action for uploading a package archive.
 
         In production, package archives are uploaded directly to cloud storage,
@@ -211,6 +205,20 @@ class PackageVersions(object):
             version.package.downloads += 1
             version.put()
             version.package.put()
+
+    @handlers.json_action
+    @handlers.requires_uploader
+    def new_dartdoc(self, package_id, id, format):
+        """Retrieve the form for uploading dartdoc for this package version."""
+        if PrivateKey.get() is None:
+            handlers.http_error(500, 'No private key set.')
+
+        version = handlers.request().package_version(id)
+        upload = cloud_storage.Upload(version.dartdoc_storage_path,
+                                      acl='public-read',
+                                      size_range=(0, Package.MAX_SIZE))
+
+        return upload.to_json()
 
     def reload(self, package_id):
         """Reload all package versions from their tarballs."""

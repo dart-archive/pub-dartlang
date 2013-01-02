@@ -85,6 +85,13 @@
         </a> &mdash; <a href="http://www.google.com/intl/en/policies/privacy/">
           Privacy Policy
         </a>
+
+        {{#logged_in}}
+          <a class="logout" href="{{logout_url}}" title="Log Out">&times;</a>
+        {{/logged_in}}
+        {{^logged_in}}
+          <a class="login" href="{{login_url}}" title="Log In">+</a>
+        {{/logged_in}}
       </footer>
     </div>
   </body>
