@@ -39,15 +39,13 @@ class PackageVersions(object):
             layout={'title': 'All versions of %s' % package.name})
 
     @handlers.json_action
+    @handlers.requires_private_key
     @handlers.requires_uploader
     def new(self, package_id, format='json', **kwargs):
         """Retrieve the form for uploading a package version.
 
         This accepts arbitrary keyword arguments to support OAuth.
         """
-        if PrivateKey.get() is None:
-            handlers.http_error(500, 'No private key set.')
-
         id = str(uuid4())
         redirect_url = handlers.request().url(action="create", id=id)
         upload = cloud_storage.Upload("tmp/" + id, acl="project-private",
@@ -149,6 +147,7 @@ class PackageVersions(object):
         if is_prerelease and not was_prerelease: return False
         return old.version < new.version
 
+    @handlers.requires_private_key
     def upload(self, file, key, acl=None, policy=None, signature=None,
                success_action_redirect=None, **kwargs):
         """A development-only action for uploading a package archive.
@@ -207,6 +206,7 @@ class PackageVersions(object):
             version.package.put()
 
     @handlers.json_action
+    @handlers.requires_private_key
     @handlers.requires_uploader
     def new_dartdoc(self, package_id, id, format):
         """Retrieve the form for uploading dartdoc for this package version."""
