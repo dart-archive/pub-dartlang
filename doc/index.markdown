@@ -2,6 +2,15 @@
 title: "Getting Started"
 ---
 
+1. [Installing and configuring pub](#installing-and-configuring-pub)
+1. [Creating a package](#creating-a-package)
+1. [Adding a dependency](#adding-a-dependency)
+1. [Installing dependencies](#installing-dependencies)
+1. [Importing code from a dependency](#importing-code-from-a-dependency)
+1. [Updating a dependency](#updating-a-dependency)
+1. [Publishing a package](#publishing-a-package)
+{:.toc}
+
 *Pub* is a package manager for Dart. It helps you reuse existing Dart code
 and bundle your Dart apps and libraries so that you can reuse and share them
 with other people. Pub handles versioning and dependency management so that you
@@ -17,14 +26,12 @@ To **use** a package that's on pub.dartlang.org:
    (if one doesn't already exist)
    and list the package as a dependency:
 
-    {% highlight yaml %}
-name: my_app
-dependencies:
-  js: 0.0.13
-{% endhighlight %}
+        name: my_app
+        dependencies:
+          js: 0.0.13
    
 1. Run `pub install`, either on the command line
-   or through the Dart Editor menu item **Tools > Pub Install**.
+   or through the Dart Editor menu: Tools > Pub Install.
 
 1. Import the package in your app:
    
@@ -33,16 +40,6 @@ import 'package:js/js.dart';
 {% endhighlight %}
 
 For details and pointers to more documentation, read on.
-
-1. [Installing and configuring pub](#installing-and-configuring-pub)
-1. [Creating a package](#creating-a-package)
-1. [Adding a dependency](#adding-a-dependency)
-1. [Installing dependencies](#installing-dependencies)
-1. [Importing code from a dependency](#importing-code-from-a-dependency)
-1. [Updating a dependency](#updating-a-dependency)
-1. [Publishing a package](#publishing-a-package)
-{:.toc}
-
 
 ## Installing and configuring pub
 
