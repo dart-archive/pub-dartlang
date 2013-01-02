@@ -11,7 +11,7 @@ title: "Getting Started"
 1. [Publishing a package](#publishing-a-package)
 {:.toc}
 
-*Pub* is a package mananger for Dart. It helps you reuse existing Dart code
+*Pub* is a package manager for Dart. It helps you reuse existing Dart code
 and bundle your Dart apps and libraries so that you can reuse and share them
 with other people. Pub handles versioning and dependency management so that you
 can ensure that your app runs on other machines exactly the same as it does on
