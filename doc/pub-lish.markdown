@@ -21,8 +21,8 @@ format](pubspec.html) and [package layout conventions](package-layout.html).
 Some of these are required in order for others to be able to use your package.
 Others are suggestions to help make it easier for users to understand and work
 with your package. In both cases, pub will try to help you by pointing out what
-changes will help make your package play nicer with the Dart ecosystem.
-There are a couple of additional requirements for uploading a package:
+changes will help make your package play nicer with the Dart ecosystem. There
+are a few additional requirements for uploading a package:
 
 * You must include a license file (named `LICENSE`, `COPYING`, or some
   variation) that contains an [open-source license](http://opensource.org/). We
@@ -33,6 +33,11 @@ There are a couple of additional requirements for uploading a package:
 * Your package must be less than ten megabytes large after gzip compression. If
   it's too large, consider splitting it into multiple packages, or cutting down
   on the number of included resources or examples.
+
+* Your package should only have hosted dependencies. Git dependencies are
+  allowed but strongly discouraged; not everyone using Dart has Git installed,
+  and Git dependencies don't support version resolution as well as hosted
+  dependencies do.
 
 Be aware that the email address associated with your Google account will be
 displayed on [pub.dartlang.org](http://pub.dartlang.org) along with any packages
