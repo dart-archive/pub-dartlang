@@ -159,8 +159,6 @@ def json_or_html_action(fn, *args, **kwargs):
         raise JsonError(400, err.message)
     except oauth.OAuthRequestError as err:
         raise JsonError(403, "OAuth2 authentication failed.")
-    except Exception as err:
-        raise JsonError(500, err.message)
 
 @decorator
 @json_or_html_action
