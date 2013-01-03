@@ -22,22 +22,22 @@ use the Search box at the top right of this page.
 
 To **use** a package that's on pub.dartlang.org:
 
-1. Create a top-level `pubspec.yaml` file for your app
+1. Create a `pubspec.yaml` file
    (if one doesn't already exist)
-   and list the package as a dependency:
+   and list the package as dependency.
+   For example, to use the [web_ui](/packages/web_ui) package
+   in an app, put this in a top-level file named `pubspec.yaml`:
 
         name: my_app
         dependencies:
-          js: 0.0.13
+          web_ui: any
    
 1. Run `pub install`, either on the command line
    or through the Dart Editor menu: Tools > Pub Install.
 
-1. Import the package in your app:
+1. Import one or more libraries from the package:
    
-    {% highlight dart %}
-import 'package:js/js.dart';
-{% endhighlight %}
+        import 'package:web_ui/web_ui.dart';
 
 For details and pointers to more documentation, read on.
 
