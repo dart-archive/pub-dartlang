@@ -8,6 +8,7 @@ from uuid import uuid4
 import json
 import logging
 
+import load_path
 import cherrypy
 import routes
 from google.appengine.ext import db
