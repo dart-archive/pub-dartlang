@@ -8,9 +8,6 @@ In development, this should be run using the App Engine dev_appserver.py script.
 """
 
 import json
-import os
-import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), 'third_party'))
 
 import cherrypy
 from google.appengine.api import users
