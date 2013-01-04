@@ -7,6 +7,7 @@ from contextlib import closing
 from uuid import uuid4
 import json
 import logging
+import time
 
 import cherrypy
 import routes
@@ -226,7 +227,8 @@ class PackageVersions(object):
         versions_to_reload = 0
         for key in PackageVersion.all(keys_only=True).run():
             versions_to_reload += 1
-            deferred.defer(self._reload_version, key)
+            name = 'reload-%s-%s' % (int(time.time()), key)
+            deferred.defer(self._reload_version, key, _name=name)
         memcache.set('versions_to_reload', versions_to_reload)
         memcache.set('versions_reloaded', 0)
         raise cherrypy.HTTPRedirect('/admin#tab-packages')
@@ -235,6 +237,8 @@ class PackageVersions(object):
         """Reload a single package version from its tarball."""
 
         version = PackageVersion.get(key)
+        logging.info('Reloading %s %s' % (version.package.name, version.version))
+
         with closing(cloud_storage.read(version.storage_path)) as f:
             new_version = PackageVersion.from_archive(
                 f, uploader=version.uploader)
@@ -260,7 +264,9 @@ class PackageVersions(object):
             new_version.put()
             package.put()
 
-        memcache.incr('versions_reloaded')
+        count = memcache.incr('versions_reloaded')
+        logging.info('%s/%s versions reloaded' %
+                     (count, memcache.get('versions_to_reload')))
 
     @handlers.json_action
     def reload_status(self, package_id, format):
