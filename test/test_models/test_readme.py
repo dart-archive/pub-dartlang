@@ -34,6 +34,12 @@ class ReadmeTest(TestCase):
         readme = Readme("This is a README.", "README.md")
         self.assertEqual(Readme.Format.MARKDOWN, readme.format)
 
+        readme = Readme("This is a README.", "README.jp.md")
+        self.assertEqual(Readme.Format.MARKDOWN, readme.format)
+
+        readme = Readme("This is a README.", "README.md.jp")
+        self.assertEqual(Readme.Format.TEXT, readme.format)
+
     def test_wraps_plain_text_readme_in_pre(self):
         readme = Readme("This is a *<README>*.", "README")
         self.assertEqual("<pre>This is a *&lt;README&gt;*.</pre>",

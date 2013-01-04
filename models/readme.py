@@ -29,6 +29,9 @@ class Readme(object):
           tar: A TarFile object.
         """
 
+        # If there are multiple READMEs, choose the one with the fewest
+        # extensions. This handles the case where there are multiple READMEs in
+        # different languages named e.g. "README.md" vs "README.jp.md".
         readmes = [name for name in tar.getnames()
                    if os.path.dirname(name) == ''
                    and re.match(r'^README($|\.)', name)]
