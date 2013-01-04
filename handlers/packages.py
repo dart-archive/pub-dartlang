@@ -68,7 +68,8 @@ class Packages(object):
             readme = None
             if package.latest_version:
                 title = '%s %s' % (package.name, package.latest_version.version)
-                readme = package.latest_version.readme.render()
+                if package.latest_version.readme:
+                    readme = package.latest_version.readme.render()
 
             return handlers.render(
                 "packages/show", package=package,
