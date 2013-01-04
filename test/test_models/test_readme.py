@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (c) 2012, the Dart project authors.  Please see the AUTHORS file
 # for details. All rights reserved. Use of this source code is governed by a
 # BSD-style license that can be found in the LICENSE file.
@@ -26,6 +27,16 @@ class ReadmeTest(TestCase):
         self.assert_extracts_readme(
             "README", ["README", "README.md", "README.md.jp"])
         self.assert_extracts_readme("README.md", ["README.md", "README.md.jp"])
+
+    def test_decodes_valid_utf_8(self):
+        archive = self.archive({'README': 'This is a R\303\213ADM\303\213.'})
+        readme = Readme.from_archive(archive)
+        self.assertEqual(u'This is a RËADMË.', readme.text)
+
+    def test_tries_to_decode_invalid_utf_8(self):
+        archive = self.archive({'README': 'This is a R\300ADM\300.'})
+        readme = Readme.from_archive(archive)
+        self.assertEqual(u'This is a R�ADM�.', readme.text)
 
     def test_infers_format_from_filename(self):
         readme = Readme("This is a README.", "README")
@@ -62,17 +73,5 @@ class ReadmeTest(TestCase):
 
     def readme_archive(self, *names):
         """Return an archive containing README files with the given names."""
-
-        tarfile_io = StringIO()
-        tar = tarfile.open(fileobj=tarfile_io, mode='w:gz')
-
-        for name in names:
-            tarinfo = tarfile.TarInfo(name)
-            contents = 'This is a README named "%s".' % name
-            io = StringIO(contents)
-            tarinfo.size = len(contents)
-            tar.addfile(tarinfo, io)
-        tar.close()
-
-        tarfile_io.seek(0)
-        return tarfile.open(fileobj=tarfile_io)
+        return self.archive({name: 'This is a README named "%s".' % name
+                             for name in names})

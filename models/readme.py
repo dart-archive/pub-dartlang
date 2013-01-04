@@ -38,7 +38,8 @@ class Readme(object):
         if len(readmes) == 0: return None
 
         filename = min(readmes, key=lambda(name): name.count('.'))
-        text = tar.extractfile(filename).read()
+        text = unicode(tar.extractfile(filename).read(),
+                       encoding='utf-8', errors='replace')
         return Readme(text, filename)
 
     @property

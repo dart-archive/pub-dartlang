@@ -245,6 +245,14 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         """
         files['pubspec.yaml'] = yaml.dump(pubspec)
         files['README'] = "This is a README."
+        return self.io_for_archive(files).getvalue()
+
+    def io_for_archive(self, files):
+        """Return a StringIO object containing a .tar.gz archive.
+
+        Arugments:
+          files: A dict of the names and contents of files in the archive.
+        """
 
         tarfile_io = StringIO()
         tar = tarfile.open(fileobj=tarfile_io, mode='w:gz')
@@ -255,7 +263,16 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
             tar.addfile(tarinfo, io)
         tar.close()
 
-        return tarfile_io.getvalue()
+        tarfile_io.seek(0)
+        return tarfile_io
+
+    def archive(self, files):
+        """Creates a TarFile archive.
+
+        Arugments:
+          files: A dict of the names and contents of files in the archive.
+        """
+        return tarfile.open(fileobj=self.io_for_archive(files))
 
     def upload_archive(self, name, version, **additional_pubspec_fields):
         """Return a tuple representing a package archive upload."""
