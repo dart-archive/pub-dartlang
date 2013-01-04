@@ -48,8 +48,7 @@ else:
 sys.path.append(sdk_path)
 import dev_appserver
 dev_appserver.fix_sys_path()
-
-import pub_dartlang
+sys.path.append(os.path.join(os.path.dirname(__file__), 'app'))
 
 test_path = os.path.join(os.path.dirname(__file__), 'test')
 loader = unittest.loader.TestLoader()
