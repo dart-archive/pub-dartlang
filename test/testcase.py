@@ -244,6 +244,7 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         then returned as a string.
         """
         files['pubspec.yaml'] = yaml.dump(pubspec)
+        files['README'] = "This is a README."
 
         tarfile_io = StringIO()
         tar = tarfile.open(fileobj=tarfile_io, mode='w:gz')

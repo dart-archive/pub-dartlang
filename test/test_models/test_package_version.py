@@ -22,3 +22,12 @@ class PackageVersionTest(TestCase):
 
         self.assertEqual(['bar/foo.dart', 'bar/src/foo.dart', 'foo.dart'],
                          version.libraries)
+
+    def test_loads_readme_from_archive(self):
+        pubspec = {'name': 'test-package', 'version': '1.0.0'}
+        archive = self.tar_package(pubspec, {
+            'README': 'This is a README.',
+        })
+        version = PackageVersion.from_archive(StringIO(archive),
+                                              uploader=self.admin_user())
+        self.assertEqual('This is a README.', version.readme.text)

@@ -44,6 +44,7 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(version.package.name, 'new-package')
 
         self.assertEqual(package.updated, version.created)
+        self.assertEqual('This is a README.', version.readme.text)
 
     def test_uploadership_is_case_insensitive(self):
         self.be_normal_oauth_user('NAme')
