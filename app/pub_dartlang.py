@@ -8,6 +8,7 @@ In development, this should be run using the App Engine dev_appserver.py script.
 """
 
 import json
+import logging
 
 import cherrypy
 from google.appengine.api import users
@@ -86,6 +87,10 @@ class Application(cherrypy.Application):
 
         # Set up custom error page.
         cherrypy.config.update({'error_page.default': _error_page})
+
+        # This logging is redundant with AppEngine's built-in logging, and
+        # sometimes prints error logs where there should only be info logs.
+        self.log.access_log.setLevel(logging.WARNING)
 
     def _resource(self, member_name, collection_name, controller, **kwargs):
         """Configure routes for a resource.
