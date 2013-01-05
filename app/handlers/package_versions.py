@@ -7,6 +7,7 @@ from contextlib import closing
 from uuid import uuid4
 import json
 import logging
+import time
 
 import cherrypy
 import routes
@@ -223,18 +224,21 @@ class PackageVersions(object):
     def reload(self, package_id):
         """Reload all package versions from their tarballs."""
         if not handlers.is_current_user_dogfooder(): handlers.http_error(403)
-        versions_to_reload = 0
-        for key in PackageVersion.all(keys_only=True).run():
-            versions_to_reload += 1
-            deferred.defer(self._reload_version, key)
-        memcache.set('versions_to_reload', versions_to_reload)
+        query = PackageVersion.all(keys_only=True)
+        memcache.set('versions_to_reload', query.count())
         memcache.set('versions_reloaded', 0)
+
+        for key in query.run():
+            name = 'reload-%s-%s' % (int(time.time()), key)
+            deferred.defer(self._reload_version, key, _name=name)
         raise cherrypy.HTTPRedirect('/admin#tab-packages')
 
     def _reload_version(self, key):
         """Reload a single package version from its tarball."""
 
         version = PackageVersion.get(key)
+        logging.info('Reloading %s %s' % (version.package.name, version.version))
+
         with closing(cloud_storage.read(version.storage_path)) as f:
             new_version = PackageVersion.from_archive(
                 f, uploader=version.uploader)
@@ -258,9 +262,16 @@ class PackageVersions(object):
             new_version.sort_order = version.sort_order
             version.delete()
             new_version.put()
-            package.put()
 
-        memcache.incr('versions_reloaded')
+            # Only save the package if its latest version has been updated.
+            # Otherwise, its latest version may be being updated in parallel,
+            # causing icky bugs.
+            if latest_version_key == key:
+                package.put()
+
+        count = memcache.incr('versions_reloaded')
+        logging.info('%s/%s versions reloaded' %
+                     (count, memcache.get('versions_to_reload')))
 
     @handlers.json_action
     def reload_status(self, package_id, format):
