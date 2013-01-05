@@ -262,7 +262,12 @@ class PackageVersions(object):
             new_version.sort_order = version.sort_order
             version.delete()
             new_version.put()
-            package.put()
+
+            # Only save the package if its latest version has been updated.
+            # Otherwise, its latest version may be being updated in parallel,
+            # causing icky bugs.
+            if latest_version_key == key:
+                package.put()
 
         count = memcache.incr('versions_reloaded')
         logging.info('%s/%s versions reloaded' %
