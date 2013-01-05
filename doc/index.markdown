@@ -17,27 +17,56 @@ with other people. Pub handles versioning and dependency management so that you
 can ensure that your app runs on other machines exactly the same as it does on
 yours.
 
+To **find** a package that's on pub.dartlang.org,
+use the Search box at the top right of this page.
+
+To **use** a package that's on pub.dartlang.org:
+
+1. Create a `pubspec.yaml` file
+   (if one doesn't already exist)
+   and list the package as dependency.
+   For example, to use the [web_ui](/packages/web_ui) package
+   in an app, put this in a top-level file named `pubspec.yaml`:
+
+        name: my_app
+        dependencies:
+          web_ui: any
+   
+1. Run `pub install`, either on the command line
+   or through the Dart Editor menu: Tools > Pub Install.
+
+1. Import one or more libraries from the package:
+   
+        import 'package:web_ui/web_ui.dart';
+
+For details and pointers to more documentation, read on.
+
 ## Installing and configuring pub
 
-Pub is part of the [Dart SDK](http://dartlang.org/docs/sdk/), so if you have
-Dart installed, you have pub too. You can access pub through the
-[Dart Editor](http://www.dartlang.org/docs/editor/), or through the standalone
-`pub` command line app, which lives inside the `bin` directory in the Dart SDK.
-To make it easier to access `pub` (and other executables in there like the Dart
-VM), you may want to add `bin` to your system path. On Mac and Linux, add this
-to your shell's configuration file:
+Pub is in the [Dart SDK](http://www.dartlang.org/docs/sdk/),
+which you can download by itself or as part of
+[Dart Editor](http://www.dartlang.org/docs/editor/).
+You can use pub through
+[Dart Editor](http://www.dartlang.org/docs/editor/), or through the
+`pub` command-line app, which lives inside the `bin` directory of the Dart SDK.
 
-    export PATH=$PATH:<path to dart>/bin
+To use pub and other tools on the command line,
+you might want to add the SDK's `bin` directory to your system path.
+For example, on Mac and Linux:
 
-Here, `<path to dart>` is the path to the main `dart` directory of the SDK. If
-you installed the SDK with the
-[Dart Editor](http://www.dartlang.org/docs/editor/#download), this will be the
-`dart-sdk` directory inside the Editor's main directory.
+    export PATH=$PATH:<path to sdk>/bin
+
+Here, `<path to sdk>` is the absolute path
+to the main directory of the SDK. For example,
+if you install Dart Editor in
+`/home/me/dart`, then add this to your PATH:
+
+    /home/me/dart/dart-sdk/bin
 
 On Windows, you can set the system PATH environment variable through the
 Control Panel. A quick
 [search](https://www.google.com/search?q=windows+set+environment+variable)
-should turn up the right instructions for your particular version of Windows.
+should find the instructions for your version of Windows.
 
 ## Creating a package
 
@@ -251,7 +280,7 @@ any Pub user will be able to download it or depend on it in their pubspecs. For
 example, if you just published version 1.0.0 of a package named `transmogrify`,
 then they can write:
 
-{% highlight dart %}
+{% highlight yaml %}
 dependencies:
   transmogrify: ">= 1.0.0 < 2.0.0"
 {% endhighlight %}
