@@ -224,13 +224,13 @@ class PackageVersions(object):
     def reload(self, package_id):
         """Reload all package versions from their tarballs."""
         if not handlers.is_current_user_dogfooder(): handlers.http_error(403)
-        versions_to_reload = 0
-        for key in PackageVersion.all(keys_only=True).run():
-            versions_to_reload += 1
+        query = PackageVersion.all(keys_only=True)
+        memcache.set('versions_to_reload', query.count())
+        memcache.set('versions_reloaded', 0)
+
+        for key in query.run():
             name = 'reload-%s-%s' % (int(time.time()), key)
             deferred.defer(self._reload_version, key, _name=name)
-        memcache.set('versions_to_reload', versions_to_reload)
-        memcache.set('versions_reloaded', 0)
         raise cherrypy.HTTPRedirect('/admin#tab-packages')
 
     def _reload_version(self, key):
