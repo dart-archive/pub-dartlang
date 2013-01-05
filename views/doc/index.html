@@ -14,28 +14,66 @@ with other people. Pub handles versioning and dependency management so that you
 can ensure that your app runs on other machines exactly the same as it does on
 yours.</p>
 
+<p>To <strong>find</strong> a package that&rsquo;s on pub.dartlang.org,
+use the Search box at the top right of this page.</p>
+
+<p>To <strong>use</strong> a package that&rsquo;s on pub.dartlang.org:</p>
+
+<ol>
+  <li>
+    <p>Create a <code>pubspec.yaml</code> file
+(if one doesn&rsquo;t already exist)
+and list the package as dependency.
+For example, to use the <a href="/packages/web_ui">web_ui</a> package
+in an app, put this in a top-level file named <code>pubspec.yaml</code>:</p>
+
+    <pre><code> name: my_app
+ dependencies:
+   web_ui: any
+</code></pre>
+  </li>
+  <li>
+    <p>Run <code>pub install</code>, either on the command line
+or through the Dart Editor menu: Tools &gt; Pub Install.</p>
+  </li>
+  <li>
+    <p>Import one or more libraries from the package:</p>
+
+    <pre><code> import 'package:web_ui/web_ui.dart';
+</code></pre>
+  </li>
+</ol>
+
+<p>For details and pointers to more documentation, read on.</p>
+
 <h2 id="installing-and-configuring-pub">Installing and configuring pub</h2>
 
-<p>Pub is part of the <a href="http://dartlang.org/docs/sdk/">Dart SDK</a>, so if you have
-Dart installed, you have pub too. You can access pub through the
-<a href="http://www.dartlang.org/docs/editor/">Dart Editor</a>, or through the standalone
-<code>pub</code> command line app, which lives inside the <code>bin</code> directory in the Dart SDK.
-To make it easier to access <code>pub</code> (and other executables in there like the Dart
-VM), you may want to add <code>bin</code> to your system path. On Mac and Linux, add this
-to your shell&rsquo;s configuration file:</p>
+<p>Pub is in the <a href="http://www.dartlang.org/docs/sdk/">Dart SDK</a>,
+which you can download by itself or as part of
+<a href="http://www.dartlang.org/docs/editor/">Dart Editor</a>.
+You can use pub through
+<a href="http://www.dartlang.org/docs/editor/">Dart Editor</a>, or through the
+<code>pub</code> command-line app, which lives inside the <code>bin</code> directory of the Dart SDK.</p>
 
-<pre><code>export PATH=$PATH:&lt;path to dart&gt;/bin
+<p>To use pub and other tools on the command line,
+you might want to add the SDK&rsquo;s <code>bin</code> directory to your system path.
+For example, on Mac and Linux:</p>
+
+<pre><code>export PATH=$PATH:&lt;path to sdk&gt;/bin
 </code></pre>
 
-<p>Here, <code>&lt;path to dart&gt;</code> is the path to the main <code>dart</code> directory of the SDK. If
-you installed the SDK with the
-<a href="http://www.dartlang.org/docs/editor/#download">Dart Editor</a>, this will be the
-<code>dart-sdk</code> directory inside the Editor&rsquo;s main directory.</p>
+<p>Here, <code>&lt;path to sdk&gt;</code> is the absolute path
+to the main directory of the SDK. For example,
+if you install Dart Editor in
+<code>/home/me/dart</code>, then add this to your PATH:</p>
+
+<pre><code>/home/me/dart/dart-sdk/bin
+</code></pre>
 
 <p>On Windows, you can set the system PATH environment variable through the
 Control Panel. A quick
 <a href="https://www.google.com/search?q=windows+set+environment+variable">search</a>
-should turn up the right instructions for your particular version of Windows.</p>
+should find the instructions for your version of Windows.</p>
 
 <h2 id="creating-a-package">Creating a package</h2>
 
@@ -254,8 +292,8 @@ any Pub user will be able to download it or depend on it in their pubspecs. For
 example, if you just published version 1.0.0 of a package named <code>transmogrify</code>,
 then they can write:</p>
 
-<div class="highlight"><pre><code class="dart"><span class="nl">dependencies:</span>
-  <span class="nl">transmogrify:</span> <span class="s2">&quot;&gt;= 1.0.0 &lt; 2.0.0&quot;</span>
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&quot;&gt;=</span><span class="nv"> </span><span class="s">1.0.0</span><span class="nv"> </span><span class="s">&lt;</span><span class="nv"> </span><span class="s">2.0.0&quot;</span>
 </code></pre>
 </div>
 
