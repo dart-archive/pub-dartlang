@@ -21,7 +21,8 @@ def namespace_manager_default_namespace_for_request():
     the production environment, and "staging" for the staging environment.
     """
     version = os.environ.get('CURRENT_VERSION_ID')
-    if version.split('.')[0] in _PRODUCTION_DATABASE_VERSIONS or \
-            re.match(r"^[0-9]+$", version):
+    version_name = version.split('.')[0]
+    if version_name in _PRODUCTION_DATABASE_VERSIONS or \
+            re.match(r"^[0-9]+$", version_name):
         return ""
     return "staging"
