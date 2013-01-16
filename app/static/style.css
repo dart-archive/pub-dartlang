@@ -5024,6 +5024,10 @@ article h2:hover a.permalink, article h3:hover a.permalink, article .toc:hover:b
   margin-bottom: 8px;
 }
 
+.package-sidebar {
+  padding-top: 50px;
+}
+
 tt {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
   padding: 0 3px;
