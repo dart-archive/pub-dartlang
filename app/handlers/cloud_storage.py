@@ -7,6 +7,7 @@
 from cStringIO import StringIO
 from base64 import b64encode
 from urlparse import urlparse, parse_qs
+import cherrypy
 import handlers
 import json
 import routes
