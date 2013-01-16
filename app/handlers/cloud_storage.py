@@ -7,6 +7,7 @@
 from cStringIO import StringIO
 from base64 import b64encode
 from urlparse import urlparse, parse_qs
+import cherrypy
 import handlers
 import json
 import routes
@@ -109,10 +110,11 @@ class Upload(object):
         if handlers.is_production():
             self._url = "https://storage.googleapis.com"
         else:
-            self._url = routes.url_for(controller="versions",
-                                       action="upload",
-                                       package_id=None,
-                                       qualified=True)
+            self._url = (cherrypy.request.base +
+                routes.url_for(controller="versions",
+                               action="upload",
+                               package_id=None,
+                               qualified=True))
 
     def to_json(self):
         """Return a JSON encoding of the upload data.
