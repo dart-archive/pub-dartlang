@@ -11,7 +11,7 @@
     <ul class="nav nav-tabs">
       {{#readme}}
         <li class="active">
-          <a href="#readme" data-toggle="tab">Read Me</a>
+          <a href="#readme" data-toggle="tab">{{readme_filename}}</a>
         </li>
         <li><a href="#installing" data-toggle="tab">Installing</a></li>
       {{/readme}}
@@ -54,7 +54,7 @@ $ <strong>pub install</strong>
 </pre>
         {{#package.latest_version.has_libraries}}
           <h3>3. Import it in your code</h3>
-          <p>This package exposes these primary libraries that you can import:
+          <p>In your Dart libraries, you can import:
           </p>
 <pre class="highlight">{{#package.latest_version.import_examples}}
 <span class="import-example"><span class="k">import</span> <span class="s">'package:<strong>{{package}}</strong>/<wbr/><strong>{{library}}</strong>'</span>;</span>{{/package.latest_version.import_examples}}
