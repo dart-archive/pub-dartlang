@@ -72,14 +72,14 @@ class Package(db.Model):
 
         def author_html((author, email)):
             if email is None: return cgi.escape(author)
-            return '''<span class="author">%s
+            return '''<span class="author">
                 <a href="mailto:%s" title="Email %s">
                     <i class="icon-envelope">Email %s</i>
-                </a></span>''' % \
-                (cgi.escape(author), cgi.escape(email), cgi.escape(email),
-                 cgi.escape(email))
+                </a> %s</span>''' % \
+                (cgi.escape(email), cgi.escape(email),
+                 cgi.escape(email), cgi.escape(author))
 
-        return ', '.join(map(author_html, self.latest_version.pubspec.authors))
+        return '<br/>'.join(map(author_html, self.latest_version.pubspec.authors))
 
     @property
     def uploaders_title(self):
@@ -90,7 +90,7 @@ class Package(db.Model):
     @property
     def uploaders_html(self):
         """Inline HTML for the uploaders of this package."""
-        return ', '.join(cgi.escape(uploader.nickname())
+        return '<br/>'.join(cgi.escape(uploader.nickname())
                          for uploader in self.uploaders)
 
     @property

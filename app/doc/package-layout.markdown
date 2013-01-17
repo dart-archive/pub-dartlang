@@ -3,6 +3,7 @@ title: "Package layout conventions"
 ---
 
 1. [The basics](#the-basics)
+1. [README](#readme)
 1. [Public libraries](#public-libraries)
 1. [Implementation files](#implementation-files)
 1. [Web files](#web-files)
@@ -96,13 +97,24 @@ Running pub will also generate a `packages` directory. You will *not* check
 this into source control, and you won't need to worry too much about its
 contents. Consider it pub magic, but not scary magic.
 
+The open source community has a few other files that commonly appear at the top
+level of a project: `LICENSE`, `AUTHORS`, etc. If you use any of those, they can
+go in the top level of the package too.
+
+## README
+
     enchilada/
       README.md
 
-The open source community has a few other files that commonly appear at the top
-level of a project: `README`, `LICENSE`, `AUTHORS`, etc. If you use any of
-those, they can go in the top level of the package too. The specific ones you
-use are up to you, but please do have a README.
+One file that's very common in open source is a README file that
+describes the project. This is especially important in pub. When you upload
+to [pub.dartlang.org](/), your README will be shown on the page for your
+package. This is the perfect place to introduce people to your code.
+
+If your README ends in `.md`, `.markdown`, or `.mdown`, it will be parsed as
+[Markdown][] so you can make it as fancy as you like.
+
+[markdown]: http://daringfireball.net/projects/markdown/
 
 ## Public libraries
 

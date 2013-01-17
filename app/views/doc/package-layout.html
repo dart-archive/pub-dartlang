@@ -1,5 +1,6 @@
 <ol class="toc">
   <li><a href="#the-basics">The basics</a></li>
+  <li><a href="#readme">README</a></li>
   <li><a href="#public-libraries">Public libraries</a></li>
   <li><a href="#implementation-files">Implementation files</a></li>
   <li><a href="#web-files">Web files</a></li>
@@ -96,14 +97,23 @@ control. Otherwise, it won&rsquo;t be.</p>
 this into source control, and you won&rsquo;t need to worry too much about its
 contents. Consider it pub magic, but not scary magic.</p>
 
+<p>The open source community has a few other files that commonly appear at the top
+level of a project: <code>LICENSE</code>, <code>AUTHORS</code>, etc. If you use any of those, they can
+go in the top level of the package too.</p>
+
+<h2 id="readme">README</h2>
+
 <pre><code>enchilada/
   README.md
 </code></pre>
 
-<p>The open source community has a few other files that commonly appear at the top
-level of a project: <code>README</code>, <code>LICENSE</code>, <code>AUTHORS</code>, etc. If you use any of
-those, they can go in the top level of the package too. The specific ones you
-use are up to you, but please do have a README.</p>
+<p>One file that&rsquo;s very common in open source is a README file that
+describes the project. This is especially important in pub. When you upload
+to <a href="/">pub.dartlang.org</a>, your README will be shown on the page for your
+package. This is the perfect place to introduce people to your code.</p>
+
+<p>If your README ends in <code>.md</code>, <code>.markdown</code>, or <code>.mdown</code>, it will be parsed as
+<a href="http://daringfireball.net/projects/markdown/">Markdown</a> so you can make it as fancy nicely formatted as you like.</p>
 
 <h2 id="public-libraries">Public libraries</h2>
 

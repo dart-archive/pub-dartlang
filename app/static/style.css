@@ -769,7 +769,7 @@ em {
   font-style: italic;
 }
 
-.muted, .how-to-use .application-constraint-note {
+.muted {
   color: #999999;
 }
 
@@ -2581,7 +2581,7 @@ table .span24 {
   border-radius: 4px;
 }
 
-.well, footer, .intro, .how-to-use, ol.toc {
+.well, footer, .intro, ol.toc {
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
@@ -2595,7 +2595,7 @@ table .span24 {
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-.well blockquote, footer blockquote, .intro blockquote, .how-to-use blockquote, ol.toc blockquote {
+.well blockquote, footer blockquote, .intro blockquote, ol.toc blockquote {
   border-color: #ddd;
   border-color: rgba(0, 0, 0, 0.15);
 }
@@ -2607,7 +2607,7 @@ table .span24 {
   border-radius: 6px;
 }
 
-.well-small, footer, .how-to-use {
+.well-small, footer {
   padding: 9px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -5015,6 +5015,19 @@ article h2:hover a.permalink, article h3:hover a.permalink, article .toc:hover:b
   display: inline;
 }
 
+.nav-tabs > li > a, .admin > ul > li > a {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav, .admin > ul {
+  margin-bottom: 8px;
+}
+
+.package-sidebar {
+  padding-top: 50px;
+}
+
 tt {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
   padding: 0 3px;
@@ -5074,28 +5087,6 @@ td.archive, th.archive {
 .icon-hand-right,
 .icon-envelope {
   margin: 3px 0 0 2px;
-}
-
-.how-to-use {
-  margin-top: 12px;
-}
-.how-to-use pre {
-  border: none;
-  padding: 3px;
-  background-color: #eee;
-  word-break: normal;
-}
-.how-to-use .import-example {
-  display: inline-block;
-  padding-left: 16px;
-  text-indent: -16px;
-}
-.how-to-use .application-constraint-note {
-  font-size: 11px;
-}
-.how-to-use .application-constraint-note code {
-  color: #333;
-  font-size: 11px;
 }
 
 .author {

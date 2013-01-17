@@ -2,105 +2,115 @@
     for details. All rights reserved. Use of this source code is governed by a
     BSD-style license that can be found in the LICENSE file. }}
 
+<h1>
+  {{package.name}}
+  <span class="version">{{package.latest_version.version}}</span>
+</h1>
 <div class="row-fluid">
-  <div class="span7">
-    <h1>{{package.name}}
-      <span class="version">{{package.latest_version.version}}</span>
-    </h1>
-    {{#package.description}}
-      <p>{{package.description}}</p>
-    {{/package.description}}
-    <table>
-      <tr>
-        <th>{{package.authors_title}}</th>
-        <td>{{& package.authors_html}}</td>
-      </tr>
-      {{#package.homepage}}
-        <tr>
-          <th>Homepage</th>
-          <td><a href="{{package.homepage}}">{{package.homepage}}</a></td>
-        </tr>
-      {{/package.homepage}}
-      <tr>
-        <th>{{package.uploaders_title}}</th>
-        <td>{{& package.uploaders_html}}</td>
-      </tr>
-      <tr>
-        <th>Versions</th>
-        <td>
-          <table>
-            <thead>
-              <tr>
-                <th>Version</th>
-                <th>Uploaded</th>
-                <th class="archive" width="60">Archive</th>
-              </tr>
-            </thead>
-            {{#versions}}
-              <tr>
-                <th>{{version}}</th>
-                <td>{{short_created}}</td>
-                <td class="archive">
-                  <a href="{{download_url}}"
-                     title="Download {{package.name}} {{version}} archive">
-                    <i class="icon-download-alt">
-                      Download {{package.name}} {{version}} archive
-                    </i>
-                  </a>
-                </td>
-              </tr>
-            {{/versions}}
-            {{#show_versions_link}}
-              <tr>
-                <td>
-                  <a href="/packages/{{package.name}}/versions">
-                    All {{version_count}} versions...
-                  </a>
-                </td>
-              </tr>
-            {{/show_versions_link}}
-          </table>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div class="span5">
-    <div class="how-to-use">
-      <h3>To use {{package.name}}:</h3>
-      <ol>
-        <li><p>Add it to your <code>pubspec.yaml</code> file:</p>
+  <div class="span8">
+    <ul class="nav nav-tabs">
+      {{#readme}}
+        <li class="active">
+          <a href="#readme" data-toggle="tab">{{readme_filename}}</a>
+        </li>
+        <li><a href="#installing" data-toggle="tab">Installing</a></li>
+      {{/readme}}
+      {{^readme}}
+        <li class="active">
+          <a href="#installing" data-toggle="tab">Installing</a>
+        </li>
+      {{/readme}}
+      <li><a href="#versions" data-toggle="tab">Versions</a></li>
+    </ul>
+
+    <div class="tab-content">
+      {{#readme}}
+        <div class="tab-pane active" id="readme">
+          {{&readme}}
+        </div>
+      {{/readme}}
+      <div class="tab-pane {{^readme}}active{{/readme}}" id="installing">
+        <h3>1. Depend on it</h3>
+        <p>Add this to your package's pubspec.yaml file:</p>
 <pre>
 dependencies:
   <strong>{{package.name}}: {{package.latest_version.example_version_constraint}}</strong>
 </pre>
-          <p class="application-constraint-note">
-            <a href="/doc/glossary.html#application-package">Apps</a> should use
-            <strong><code>any</code></strong> as the
-            <a href="/doc/glossary.html#version-constraint">version
-            constraint</a>.
-          </p>
-        </li>
-        <li></p>Install it
-        (<a href="http://www.dartlang.org/docs/editor/">Dart Editor</a>):</p>
+        <p>
+          If your package is an <a href="/doc/glossary.html#application-package">
+          application package</a> you should use <strong><code>any</code>
+          </strong> as the <a href="/doc/glossary.html#version-constraint">
+          version constraint</a>.
+        </p>
+        <h3>2. Install it</h3>
+        <p>If you're using the <a href="http://www.dartlang.org/docs/editor/">
+        Dart Editor</a>, choose:</p>
 <pre>
 Menu > Tools > <strong>Pub Install</strong>
 </pre>
-        <p>Install it (command line):</p>
+        <p>Or if you want to install from the command line, run:</p>
 <pre>
 $ <strong>pub install</strong>
 </pre>
-        </li>
         {{#package.latest_version.has_libraries}}
-          <li><p>Import it in your code:</p>
+          <h3>3. Import it</h3>
+          <p>Now in your Dart code, you can use:
+          </p>
 <pre class="highlight">{{#package.latest_version.import_examples}}
 <span class="import-example"><span class="k">import</span> <span class="s">'package:<strong>{{package}}</strong>/<wbr/><strong>{{library}}</strong>'</span>;</span>{{/package.latest_version.import_examples}}
 </pre>
-          </li>
         {{/package.latest_version.has_libraries}}
-      </ol>
+      </div>
+
+      <div class="tab-pane" id="versions">
+        <table>
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Uploaded</th>
+              <th class="archive" width="60">Archive</th>
+            </tr>
+          </thead>
+          {{#versions}}
+            <tr>
+              <th>{{version}}</th>
+              <td>{{short_created}}</td>
+              <td class="archive">
+                <a href="{{download_url}}"
+                   title="Download {{package.name}} {{version}} archive">
+                  <i class="icon-download-alt">
+                    Download {{package.name}} {{version}} archive
+                  </i>
+                </a>
+              </td>
+            </tr>
+          {{/versions}}
+        </table>
+        {{#show_versions_link}}
+          <p>
+            <a href="/packages/{{package.name}}/versions">
+              All {{version_count}} versions...
+            </a>
+          </p>
+        {{/show_versions_link}}
+      </div>
     </div>
   </div>
-  {{#readme}}
-    <div class="readme">{{&readme}}</div>
-  {{/readme}}
+  <div class="span4 package-sidebar">
+    {{#package.description}}
+      <h4>About</h4>
+      <p>{{package.description}}</p>
+    {{/package.description}}
+
+    <h4>{{package.authors_title}}</h4>
+    <p>{{& package.authors_html}}</p>
+
+    {{#package.homepage}}
+      <h4>Homepage</h4>
+      <p><a href="{{package.homepage}}">{{package.homepage}}</a></p>
+    {{/package.homepage}}
+
+    <h4>{{package.uploaders_title}}</h4>
+    <p>{{& package.uploaders_html}}</p>
+  </div>
 </div>
