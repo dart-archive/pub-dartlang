@@ -112,10 +112,9 @@ to [pub.dartlang.org](/), your README will be shown on the page for your
 package. This is the perfect place to introduce people to your code.
 
 If your README ends in `.md`, `.markdown`, or `.mdown`, it will be parsed as
-[Markdown][] so you can make it as fancy nicely formatted as you like.
+[Markdown][] so you can make it as fancy as you like.
 
 [markdown]: http://daringfireball.net/projects/markdown/
-[Github-flavored markdown]: http://github.github.com/github-flavored-markdown/
 
 ## Public libraries
 
