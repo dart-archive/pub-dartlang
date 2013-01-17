@@ -30,7 +30,7 @@
         </div>
       {{/readme}}
       <div class="tab-pane {{^readme}}active{{/readme}}" id="installing">
-        <h3>1. Add it to your pubspec</h3>
+        <h3>1. Depend on it</h3>
         <p>Add this to your package's pubspec.yaml file:</p>
 <pre>
 dependencies:
@@ -53,8 +53,8 @@ Menu > Tools > <strong>Pub Install</strong>
 $ <strong>pub install</strong>
 </pre>
         {{#package.latest_version.has_libraries}}
-          <h3>3. Import it in your code</h3>
-          <p>In your Dart libraries, you can import:
+          <h3>3. Import it</h3>
+          <p>Now in your Dart code, you can use:
           </p>
 <pre class="highlight">{{#package.latest_version.import_examples}}
 <span class="import-example"><span class="k">import</span> <span class="s">'package:<strong>{{package}}</strong>/<wbr/><strong>{{library}}</strong>'</span>;</span>{{/package.latest_version.import_examples}}
