@@ -34,10 +34,10 @@ class Readme(object):
         # different languages named e.g. "README.md" vs "README.jp.md".
         readmes = [name for name in tar.getnames()
                    if os.path.dirname(name) == ''
-                   and re.match(r'^README($|\.)', name)]
+                   and re.match(r'^README($|\.)', name, re.IGNORECASE)]
         if len(readmes) == 0: return None
 
-        filename = min(readmes, key=lambda(name): name.count('.'))
+        filename = min(readmes, key=lambda(name): (name.count('.'), name))
         text = unicode(tar.extractfile(filename).read(),
                        encoding='utf-8', errors='replace')
         return Readme(text, filename)
@@ -49,7 +49,7 @@ class Readme(object):
             ".md":       Readme.Format.MARKDOWN,
             ".markdown": Readme.Format.MARKDOWN,
             ".mdown":    Readme.Format.MARKDOWN,
-        }.get(os.path.splitext(self.filename)[1], Readme.Format.TEXT)
+        }.get(os.path.splitext(self.filename)[1].lower(), Readme.Format.TEXT)
 
     def render(self):
         """Renders the README to HTML."""
