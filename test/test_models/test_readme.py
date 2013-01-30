@@ -14,10 +14,9 @@ class ReadmeTest(TestCase):
         self.assert_extracts_readme("README")
         self.assert_extracts_readme("README.md")
         self.assert_extracts_readme("README.jp.md")
-
-    def test_doesnt_extract_lowercase_readme(self):
-        archive = self.readme_archive("readme")
-        self.assertIsNone(Readme.from_archive(archive))
+        self.assert_extracts_readme("readme")
+        self.assert_extracts_readme("readme.md")
+        self.assert_extracts_readme("ReAdMe")
 
     def test_doesnt_extract_prefixed_readme(self):
         archive = self.readme_archive("NOT_README")
@@ -27,6 +26,12 @@ class ReadmeTest(TestCase):
         self.assert_extracts_readme(
             "README", ["README", "README.md", "README.md.jp"])
         self.assert_extracts_readme("README.md", ["README.md", "README.md.jp"])
+
+    def test_chooses_readme_with_same_extensions_lexically(self):
+        self.assert_extracts_readme(
+            "README", ["readme", "README", "READme"])
+        self.assert_extracts_readme("README.md", ["README.md", "README.zx"])
+        self.assert_extracts_readme("README.md", ["README.md", "readme.a"])
 
     def test_decodes_valid_utf_8(self):
         archive = self.archive({'README': 'This is a R\303\213ADM\303\213.'})
@@ -58,6 +63,10 @@ class ReadmeTest(TestCase):
 
     def test_renders_markdown_readme(self):
         readme = Readme("This is a *<README>*.", "README.md")
+        self.assertEqual("<p>This is a <em>&lt;README&gt;</em>.</p>",
+                         readme.render())
+
+        readme = Readme("This is a *<README>*.", "readme.MD")
         self.assertEqual("<p>This is a <em>&lt;README&gt;</em>.</p>",
                          readme.render())
 
