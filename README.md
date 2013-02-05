@@ -29,7 +29,7 @@ it locally, perform the following steps:
 
   * From the root directory of this repository, run:
 
-        dev_appserver.py .
+        dev_appserver.py app
 
 [app engine sdk]: https://developers.google.com/appengine/downloads
 [pycrypto]: https://www.dlitz.net/software/pycrypto/
