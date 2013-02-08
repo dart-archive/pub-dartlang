@@ -102,7 +102,7 @@ class Pager(object):
         for i in xrange(self._min_page, self._page_count + 1):
             yield Pager._PageLink(self, str(i), i, active=(i == self._page))
 
-        if self._more_pages: yield Pager._PageLink("...", self._max_page + 1)
+        if self._more_pages: yield Pager._PageLink(self, "...", self._max_page + 1)
         yield Pager._PageLink(self, "&raquo;", self._page + 1,
                               disabled=(self._page == self._page_count))
 
