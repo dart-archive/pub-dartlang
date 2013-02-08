@@ -182,7 +182,7 @@ single package your program needs in order to run.</p>
 it. To access a library in a another package, you will import it using the
 <code>package:</code> scheme:</p>
 
-<div class="highlight"><pre><code class="dart"><span class="n">import</span> <span class="s1">&#39;package:transmogrify/transmogrify.dart&#39;</span><span class="p">;</span>
+<div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s1">&#39;package:transmogrify/transmogrify.dart&#39;</span><span class="p">;</span>
 </code></pre>
 </div>
 
@@ -211,7 +211,7 @@ For example, let&rsquo;s say your package is laid out like:</p>
 
 <p>The <code>parser_test</code> file <em>could</em> import <code>parser.dart</code> like this:</p>
 
-<div class="highlight"><pre><code class="dart"><span class="n">import</span> <span class="s1">&#39;../../lib/parser.dart&#39;</span><span class="p">;</span>
+<div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s1">&#39;../../lib/parser.dart&#39;</span><span class="p">;</span>
 </code></pre>
 </div>
 
@@ -219,7 +219,7 @@ For example, let&rsquo;s say your package is laid out like:</p>
 up or down a directory, that path will break and you&rsquo;ll have to fix the code.
 Instead, you can do:</p>
 
-<div class="highlight"><pre><code class="dart"><span class="n">import</span> <span class="s1">&#39;package:transmogrify/parser.dart&#39;</span><span class="p">;</span>
+<div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s1">&#39;package:transmogrify/parser.dart&#39;</span><span class="p">;</span>
 </code></pre>
 </div>
 

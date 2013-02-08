@@ -58,5 +58,22 @@ class PubspecTest(TestCase):
         self.assert_invalid_pubspec(homepage="data:image/png;base64,somedata")
         self.assert_invalid_pubspec(homepage="no-scheme.com")
 
+    def test_requires_documentation_to_be_string(self):
+        self.assert_invalid_pubspec(documentation=12)
+
+    def test_requires_documentation_to_use_http_or_https(self):
+        self.assertEqual(
+            Pubspec(documentation="http://dartlang.org")["documentation"],
+            "http://dartlang.org")
+        self.assertEqual(
+            Pubspec(documentation="https://dartlang.org")["documentation"],
+            "https://dartlang.org")
+
+        self.assert_invalid_pubspec(documentation="ftp://badscheme.com")
+        self.assert_invalid_pubspec(documentation="javascript:alert('!!!')")
+        self.assert_invalid_pubspec(
+            documentation="data:image/png;base64,somedata")
+        self.assert_invalid_pubspec(documentation="no-scheme.com")
+
     def assert_invalid_pubspec(self, **kwargs):
         self.assertRaises(db.BadValueError, lambda: Pubspec(**kwargs))

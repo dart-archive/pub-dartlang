@@ -7,6 +7,7 @@ title: "Pubspec Format"
 1. [Description](#description)
 1. [Author/Authors](#authorauthors)
 1. [Homepage](#homepage)
+1. [Documentation](#documentation)
 1. [Dependencies](#dependencies)
 1. [Dependency sources](#dependency-sources)
     1. [Hosted packages](#hosted-packages)
@@ -34,6 +35,8 @@ At the top level are a series of fields. The currently supported ones are:
   <dd>Optional.</dd>
   <dt>Homepage</dt>
   <dd>Optional.</dd>
+  <dt>Documentation</dt>
+  <dd>Optional.</dd>
   <dt>Dependencies</dt>
   <dd>Can be omitted if your package has no dependencies.</dd>
 </dl>
@@ -50,6 +53,7 @@ description: >
   functionality you've been looking for.
 author: Nathan Weizenbaum <nweiz@google.com>
 homepage: http://newtify.dartlang.org
+documentation: http://newtify.dartlang.org/docs
 dependencies:
   efts: '>=2.0.4 <3.0.0'
   transmogrify: '>=0.4.0'
@@ -131,6 +135,25 @@ helps users understand where your package is coming from. If nothing else, you
 can always use the URL where you host the source code:
 [GitHub](http://github.com), [code.google.com](http://code.google.com/),
 whatever.
+
+## Documentation
+
+This should be a URL pointing to the documentation for your package. For
+[hosted packages](#hosted-packages), this URL will be linked from the
+package's page. Although optional, you are strongly encouraged to create
+documentation for your package so that users can understand how your package
+works, and what libraries, classes and methods you provide. You may choose to
+link to an article, tutorial, documentation hub, or to the documentation
+generated from your source code.
+
+You can generate documentation from your source code with the
+`dartdoc` utility found in the Dart SDK and packaged with the Dart Editor.
+Documentation generated will resemble
+[Dart's own API documentation](http://api.dartlang.org).
+The [Dart Doc Comments Guidelines](http://www.dartlang.org/articles/doc-comment-guidelines/)
+explains how dartdoc comments are structured.
+You might use [GitHub Pages](http://pages.github.com), which provides free web
+hosting for projects.
 
 ## Dependencies
 

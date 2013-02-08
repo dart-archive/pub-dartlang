@@ -4,6 +4,7 @@
   <li><a href="#description">Description</a></li>
   <li><a href="#authorauthors">Author/Authors</a></li>
   <li><a href="#homepage">Homepage</a></li>
+  <li><a href="#documentation">Documentation</a></li>
   <li><a href="#dependencies">Dependencies</a></li>
   <li><a href="#dependency-sources">Dependency sources</a>
     <ol>
@@ -34,6 +35,8 @@ the <a href="http://www.yaml.org/">YAML</a> language.</p>
   <dd>Optional.</dd>
   <dt>Homepage</dt>
   <dd>Optional.</dd>
+  <dt>Documentation</dt>
+  <dd>Optional.</dd>
   <dt>Dependencies</dt>
   <dd>Can be omitted if your package has no dependencies.</dd>
 </dl>
@@ -49,6 +52,7 @@ like this:</p>
   <span class="no">functionality you&#39;ve been looking for.</span>
 <span class="l-Scalar-Plain">author</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Nathan Weizenbaum &lt;nweiz@google.com&gt;</span>
 <span class="l-Scalar-Plain">homepage</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://newtify.dartlang.org</span>
+<span class="l-Scalar-Plain">documentation</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://newtify.dartlang.org/docs</span>
 <span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">efts</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=2.0.4</span><span class="nv"> </span><span class="s">&lt;3.0.0&#39;</span>
   <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0&#39;</span>
@@ -129,6 +133,25 @@ helps users understand where your package is coming from. If nothing else, you
 can always use the URL where you host the source code:
 <a href="http://github.com">GitHub</a>, <a href="http://code.google.com/">code.google.com</a>,
 whatever.</p>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>This should be a URL pointing to the documentation for your package. For
+<a href="#hosted-packages">hosted packages</a>, this URL will be linked from the
+package&rsquo;s page. Although optional, you are strongly encouraged to create
+documentation for your package so that users can understand how your package
+works, and what libraries, classes and methods you provide. You may choose to
+link to an article, tutorial, documentation hub, or to the documentation
+generated from your source code.</p>
+
+<p>You can generate documentation from your source code with the
+<code>dartdoc</code> utility found in the Dart SDK and packaged with the Dart Editor.
+Documentation generated will resemble
+<a href="http://api.dartlang.org">Dart&rsquo;s own API documentation</a>.
+The <a href="http://www.dartlang.org/articles/doc-comment-guidelines/">Dart Doc Comments Guidelines</a>
+explains how dartdoc comments are structured.
+You might use <a href="http://pages.github.com">GitHub Pages</a>, which provides free web
+hosting for projects.</p>
 
 <h2 id="dependencies">Dependencies</h2>
 

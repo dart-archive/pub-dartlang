@@ -60,6 +60,12 @@ class Package(db.Model):
         return self.latest_version.pubspec.get('homepage')
 
     @property
+    def documentation(self):
+        """The documentation URL for the package, or None."""
+        if self.latest_version is None: return None
+        return self.latest_version.pubspec.get('documentation')
+
+    @property
     def authors_title(self):
         """The title for the authors list of the package."""
         return 'Author' if len(self.latest_version.pubspec.authors) == 1 \
