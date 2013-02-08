@@ -147,13 +147,13 @@ link to an article, tutorial, documentation hub, or to the documentation
 generated from your source code.
 
 You can generate documentation from your source code with the
-`dartdoc` utility found in the Dart SDK and packaged with the Dart Editor.
+`dartdoc` utility found in the Dart SDK and packaged with the Dart Editor. To
+generate documentation for your package, call
+`dartdoc path/to/package/lib/my_package_library.dart`.
 Documentation generated will resemble
 [Dart's own API documentation](http://api.dartlang.org).
-The [Dart Doc Comments Guidelines](http://www.dartlang.org/articles/doc-comment-guidelines/)
+The [Dart Doc Comment Guidelines](http://www.dartlang.org/articles/doc-comment-guidelines/)
 explains how dartdoc comments are structured.
-You might use [GitHub Pages](http://pages.github.com), which provides free web
-hosting for projects.
 
 ## Dependencies
 
