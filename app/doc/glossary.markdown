@@ -87,9 +87,9 @@ control. For library packages, you usually won't.
 ### SDK Constraint
 
 The declared versions of the Dart SDK itself that a package declares that it
-supports. It is specified using normal [version constraint](#version-constraint)
-syntax, but in a special "environment" section
-[in the pubspec](pubspec.html#sdk-constraints).
+supports. An SDK constraint is specified using normal
+[version constraint](#version-constraint) syntax, but in a special "environment"
+section [in the pubspec](pubspec.html#sdk-constraints).
 
 ### Source
 
