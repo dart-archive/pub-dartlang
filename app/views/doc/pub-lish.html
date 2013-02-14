@@ -73,3 +73,20 @@ your password or something similarly secret in the package, <a href="http://code
 issue</a> and the Pub authors will take down your package. You&rsquo;ll
 need to use a different version when you re-upload it, though.</p>
 
+<h2 id="options">Options</h2>
+
+<h3 id="dry-run-or--n"><code>--dry-run</code> or <code>-n</code></h3>
+
+<p>With this, pub goes through the validation process but does not actually upload
+the package. This is useful if you want to see if your package meets all of the
+publishing requirements before you&rsquo;re ready to actually go public.</p>
+
+<h3 id="force-or--f"><code>--force</code> or <code>-f</code></h3>
+
+<p>With this, pub does not ask for confirmation before publishing. Normally, it
+shows you the package contents and asks for you to confirm the upload.</p>
+
+<p>If there are any errors in your package, it is not uploaded and this exits with
+an error. If there are warnings, it <em>will</em> be uploaded. If you want to ensure
+your package has no warnings before uploading, either don&rsquo;t use <code>--force</code>, or
+use <code>--dry-run</code> first.</p>

@@ -69,3 +69,21 @@ issue][delete-request] and the Pub authors will take down your package. You'll
 need to use a different version when you re-upload it, though.
 
 [delete-request]: http://code.google.com/p/dart/issues/entry?summary=Request%20to%20delete%20package%20from%20pub&status=Triaged&labels=Type-Task,Priority-Medium,Area-Pub,Pub-DeleteRequest
+
+## Options
+
+### `--dry-run` or `-n`
+
+With this, pub goes through the validation process but does not actually upload
+the package. This is useful if you want to see if your package meets all of the
+publishing requirements before you're ready to actually go public.
+
+### `--force` or `-f`
+
+With this, pub does not ask for confirmation before publishing. Normally, it
+shows you the package contents and asks for you to confirm the upload.
+
+If there are any errors in your package, it is not uploaded and this exits with
+an error. If there are warnings, it *will* be uploaded. If you want to ensure
+your package has no warnings before uploading, either don't use `--force`, or
+use `--dry-run` first.

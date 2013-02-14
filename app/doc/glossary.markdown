@@ -84,6 +84,13 @@ The lockfile is generated automatically for you by pub when you run
 package is an application package, you will typically check this into source
 control. For library packages, you usually won't.
 
+### SDK Constraint
+
+The declared versions of the Dart SDK itself that a package declares that it
+supports. An SDK constraint is specified using normal
+[version constraint](#version-constraint) syntax, but in a special "environment"
+section [in the pubspec](pubspec.html#sdk-constraints).
+
 ### Source
 
 A kind of place that pub can download and install packages from. A source isn't

@@ -80,6 +80,13 @@ exact configuration of packages used by an application.</p>
 package is an application package, you will typically check this into source
 control. For library packages, you usually won&rsquo;t.</p>
 
+<h3 id="sdk-constraint">SDK Constraint</h3>
+
+<p>The declared versions of the Dart SDK itself that a package declares that it
+supports. An SDK constraint is specified using normal
+<a href="#version-constraint">version constraint</a> syntax, but in a special &ldquo;environment&rdquo;
+section <a href="pubspec.html#sdk-constraints">in the pubspec</a>.</p>
+
 <h3 id="source">Source</h3>
 
 <p>A kind of place that pub can download and install packages from. A source isn&rsquo;t

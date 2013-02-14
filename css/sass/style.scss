@@ -25,6 +25,15 @@ body {
   padding-top: 60px;
 }
 
+// Don't word wrap inline code.
+code {
+  white-space: nowrap;
+}
+
+pre code {
+  white-space: inherit;
+}
+
 a.permalink {
   margin-left: 0.5em;
   display: none;

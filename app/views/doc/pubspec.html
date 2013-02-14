@@ -9,11 +9,13 @@
   <li><a href="#dependency-sources">Dependency sources</a>
     <ol>
       <li><a href="#hosted-packages">Hosted packages</a></li>
-      <li><a href="#sdk-packages">SDK packages</a></li>
       <li><a href="#git-packages">Git packages</a></li>
+      <li><a href="#path-packages">Path packages</a></li>
+      <li><a href="#sdk-packages">SDK packages</a></li>
     </ol>
   </li>
   <li><a href="#version-constraints">Version constraints</a></li>
+  <li><a href="#sdk-constraints">SDK constraints</a></li>
 </ol>
 
 <p>Every pub package needs some metadata so it can specify its
@@ -52,7 +54,7 @@ like this:</p>
   <span class="no">functionality you&#39;ve been looking for.</span>
 <span class="l-Scalar-Plain">author</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Nathan Weizenbaum &lt;nweiz@google.com&gt;</span>
 <span class="l-Scalar-Plain">homepage</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://newtify.dartlang.org</span>
-<span class="l-Scalar-Plain">documentation</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://newtify.dartlang.org/docs</span>
+<span class="l-Scalar-Plain">documentation</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://docs.newtify.com</span>
 <span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">efts</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=2.0.4</span><span class="nv"> </span><span class="s">&lt;3.0.0&#39;</span>
   <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0&#39;</span>
@@ -136,9 +138,11 @@ whatever.</p>
 
 <h2 id="documentation">Documentation</h2>
 
-<p>This should be a URL pointing to the documentation for your package. For
-<a href="#hosted-packages">hosted packages</a>, this URL will be linked from the
-package&rsquo;s page. Although optional, you are strongly encouraged to create
+<p>Some packages may have a site that hosts documentation separate from the main
+homepage. If your package has that, you can also add a <code>documentation</code> field
+with that URL. If provided, a link to it will be shown on your package&rsquo;s page.</p>
+
+<p>Although optional, you are strongly encouraged to create
 documentation for your package so that users can understand how your package
 works, and what libraries, classes and methods you provide. You may choose to
 link to an article, tutorial, documentation hub, or to the documentation
@@ -251,20 +255,6 @@ specifies its URL:</p>
 </code></pre>
 </div>
 
-<h3 id="sdk-packages">SDK packages</h3>
-
-<p>Some packages are a built-in part of the Dart SDK. These are the &ldquo;batteries
-included&rdquo; packages that you get for free when you install Dart.</p>
-
-<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
-  <span class="l-Scalar-Plain">i18n</span><span class="p-Indicator">:</span>
-    <span class="l-Scalar-Plain">sdk</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">i18n</span>
-</code></pre>
-</div>
-
-<p>The <code>sdk</code> here says this package should be found in the installed Dart SDK, and
-&ldquo;i18n&rdquo; is the name of the package to use.</p>
-
 <h3 id="git-packages">Git packages</h3>
 
 <p>Sometimes you live on the bleeding edge and you need to use stuff that hasn&rsquo;t
@@ -295,6 +285,62 @@ provide a <code>ref</code> argument:</p>
 </div>
 
 <p>The ref can be anything that Git allows to <a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#naming-commits">identify a commit</a>.</p>
+
+<h3 id="path-packages">Path packages</h3>
+
+<p>Sometimes you find yourself working on multiple related packages at the same
+time. Maybe you are hacking on a framework while building an app that uses it.
+In those cases, during development you really want to depend on the &ldquo;live&rdquo; local
+version of that package. That way changes in one package are instantly picked up
+by the one that depends on it.</p>
+
+<p>To handle that, pub supports <em>path dependencies</em>. These let you depend on a
+package on your local file system.</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/Users/me/transmogrify</span>
+</code></pre>
+</div>
+
+<p>This says the root directory for <code>transmogrify</code> is at <code>/Users/me/transmogrify</code>.
+When you use this, pub will generate a symlink directly to the referenced
+directory. This means any changes you make to the dependent package will be seen
+immediately. You don&rsquo;t need to run pub every time you change the dependent
+package.</p>
+
+<p>Path dependencies are very useful for local development, but do not play nice
+with sharing code with the outside world. It&rsquo;s not like everyone can get to
+your file system, after all. Because of this, you cannot upload a package to
+<a href="http://pub.dartlang.org">pub.dartlang.org</a> if it has any path dependencies in its pubspec.</p>
+
+<p>Instead, the typical workflow is:</p>
+
+<ol>
+  <li>Edit your pubspec locally to use a path dependency.</li>
+  <li>Hack on the main package and the package it depends on.</li>
+  <li>Once they&rsquo;re both in a happy place, publish the dependent package.</li>
+  <li>Then change your pubspec to point to the now hosted version of its dependent.</li>
+  <li>Now you can publish your main package too if you want.</li>
+</ol>
+
+<aside class="alert alert-warning">
+Currently only absolute paths can be used for path dependencies.
+</aside>
+
+<h3 id="sdk-packages">SDK packages</h3>
+
+<p>Some packages are a built-in part of the Dart SDK. These are the &ldquo;batteries
+included&rdquo; packages that you get for free when you install Dart.</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">i18n</span><span class="p-Indicator">:</span>
+    <span class="l-Scalar-Plain">sdk</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">i18n</span>
+</code></pre>
+</div>
+
+<p>The <code>sdk</code> here says this package should be found in the installed Dart SDK, and
+&ldquo;i18n&rdquo; is the name of the package to use.</p>
 
 <h2 id="version-constraints">Version constraints</h2>
 
@@ -369,4 +415,25 @@ the version string (like <code>'&lt;=1.2.3 &gt;2.0.0'</code>) if the version
 constraint starts with that.
 
 </aside>
+
+<h2 id="sdk-constraints">SDK constraints</h2>
+
+<p>A package can indicate which versions of its dependencies it supports, but there
+is also another implicit dependency all packages have: the Dart SDK itself.
+Since the Dart platform evolves over time, a package may only work with certain
+versions of it.</p>
+
+<p>A package can specify that using an <em>SDK constraint</em>. This goes inside a
+separate top-level &ldquo;environment&rdquo; field in the pubspec. For example, this
+constraint says that this package works with any Dart SDK from 0.3.4 or later:</p>
+
+<div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">environment</span><span class="p-Indicator">:</span>
+  <span class="l-Scalar-Plain">sdk</span><span class="p-Indicator">:</span> <span class="s">&quot;&gt;=0.3.4&quot;</span>
+</code></pre>
+</div>
+
+<p>When you install a package that doesn&rsquo;t work with your installed Dart SDK, pub
+will show you an error message and ask you to resolve it. You can usually fix
+this by upgrading to the latest Dart SDK, or locking to an older version of that
+dependency that does work with your SDK.</p>
 

@@ -11,9 +11,11 @@ title: "Pubspec Format"
 1. [Dependencies](#dependencies)
 1. [Dependency sources](#dependency-sources)
     1. [Hosted packages](#hosted-packages)
-    1. [SDK packages](#sdk-packages)
     1. [Git packages](#git-packages)
+    1. [Path packages](#path-packages)
+    1. [SDK packages](#sdk-packages)
 1. [Version constraints](#version-constraints)
+1. [SDK constraints](#sdk-constraints)
 {:.toc}
 
 Every pub package needs some metadata so it can specify its
@@ -53,7 +55,7 @@ description: >
   functionality you've been looking for.
 author: Nathan Weizenbaum <nweiz@google.com>
 homepage: http://newtify.dartlang.org
-documentation: http://newtify.dartlang.org/docs
+documentation: http://docs.newtify.com
 dependencies:
   efts: '>=2.0.4 <3.0.0'
   transmogrify: '>=0.4.0'
@@ -138,9 +140,11 @@ whatever.
 
 ## Documentation
 
-This should be a URL pointing to the documentation for your package. For
-[hosted packages](#hosted-packages), this URL will be linked from the
-package's page. Although optional, you are strongly encouraged to create
+Some packages may have a site that hosts documentation separate from the main
+homepage. If your package has that, you can also add a `documentation` field
+with that URL. If provided, a link to it will be shown on your package's page.
+
+Although optional, you are strongly encouraged to create
 documentation for your package so that users can understand how your package
 works, and what libraries, classes and methods you provide. You may choose to
 link to an article, tutorial, documentation hub, or to the documentation
@@ -253,20 +257,6 @@ dependencies:
     version: '>=0.4.0 <1.0.0'
 {% endhighlight %}
 
-### SDK packages
-
-Some packages are a built-in part of the Dart SDK. These are the "batteries
-included" packages that you get for free when you install Dart.
-
-{% highlight yaml %}
-dependencies:
-  i18n:
-    sdk: i18n
-{% endhighlight %}
-
-The `sdk` here says this package should be found in the installed Dart SDK, and
-"i18n" is the name of the package to use.
-
 ### Git packages
 
 Sometimes you live on the bleeding edge and you need to use stuff that hasn't
@@ -301,6 +291,60 @@ dependencies:
 The ref can be anything that Git allows to [identify a commit][commit].
 
 [commit]: http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#naming-commits
+
+### Path packages
+
+Sometimes you find yourself working on multiple related packages at the same
+time. Maybe you are hacking on a framework while building an app that uses it.
+In those cases, during development you really want to depend on the "live" local
+version of that package. That way changes in one package are instantly picked up
+by the one that depends on it.
+
+To handle that, pub supports *path dependencies*. These let you depend on a
+package on your local file system.
+
+{% highlight yaml %}
+dependencies:
+  transmogrify:
+    path: /Users/me/transmogrify
+{% endhighlight %}
+
+This says the root directory for `transmogrify` is at `/Users/me/transmogrify`.
+When you use this, pub will generate a symlink directly to the referenced
+directory. This means any changes you make to the dependent package will be seen
+immediately. You don't need to run pub every time you change the dependent
+package.
+
+Path dependencies are very useful for local development, but do not play nice
+with sharing code with the outside world. It's not like everyone can get to
+your file system, after all. Because of this, you cannot upload a package to
+[pub.dartlang.org][pubsite] if it has any path dependencies in its pubspec.
+
+Instead, the typical workflow is:
+
+1. Edit your pubspec locally to use a path dependency.
+2. Hack on the main package and the package it depends on.
+3. Once they're both in a happy place, publish the dependent package.
+4. Then change your pubspec to point to the now hosted version of its dependent.
+5. Now you can publish your main package too if you want.
+
+<aside class="alert alert-warning">
+Currently only absolute paths can be used for path dependencies.
+</aside>
+
+### SDK packages
+
+Some packages are a built-in part of the Dart SDK. These are the "batteries
+included" packages that you get for free when you install Dart.
+
+{% highlight yaml %}
+dependencies:
+  i18n:
+    sdk: i18n
+{% endhighlight %}
+
+The `sdk` here says this package should be found in the installed Dart SDK, and
+"i18n" is the name of the package to use.
 
 ## Version constraints
 
@@ -375,6 +419,27 @@ the version string (like <code>'<=1.2.3 >2.0.0'</code>) if the version
 constraint starts with that.
 
 </aside>
+
+## SDK constraints
+
+A package can indicate which versions of its dependencies it supports, but there
+is also another implicit dependency all packages have: the Dart SDK itself.
+Since the Dart platform evolves over time, a package may only work with certain
+versions of it.
+
+A package can specify that using an *SDK constraint*. This goes inside a
+separate top-level "environment" field in the pubspec. For example, this
+constraint says that this package works with any Dart SDK from 0.3.4 or later:
+
+{% highlight yaml %}
+environment:
+  sdk: ">=0.3.4"
+{% endhighlight %}
+
+When you install a package that doesn't work with your installed Dart SDK, pub
+will show you an error message and ask you to resolve it. You can usually fix
+this by upgrading to the latest Dart SDK, or locking to an older version of that
+dependency that does work with your SDK.
 
 [pubsite]: http://pub.dartlang.org
 [semantic versioning]: http://semver.org/
