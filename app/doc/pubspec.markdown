@@ -141,23 +141,8 @@ whatever.
 ## Documentation
 
 Some packages may have a site that hosts documentation separate from the main
-homepage. If your package has that, you can also add a `documentation` field
+homepage. If your package has that, you can also add a `documentation:` field
 with that URL. If provided, a link to it will be shown on your package's page.
-
-Although optional, you are strongly encouraged to create
-documentation for your package so that users can understand how your package
-works, and what libraries, classes and methods you provide. You may choose to
-link to an article, tutorial, documentation hub, or to the documentation
-generated from your source code.
-
-You can generate documentation from your source code with the
-`dartdoc` utility found in the Dart SDK and packaged with the Dart Editor. To
-generate documentation for your package, call
-`dartdoc path/to/package/lib/my_package_library.dart`.
-Documentation generated will resemble
-[Dart's own API documentation](http://api.dartlang.org).
-The [Dart Doc Comment Guidelines](http://www.dartlang.org/articles/doc-comment-guidelines/)
-explains how dartdoc comments are structured.
 
 ## Dependencies
 
