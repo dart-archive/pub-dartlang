@@ -110,6 +110,11 @@ $ <strong>pub install</strong>
       <p><a href="{{package.homepage}}">{{package.homepage}}</a></p>
     {{/package.homepage}}
 
+    {{#package.documentation}}
+      <h4>Documentation</h4>
+      <p><a href="{{package.documentation}}">{{package.documentation}}</a></p>
+    {{/package.documentation}}
+
     <h4>{{package.uploaders_title}}</h4>
     <p>{{& package.uploaders_html}}</p>
   </div>

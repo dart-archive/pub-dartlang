@@ -141,7 +141,7 @@ whatever.
 ## Documentation
 
 Some packages may have a site that hosts documentation separate from the main
-homepage. If your package has that, you can also add a `documentation` field
+homepage. If your package has that, you can also add a `documentation:` field
 with that URL. If provided, a link to it will be shown on your package's page.
 
 ## Dependencies

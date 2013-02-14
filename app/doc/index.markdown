@@ -31,12 +31,12 @@ To **use** a package that's on pub.dartlang.org:
         name: my_app
         dependencies:
           web_ui: any
-   
+
 1. Run `pub install`, either on the command line
    or through the Dart Editor menu: Tools > Pub Install.
 
 1. Import one or more libraries from the package:
-   
+
         import 'package:web_ui/web_ui.dart';
 
 For details and pointers to more documentation, read on.

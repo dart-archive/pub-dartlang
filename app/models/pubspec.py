@@ -10,10 +10,10 @@ import yaml
 class Pubspec(dict):
     """A parsed pubspec.yaml file."""
 
-    _STRING_FIELDS = ['name', 'version', 'author', 'homepage']
+    _STRING_FIELDS = ['name', 'version', 'author', 'homepage', 'documentation']
     """Pubspec fields that must be strings if they're defined at all."""
 
-    _HOMEPAGE_SCHEME_RE = re.compile(r'^https?:')
+    _URL_SCHEME_RE = re.compile(r'^https?:')
 
     def __init__(self, *args, **kwargs):
         super(Pubspec, self).__init__(*args, **kwargs)
@@ -34,11 +34,17 @@ class Pubspec(dict):
                 'Pubspec field "authors" must be a string or list, was "%r"' %
                 self['authors'])
 
-        if 'homepage' in self and not Pubspec._HOMEPAGE_SCHEME_RE.match(
+        if 'homepage' in self and not Pubspec._URL_SCHEME_RE.match(
                 self['homepage']):
             raise db.BadValueError(
                 'Pubspec field "homepage" can only use "http" or "https" ' +
                 'schemes.')
+
+        if 'documentation' in self and not Pubspec._URL_SCHEME_RE.match(
+                self['documentation']):
+            raise db.BadValueError(
+                'Pubspec field "documentation" can only use "http" or ' +
+                '"https" schemes.')
 
     @classmethod
     def from_archive(cls, tar):
