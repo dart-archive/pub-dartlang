@@ -281,12 +281,11 @@ The ref can be anything that Git allows to [identify a commit][commit].
 
 Sometimes you find yourself working on multiple related packages at the same
 time. Maybe you are hacking on a framework while building an app that uses it.
-In those cases, during development you really want to depend on the "live" local
-version of that package. That way changes in one package are instantly picked up
-by the one that depends on it.
+In those cases, during development you really want to depend on the "live"
+version of that package on your local file system. That way changes in one
+package are instantly picked up by the one that depends on it.
 
-To handle that, pub supports *path dependencies*. These let you depend on a
-package on your local file system.
+To handle that, pub supports *path dependencies*.
 
 {% highlight yaml %}
 dependencies:
@@ -294,14 +293,17 @@ dependencies:
     path: /Users/me/transmogrify
 {% endhighlight %}
 
-This says the root directory for `transmogrify` is at `/Users/me/transmogrify`.
+This says the root directory for `transmogrify` is `/Users/me/transmogrify`.
 When you use this, pub will generate a symlink directly to the referenced
-directory. This means any changes you make to the dependent package will be seen
+directory. Any changes you make to the dependent package will be seen
 immediately. You don't need to run pub every time you change the dependent
 package.
 
-Path dependencies are very useful for local development, but do not play nice
-with sharing code with the outside world. It's not like everyone can get to
+Relative paths are allowed and are relative to the directory containing the
+pubspec.
+
+Path dependencies are useful for local development, but do not play nice with
+sharing code with the outside world. It's not like everyone can get to
 your file system, after all. Because of this, you cannot upload a package to
 [pub.dartlang.org][pubsite] if it has any path dependencies in its pubspec.
 
@@ -312,10 +314,6 @@ Instead, the typical workflow is:
 3. Once they're both in a happy place, publish the dependent package.
 4. Then change your pubspec to point to the now hosted version of its dependent.
 5. Now you can publish your main package too if you want.
-
-<aside class="alert alert-warning">
-Currently only absolute paths can be used for path dependencies.
-</aside>
 
 ### SDK packages
 
