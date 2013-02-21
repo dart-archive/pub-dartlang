@@ -350,8 +350,7 @@ versions should work. If you know that your package works fine with `1.2.3` of
 some dependency, then semantic versioning tells you that it should work (at
 least) up to `2.0.0`.
 
-A version constraint is a space-separated series of version parts. A part can
-be one of:
+A version constraint is a series of:
 
 <dl class="dl-horizontal">
   <dt><code>any</code></dt>
@@ -382,14 +381,6 @@ be one of:
     the upper version that you know does <em>not</em> work with your package
     (because it's the first version to introduce some breaking change).</dd>
 </dl>
-
-<aside class="alert alert-warning">
-
-Make sure not to put a space between any of these comparison operators and the
-subsequent version number. <code>&gt;=1.2.3</code> is good,
-<code>&gt;= 1.2.3</code> is not.
-
-</aside>
 
 You can specify version parts as you want, and their ranges will be intersected
 together. For example, `>=1.2.3 <2.0.0` allows any version from `1.2.3` to
