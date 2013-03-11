@@ -1,0 +1,27 @@
+<pre><code>$ pub uploader [options] {add/remove} &lt;email&gt;
+</code></pre>
+
+<p>This command allows <a href="glossary.html#uploader">uploaders</a> of a package
+on <a href="http://pub.dartlang.org">pub.dartlang.org</a> to add or remove other
+uploaders for that package. It has two sub-commands, <code>add</code> and
+<code>remove</code>, that both take the email address of the person to add as an
+uploader. For example:</p>
+
+<pre><code>~/code/transmogrify$ pub uploader add nweiz@google.com
+'nweiz@google.com' added as an uploader for package 'transmogrify'.
+
+~/code/transmogrify$ pub uploader remove nweiz@google.com
+'nweiz@google.com' is no longer an uploader for package 'transmogrify'.
+</code></pre>
+
+<p>By default, the package in the current working directory will have its
+uploaders modified. You can also pass the <code>--package</code> flag to choose a
+package manually. For example:</p>
+
+<pre><code>$ pub uploader --package=transmogrify add nweiz@google.com
+'nweiz@google.com' added as an uploader for package 'transmogrify'.
+</code></pre>
+
+<p>It&rsquo;s important to note that uploaders are identified by their Google
+accounts, so you&rsquo;ll need to provide a Gmail or Google Apps email
+address for any new uploaders.</p>
