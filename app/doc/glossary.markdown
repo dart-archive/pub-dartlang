@@ -120,6 +120,18 @@ requires it. If your package depends on A, which in turn depends on B which
 depends on C, then A is an [immediate dependency](#immediate-dependency) and B
 and C are transitive ones.
 
+### Uploader
+
+An uploader of a package is someone who has administrative permissions
+for that package. They can not only upload new versions of a package,
+but also [add and remove other uploaders](pub-uploader.html) for that
+package. The uploader of a package is often, but not necessarily, the
+same as the [author](pubspec.html#authorauthors) of a package.
+
+Anyone uploading a new package automatically becomes an uploader for
+that package. Otherwise, to become an uploader, you need to contact an
+existing uploader and ask them to add you as another uploader.
+
 ### Version Constraint
 
 A constraint placed on each [dependency](#dependency) of a package that
