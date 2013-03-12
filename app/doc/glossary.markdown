@@ -126,7 +126,7 @@ An uploader of a package is someone who has administrative permissions
 for that package. They can not only upload new versions of a package,
 but also [add and remove other uploaders](pub-uploader.html) for that
 package. The uploader of a package is often, but not necessarily, the
-same as the author of a package.
+same as the [author](pubspec.html#authorauthors) of a package.
 
 Anyone uploading a new package automatically becomes an uploader for
 that package. Otherwise, to become an uploader, you need to contact an
