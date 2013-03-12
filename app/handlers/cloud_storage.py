@@ -228,7 +228,7 @@ def read(obj):
 def object_url(obj):
     """Returns the URL for an object in cloud storage."""
     if handlers.is_production():
-        return 'http://commondatastorage.googleapis.com/' + _object_path(obj)
+        return 'https://commondatastorage.googleapis.com/' + _object_path(obj)
     else:
         return '/gs_/' + urllib.quote(obj)
 
