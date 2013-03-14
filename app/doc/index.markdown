@@ -117,7 +117,7 @@ Now `my_app` is a pub package!
 ## Adding a dependency
 
 <div class="learn-more">
-  <a href="/doc/pubspec.html#dependencies">
+  <a href="/doc/dependencies.html">
     Learn more about dependencies &rarr;
   </a>
 </div>

@@ -1,5 +1,5 @@
 ---
-title: "Pub's Versioning Philosophy"
+title: "Versioning Philosophy"
 ---
 
 1. [A name and a number](#a-name-and-a-number)
@@ -14,7 +14,7 @@ title: "Pub's Versioning Philosophy"
 1. [Summary](#summary)
 {:.toc}
 
-One of pub's core concerns is helping you work with versioning. Here, I'll
+One of pub's main jobs is helping you work with versioning. Here, I'll
 explain a bit about the history of versioning and pub's approach to it.
 Consider this to be advanced information. If you want a better picture of *why*
 pub was designed the way it was, read on. If you just want to *use* pub, the

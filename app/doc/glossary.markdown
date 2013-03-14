@@ -21,7 +21,8 @@ constraints](#version-constraint).
 
 Another package that your package relies on. If your package wants to import
 code from some other package, that package must be a dependency. Dependencies
-are specified in your package's [pubspec](pubspec.html).
+are specified in your package's [pubspec](pubspec.html) and described
+[here](dependencies.html).
 
 ### Entrypoint
 
@@ -98,7 +99,7 @@ a specific place like pub.dartlang.org or some specific Git URL. Each source
 describes a general procedure for accessing a package in some way. For example,
 "git" is one source. The git source knows how to download packages given a Git
 URL. There are a few different
-[supported sources](pubspec.html#dependency-sources).
+[supported sources](dependencies.html#sources).
 
 ### System cache
 
@@ -146,5 +147,5 @@ should usually allow any version of their dependencies, since they use the
 [lockfile](#lockfile) to manage their dependency versions.
 
 See also documentation on [version constraint
-formatting](/doc/pubspec.html#version-constraints) and [the philosophy behind
-Pub's versioning scheme](/doc/versioning.html).
+formatting](dependencies.html#version-constraints) and [the philosophy behind
+Pub's versioning scheme](versioning.html).
