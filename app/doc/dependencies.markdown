@@ -23,15 +23,15 @@ versions* of that package that you allow. You may also specify the
 [*source*](glossary.html#source) which tells pub how the package can be located,
 and any additional *description* that the source needs to find the package.
 
-There are a few different ways to specify dependencies based on how much of
-that data you need to provide. The shortest way is to just specify a name:
+There are two different ways to specify dependencies based on what data you want
+to provide. The shortest way is to just specify a name:
 
 {% highlight yaml %}
 dependencies:
   transmogrify:
 {% endhighlight %}
 
-This creates a dependency on `transmogrify`. It allows any version, and looks
+This creates a dependency on `transmogrify`that  allows any version, and looks
 it up using the default source, which is this site itself. To limit the
 dependency to a range of versions, you can provide a *version constraint*:
 
@@ -50,6 +50,7 @@ If you want to specify a source, the syntax looks a bit different:
 dependencies:
   transmogrify:
     hosted:
+      name: transmogrify
       url: http://some-package-server.com
 {% endhighlight %}
 
@@ -157,13 +158,13 @@ dependencies:
 {% endhighlight %}
 
 This says the root directory for `transmogrify` is `/Users/me/transmogrify`.
-When you use this, pub will generate a symlink directly to the referenced
-directory. Any changes you make to the dependent package will be seen
-immediately. You don't need to run pub every time you change the dependent
-package.
+When you use this, pub will generate a symlink directly to the `lib` directory
+of the referenced package directory. Any changes you make to the dependent
+package will be seen immediately. You don't need to run pub every time you
+change the dependent package.
 
-Relative paths are allowed and are relative to the directory containing the
-pubspec.
+Relative paths are allowed and are considered relative to the directory
+containing your pubspec.
 
 Path dependencies are useful for local development, but do not play nice with
 sharing code with the outside world. It's not like everyone can get to
@@ -183,15 +184,16 @@ Instead, the typical workflow is:
 If your package is an application, you don't usually need to specify [version
 constraints](glossary.html#version-constraint) for your dependencies. You will
 typically want to use the latest versions of the dependencies when you first
-create your app. Then you'll create and check in a lockfile that pins your
-dependencies to those specific versions. Specifying version constraints in your
-pubpsc then is usually redundant (though you can do it if you want).
+create your app. Then you'll create and check in a
+[lockfile](glossary.html#lockfile) that pins your dependencies to those specific
+versions. Specifying version constraints in your pubspec then is usually
+redundant (though you can do it if you want).
 
 For a [library package](glossary.html#library-package) that you want users to
 reuse, though, it is important to specify version constraints. That lets people
 using your package know which versions of its dependencies they can rely on to
 be compatible with your library. Your goal is to allow a range of versions as
-wide as possible to give your users' flexibility. But it should be narrow enough
+wide as possible to give your users flexibility. But it should be narrow enough
 to exclude versions that you know don't work or haven't been tested.
 
 The Dart community uses [semantic versioning][], which helps you know which
@@ -210,7 +212,7 @@ A version constraint is a series of:
   <dd>A concrete version number pins the dependency to only allow that
     <em>exact</em> version. Avoid using this when you can because it can cause
     version lock for your users and make it hard for them to use your package
-    along with other packages that also use it.</dd>
+    along with other packages that also depend on it.</dd>
 
   <dt><code>&gt;=1.2.3</code></dt>
   <dd>Allows the given version or any greater one. You'll typically use this.
@@ -238,7 +240,7 @@ together. For example, `>=1.2.3 <2.0.0` allows any version from `1.2.3` to
 <aside class="alert alert-warning">
 
 Note that <code>&gt;</code> is also valid YAML syntax so you will want to quote
-the version string (like <code>'<=1.2.3 >2.0.0'</code>) if the version
+the version string (like <code>'&lt;=1.2.3 &gt;2.0.0'</code>) if the version
 constraint starts with that.
 
 </aside>
@@ -251,8 +253,8 @@ dependencies of packages you depend on are ignored*. That's a mouthful, so
 here's a motivating example:
 
 Say the `transmogrify` package uses the `unittest` package in its tests and only
-in its tests. If someone just wants to use that package&mdash;import its
-libraries&mdash; it doesn't actually need `unittest`. In this case, it specifies
+in its tests. If someone just wants to use `transmogrify`&mdash;import its
+libraries&mdash;it doesn't actually need `unittest`. In this case, it specifies
 `unittest` as a dev dependency. Its pubspec will have something like:
 
 {% highlight yaml %}
@@ -260,10 +262,10 @@ dev_dependencies:
   unittest: '>=0.5.0'
 {% endhighlight %}
 
-When pub is installing all of an [entrypoint](glossary.html#entrypoint)
-package's dependencies, it will *transitively* install all of the root package's
-regular dependencies. It will also install its dev dependencies. But it
-*ignores* the dev dependencies of any dependent packages. So when your package
+Pub installs every package your package package depends on, and everything
+*those* packages depend on, transitively. It also installs your package's dev
+dependencies. But it *ignores* the dev dependencies of any dependent packages.
+Only *your* package's dev dependencies are installed. So when your package
 depends on `transmogrify` it will install `transmogrify` but not `unittest`.
 
 The rule for deciding between a regular or dev dependency is pretty simple. If a
