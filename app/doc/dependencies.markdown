@@ -268,10 +268,10 @@ dependencies. But it *ignores* the dev dependencies of any dependent packages.
 Only *your* package's dev dependencies are installed. So when your package
 depends on `transmogrify` it will install `transmogrify` but not `unittest`.
 
-The rule for deciding between a regular or dev dependency is pretty simple. If a
-dependent library is imported from something in your `lib` directory, it needs
-to be a regular dependency. If it's only imported from `test`, `example`, etc.
-it can and should be a dev dependency.
+The rule for deciding between a regular or dev dependency is pretty simple. If
+the dependency is imported from something in your `lib` directory, it needs to
+be a regular dependency. If it's only imported from `test`, `example`, etc. it
+can and should be a dev dependency.
 
 Using dev dependencies makes dependency graphs smaller. That makes pub run
 faster, and makes it easier to find a set of package versions that satisfy all

@@ -266,10 +266,10 @@ dependencies. But it <em>ignores</em> the dev dependencies of any dependent pack
 Only <em>your</em> package&rsquo;s dev dependencies are installed. So when your package
 depends on <code>transmogrify</code> it will install <code>transmogrify</code> but not <code>unittest</code>.</p>
 
-<p>The rule for deciding between a regular or dev dependency is pretty simple. If a
-dependent library is imported from something in your <code>lib</code> directory, it needs
-to be a regular dependency. If it&rsquo;s only imported from <code>test</code>, <code>example</code>, etc.
-it can and should be a dev dependency.</p>
+<p>The rule for deciding between a regular or dev dependency is pretty simple. If
+the dependency is imported from something in your <code>lib</code> directory, it needs to
+be a regular dependency. If it&rsquo;s only imported from <code>test</code>, <code>example</code>, etc. it
+can and should be a dev dependency.</p>
 
 <p>Using dev dependencies makes dependency graphs smaller. That makes pub run
 faster, and makes it easier to find a set of package versions that satisfy all
