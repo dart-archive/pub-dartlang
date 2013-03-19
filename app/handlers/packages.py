@@ -80,6 +80,6 @@ class Packages(object):
                 show_versions_link=version_count > 10,
                 readme=readme,
                 readme_filename=readme_filename,
-                layout={'title': title})
+                layout={'title': title, 'package': package})
         else:
             raise handlers.http_error(404)

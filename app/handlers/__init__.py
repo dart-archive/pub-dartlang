@@ -38,7 +38,7 @@ def render(name, *context, **kwargs):
     if kwargs_for_layout == False: return content
     return layout(content, **kwargs_for_layout)
 
-def layout(content, title=None):
+def layout(content, title=None, package=None):
     """Renders a Mustache layout with the given content."""
 
     # We're about to display the flash message, so we should get rid of the
@@ -61,7 +61,8 @@ def layout(content, title=None):
         login_url=users.create_login_url(cherrypy.url()),
         logout_url=users.create_logout_url(cherrypy.url()),
         message=flash and flash.value,
-        title=title)
+        title=title,
+        package=package)
 
 def flash(message):
     """Records a message for the user.

@@ -3,11 +3,18 @@
     BSD-style license that can be found in the LICENSE file. }}
 
 <!doctype html>
-<html lang="en-us">
+<html lang="en-us"{{#package}} itemscope itemtype="http://schema.org/Product"{{/package}}>
   <head>
     <title>{{title}}</title>
-    <meta name="description" content="Pub is a package manager for the Dart
+    <meta itemprop="image" content="/static/img/dart-logo-400x400.png">
+    {{#package}}
+    <meta itemprop="name" content="{{package.name}}">
+    <meta itemprop="description" content="{{package.name}} - {{package.description}}">
+    {{/package}}
+    {{^package}}
+    <meta itemprop="description" content="Pub is a package manager for the Dart
       programming language.">
+    {{/package}}
 
     <link href="/static/style.css" rel="stylesheet" type="text/css" />
     <script src="/static/js/jquery-1.7.2.min.js"></script>
