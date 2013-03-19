@@ -38,6 +38,11 @@ That's it. All the dependencies needed to run the app are included in the
 repository so that App Engine can use them, so no further installation is
 necessary.
 
+In order to publish packages to your local test server, you must setup a
+_private key_. Visit http://localhost:8080/admin and enter whatever you like
+into the private key field. (Of course, use the port that works for your
+local instance.)
+
 [^1]: Some Linux distributions come with PyCrypto installed by default. Make
       sure you have at least version 2.6 installed.
 
