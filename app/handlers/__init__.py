@@ -38,7 +38,7 @@ def render(name, *context, **kwargs):
     if kwargs_for_layout == False: return content
     return layout(content, **kwargs_for_layout)
 
-def layout(content, title=None, package=None):
+def layout(content, title=None):
     """Renders a Mustache layout with the given content."""
 
     # We're about to display the flash message, so we should get rid of the
@@ -53,6 +53,8 @@ def layout(content, title=None, package=None):
     else:
         title = ''
     title = '%sPub Package Manager' % title
+
+    package = request().maybe_package
 
     return _renderer.render(
         _renderer.load_template("layout"),
