@@ -54,6 +54,8 @@ def layout(content, title=None):
         title = ''
     title = '%sPub Package Manager' % title
 
+    package = request().maybe_package
+
     return _renderer.render(
         _renderer.load_template("layout"),
         content=content,
@@ -61,7 +63,8 @@ def layout(content, title=None):
         login_url=users.create_login_url(cherrypy.url()),
         logout_url=users.create_logout_url(cherrypy.url()),
         message=flash and flash.value,
-        title=title)
+        title=title,
+        package=package)
 
 def flash(message):
     """Records a message for the user.
