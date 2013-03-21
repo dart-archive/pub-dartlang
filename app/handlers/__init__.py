@@ -363,9 +363,9 @@ class Request(object):
     def _package_name(self):
         """Return the name of the current package."""
         if self.route['controller'] == 'packages':
-            return self.request.params['id']
+            return self.request.params.get('id')
         else:
-            return self.request.params['package_id']
+            return self.request.params.get('package_id')
 
     @property
     def has_oauth(self):
