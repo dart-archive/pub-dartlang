@@ -277,12 +277,12 @@ def is_current_user_dogfooder():
 
 def is_production():
     """Return whether we're running in production mode."""
-    return bool(os.environ.get('DATACENTER'))
+    return not is_dev_server()
 
 def is_dev_server():
     """Return whether we're running on locally or on AppEngine.
 
-    Note that this returns True in tests so that the test appear to run in a
+    Note that this returns False in tests so that the test appear to run in a
     non-dev-server-like environment.
     """
     return os.environ['SERVER_SOFTWARE'].startswith('Development')
