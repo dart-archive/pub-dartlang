@@ -62,6 +62,12 @@ Once everything is installed, you can run the tests by running:
 
     ./test.py
 
+### Deploying
+
+See the docs on [branches and versions][].
+
+[branches and versions]: https://github.com/dart-lang/pub-dartlang/wiki/Branches-and-Versions
+
 ### Modifying the CSS and Documentation
 
 The CSS files are generated from the source [Sass][] files using [Compass][].
