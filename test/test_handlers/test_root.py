@@ -4,10 +4,16 @@
 
 from testcase import TestCase
 
+import handlers
 from models.package import Package
 from models.package_version import PackageVersion
 
 class RootTest(TestCase):
+    def test_in_production_is_false_in_tests(self):
+        # A little sanity check to make sure the tests don't run against
+        # production.
+        self.assertFalse(handlers.is_production())
+
     def test_index_lists_recent_packages_in_update_order(self):
         self.be_admin_user()
 

@@ -277,15 +277,29 @@ def is_current_user_dogfooder():
 
 def is_production():
     """Return whether we're running in production mode."""
-    return not is_dev_server()
+    return not os.environ['SERVER_SOFTWARE'].startswith('Development')
+
+_mock_is_dev_server = None
 
 def is_dev_server():
     """Return whether we're running on locally or on AppEngine.
 
-    Note that this returns False in tests so that the test appear to run in a
+    Note that this returns False in tests so that the test appears to run in a
     non-dev-server-like environment.
     """
+    global _mock_is_dev_server
+    if _mock_is_dev_server is not None: return _mock_is_dev_server
     return os.environ['SERVER_SOFTWARE'].startswith('Development')
+
+def set_is_dev_server(is_dev_server):
+    """Override the automatic detection of whether or not we're running on the
+    dev server.
+
+    Should only be used for tests. Call with None to re-enable automatic
+    detection.
+    """
+    global _mock_is_dev_server
+    _mock_is_dev_server = is_dev_server
 
 def request():
     """Return the current Request instance."""
@@ -362,6 +376,8 @@ class Request(object):
     @property
     def _package_name(self):
         """Return the name of the current package."""
+        if self.route is None: return None
+
         if self.route['controller'] == 'packages':
             return self.request.params.get('id')
         else:

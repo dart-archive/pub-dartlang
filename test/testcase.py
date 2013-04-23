@@ -22,6 +22,7 @@ import json
 import yaml
 import tarfile
 
+import handlers
 from pub_dartlang import Application
 from models.package import Package
 from models.package_version import PackageVersion
@@ -63,11 +64,6 @@ class TestCase(unittest.TestCase):
         self.testbed.init_user_stub()
 
         self.testapp = webtest.TestApp(Application())
-
-        # Pretend we are running on AppEngine so that things like the error
-        # page that behave differently when run locally act like they do in
-        # production.
-        os.environ['SERVER_SOFTWARE'] = 'Google App Engine/TESTING'
 
         # This private key is not actually used for anything other than testing.
         PrivateKey.set('''-----BEGIN RSA PRIVATE KEY-----
@@ -209,6 +205,14 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
             email=user.email(),
             user_id=user.user_id() or '0',
             is_admin=user.email().startswith('test-admin'))
+
+    def set_is_dev_server(self, is_dev_server):
+        """Set it so that we appear to be running on AppEngine.
+
+        This is only used for the error page tests since the error page
+        specifically checks to see if you're running on the dev server.
+        """
+        handlers.set_is_dev_server(is_dev_server)
 
     def create_package(self, name, version):
         """Create and save a package object with a version."""
