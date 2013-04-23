@@ -6,6 +6,7 @@ import base64
 import os
 import unittest
 from cStringIO import StringIO
+from decorator import decorator
 
 import cherrypy
 import webtest
@@ -206,14 +207,6 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
             user_id=user.user_id() or '0',
             is_admin=user.email().startswith('test-admin'))
 
-    def set_is_dev_server(self, is_dev_server):
-        """Set it so that we appear to be running on AppEngine.
-
-        This is only used for the error page tests since the error page
-        specifically checks to see if you're running on the dev server.
-        """
-        handlers.set_is_dev_server(is_dev_server)
-
     def create_package(self, name, version):
         """Create and save a package object with a version."""
         Package.new(name=name, uploaders=[users.get_current_user()]).put()
@@ -398,3 +391,16 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
 
         return any([link['href'] == url for link
                     in self.html(response).find_all('a')])
+
+@decorator
+def mock_not_on_dev_server(fn, *args, **kwargs):
+    """A decorator for tests that need to appear to not be on the dev server.
+
+    This is only used for the error page tests since the error page
+    specifically checks to see if you're running on the dev server.
+    """
+    try:
+        handlers.set_is_dev_server(False)
+        fn(*args, **kwargs)
+    finally:
+        handlers.set_is_dev_server(None)
