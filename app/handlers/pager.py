@@ -37,8 +37,8 @@ class Pager(object):
         # If there are many pages, we don't want to individually list all of
         # them. These are the minimum and maximum page numbers that we do want
         # to list.
-        min_page_to_list = self._page - self._max_pages/2
-        max_page_to_list = self._page + self._max_pages/2
+        min_page_to_list = self._page - self._max_pages / 2
+        max_page_to_list = self._page + self._max_pages / 2
 
         # If we're close enough to the first page that we show fewer than
         # `max_pages/2` pages to the left of the current page, re-allocate the
@@ -48,6 +48,7 @@ class Pager(object):
             min_page_to_list = 1
 
         max_item_to_count = max_page_to_list * per_page
+
         # Count one extra page so we can know if there are more pages to the
         # right of those we're displaying.
         count = self._query.count(limit=max_item_to_count + 1)
@@ -57,7 +58,7 @@ class Pager(object):
         else:
             # As above, if we're close enough to the last page, re-allocate
             # extra space to the left.
-            min_page_to_list -= max_item_to_count - count
+            min_page_to_list -= (max_item_to_count - count) / per_page
             min_page_to_list = max(1, min_page_to_list)
 
         self._min_page = min_page_to_list
