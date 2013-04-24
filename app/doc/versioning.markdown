@@ -144,7 +144,7 @@ dependencies:
   collections: '>=2.3.5 <2.4.0'
 {% endhighlight %}
 
-Then we could pick version `2.5.7` for `collections` and then both `widgets`
+Then we could pick version `2.3.7` for `collections` and then both `widgets`
 and `templates` have their constraints satisfied by a single concrete version.
 
 ## Semantic versions

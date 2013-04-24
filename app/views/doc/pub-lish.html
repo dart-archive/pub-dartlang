@@ -1,4 +1,4 @@
-<pre><code>$ pub publish
+<pre><code>$ pub publish [--dry-run] [--force] [--server &lt;url&gt;]
 </code></pre>
 
 <p>This command publishes your package on
@@ -65,14 +65,6 @@ add them to <code>.gitignore</code>) before running <code>pub publish</code>.</p
 <p>To be on the safe side, <code>pub publish</code> will list all files it&rsquo;s going to publish
 for you to look over before it actually uploads your package.</p>
 
-<h2 id="deleting-a-published-package">Deleting a published package</h2>
-
-<p>Once a package is published, you&rsquo;re strongly discouraged from deleting it. After
-all, some user could already be depending on it! If you accidentally included
-your password or something similarly secret in the package, <a href="http://code.google.com/p/dart/issues/entry?summary=Request%20to%20delete%20package%20from%20pub&amp;status=Triaged&amp;labels=Type-Task,Priority-Medium,Area-Pub,Pub-DeleteRequest">file an
-issue</a> and the Pub authors will take down your package. You&rsquo;ll
-need to use a different version when you re-upload it, though.</p>
-
 <h2 id="options">Options</h2>
 
 <h3 id="dry-run-or--n"><code>--dry-run</code> or <code>-n</code></h3>
@@ -90,3 +82,13 @@ shows you the package contents and asks for you to confirm the upload.</p>
 an error. If there are warnings, it <em>will</em> be uploaded. If you want to ensure
 your package has no warnings before uploading, either don&rsquo;t use <code>--force</code>, or
 use <code>--dry-run</code> first.</p>
+
+<h3 id="server"><code>--server</code></h3>
+
+<p>If you pass <code>--server</code> followed by a URL, it will attempt to publish the
+package to that server. It assumes the server supports the same HTTP API that
+<a href="http://pub.dartlang.org">pub.dartlang.org</a> uses.</p>
+
+<p>This can be useful if you&rsquo;re running your own local package server for testing.
+The main pub server is itself open source and available <a href="https://github.com/dart-lang/pub-dartlang">here</a>.</p>
+
