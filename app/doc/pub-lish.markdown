@@ -87,3 +87,14 @@ If there are any errors in your package, it is not uploaded and this exits with
 an error. If there are warnings, it *will* be uploaded. If you want to ensure
 your package has no warnings before uploading, either don't use `--force`, or
 use `--dry-run` first.
+
+### `--server`
+
+If you pass `--server` followed by a URL, it will attempt to publish the package to that server. It assumes the server supports the same HTTP API that
+[pub.dartlang.org][pubsite] uses.
+
+This can be useful if you're running your own local package server for testing.
+The main pub server is itself open source and available [here][pub repo].
+
+[pubsite]: http://pub.dartlang.org
+[pub repo]: https://github.com/dart-lang/pub-dartlang
