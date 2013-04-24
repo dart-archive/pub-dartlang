@@ -35,7 +35,7 @@ packages that your app uses.
 
 Pub creates these directories for you. The main one it creates is in the root
 of your package. Inside that, it creates symlinks pointing to the `lib`
-directories of each package your app [depends][] on. (The dependent packages
+directories of each package your app [depends][] on. (The dependencies
 themselves will usually live in your [system cache][].)
 
 [depends]: http://glossary.html#dependency
