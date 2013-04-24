@@ -7,12 +7,12 @@ title: "Frequently Asked Questions"
 After you run pub, you'll notice that your package has little `packages`
 directories sprinkled all over it. These are needed to make "package:" imports
 work. When your code has an import with the "package" scheme, a Dart
-implementation like the VM or dart2js translates that to a "regular" URL
-using a simple rewriting rule:
+implementation like the VM or dart2js translates that to a path or URL using a
+simple rewriting rule:
 
- 1. Take the URL to your application's [entrypoint](glossary.dart#entrypoint).
+ 1. Take the URI of your application's [entrypoint](glossary.dart#entrypoint).
  2. Strip off the trailing file name.
- 3. Append "/packages/" followed by the rest of the import URL:
+ 3. Append "/packages/" followed by the rest of the import URL.
 
 For example, if you app's entrypoint is `/dev/myapp/web/main.dart` then:
 
@@ -27,9 +27,9 @@ import '/dev/myapp/web/packages/unittest/unittest.dart';
 {% endhighlight %}
 
 Then Dart loads that as normal. This behavior is a [specified][spec] part of
-the Dart language. As you can see, the example only works if you have a
-directory named `packages` inside your `web` directory and that directory in
-turn contains the packages that your app uses.
+the Dart language. The example only works if you have a directory named
+`packages` inside your `web` directory and that directory in turn contains the
+packages that your app uses.
 
 [spec]: http://www.dartlang.org/docs/spec/
 
@@ -46,10 +46,10 @@ creates secondary ones in every directory in your package where a Dart
 entrypoint may appear. Currently that's `bin`, `example`, `test`, `tool`, and
 `web`.
 
-Pub also creates `packages` directories in *subdirectories* of any of those.
-Since you may have entrypoints under, for example, `web/admin/controllers/`,
-pub makes sure there is always a nearby `packages` directory. Otherwise the
-imports won't work.
+Pub also creates `packages` symlinks in *subdirectories* of any of those that
+point back to the main one. Since you may have entrypoints under, for example,
+`web/admin/controllers/`, pub makes sure there is always a nearby `packages`
+directory. Otherwise the imports won't work.
 
 ### I found a bug in pub. How do I report it?
 
@@ -86,9 +86,10 @@ look into it. Usually it resolves itself in a few hours.
 ### Why doesn't pub do ___?
 
 Probably because we haven't implemented yet. Pub is still under active
-development. If there are features you would like to see, go ahead and file a
-ticket. Please search and make sure it hasn't already been requested yet. If it
-has, star it so we know what things are important to users.
+development. If there are features you would like to see, go ahead and
+[file a ticket][dart bug tracker]. Please search and make sure it hasn't
+already been requested yet. If it has, star it so we know what things are
+important to users.
 
 Also, patches are more than welcome! Pub is [open source][] and we love outside
 contributions. Both the [client][] and [server][] are well-tested,
@@ -111,9 +112,7 @@ You can usually get a picture for what we are working on now by seeing which
 
 ### How do I report abuse of pub.dartlang.org?
 
-Please contact us on [misc@dartlang.org][misc] to discuss the situation.
-
-[misc]: https://groups.google.com/a/dartlang.org/forum/?fromgroups#!forum/misc
+Please contact us on the [mailing list][] to discuss the situation.
 
 ### I still have questions. What should I do?
 

@@ -80,7 +80,8 @@ use `--dry-run` first.
 
 ### `--server`
 
-If you pass `--server` followed by a URL, it will attempt to publish the package to that server. It assumes the server supports the same HTTP API that
+If you pass `--server` followed by a URL, it will attempt to publish the
+package to that server. It assumes the server supports the same HTTP API that
 [pub.dartlang.org][pubsite] uses.
 
 This can be useful if you're running your own local package server for testing.

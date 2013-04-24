@@ -3,13 +3,13 @@
 <p>After you run pub, you&rsquo;ll notice that your package has little <code>packages</code>
 directories sprinkled all over it. These are needed to make &ldquo;package:&rdquo; imports
 work. When your code has an import with the &ldquo;package&rdquo; scheme, a Dart
-implementation like the VM or dart2js translates that to a &ldquo;regular&rdquo; URL
-using a simple rewriting rule:</p>
+implementation like the VM or dart2js translates that to a path or URL using a
+simple rewriting rule:</p>
 
 <ol>
-  <li>Take the URL to your application&rsquo;s <a href="glossary.dart#entrypoint">entrypoint</a>.</li>
+  <li>Take the URI of your application&rsquo;s <a href="glossary.dart#entrypoint">entrypoint</a>.</li>
   <li>Strip off the trailing file name.</li>
-  <li>Append &ldquo;/packages/&rdquo; followed by the rest of the import URL:</li>
+  <li>Append &ldquo;/packages/&rdquo; followed by the rest of the import URL.</li>
 </ol>
 
 <p>For example, if you app&rsquo;s entrypoint is <code>/dev/myapp/web/main.dart</code> then:</p>
@@ -25,9 +25,9 @@ using a simple rewriting rule:</p>
 </div>
 
 <p>Then Dart loads that as normal. This behavior is a <a href="http://www.dartlang.org/docs/spec/">specified</a> part of
-the Dart language. As you can see, the example only works if you have a
-directory named <code>packages</code> inside your <code>web</code> directory and that directory in
-turn contains the packages that your app uses.</p>
+the Dart language. The example only works if you have a directory named
+<code>packages</code> inside your <code>web</code> directory and that directory in turn contains the
+packages that your app uses.</p>
 
 <p>Pub creates these directories for you. The main one it creates is in the root
 of your package. Inside that, it creates symlinks pointing to the <code>lib</code>
@@ -39,10 +39,10 @@ creates secondary ones in every directory in your package where a Dart
 entrypoint may appear. Currently that&rsquo;s <code>bin</code>, <code>example</code>, <code>test</code>, <code>tool</code>, and
 <code>web</code>.</p>
 
-<p>Pub also creates <code>packages</code> directories in <em>subdirectories</em> of any of those.
-Since you may have entrypoints under, for example, <code>web/admin/controllers/</code>,
-pub makes sure there is always a nearby <code>packages</code> directory. Otherwise the
-imports won&rsquo;t work.</p>
+<p>Pub also creates <code>packages</code> symlinks in <em>subdirectories</em> of any of those that
+point back to the main one. Since you may have entrypoints under, for example,
+<code>web/admin/controllers/</code>, pub makes sure there is always a nearby <code>packages</code>
+directory. Otherwise the imports won&rsquo;t work.</p>
 
 <h3 id="i-found-a-bug-in-pub-how-do-i-report-it">I found a bug in pub. How do I report it?</h3>
 
@@ -73,9 +73,10 @@ look into it. Usually it resolves itself in a few hours.</p>
 <h3 id="why-doesnt-pub-do-">Why doesn&rsquo;t pub do ___?</h3>
 
 <p>Probably because we haven&rsquo;t implemented yet. Pub is still under active
-development. If there are features you would like to see, go ahead and file a
-ticket. Please search and make sure it hasn&rsquo;t already been requested yet. If it
-has, star it so we know what things are important to users.</p>
+development. If there are features you would like to see, go ahead and
+<a href="https://code.google.com/p/dart/issues/list">file a ticket</a>. Please search and make sure it hasn&rsquo;t
+already been requested yet. If it has, star it so we know what things are
+important to users.</p>
 
 <p>Also, patches are more than welcome! Pub is <a href="https://code.google.com/p/dart/wiki/GettingTheSource?tm=4">open source</a> and we love outside
 contributions. Both the <a href="https://code.google.com/p/dart/source/browse/#svn%2Fbranches%2Fbleeding_edge%2Fdart%2Fsdk%2Flib%2F_internal%2Fpub">client</a> and <a href="https://github.com/dart-lang/pub-dartlang">server</a> are well-tested,
@@ -92,7 +93,7 @@ the future, we are likely to end up disappointing users when plans change.</p>
 
 <h3 id="how-do-i-report-abuse-of-pubdartlangorg">How do I report abuse of pub.dartlang.org?</h3>
 
-<p>Please contact us on <a href="https://groups.google.com/a/dartlang.org/forum/?fromgroups#!forum/misc">misc@dartlang.org</a> to discuss the situation.</p>
+<p>Please contact us on the <a href="https://groups.google.com/a/dartlang.org/forum/?fromgroups#!forum/misc">mailing list</a> to discuss the situation.</p>
 
 <h3 id="i-still-have-questions-what-should-i-do">I still have questions. What should I do?</h3>
 
