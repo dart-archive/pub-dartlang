@@ -2,13 +2,8 @@
 
 <p>After you run pub, you&rsquo;ll notice that your package has little <code>packages</code>
 directories sprinkled all over it. These are needed to make &ldquo;package:&rdquo; imports
-work. When your code has an import like:</p>
-
-<div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s1">&#39;package:unittest/unittest.dart&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
-
-<p>A Dart implementation like the VM or dart2js translates that to a &ldquo;regular&rdquo;
+work. When your code has an import with the &ldquo;package&rdquo; scheme, a Dart
+implementation like the VM or dart2js translates that to a &ldquo;regular&rdquo; URL
 using a simple rewriting rule:</p>
 
 <ol>
@@ -35,12 +30,11 @@ directory named <code>packages</code> inside your <code>web</code> directory and
 turn contains the packages that your app uses.</p>
 
 <p>Pub creates these directories for you. The main one it creates is in the root
-of your package. Inside that, it creates a directory for each package your app
-<a href="http://glossary.html#dependency">depends</a> on. Each of those will be a symlink to that dependency&rsquo;s <code>lib</code>
-directory. (The dependent packages themselves will usually live in your
-<a href="http://glossary.html#system-cache">system cache</a>.)</p>
+of your package. Inside that, it creates symlinks pointing to the <code>lib</code>
+directories of each package your app <a href="http://glossary.html#dependency">depends</a> on. (The dependent packages
+themselves will usually live in your <a href="http://glossary.html#system-cache">system cache</a>.)</p>
 
-<p>After creating the main <code>packages</code> directory in your package&rsquo;s root, it then
+<p>After creating the main <code>packages</code> directory in your package&rsquo;s root, pub then
 creates secondary ones in every directory in your package where a Dart
 entrypoint may appear. Currently that&rsquo;s <code>bin</code>, <code>example</code>, <code>test</code>, <code>tool</code>, and
 <code>web</code>.</p>
@@ -84,8 +78,8 @@ ticket. Please search and make sure it hasn&rsquo;t already been requested yet. 
 has, star it so we know what things are important to users.</p>
 
 <p>Also, patches are more than welcome! Pub is <a href="https://code.google.com/p/dart/wiki/GettingTheSource?tm=4">open source</a> and we love outside
-contributions. Both the <a href="https://code.google.com/p/dart/source/browse/#svn%2Fbranches%2Fbleeding_edge%2Fdart%2Fsdk%2Flib%2F_internal%2Fpub">client</a> and server are well-tested, well-documented,
-and, we hope, easy to contribute to.</p>
+contributions. Both the <a href="https://code.google.com/p/dart/source/browse/#svn%2Fbranches%2Fbleeding_edge%2Fdart%2Fsdk%2Flib%2F_internal%2Fpub">client</a> and <a href="https://github.com/dart-lang/pub-dartlang">server</a> are well-tested,
+well-documented, and, we hope, easy to contribute to.</p>
 
 <h3 id="what-is-the-roadmap-for-pub">What is the roadmap for pub?</h3>
 

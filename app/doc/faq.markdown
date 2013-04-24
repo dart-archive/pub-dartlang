@@ -6,13 +6,8 @@ title: "Frequently Asked Questions"
 
 After you run pub, you'll notice that your package has little `packages`
 directories sprinkled all over it. These are needed to make "package:" imports
-work. When your code has an import like:
-
-{% highlight dart %}
-import 'package:unittest/unittest.dart';
-{% endhighlight %}
-
-A Dart implementation like the VM or dart2js translates that to a "regular"
+work. When your code has an import with the "package" scheme, a Dart
+implementation like the VM or dart2js translates that to a "regular" URL
 using a simple rewriting rule:
 
  1. Take the URL to your application's [entrypoint](glossary.dart#entrypoint).
@@ -39,15 +34,14 @@ turn contains the packages that your app uses.
 [spec]: http://www.dartlang.org/docs/spec/
 
 Pub creates these directories for you. The main one it creates is in the root
-of your package. Inside that, it creates a directory for each package your app
-[depends][] on. Each of those will be a symlink to that dependency's `lib`
-directory. (The dependent packages themselves will usually live in your
-[system cache][].)
+of your package. Inside that, it creates symlinks pointing to the `lib`
+directories of each package your app [depends][] on. (The dependent packages
+themselves will usually live in your [system cache][].)
 
 [depends]: http://glossary.html#dependency
 [system cache]: http://glossary.html#system-cache
 
-After creating the main `packages` directory in your package's root, it then
+After creating the main `packages` directory in your package's root, pub then
 creates secondary ones in every directory in your package where a Dart
 entrypoint may appear. Currently that's `bin`, `example`, `test`, `tool`, and
 `web`.
@@ -97,8 +91,8 @@ ticket. Please search and make sure it hasn't already been requested yet. If it
 has, star it so we know what things are important to users.
 
 Also, patches are more than welcome! Pub is [open source][] and we love outside
-contributions. Both the [client][] and server are well-tested, well-documented,
-and, we hope, easy to contribute to.
+contributions. Both the [client][] and [server][] are well-tested,
+well-documented, and, we hope, easy to contribute to.
 
 [open source]: https://code.google.com/p/dart/wiki/GettingTheSource?tm=4
 [client]: https://code.google.com/p/dart/source/browse/#svn%2Fbranches%2Fbleeding_edge%2Fdart%2Fsdk%2Flib%2F_internal%2Fpub
