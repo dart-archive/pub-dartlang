@@ -1,0 +1,105 @@
+<h3 id="what-are-all-the-packages-directories-for">What are all the &ldquo;packages&rdquo; directories for?</h3>
+
+<p>After you run pub, you&rsquo;ll notice that your package has little <code>packages</code>
+directories sprinkled all over it. These are needed to make &ldquo;package:&rdquo; imports
+work. When your code has an import like:</p>
+
+<div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s1">&#39;package:unittest/unittest.dart&#39;</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>A Dart implementation like the VM or dart2js translates that to a &ldquo;regular&rdquo;
+using a simple rewriting rule:</p>
+
+<ol>
+  <li>Take the URL to your application&rsquo;s <a href="glossary.dart#entrypoint">entrypoint</a>.</li>
+  <li>Strip off the trailing file name.</li>
+  <li>Append &ldquo;/packages/&rdquo; followed by the rest of the import URL:</li>
+</ol>
+
+<p>For example, if you app&rsquo;s entrypoint is <code>/dev/myapp/web/main.dart</code> then:</p>
+
+<div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s1">&#39;package:unittest/unittest.dart&#39;</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>Magically turns into:</p>
+
+<div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s1">&#39;/dev/myapp/web/packages/unittest/unittest.dart&#39;</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>Then Dart loads that as normal. This behavior is a <a href="http://www.dartlang.org/docs/spec/">specified</a> part of
+the Dart language. As you can see, the example only works if you have a
+directory named <code>packages</code> inside your <code>web</code> directory and that directory in
+turn contains the packages that your app uses.</p>
+
+<p>Pub creates these directories for you. The main one it creates is in the root
+of your package. Inside that, it creates a directory for each package your app
+<a href="http://glossary.html#dependency">depends</a> on. Each of those will be a symlink to that dependency&rsquo;s <code>lib</code>
+directory. (The dependent packages themselves will usually live in your
+<a href="http://glossary.html#system-cache">system cache</a>.)</p>
+
+<p>After creating the main <code>packages</code> directory in your package&rsquo;s root, it then
+creates secondary ones in every directory in your package where a Dart
+entrypoint may appear. Currently that&rsquo;s <code>bin</code>, <code>example</code>, <code>test</code>, <code>tool</code>, and
+<code>web</code>.</p>
+
+<p>Pub also creates <code>packages</code> directories in <em>subdirectories</em> of any of those.
+Since you may have entrypoints under, for example, <code>web/admin/controllers/</code>,
+pub makes sure there is always a nearby <code>packages</code> directory. Otherwise the
+imports won&rsquo;t work.</p>
+
+<h3 id="i-found-a-bug-in-pub-how-do-i-report-it">I found a bug in pub. How do I report it?</h3>
+
+<p>We use the main <a href="https://code.google.com/p/dart/issues/list">Dart bug tracker</a>. Feel free to file a ticket. When you do,
+please include:</p>
+
+<ul>
+  <li>Your platform (Windows, Mac, Linux, etc.).</li>
+  <li>The version you are running. (Run <code>pub version</code>.)</li>
+  <li>If possible, include a log by running <code>pub --verbose &lt;your command&gt;</code>.</li>
+</ul>
+
+<h2 id="how-do-i-delete-a-package">How do I delete a package?</h2>
+
+<p>Once a package is published, you&rsquo;re strongly discouraged from deleting it.
+After all, some user could already be depending on it! If you accidentally
+include your password or something similarly secret in the package,
+<a href="http://code.google.com/p/dart/issues/entry?summary=Request%20to%20delete%20package%20from%20pub&amp;status=Triaged&amp;labels=Type-Task,Priority-Medium,Area-Pub,Pub-DeleteRequest">file an issue</a> and the Pub authors will take down your
+package. You&rsquo;ll need to use a different version when you re-upload it.</p>
+
+<h3 id="i-get-a-timeout-when-i-run-pub-what-do-i-do">I get a timeout when I run pub. What do I do?</h3>
+
+<p>The <a href="http://pub.dartlang.org">pub package server</a> is hosted on <a href="https://appengine.google.com">App Engine</a>. We&rsquo;ve seen a few times
+where App Engine has run slowly for us and other users, leading to some
+timeouts. If this happens, send us a note on the <a href="https://groups.google.com/a/dartlang.org/forum/?fromgroups#!forum/misc">mailing list</a> and we&rsquo;ll
+look into it. Usually it resolves itself in a few hours.</p>
+
+<h3 id="why-doesnt-pub-do-">Why doesn&rsquo;t pub do ___?</h3>
+
+<p>Probably because we haven&rsquo;t implemented yet. Pub is still under active
+development. If there are features you would like to see, go ahead and file a
+ticket. Please search and make sure it hasn&rsquo;t already been requested yet. If it
+has, star it so we know what things are important to users.</p>
+
+<p>Also, patches are more than welcome! Pub is <a href="https://code.google.com/p/dart/wiki/GettingTheSource?tm=4">open source</a> and we love outside
+contributions. Both the <a href="https://code.google.com/p/dart/source/browse/#svn%2Fbranches%2Fbleeding_edge%2Fdart%2Fsdk%2Flib%2F_internal%2Fpub">client</a> and server are well-tested, well-documented,
+and, we hope, easy to contribute to.</p>
+
+<h3 id="what-is-the-roadmap-for-pub">What is the roadmap for pub?</h3>
+
+<p>We don&rsquo;t generally make public roadmaps for pub. The Dart project is very fluid
+and priorities and schedules change very frequently. If we make promises for
+the future, we are likely to end up disappointing users when plans change.</p>
+
+<p>You can usually get a picture for what we are working on now by seeing which
+<a href="https://code.google.com/p/dart/issues/list?can=2&amp;q=Area%3DPub+status%3AStarted+&amp;colspec=ID+Type+Status+Priority+Area+Milestone+Owner+Summary&amp;cells=tiles">bugs we have started</a>.</p>
+
+<h3 id="how-do-i-report-abuse-of-pubdartlangorg">How do I report abuse of pub.dartlang.org?</h3>
+
+<p>Please contact us on <a href="https://groups.google.com/a/dartlang.org/forum/?fromgroups#!forum/misc">misc@dartlang.org</a> to discuss the situation.</p>
+
+<h3 id="i-still-have-questions-what-should-i-do">I still have questions. What should I do?</h3>
+
+<p>Send an email to the main Dart <a href="https://groups.google.com/a/dartlang.org/forum/?fromgroups#!forum/misc">mailing list</a> and we&rsquo;ll see it.</p>

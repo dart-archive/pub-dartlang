@@ -2,7 +2,7 @@
 title: "Command: Publish"
 ---
 
-    $ pub publish
+    $ pub publish [--dry-run] [--force] [--server <url>]
 
 This command publishes your package on
 [pub.dartlang.org](http://pub.dartlang.org) for anyone to download and depend
@@ -59,16 +59,6 @@ add them to `.gitignore`) before running `pub publish`.
 
 To be on the safe side, `pub publish` will list all files it's going to publish
 for you to look over before it actually uploads your package.
-
-## Deleting a published package
-
-Once a package is published, you're strongly discouraged from deleting it. After
-all, some user could already be depending on it! If you accidentally included
-your password or something similarly secret in the package, [file an
-issue][delete-request] and the Pub authors will take down your package. You'll
-need to use a different version when you re-upload it, though.
-
-[delete-request]: http://code.google.com/p/dart/issues/entry?summary=Request%20to%20delete%20package%20from%20pub&status=Triaged&labels=Type-Task,Priority-Medium,Area-Pub,Pub-DeleteRequest
 
 ## Options
 
