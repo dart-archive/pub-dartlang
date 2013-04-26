@@ -284,8 +284,13 @@ _mock_is_dev_server = None
 def is_dev_server():
     """Return whether we're running on locally or on AppEngine.
 
-    Note that this returns False in tests so that the tests appear to run in a
-    non-dev-server-like environment.
+    Note that this is *not* the exact opposite of is_production().
+    That will always return False when running locally to ensure that local
+    testing does not hit production data.
+
+    This can be mocked to return False even when running locally so that the
+    error page tests can validate their behavior which varies based on whether
+    or not you are running locally.
     """
     if _mock_is_dev_server is not None: return _mock_is_dev_server
     return os.environ['SERVER_SOFTWARE'].startswith('Development')
