@@ -112,7 +112,9 @@ You can usually get a picture for what we are working on now by seeing which
 
 ### How do I report abuse of pub.dartlang.org?
 
-Please contact us on the [mailing list][] to discuss the situation.
+Please contact us at [pub-abuse@dartlang.org][abuse] to discuss the situation.
+
+[abuse]: mailto:pub-abuse@dartlang.org
 
 ### I still have questions. What should I do?
 
