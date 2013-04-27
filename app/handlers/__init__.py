@@ -288,7 +288,7 @@ def is_dev_server():
     That will always return False when running locally to ensure that local
     testing does not hit production data.
 
-    This can be mocked to return False even when running locally so that the
+    This can be mocked to return True even when running locally so that the
     error page tests can validate their behavior which varies based on whether
     or not you are running locally.
     """
