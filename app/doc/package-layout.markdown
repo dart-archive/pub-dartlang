@@ -8,7 +8,7 @@ title: "Package layout conventions"
 1. [Implementation files](#implementation-files)
 1. [Web files](#web-files)
 1. [Command-line apps](#command-line-apps)
-1. [Tests](#tests)
+1. [Tests and benchmarks](#tests-and-benchmarks)
 1. [Documentation](#documentation)
 1. [Examples](#examples)
 1. [Internal tools and scripts](#internal-tools-and-scripts)
@@ -35,6 +35,9 @@ would look like:
       pubspec.lock *
       README.md
       LICENSE
+      benchmark/
+        make_lunch.dart
+        packages/ **
       bin/
         enchilada
         packages/ **
@@ -159,8 +162,8 @@ import "package:enchilada/some/path/olives.dart";
 Note that only *libraries* should be in `lib`. *Entrypoints*&mdash;Dart scripts
 with a `main()` function&mdash;cannot go in `lib`. If you place a Dart script
 inside `lib`, you will discover that any `package:` imports it contains don't
-resolve. Instead, your entrypoints should go in `bin`, `example`, `test`,
-`tool`, or `web`, whichever is most appropriate.
+resolve. Instead, your entrypoints should go in the appropriate
+[entrypoint directory](glossary.html#entrypoint-directory).
 
 ## Implementation files
 
@@ -235,7 +238,7 @@ system path so that these scripts can be easily invoked.
 
 </aside>
 
-## Tests
+## Tests and benchmarks
 
     enchilada/
       test/
@@ -248,6 +251,14 @@ and have `_test` at the end of their file names.
 
 Typically, these use the [unittest](http://api.dartlang.org/unittest.html)
 package but you can use whatever testing system that gets you excited.
+
+    enchilada/
+      benchmark/
+        make_lunch.dart
+
+Packages that have performance critical code may also include *benchmarks*.
+These test the API not for correctness but for speed (or memory use, or maybe
+other empirical metrics).
 
 ## Documentation
 

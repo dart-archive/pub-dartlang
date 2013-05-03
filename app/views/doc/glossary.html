@@ -38,6 +38,16 @@ app uses a library package A. When you run your app, A is not the entrypoint
 package. However, if you go over to A and execute its unit tests, in that
 context, it <em>is</em> the entrypoint since your app isn&rsquo;t involved.</p>
 
+<h3 id="entrypoint-directory">Entrypoint directory</h3>
+
+<p>A directory inside your package that is allowed to contain
+<a href="#entrypoint">Dart entrypoints</a>. Pub will ensure all of these directories get
+a &ldquo;packages&rdquo; directory, which is needed for &ldquo;package:&rdquo; imports to work.</p>
+
+<p>Pub has a whitelist of these directories: <code>benchmark</code>, <code>bin</code>, <code>example</code>,
+<code>test</code>, <code>tool</code>, and <code>web</code>. Any subdirectories of those (except <code>bin</code>) may also
+contain entrypoints.</p>
+
 <h3 id="immediate-dependency">Immediate dependency</h3>
 
 <p>A <a href="#dependency">dependency</a> that your package directly uses itself. The

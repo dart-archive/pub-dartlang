@@ -5,7 +5,7 @@
   <li><a href="#implementation-files">Implementation files</a></li>
   <li><a href="#web-files">Web files</a></li>
   <li><a href="#command-line-apps">Command-line apps</a></li>
-  <li><a href="#tests">Tests</a></li>
+  <li><a href="#tests-and-benchmarks">Tests and benchmarks</a></li>
   <li><a href="#documentation">Documentation</a></li>
   <li><a href="#examples">Examples</a></li>
   <li><a href="#internal-tools-and-scripts">Internal tools and scripts</a></li>
@@ -32,6 +32,9 @@ would look like:</p>
   pubspec.lock *
   README.md
   LICENSE
+  benchmark/
+    make_lunch.dart
+    packages/ **
   bin/
     enchilada
     packages/ **
@@ -160,8 +163,8 @@ they import it. Say you have a file hierarchy like this:</p>
 <p>Note that only <em>libraries</em> should be in <code>lib</code>. <em>Entrypoints</em>&mdash;Dart scripts
 with a <code>main()</code> function&mdash;cannot go in <code>lib</code>. If you place a Dart script
 inside <code>lib</code>, you will discover that any <code>package:</code> imports it contains don&rsquo;t
-resolve. Instead, your entrypoints should go in <code>bin</code>, <code>example</code>, <code>test</code>,
-<code>tool</code>, or <code>web</code>, whichever is most appropriate.</p>
+resolve. Instead, your entrypoints should go in the appropriate
+<a href="glossary.html#entrypoint-directory">entrypoint directory</a>.</p>
 
 <h2 id="implementation-files">Implementation files</h2>
 
@@ -239,7 +242,7 @@ system path so that these scripts can be easily invoked.
 
 </aside>
 
-<h2 id="tests">Tests</h2>
+<h2 id="tests-and-benchmarks">Tests and benchmarks</h2>
 
 <pre><code>enchilada/
   test/
@@ -253,6 +256,15 @@ and have <code>_test</code> at the end of their file names.</p>
 
 <p>Typically, these use the <a href="http://api.dartlang.org/unittest.html">unittest</a>
 package but you can use whatever testing system that gets you excited.</p>
+
+<pre><code>enchilada/
+  benchmark/
+    make_lunch.dart
+</code></pre>
+
+<p>Packages that have performance critical code may also include <em>benchmarks</em>.
+These test the API not for correctness but for speed (or memory use, or maybe
+other empirical metrics).</p>
 
 <h2 id="documentation">Documentation</h2>
 
