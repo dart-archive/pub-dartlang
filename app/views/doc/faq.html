@@ -35,9 +35,9 @@ directories of each package your app <a href="http://glossary.html#dependency">d
 themselves will usually live in your <a href="http://glossary.html#system-cache">system cache</a>.)</p>
 
 <p>After creating the main <code>packages</code> directory in your package&rsquo;s root, pub then
-creates secondary ones in every directory in your package where a Dart
-entrypoint may appear. Currently that&rsquo;s <code>benchmark</code>, <code>bin</code>, <code>example</code>, <code>test</code>,
-<code>tool</code>, and <code>web</code>.</p>
+creates secondary ones in every <a href="glossary.html#entrypoint-directory">directory in your package where a Dart
+entrypoint may appear</a>. Currently that&rsquo;s
+<code>benchmark</code>, <code>bin</code>, <code>example</code>, <code>test</code>, <code>tool</code>, and <code>web</code>.</p>
 
 <p>Pub also creates <code>packages</code> symlinks in <em>subdirectories</em> of any of those that
 point back to the main one. Since you may have entrypoints under, for example,

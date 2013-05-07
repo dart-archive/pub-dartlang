@@ -42,9 +42,9 @@ themselves will usually live in your [system cache][].)
 [system cache]: http://glossary.html#system-cache
 
 After creating the main `packages` directory in your package's root, pub then
-creates secondary ones in every directory in your package where a Dart
-entrypoint may appear. Currently that's `benchmark`, `bin`, `example`, `test`,
-`tool`, and `web`.
+creates secondary ones in every [directory in your package where a Dart
+entrypoint may appear](glossary.html#entrypoint-directory). Currently that's
+`benchmark`, `bin`, `example`, `test`, `tool`, and `web`.
 
 Pub also creates `packages` symlinks in *subdirectories* of any of those that
 point back to the main one. Since you may have entrypoints under, for example,
