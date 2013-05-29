@@ -7,6 +7,9 @@
 from contextlib import contextmanager
 import re
 
+import cherrypy
+import routes
+
 from decorator import decorator
 from google.appengine.ext import db
 
@@ -48,3 +51,11 @@ def validate_not_empty(list):
     """Validate that the value of a list property is not empty."""
     if len(list) == 0:
         raise db.BadValueError("List property must not be empty.")
+
+def url(**kwargs):
+    """Construct a URL for a given set of parametters.
+
+    This must be run within a request context so that it can determine the base
+    URL of the app.
+    """
+    return cherrypy.request.base + routes.url_for(**kwargs)

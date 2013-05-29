@@ -148,3 +148,37 @@ class Package(db.Model):
         """
         return uploader.email().lower() in \
             [u.email().lower() for u in self.uploaders]
+
+    @property
+    def url(self):
+        """The API URL for this package."""
+        return models.url(
+            controller='api.packages', action='show', id=self.name)
+
+    def as_dict(self, full=False):
+        """Returns the dictionary representation of this package.
+
+        This is used to represent the package in API responses. Normally this
+        just includes URLs and some information about the latest version, but if
+        full is True, it will include all available information about the
+        package.
+        """
+
+        value = {
+            'name': self.name,
+            'url': self.url,
+            'uploaders_url': self.url + '/uploaders',
+            'version_url': self.url + '/versions/{version}',
+            'new_version_url': self.url + '/versions/new',
+            'latest': self.latest_version and self.latest_version.as_dict()
+        }
+
+        if full:
+            value.update({
+                'created': self.created.isoformat(),
+                'downloads': self.downloads,
+                'uploaders': [uploader.email() for uploader in self.uploaders],
+                'versions': [version.as_dict() for version in self.version_set]
+            })
+
+        return value

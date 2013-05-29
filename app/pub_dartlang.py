@@ -15,6 +15,7 @@ from google.appengine.api import users
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 import handlers
+import handlers.api as api
 from handlers.doc import Doc
 from handlers.root import Root
 from handlers.packages import Packages
@@ -30,7 +31,7 @@ class Application(cherrypy.Application):
         self.dispatcher = cherrypy.dispatch.RoutesDispatcher()
         self.merge({'/': {'request.dispatch': self.dispatcher}})
 
-        # Configure routes
+        # Frontend routes (also deprecated v1 API routes)
         self.dispatcher.connect('root', '/', Root(), action='index')
         self.dispatcher.mapper.connect(
             '/authorized', controller='root', action='authorized')
@@ -59,12 +60,64 @@ class Application(cherrypy.Application):
                          'create': 'GET',
                          'new_dartdoc': 'GET'
                        })
+        with self.dispatcher.mapper.submapper(
+                controller='versions',
+                path_prefix='/packages/versions/') as m:
+            m.connect('reload', action='reload', conditions={'method': 'POST'})
+            m.connect('reload.:(format)', action='reload_status',
+                      conditions={'method': 'GET'})
 
-        # Package version actions related to uploading a new package need to
-        # work without that package in the URL.
-        with self.dispatcher.mapper.submapper(controller='versions',
-                                              path_prefix='/packages/versions/',
-                                              package_id=None) as m:
+        self._resource('uploader', 'uploaders', PackageUploaders(),
+                       parent_resource={
+                         'member_name': 'package',
+                         'collection_name': 'packages'
+                       })
+
+        # API Routes
+        self.dispatcher.connect('api.root', '/api', api.Root(), action='index')
+
+        self.dispatcher.controllers['api.packages'] = api.Packages()
+        self.dispatcher.mapper.resource(
+            'package', 'packages',
+            controller='api.packages', path_prefix='api')
+
+        self.dispatcher.controllers['api.versions'] = api.PackageVersions()
+        self.dispatcher.mapper.resource(
+            'version', 'versions',
+            controller='api.versions',
+            path_prefix='api/packages/:package_id',
+            parent_resource={
+                'member_name': 'package',
+                'collection_name': 'packages'
+            },
+            member={
+                'create': 'GET',
+                'new_dartdoc': 'GET'
+            })
+
+        with self.dispatcher.mapper.submapper(
+                controller='api.versions',
+                path_prefix='/api/packages/versions/') as m:
+            m.connect('new', action='new',
+                      conditions={'method': ['GET', 'HEAD']})
+            m.connect(':id/create', action='create')
+            m.connect('upload', action='upload', conditions={'method': 'POST'})
+
+        self.dispatcher.controllers['api.uploaders'] = api.PackageUploaders()
+        self.dispatcher.mapper.resource(
+            'uploader', 'uploaders',
+            controller='api.uploaders',
+            path_prefix='api/packages/:package_id',
+            parent_resource={
+                'member_name': 'package',
+                'collection_name': 'packages'
+            })
+
+        # For old API endpoints that are compatible with the new API, we can
+        # just reroute the old paths to the new actions.
+        with self.dispatcher.mapper.submapper(
+                controller='api.versions',
+                path_prefix='/packages/versions/') as m:
             m.connect('new.:(format)', action='new',
                       conditions={'method': ['GET', 'HEAD']})
             m.connect('new', action='new',
@@ -72,18 +125,6 @@ class Application(cherrypy.Application):
             m.connect(':id/create', action='create')
             m.connect(':id/create.:(format)', action='create')
             m.connect('upload', action='upload', conditions={'method': 'POST'})
-            m.connect('reload', action='reload', conditions={'method': 'POST'})
-            m.connect('reload.:(format)', action='reload_status',
-                      conditions={'method': 'GET'})
-        self.dispatcher.mapper.connect('/packages/versions/create',
-                                       controller='versions',
-                                       action='create')
-
-        self._resource('uploader', 'uploaders', PackageUploaders(),
-                       parent_resource={
-                         'member_name': 'package',
-                         'collection_name': 'packages'
-                       })
 
         # Set up custom error page.
         cherrypy.config.update({'error_page.default': _error_page})

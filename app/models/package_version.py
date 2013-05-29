@@ -10,6 +10,7 @@ from google.appengine.api import memcache
 from google.appengine.ext import db
 import yaml
 
+import models
 from semantic_version import SemanticVersion
 from handlers import cloud_storage
 from package import Package
@@ -218,3 +219,43 @@ class PackageVersion(db.Model):
             raise db.BadValueError(
                 'Version "%s" in pubspec doesn\'t match version "%s"' %
                 (version_in_pubspec._key(), self.version._key()))
+    @property
+    def url(self):
+        """The API URL for this package version."""
+        return models.url(controller='api.versions',
+                          action='show',
+                          package_id=self.package.name,
+                          id=str(self.version))
+
+    def as_dict(self, full=False):
+        """Returns the dictionary representation of this package version.
+
+        This is used to represent the package in API responses. Normally this
+        just includes URLs and the pubspec, but if full is True, it will include
+        all available information about the package version.
+        """
+
+        value = {
+            'version': str(self.version),
+            'url': self.url,
+            'package_url': models.url(controller='api.packages',
+                                      action='show',
+                                      id=self.package.name),
+            'new_dartdoc_url': self.url + '/new_dartdoc',
+            'archive_url': models.url(controller='versions',
+                                      action='show',
+                                      package_id=self.package.name,
+                                      id=str(self.version),
+                                      format='tar.gz'),
+            'pubspec': self.pubspec
+        }
+
+        if full:
+            value.update({
+                'created': self.created.isoformat(),
+                'downloads': self.downloads,
+                'libraries': self.libraries,
+                'uploader': self.uploader.email()
+            })
+
+        return value
