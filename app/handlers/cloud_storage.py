@@ -7,6 +7,7 @@
 from cStringIO import StringIO
 from base64 import b64encode
 from urlparse import urlparse, parse_qs
+from xml.etree import ElementTree
 import cherrypy
 import handlers
 import json
@@ -194,9 +195,19 @@ def modify_object(obj,
     headers = {key: value for key, value in headers.iteritems()
                if value is not None}
 
-    return urlfetch.fetch("https://storage.googleapis.com/" +
-                            urllib.quote(_object_path(obj)),
-                          method="PUT", headers=headers)
+    response = urlfetch.fetch("https://storage.googleapis.com/" +
+                                urllib.quote(_object_path(obj)),
+                              method="PUT",
+                              headers=headers,
+                              follow_redirects=True)
+    if response.status_code == 200: return
+
+    xml = ElementTree.XML(response.content)
+    raise handlers.http_error(500, "Cloud storage %s error: %s\n%s" % (
+        response.status_code,
+        xml.find('Code').text,
+        xml.find('Message').text
+    ))
 
 def delete_object(obj):
     """Deletes an object from cloud storage."""
