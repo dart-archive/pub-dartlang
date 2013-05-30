@@ -66,8 +66,7 @@ class PackageVersions(object):
 
         If the user doesn't own the package or isn't logged in with admin
         privileges, this will return a 403. If the package already has a version
-        with this number, or if the version is invalid, this will redirect to
-        the new version form.
+        with this number, or if the version is invalid, this will return a 400.
 
         Arguments:
           id: The id of the package in cloud storage.
@@ -85,6 +84,8 @@ class PackageVersions(object):
                 handlers.http_error(
                     403, "Package upload " + id + " does not exist.")
 
+            # If the package for this version already exists, make sure we're an
+            # uploader for it. If it doesn't, we're fine to create it anew.
             if version.package.is_saved():
                 if not version.package.has_uploader(handlers.get_oauth_user()):
                     handlers.http_error(
@@ -133,8 +134,7 @@ class PackageVersions(object):
         if old is None: return True
         was_prerelease = old.version.is_prerelease
         is_prerelease = new.version.is_prerelease
-        if was_prerelease and not is_prerelease: return True
-        if is_prerelease and not was_prerelease: return False
+        if was_prerelease != is_prerelease: return was_prerelease
         return old.version < new.version
 
     @handlers.api(1)
@@ -176,9 +176,6 @@ class PackageVersions(object):
     @handlers.requires_uploader
     def new_dartdoc(self, package_id, id):
         """Retrieve the form for uploading dartdoc for this package version."""
-        if PrivateKey.get() is None:
-            handlers.http_error(500, 'No private key set.')
-
         version = handlers.request().package_version(id)
         upload = cloud_storage.Upload(version.dartdoc_storage_path,
                                       acl='public-read',

@@ -19,7 +19,7 @@ class Packages(object):
         """Retrieve a paginated list of uploaded packages.
 
         Arguments:
-          page: The page of packages to get. Each page contains 10 packages.
+          page: The page of packages to get. Each page contains 50 packages.
         """
         pager = Pager(int(page), "/api/packages?page=%d",
                       Package.all().order('-updated'),
