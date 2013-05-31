@@ -4,7 +4,9 @@
 
 """This module provides utility functions for handlers."""
 
+import logging
 import os
+import re
 
 import cherrypy
 from decorator import decorator
@@ -111,6 +113,11 @@ class JsonError(cherrypy.HTTPError):
             "error": {"message": self._message}
         })
 
+def json_error(status, message=None):
+    """Return a JSON error response."""
+    if message: message = message.encode('utf-8')
+    raise JsonError(status, message)
+
 def json_success(message):
     """Return a successful JSON response."""
     cherrypy.response.headers['Content-Type'] = 'application/json'
@@ -152,6 +159,8 @@ def json_or_html_action(fn, *args, **kwargs):
 
     if not request().is_json: return fn(*args, **kwargs)
 
+    logging.info("request using API v%d" % request().api_version)
+
     try:
         cherrypy.response.headers['Content-Type'] = 'application/json'
         return fn(*args, **kwargs)
@@ -173,6 +182,27 @@ def json_action(fn, *args, **kwargs):
     """
     if not request().is_json: http_error(404)
     return fn(*args, **kwargs)
+
+def api(min_compatible_version):
+    """ A decorator for actions that are part of the pub.dartlang.org API.
+
+    min_compatible_version is the smallest API version that this action
+    supports. Version 1 refers to the pre-versioned API; some actions are still
+    compatible with this API.
+
+    This decorator implies json_action. In addition, it will return a 406 error
+    if the client is requesting an API version outside the allowed range.
+    """
+    @decorator
+    @json_action
+    def inner(fn, *args, **kwargs):
+        version = request().api_version
+        if version < min_compatible_version:
+            json_error(406, "API version %d is no longer supported." % version)
+
+        return fn(*args, **kwargs)
+
+    return inner
 
 @decorator
 def requires_user(fn, *args, **kwargs):
@@ -311,6 +341,13 @@ def request():
         setattr(cherrypy.request, 'pub_data', Request(cherrypy.request))
     return cherrypy.request.pub_data
 
+_API_CONTENT_TYPE = re.compile(
+    r"^application/vnd\.pub\.([^.+]+)\+([^.+]+)$")
+
+_API_VERSION = re.compile(r"^v([0-9]+)$")
+
+_MAX_API_VERSION = 2
+
 class Request(object):
     """A collection of request-specific helpers."""
 
@@ -319,6 +356,8 @@ class Request(object):
         self._route = None
         self._package = None
         self._package_version = None
+        self._api_version = None
+        self._is_api_request = None
 
     def url(self, **kwargs):
         """Construct a URL for a given set of parametters.
@@ -329,6 +368,61 @@ class Request(object):
         params = self.route.copy()
         params.update(kwargs)
         return self.request.base + routes.url_for(**params)
+ 
+    @property
+    def api_version(self):
+        """Returns the highest API version that the client understands.
+
+        This is derived from the request's Accept header, which should be of the
+        format "application/vnd.pub.version+json" (e.g.
+        "application/vnd.pub.v2+json"). The default version is the latest, but
+        it's recommended that clients request a specific version.
+        """
+        if self._api_version is None: self._parse_accept_header()
+        return self._api_version
+
+    def _parse_accept_header(self):
+        """Parses the Accept header to determine what API version the client is
+        requesting.
+        """
+
+        errors = []
+        for accept in self.request.headers.elements('accept'):
+            match = _API_CONTENT_TYPE.match(accept.value)
+            if not match: continue
+
+            version_match = _API_VERSION.match(match.group(1))
+            if not version_match:
+                errors.append("Invalid version %s in %s." %
+                              (match.group(1), match.group(0)))
+                continue
+
+            version = int(version_match.group(1))
+            if version < 1 or version > _MAX_API_VERSION:
+                errors.append("Unsupported version %s in %s." %
+                              (match.group(1), match.group(0)))
+                continue
+
+            if match.group(2) != 'json':
+                errors.append("Invalid format %s in %s." %
+                              (match.group(2), match.group(0)))
+                continue
+
+            self._api_version = version
+            self._is_api_request = True
+            return
+
+        if errors: json_error(406, "\n".join(errors))
+
+        # We consider this an API request if it's against an "api/" URL, even if
+        # the user didn't provide an "Accept:" header.
+        self._is_api_request = self.route and \
+            self.route['controller'].startswith('api.')
+
+        # If this is a request against the v2+ API endpoint, we default to the
+        # max API version. Otherwise it's either a non-API request, in which
+        # case we don't care, or it's a request against the v1 API.
+        self._api_version = _MAX_API_VERSION if self._is_api_request else 1
 
     @property
     def route(self):
@@ -345,7 +439,9 @@ class Request(object):
     @property
     def is_json(self):
         """Whether the current request is JSON-formatted."""
-        return self.request.params.get('format') == 'json'
+        if self._is_api_request is None: self._parse_accept_header()
+        return self._is_api_request or \
+            self.request.params.get('format') == 'json'
 
     @property
     def package(self):
@@ -382,7 +478,7 @@ class Request(object):
         """Return the name of the current package."""
         if self.route is None: return None
 
-        if self.route['controller'] == 'packages':
+        if self.route['controller'] in ['packages', 'api.packages']:
             return self.request.params.get('id')
         else:
             return self.request.params.get('package_id')

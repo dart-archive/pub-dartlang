@@ -95,7 +95,7 @@ class PackagesTest(TestCase):
         ])
 
     def test_get_non_existent_package(self):
-        self.testapp.get('/packages/package/test-package', status=404)
+        self.testapp.get('/packages/test-package', status=404)
 
     def test_get_unowned_package(self):
         Package.new(name='test-package', uploaders=[self.admin_user()]).put()

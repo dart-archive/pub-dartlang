@@ -309,7 +309,6 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
 
     def assert_oauth_error(self, response):
         """Assert that the given response is an OAuth2 error."""
-        print(response.headers)
         self.assertTrue(response.headers['WWW-Authenticate'].startswith(
                 'Bearer error="'))
 
@@ -391,6 +390,21 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
 
         return any([link['href'] == url for link
                     in self.html(response).find_all('a')])
+
+    def package_version_dict(self, name, version):
+        """Returns the expected API dictionary for a package version."""
+
+        package_url = "http://localhost:80/api/packages/" + name
+        version_url = package_url + "/versions/" + version
+        return {
+            "version": version,
+            "url": version_url,
+            "package_url": package_url,
+            "new_dartdoc_url": version_url + "/new_dartdoc",
+            "archive_url": "http://localhost:80/packages/" + name +
+                "/versions/" + version + ".tar.gz",
+            "pubspec": {"name": name, "version": version}
+        }
 
 @decorator
 def mock_not_on_dev_server(fn, *args, **kwargs):

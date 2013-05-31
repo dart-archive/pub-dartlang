@@ -110,9 +110,8 @@ class Upload(object):
         if handlers.is_production():
             self._url = "https://storage.googleapis.com"
         else:
-            self._url = routes.url_for(controller="versions",
+            self._url = routes.url_for(controller="api.versions",
                                        action="upload",
-                                       package_id=None,
                                        qualified=True)
 
     def to_json(self):
