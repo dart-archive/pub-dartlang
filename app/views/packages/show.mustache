@@ -13,12 +13,25 @@
         <li class="active">
           <a href="#readme" data-toggle="tab">{{readme_filename}}</a>
         </li>
+        {{#changelog}}
+        <li>
+          <a href="#changelog" data-toggle="tab">{{changelog_filename}}</a>
+        </li>
+        {{/changelog}}
         <li><a href="#installing" data-toggle="tab">Installing</a></li>
       {{/readme}}
       {{^readme}}
-        <li class="active">
-          <a href="#installing" data-toggle="tab">Installing</a>
-        </li>
+        {{#changelog}}
+          <li class="active">
+            <a href="#changelog" data-toggle="tab">{{changelog_filename}}</a>
+          </li>
+          <li><a href="#installing" data-toggle="tab">Installing</a></li>
+        {{/changelog}}
+        {{^changelog}}
+          <li class="active">
+            <a href="#installing" data-toggle="tab">Installing</a>
+          </li>
+        {{/changelog}}        
       {{/readme}}
       <li><a href="#versions" data-toggle="tab">Versions</a></li>
     </ul>
@@ -29,7 +42,12 @@
           {{&readme}}
         </div>
       {{/readme}}
-      <div class="tab-pane {{^readme}}active{{/readme}}" id="installing">
+      {{#changelog}}
+      <div class="tab-pane {{^readme}}active{{/readme}}" id="changelog">
+        {{&changelog}}
+      </div>
+      {{/changelog}}
+      <div class="tab-pane {{^readme}}{{^changelog}}active{{/changelog}}{{/readme}}" id="installing">
         <h3>1. Depend on it</h3>
         <p>Add this to your package's pubspec.yaml file:</p>
 <pre>

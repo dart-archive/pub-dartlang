@@ -67,11 +67,17 @@ class Packages(object):
             title = package.name
             readme = None
             readme_filename = None
+            changelog = None
+            changelog_filename = None
             if package.latest_version:
                 title = '%s %s' % (package.name, package.latest_version.version)
                 if package.latest_version.readme:
                     readme = package.latest_version.readme.render()
                     readme_filename = package.latest_version.readme.filename;
+                if package.latest_version.changelog:
+                    changelog = package.latest_version.changelog.render()
+                    changelog_filename = \
+                            package.latest_version.changelog.filename;
 
             return handlers.render(
                 "packages/show", package=package,
@@ -80,6 +86,8 @@ class Packages(object):
                 show_versions_link=version_count > 10,
                 readme=readme,
                 readme_filename=readme_filename,
+                changelog=changelog,
+                changelog_filename=changelog_filename,
                 layout={'title': title})
         else:
             raise handlers.http_error(404)
