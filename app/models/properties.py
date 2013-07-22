@@ -8,7 +8,6 @@ import pickle
 
 from pubspec import Pubspec
 from readme import Readme
-from changelog import Changelog
 from semantic_version import SemanticVersion
 
 class DocumentProperty(db.Property):
@@ -61,7 +60,7 @@ class ReadmeProperty(PickledProperty):
 class ChangelogProperty(PickledProperty):
     """A property that stores a CHANGELOG file."""
 
-    data_type = Changelog
+    data_type = Readme
 
 class VersionProperty(db.Property):
     """A property that stores a semantic version."""

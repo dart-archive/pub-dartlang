@@ -20,24 +20,25 @@ class Readme(object):
         self.filename = filename
 
     @classmethod
-    def from_archive(cls, tar):
+    def from_archive(cls, tar, name="README"):
         """Extract and return the README from a package archive.
 
         Return None if no README could be found.
 
         Arguments:
           tar: A TarFile object.
+          name: Case-insensitive name for the README file; defaults to `README`.
         """
 
         # If there are multiple READMEs, choose the one with the fewest
         # extensions. This handles the case where there are multiple READMEs in
         # different languages named e.g. "README.md" vs "README.jp.md".
-        readmes = [name for name in tar.getnames()
-                   if os.path.dirname(name) == ''
-                   and re.match(r'^README($|\.)', name, re.IGNORECASE)]
+        readmes = [n for n in tar.getnames()
+                   if os.path.dirname(n) == ''
+                   and re.match('^{0}($|\.)'.format(name), n, re.IGNORECASE)]
         if len(readmes) == 0: return None
 
-        filename = min(readmes, key=lambda(name): (name.count('.'), name))
+        filename = min(readmes, key=lambda(n): (n.count('.'), n))
         text = unicode(tar.extractfile(filename).read(),
                        encoding='utf-8', errors='replace')
         return Readme(text, filename)

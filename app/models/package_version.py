@@ -18,7 +18,6 @@ from properties import ChangelogProperty, PubspecProperty, ReadmeProperty, \
                        VersionProperty
 from pubspec import Pubspec
 from readme import Readme
-from changelog import Changelog
 
 class PackageVersion(db.Model):
     """The model for a single version of a package.
@@ -109,7 +108,7 @@ class PackageVersion(db.Model):
         """
         try:
             tar = tarfile.open(mode="r:gz", fileobj=file)
-            changelog = Changelog.from_archive(tar)
+            changelog = Readme.from_archive(tar, name='CHANGELOG')
             readme = Readme.from_archive(tar)
             pubspec = Pubspec.from_archive(tar)
             name = pubspec.required('name')
