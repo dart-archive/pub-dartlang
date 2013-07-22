@@ -73,11 +73,11 @@ class Packages(object):
                 title = '%s %s' % (package.name, package.latest_version.version)
                 if package.latest_version.readme:
                     readme = package.latest_version.readme.render()
-                    readme_filename = package.latest_version.readme.filename;
+                    readme_filename = package.latest_version.readme.filename
                 if package.latest_version.changelog:
                     changelog = package.latest_version.changelog.render()
                     changelog_filename = \
-                            package.latest_version.changelog.filename;
+                            package.latest_version.changelog.filename
 
             return handlers.render(
                 "packages/show", package=package,
