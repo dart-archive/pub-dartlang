@@ -13,26 +13,15 @@
         <li class="active">
           <a href="#readme" data-toggle="tab">{{readme_filename}}</a>
         </li>
-        {{#changelog}}
-        <li>
+      {{/readme}}
+      {{#changelog}}
+        <li class="{{^readme}}active{{/readme}}">
           <a href="#changelog" data-toggle="tab">{{changelog_filename}}</a>
         </li>
-        {{/changelog}}
-        <li><a href="#installing" data-toggle="tab">Installing</a></li>
-      {{/readme}}
-      {{^readme}}
-        {{#changelog}}
-          <li class="active">
-            <a href="#changelog" data-toggle="tab">{{changelog_filename}}</a>
-          </li>
-          <li><a href="#installing" data-toggle="tab">Installing</a></li>
-        {{/changelog}}
-        {{^changelog}}
-          <li class="active">
-            <a href="#installing" data-toggle="tab">Installing</a>
-          </li>
-        {{/changelog}}        
-      {{/readme}}
+      {{/changelog}}
+      <li class="{{^readme}}{{^changelog}}active{{/changelog}}{{/readme}}">
+        <a href="#installing" data-toggle="tab">Installing</a>
+      </li>
       <li><a href="#versions" data-toggle="tab">Versions</a></li>
     </ul>
 
