@@ -23,7 +23,7 @@ class Packages(object):
         """
         pager = Pager(int(page), "/api/packages?page=%d",
                       Package.all().order('-updated'),
-                      per_page=50)
+                      per_page=100)
         return json.dumps({
             "packages": [package.as_dict() for package in pager.get_items()],
             "prev_url": pager.prev_url,
