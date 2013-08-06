@@ -22,10 +22,10 @@ The server is written in Python and intended to run on Google App Engine. To run
 it locally, perform the following steps:
 
   * Install the [App Engine SDK][] for Python.
-  * Make sure the SDK is on your `$PATH` [^1].
-  * Install [PyCrypto][pycrypto] and [WebTest][webtest] [^2]:
+  * Make sure the SDK is on your `$PATH`<sup>1</sup>.
+  * Install [PyCrypto][pycrypto] and [WebTest][webtest]<sup>2</sup>.
 
-        pip install webtest pycrypto webtest
+        pip install beautifulsoup4 pycrypto webtest
 
   * From the root directory of this repository, run:
 
@@ -45,13 +45,13 @@ In order to publish packages to your local test server, you must setup a
 _private key_. Visit <http://localhost:8080/admin> (sign in as administrator)
 and enter whatever you like into the private key field.
 
-[^1]: This might be done for you already when you start the Google App Engine 
-      Launcher and you confirm it to add symbolic links to your PATH.
+<sup>1</sup>This might have been done already if you allowed the Google App
+            Engine launcher to add symbolic links to your `$PATH`.
 
-[^2]: WebTest is only required for running tests.  **Linux:** Some Linux 
-      distributions come with PyCrypto installed by default.  Make sure you have
-      at least version 2.6 installed. **Mac:** If pip is not available, try
-      [brew](http://brew.sh) and `brew install python`.
+<sup>2</sup>WebTest is only required for running tests.  **Linux:** Some Linux 
+            distributions come with PyCrypto installed by default.  Make sure
+            you have at least version 2.6 installed. **Mac:** If pip is not 
+            available, try [brew](http://brew.sh) and `brew install python`.
 
 ### Deploying
 
