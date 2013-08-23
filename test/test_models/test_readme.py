@@ -17,6 +17,12 @@ class ReadmeTest(TestCase):
         self.assert_extracts_readme("readme")
         self.assert_extracts_readme("readme.md")
         self.assert_extracts_readme("ReAdMe")
+        self.assert_extracts_readme("CHANGELOG", pattern="CHANGELOG")
+        self.assert_extracts_readme("CHANGELOG.md", pattern="CHANGELOG")
+        self.assert_extracts_readme("CHANGELOG.fr.md", pattern="CHANGELOG")
+        self.assert_extracts_readme("changelog", pattern="CHANGELOG")
+        self.assert_extracts_readme("changelog.md", pattern="CHANGELOG")
+        self.assert_extracts_readme("ChaNGelOg", pattern="CHANGELOG")
 
     def test_doesnt_extract_prefixed_readme(self):
         archive = self.readme_archive("NOT_README")
@@ -26,12 +32,27 @@ class ReadmeTest(TestCase):
         self.assert_extracts_readme(
             "README", ["README", "README.md", "README.md.jp"])
         self.assert_extracts_readme("README.md", ["README.md", "README.md.jp"])
+        self.assert_extracts_readme(
+            "CHANGELOG", ["CHANGELOG", "CHANGELOG.md", "CHANGELOG.md.fr"], 
+            pattern="CHANGELOG")
+        self.assert_extracts_readme(
+            "CHANGELOG.md", ["CHANGELOG.md.fr", "CHANGELOG.md"], 
+            pattern="CHANGELOG")
 
     def test_chooses_readme_with_same_extensions_lexically(self):
         self.assert_extracts_readme(
             "README", ["readme", "README", "READme"])
         self.assert_extracts_readme("README.md", ["README.md", "README.zx"])
         self.assert_extracts_readme("README.md", ["README.md", "readme.a"])
+        self.assert_extracts_readme(
+            "CHANGELOG", ["changelog", "CHANGELOG", "CHANGElog"], 
+            pattern="CHANGELOG")
+        self.assert_extracts_readme(
+            "CHANGELOG.md", ["CHANGELOG.md", "CHANGELOG.zx"], 
+            pattern="CHANGELOG")
+        self.assert_extracts_readme(
+            "CHANGELOG.md", ["CHANGELOG.md", "changelog.a"],
+            pattern="CHANGELOG")
 
     def test_decodes_valid_utf_8(self):
         archive = self.archive({'README': 'This is a R\303\213ADM\303\213.'})
@@ -56,6 +77,18 @@ class ReadmeTest(TestCase):
         readme = Readme("This is a README.", "README.md.jp")
         self.assertEqual(Readme.Format.TEXT, readme.format)
 
+        readme = Readme("This is a CHANGELOG.", "CHANGELOG")
+        self.assertEqual(Readme.Format.TEXT, readme.format)
+
+        readme = Readme("This is a CHANGELOG.", "CHANGELOG.md")
+        self.assertEqual(Readme.Format.MARKDOWN, readme.format)
+
+        readme = Readme("This is a CHANGELOG.", "CHANGELOG.fr.md")
+        self.assertEqual(Readme.Format.MARKDOWN, readme.format)
+
+        readme = Readme("This is a CHANGELOG.", "CHANGELOG.md.fr")
+        self.assertEqual(Readme.Format.TEXT, readme.format)
+
     def test_wraps_plain_text_readme_in_pre(self):
         readme = Readme("This is a *<README>*.", "README")
         self.assertEqual("<pre>This is a *&lt;README&gt;*.</pre>",
@@ -70,12 +103,14 @@ class ReadmeTest(TestCase):
         self.assertEqual("<p>This is a <em>&lt;README&gt;</em>.</p>",
                          readme.render())
 
-    def assert_extracts_readme(self, chosen, names=None):
+    def assert_extracts_readme(self, chosen, names=None, pattern=None):
         """Assert that the given README is extracted from an archive.
 
-        If no names are passed, creates an archive with a single README."""
+        If no names are passed, creates an archive with a single README.
+        If no pattern is passed, the pattern default is 'README'."""
         archive = self.readme_archive(*(names or [chosen]))
-        readme = Readme.from_archive(archive)
+        if pattern: readme = Readme.from_archive(archive, pattern)
+        else: readme = Readme.from_archive(archive)
         self.assertIsNotNone(readme)
         self.assertEqual('This is a README named "%s".' % chosen, readme.text)
         self.assertEqual(chosen, readme.filename)
