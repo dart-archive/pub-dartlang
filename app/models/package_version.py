@@ -14,8 +14,7 @@ import models
 from semantic_version import SemanticVersion
 from handlers import cloud_storage
 from package import Package
-from properties import ChangelogProperty, PubspecProperty, ReadmeProperty, \
-                       VersionProperty
+from properties import PubspecProperty, ReadmeProperty, VersionProperty
 from pubspec import Pubspec
 from readme import Readme
 
@@ -35,7 +34,7 @@ class PackageVersion(db.Model):
     readme = ReadmeProperty()
     """The README file."""
 
-    changelog = ChangelogProperty()
+    changelog = ReadmeProperty()
     """The CHANGELOG file."""
 
     libraries = db.ListProperty(str)

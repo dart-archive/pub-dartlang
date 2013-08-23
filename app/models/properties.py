@@ -57,11 +57,6 @@ class ReadmeProperty(PickledProperty):
 
     data_type = Readme
 
-class ChangelogProperty(PickledProperty):
-    """A property that stores a CHANGELOG file."""
-
-    data_type = Readme
-
 class VersionProperty(db.Property):
     """A property that stores a semantic version."""
 
