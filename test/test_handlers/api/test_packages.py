@@ -38,7 +38,7 @@ class PackagesTest(TestCase):
     def test_api_index_lists_one_page_of_packages(self):
         self.be_admin_user()
 
-        packages = ['package%d' % i for i in range(0, 100)]
+        packages = ['package%d' % i for i in range(0, 200)]
 
         for package in packages:
             self.create_package(package, '1.0.0')
@@ -54,14 +54,14 @@ class PackagesTest(TestCase):
         self.assertEqual(result['prev_url'], None)
         self.assertEqual(result['pages'], 2)
 
-        for i in range(0, 50):
+        for i in range(0, 100):
             self.assertEqual(result['packages'][i]['name'],
-                             'package%d' % (99 - i))
+                             'package%d' % (199 - i))
 
     def test_api_index_lists_second_page_of_packages(self):
         self.be_admin_user()
 
-        packages = ['package%d' % i for i in range(0, 100)]
+        packages = ['package%d' % i for i in range(0, 200)]
 
         for package in packages:
             self.create_package(package, '1.0.0')
@@ -77,9 +77,9 @@ class PackagesTest(TestCase):
         self.assertEqual(result['next_url'], None)
         self.assertEqual(result['pages'], 2)
 
-        for i in range(0, 50):
+        for i in range(0, 100):
             self.assertEqual(result['packages'][i]['name'],
-                             'package%d' % (49 - i))
+                             'package%d' % (99 - i))
 
     def test_api_get_non_existent_package(self):
         response = self.testapp.get(
