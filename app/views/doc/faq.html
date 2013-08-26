@@ -1,3 +1,21 @@
+<h3 id="what-are-pubs-system-requirements">What are pub&rsquo;s system requirements?</h3>
+
+<p>Pub runs on any platform that supports the Dart VM. That basically means
+relatively recent versions of Mac, Linux and Windows.</p>
+
+<p>However, there are a couple of limitations on Windows:</p>
+
+<ul>
+  <li>Windows XP is not supported.</li>
+  <li>FAT32 file systems are not supported.</li>
+  <li>Packages cannot be stored on a different drive than your user directory.</li>
+  <li>Packages cannot be stored on network shares.</li>
+</ul>
+
+<p>Pub relies on junction points for core functionality, and those aren&rsquo;t available
+on the above. We realize these limitations are painful and we&rsquo;re hoping to
+address the root cause but it will take a while to get there.</p>
+
 <h3 id="what-are-all-the-packages-directories-for">What are all the &ldquo;packages&rdquo; directories for?</h3>
 
 <p>After you run pub, you&rsquo;ll notice that your package has little <code>packages</code>
@@ -55,7 +73,7 @@ please include:</p>
   <li>If possible, include a log by running <code>pub --verbose &lt;your command&gt;</code>.</li>
 </ul>
 
-<h2 id="how-do-i-delete-a-package">How do I delete a package?</h2>
+<h3 id="how-do-i-delete-a-package">How do I delete a package?</h3>
 
 <p>Once a package is published, you&rsquo;re strongly discouraged from deleting it.
 After all, some user could already be depending on it! If you accidentally

@@ -55,3 +55,22 @@ will remove the dependency from the `packages` directory, thus making it
 unavailable for importing. Any transitive dependencies of the removed dependency
 will also be removed, as long as no remaining immediate dependencies also depend
 on them. This is the same behavior as `pub install`.
+
+## Updating while offline
+
+If you don't have network access, you can still run `pub update`. Since pub
+installs packages to a central cache shared by all packages on your system, it
+can often find previous-installed packages there without needing to hit the
+network.
+
+However, by default, pub will always try to go online when you update if you
+have any hosted dependencies so that it can see if newer versions of them are
+available. If you don't want it to do that, pass the `--offline` flag when
+running pub. In this mode, it will only look in your local package cache and
+try to find a set of versions that work with your package from what's already
+available.
+
+Keep in mind that pub *will* generate a lockfile after it does this. If the
+only version of some dependency in your cache happens to be old, this will lock
+your app to that version. The next time you are online, you will likely want to
+run `pub update` again to upgrade to a later version.

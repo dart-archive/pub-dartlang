@@ -2,7 +2,7 @@
 title: "Command: Install"
 ---
 
-    $ pub install
+    $ pub install [--offline]
 
 This command installs all the dependencies listed in the
 [`pubspec.yaml`](pubspec.html) file in the current working directory, as well as
@@ -78,3 +78,22 @@ downloaded and stored locally once. It also means that it's safe to delete the
 By default, the system package cache is located in the `.pub-cache` subdirectory
 of your home directory. However, it may be configured by setting the `PUB_CACHE`
 environment variable before running Pub.
+
+## Installing while offline
+
+If you don't have network access, you can still run `pub install`. Since pub
+downloads packages to a central cache shared by all packages on your system, it
+can often find previous-installed packages there without needing to hit the
+network.
+
+However, by default, pub will always try to go online when you install if you
+have any hosted dependencies so that it can see if newer versions of them are
+available. If you don't want it to do that, pass the `--offline` flag when
+running pub. In this mode, it will only look in your local package cache and
+try to find a set of versions that work with your package from what's already
+available.
+
+Keep in mind that pub *will* generate a lockfile after it does this. If the
+only version of some dependency in your cache happens to be old, this will lock
+your app to that version. The next time you are online, you will likely want to
+run [`pub update`](pub-update.html) to upgrade to a later version.
