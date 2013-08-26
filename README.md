@@ -21,46 +21,37 @@ For license information, please see LICENSE.
 The server is written in Python and intended to run on Google App Engine. To run
 it locally, perform the following steps:
 
-  * Install the [App Engine SDK][].
-  * Make sure the SDK is on your `$PATH`.
-  * Install [PyCrypto][pycrypto][^1]:
+  * Install the [App Engine SDK][] for Python.
+  * Make sure the SDK is on your `$PATH`.<sup>1</sup>
+  * Install required packages.<sup>2</sup>
 
-        pip install pycrypto
+        pip install beautifulsoup4 pycrypto webtest
 
   * From the root directory of this repository, run:
 
         dev_appserver.py app
 
 [app engine sdk]: https://developers.google.com/appengine/downloads
-[pycrypto]: https://www.dlitz.net/software/pycrypto/
 
-That's it. All the dependencies needed to run the app are included in the
-repository so that App Engine can use them, so no further installation is
-necessary.
+  * Open your browser to <http://localhost:8080/> to see that it works.
 
-In order to publish packages to your local test server, you must setup a
-_private key_. Visit http://localhost:8080/admin and enter whatever you like
-into the private key field. (Of course, use the port that works for your
-local instance.)
+  * To run tests:
 
-[^1]: Some Linux distributions come with PyCrypto installed by default. Make
-      sure you have at least version 2.6 installed.
+        ./test.py
 
-### Running Tests
+  * To publish packages to your local test server, visit <http://localhost:8080/admin>
+    (sign in as administrator), go to the "Private Key" tab & enter any string 
+    into the private key field.
 
-The tests have some external dependencies. Before you can run the tests,
-perform the following steps once:
+<sup>1</sup> This might have been done already if you allowed the Google App
+             Engine launcher to add symbolic links to your `$PATH`.
 
-  * Install the [App Engine SDK][].
-  * Make sure the SDK is on your `$PATH`.
-  * Run:
-
-        easy_install webtest
-        easy_install beautifulsoup4
-
-Once everything is installed, you can run the tests by running:
-
-    ./test.py
+<sup>2</sup> On installing packages:
+* Beautiful Soup & WebTest are only required for running tests.
+* Some Linux distributions come with PyCrypto installed by default.  Make sure
+  at least version 2.6 installed.
+* If using Mac and `pip` is not available, install [brew](http://brew.sh) and 
+  run `brew install python`.
 
 ### Deploying
 
