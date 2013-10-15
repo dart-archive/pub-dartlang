@@ -2,9 +2,9 @@
   <li><a href="#installing-and-configuring-pub">Installing and configuring pub</a></li>
   <li><a href="#creating-a-package">Creating a package</a></li>
   <li><a href="#adding-a-dependency">Adding a dependency</a></li>
-  <li><a href="#installing-dependencies">Installing dependencies</a></li>
+  <li><a href="#getting-dependencies">Getting dependencies</a></li>
   <li><a href="#importing-code-from-a-dependency">Importing code from a dependency</a></li>
-  <li><a href="#updating-a-dependency">Updating a dependency</a></li>
+  <li><a href="#upgrading-a-dependency">Upgrading a dependency</a></li>
   <li><a href="#publishing-a-package">Publishing a package</a></li>
 </ol>
 
@@ -33,8 +33,8 @@ in an app, put this in a top-level file named <code>pubspec.yaml</code>:</p>
 </code></pre>
   </li>
   <li>
-    <p>Run <code>pub install</code>, either on the command line
-or through the Dart Editor menu: Tools &gt; Pub Install.</p>
+    <p>Run <code>pub get</code>, either on the command line
+or through the Dart Editor menu: Tools &gt; Pub Get.</p>
   </li>
   <li>
     <p>Import one or more libraries from the package:</p>
@@ -145,20 +145,20 @@ your package name. For example:</p>
 
 <p>Here, we are declaring a dependency on the (fictional) <code>transmogrify</code> package.</p>
 
-<h2 id="installing-dependencies">Installing dependencies</h2>
+<h2 id="getting-dependencies">Getting dependencies</h2>
 
 <div class="learn-more">
-  <a href="/doc/pub-install.html">
-    Learn more about <tt>pub install</tt> &rarr;
+  <a href="/doc/pub-get.html">
+    Learn more about <tt>pub get</tt> &rarr;
   </a>
 </div>
 
-<p>Once you&rsquo;ve declared a dependency, you then tell pub to install it for you. If
-you&rsquo;re using the Editor, select &ldquo;Pub Install&rdquo; from the &ldquo;Tools&rdquo; menu. If you&rsquo;re
+<p>Once you&rsquo;ve declared a dependency, you then tell pub to get it for you. If
+you&rsquo;re using the Editor, select &ldquo;Pub Get&rdquo; from the &ldquo;Tools&rdquo; menu. If you&rsquo;re
 rocking the command line, do:</p>
 
 <pre><code>$ cd path/to/your_app
-$ pub install
+$ pub get
 </code></pre>
 
 <aside class="alert alert-warning">
@@ -168,10 +168,10 @@ sub-directory of the package.
 </aside>
 
 <p>When you do this, pub will create a <code>packages</code> directory in the same directory
-as <code>pubspec.yaml</code>. In there, it will download and install each package that
-your package depends on (these are called your <strong>immediate dependencies</strong>). It
-will also look at all of those packages and install everything <em>they</em> depend
-on, recursively (these are your <strong>transitive dependencies</strong>).</p>
+as <code>pubspec.yaml</code>. In there, it will place package that your package depends on
+(these are called your <strong>immediate dependencies</strong>). It will also look at all of
+those packages and get everything <em>they</em> depend on, recursively (these are your
+<strong>transitive dependencies</strong>).</p>
 
 <p>When this is done, you will have a <code>packages</code> directory that contains every
 single package your program needs in order to run.</p>
@@ -194,7 +194,7 @@ to see if it exposes anything different for you to import.</p>
 <aside class="alert alert-info">
 This works by looking inside the generated <tt>packages</tt> directory. If you
 get an error, the directory may be out of date. Fix it by running
-<tt>pub install</tt> whenever you change your pubspec.
+<tt>pub get</tt> whenever you change your pubspec.
 </aside>
 
 <p>You can also use this style to import libraries from within your own package.
@@ -235,17 +235,17 @@ importing file is.</p>
 </div>
 -->
 
-<h2 id="updating-a-dependency">Updating a dependency</h2>
+<h2 id="upgrading-a-dependency">Upgrading a dependency</h2>
 
 <div class="learn-more">
-  <a href="/doc/pub-update.html">
-  Learn more about <tt>pub update</tt> &rarr;
+  <a href="/doc/pub-upgrade.html">
+  Learn more about <tt>pub upgrade</tt> &rarr;
   </a>
 </div>
 
-<p>The first time you install a new dependency for your package, pub will download
-the latest version of it that&rsquo;s compatible with your other dependencies. It
-then locks your package to <em>always</em> use that version by creating a <strong>lockfile</strong>.
+<p>The first time you get a new dependency for your package, pub will download the
+latest version of it that&rsquo;s compatible with your other dependencies. It then
+locks your package to <em>always</em> use that version by creating a <strong>lockfile</strong>.
 This is a file named <code>pubspec.lock</code> that pub creates and stores next to your
 pubspec. It lists the specific versions of each dependency (immediate and
 transitive) that your package uses.</p>
@@ -257,18 +257,18 @@ when you deploy your app to production.</p>
 
 <p>When you are ready to upgrade your dependencies to the latest versions, do:</p>
 
-<pre><code>$ pub update
+<pre><code>$ pub upgrade
 </code></pre>
 
 <p>This tells pub to regenerate the lockfile using the newest available versions of
-your package&rsquo;s dependencies. If you only want to update a specific dependency,
+your package&rsquo;s dependencies. If you only want to upgrade a specific dependency,
 you can specify that too:</p>
 
-<pre><code>$ pub update transmogrify
+<pre><code>$ pub upgrade transmogrify
 </code></pre>
 
-<p>This updates <code>transmogrify</code> to the latest version but leaves everything else the
-same.</p>
+<p>This upgrades <code>transmogrify</code> to the latest version but leaves everything else
+the same.</p>
 
 <h2 id="publishing-a-package">Publishing a package</h2>
 

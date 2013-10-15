@@ -87,7 +87,7 @@ specific versions of packages. A lockfile ensures that you can recreate the
 exact configuration of packages used by an application.</p>
 
 <p>The lockfile is generated automatically for you by pub when you run
-<a href="pub-install.html"><code>pub install</code></a> or <a href="pub-update.html"><code>pub update</code></a>. If your
+<a href="pub-get.html"><code>pub get</code></a> or <a href="pub-upgrade.html"><code>pub upgrade</code></a>. If your
 package is an application package, you will typically check this into source
 control. For library packages, you usually won&rsquo;t.</p>
 
@@ -100,20 +100,19 @@ section <a href="pubspec.html#sdk-constraints">in the pubspec</a>.</p>
 
 <h3 id="source">Source</h3>
 
-<p>A kind of place that pub can download and install packages from. A source isn&rsquo;t
-a specific place like pub.dartlang.org or some specific Git URL. Each source
-describes a general procedure for accessing a package in some way. For example,
-&ldquo;git&rdquo; is one source. The git source knows how to download packages given a Git
-URL. There are a few different
-<a href="dependencies.html#sources">supported sources</a>.</p>
+<p>A kind of place that pub can get packages from. A source isn&rsquo;t a specific place
+like pub.dartlang.org or some specific Git URL. Each source describes a general
+procedure for accessing a package in some way. For example, &ldquo;git&rdquo; is one source.
+The git source knows how to download packages given a Git URL. There are a few
+different <a href="dependencies.html#sources">supported sources</a>.</p>
 
 <h3 id="system-cache">System cache</h3>
 
-<p>When pub installs a remote package, it downloads it into a single
-&ldquo;system cache&rdquo; directory maintained by pub. When it generates a &ldquo;packages&rdquo;
-directory for a package, that only contains symlinks to the real packages in
-the system cache. On Mac and Linux, this directory defaults to <code>~/.pub-cache</code>.
-On Windows, it goes in <code>AppData\Roaming\Pub\Cache</code>.</p>
+<p>When pub gets a remote package, it downloads it into a single &ldquo;system cache&rdquo;
+directory maintained by pub. When it generates a &ldquo;packages&rdquo; directory for a
+package, that only contains symlinks to the real packages in the system cache.
+On Mac and Linux, this directory defaults to <code>~/.pub-cache</code>. On Windows, it
+goes in <code>AppData\Roaming\Pub\Cache</code>.</p>
 
 <p>This means you only have to download a given version of a package once and can
 then reuse it in as many packages as you would like. It also means you can

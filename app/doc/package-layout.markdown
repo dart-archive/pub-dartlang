@@ -68,7 +68,7 @@ would look like:
 [application package](glossary.html#application-package).
 
 \** The `packages` directories will exist locally after you're run
-`pub install`, but won't be checked into source control.
+`pub get`, but won't be checked into source control.
 
 ## The basics
 
@@ -86,8 +86,8 @@ Every package will have a [**pubspec**](pubspec.html), a file named
 `pubspec.yaml`, in the root directory of the package. That's what *makes* it a
 package.
 
-Once you've run [`pub install`](pub-install.html) or [`pub
-update`](pub-update.html) on the package, you will also have a **lockfile**,
+Once you've run [`pub get`](pub-get.html) or [`pub
+upgrade`](pub-upgrade.html) on the package, you will also have a **lockfile**,
 named `pubspec.lock`. If your package is an [application
 package](glossary.html#application-package), this will be checked into source
 control. Otherwise, it won't be.

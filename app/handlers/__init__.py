@@ -368,7 +368,7 @@ class Request(object):
         params = self.route.copy()
         params.update(kwargs)
         return self.request.base + routes.url_for(**params)
- 
+
     @property
     def api_version(self):
         """Returns the highest API version that the client understands.
@@ -477,6 +477,8 @@ class Request(object):
     def _package_name(self):
         """Return the name of the current package."""
         if self.route is None: return None
+
+        if 'controller' not in self.route: return None
 
         if self.route['controller'] in ['packages', 'api.packages']:
             return self.request.params.get('id')

@@ -26,6 +26,13 @@ class Doc(object):
         loaded from those source files as well.
         """
 
+        # TODO(rnystrom): Handle this in routing.
+        if filename == 'pub-install.html':
+            raise cherrypy.HTTPRedirect('/doc/pub-get.html')
+
+        if filename == 'pub-update.html':
+            raise cherrypy.HTTPRedirect('/doc/pub-upgrade.html')
+
         if filename == '': filename = 'index.html'
         root = os.path.join(os.path.dirname(__file__), '..')
 

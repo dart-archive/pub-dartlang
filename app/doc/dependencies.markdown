@@ -262,11 +262,11 @@ dev_dependencies:
   unittest: '>=0.5.0'
 {% endhighlight %}
 
-Pub installs every package your package package depends on, and everything
-*those* packages depend on, transitively. It also installs your package's dev
-dependencies. But it *ignores* the dev dependencies of any dependent packages.
-Only *your* package's dev dependencies are installed. So when your package
-depends on `transmogrify` it will install `transmogrify` but not `unittest`.
+Pub gets every package your package package depends on, and everything *those*
+packages depend on, transitively. It also gets your package's dev dependencies.
+But it *ignores* the dev dependencies of any dependent packages. Pub only gets
+*your* package's dev dependencies. So when your package depends on
+`transmogrify` it will get `transmogrify` but not `unittest`.
 
 The rule for deciding between a regular or dev dependency is pretty simple. If
 the dependency is imported from something in your `lib` directory, it needs to

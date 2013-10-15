@@ -260,11 +260,11 @@ libraries&mdash;it doesn&rsquo;t actually need <code>unittest</code>. In this ca
 </code></pre>
 </div>
 
-<p>Pub installs every package your package package depends on, and everything
-<em>those</em> packages depend on, transitively. It also installs your package&rsquo;s dev
-dependencies. But it <em>ignores</em> the dev dependencies of any dependent packages.
-Only <em>your</em> package&rsquo;s dev dependencies are installed. So when your package
-depends on <code>transmogrify</code> it will install <code>transmogrify</code> but not <code>unittest</code>.</p>
+<p>Pub gets every package your package package depends on, and everything <em>those</em>
+packages depend on, transitively. It also gets your package&rsquo;s dev dependencies.
+But it <em>ignores</em> the dev dependencies of any dependent packages. Pub only gets
+<em>your</em> package&rsquo;s dev dependencies. So when your package depends on
+<code>transmogrify</code> it will get <code>transmogrify</code> but not <code>unittest</code>.</p>
 
 <p>The rule for deciding between a regular or dev dependency is pretty simple. If
 the dependency is imported from something in your <code>lib</code> directory, it needs to

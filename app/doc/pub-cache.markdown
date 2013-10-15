@@ -4,7 +4,7 @@ title: "Command: Cache"
 
     $ pub cache list
 
-This command lists information about packages currently installed in your
+This command lists information about packages currently downloaded into your
 [system cache](glossary.html#system-cache). Currently, it only outputs
 information in JSON form and exists mainly for the Editor's benefit.
 

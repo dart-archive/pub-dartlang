@@ -177,10 +177,8 @@ environment:
   sdk: ">=0.3.4"
 {% endhighlight %}
 
-When you install a package that doesn't work with your installed Dart SDK, pub
-will show you an error message and ask you to resolve it. You can usually fix
-this by upgrading to the latest Dart SDK, or locking to an older version of that
-dependency that does work with your SDK.
+Pub will try to find the latest version of a package whose SDK constraint works
+with the version of the Dart SDK that you have installed.
 
 [pubsite]: http://pub.dartlang.org
 [semantic versioning]: http://semver.org/

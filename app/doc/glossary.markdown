@@ -91,7 +91,7 @@ specific versions of packages. A lockfile ensures that you can recreate the
 exact configuration of packages used by an application.
 
 The lockfile is generated automatically for you by pub when you run
-[`pub install`](pub-install.html) or [`pub update`](pub-update.html). If your
+[`pub get`](pub-get.html) or [`pub upgrade`](pub-upgrade.html). If your
 package is an application package, you will typically check this into source
 control. For library packages, you usually won't.
 
@@ -104,20 +104,19 @@ section [in the pubspec](pubspec.html#sdk-constraints).
 
 ### Source
 
-A kind of place that pub can download and install packages from. A source isn't
-a specific place like pub.dartlang.org or some specific Git URL. Each source
-describes a general procedure for accessing a package in some way. For example,
-"git" is one source. The git source knows how to download packages given a Git
-URL. There are a few different
-[supported sources](dependencies.html#sources).
+A kind of place that pub can get packages from. A source isn't a specific place
+like pub.dartlang.org or some specific Git URL. Each source describes a general
+procedure for accessing a package in some way. For example, "git" is one source.
+The git source knows how to download packages given a Git URL. There are a few
+different [supported sources](dependencies.html#sources).
 
 ### System cache
 
-When pub installs a remote package, it downloads it into a single
-"system cache" directory maintained by pub. When it generates a "packages"
-directory for a package, that only contains symlinks to the real packages in
-the system cache. On Mac and Linux, this directory defaults to `~/.pub-cache`.
-On Windows, it goes in `AppData\Roaming\Pub\Cache`.
+When pub gets a remote package, it downloads it into a single "system cache"
+directory maintained by pub. When it generates a "packages" directory for a
+package, that only contains symlinks to the real packages in the system cache.
+On Mac and Linux, this directory defaults to `~/.pub-cache`. On Windows, it
+goes in `AppData\Roaming\Pub\Cache`.
 
 This means you only have to download a given version of a package once and can
 then reuse it in as many packages as you would like. It also means you can

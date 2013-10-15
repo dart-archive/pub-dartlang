@@ -8,7 +8,7 @@ This command publishes your package on
 [pub.dartlang.org](http://pub.dartlang.org) for anyone to download and depend
 on. For example, if your package is named transmogrify, it will be listed on
 `http://pub.dartlang.org/packages/transmogify`, and users can depend on it in
-their pubspecs and get it via [pub install](pub-install.html) using something
+their pubspecs and get it via [pub get](pub-get.html) using something
 like:
 
 {% highlight dart %}
