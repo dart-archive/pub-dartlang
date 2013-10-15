@@ -26,7 +26,7 @@ class Doc(object):
         loaded from those source files as well.
         """
 
-        # TODO(rnystrom): Handle this in routing.
+        # Redirect from the old names for the commands.
         if filename == 'pub-install.html':
             raise cherrypy.HTTPRedirect('/doc/pub-get.html')
 

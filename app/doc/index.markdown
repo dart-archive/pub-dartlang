@@ -160,10 +160,10 @@ sub-directory of the package.
 </aside>
 
 When you do this, pub will create a `packages` directory in the same directory
-as `pubspec.yaml`. In there, it will place package that your package depends on
-(these are called your **immediate dependencies**). It will also look at all of
-those packages and get everything *they* depend on, recursively (these are your
-**transitive dependencies**).
+as `pubspec.yaml`. In there, it will place each package that your package
+depends on (these are called your **immediate dependencies**). It will also
+look at all of those packages and get everything *they* depend on, recursively
+(these are your **transitive dependencies**).
 
 When this is done, you will have a `packages` directory that contains every
 single package your program needs in order to run.

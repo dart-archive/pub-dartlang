@@ -263,8 +263,8 @@ dev_dependencies:
 {% endhighlight %}
 
 Pub gets every package your package package depends on, and everything *those*
-packages depend on, transitively. It also gets your package's dev dependencies.
-But it *ignores* the dev dependencies of any dependent packages. Pub only gets
+packages depend on, transitively. It also gets your package's dev dependencies,
+but it *ignores* the dev dependencies of any dependent packages. Pub only gets
 *your* package's dev dependencies. So when your package depends on
 `transmogrify` it will get `transmogrify` but not `unittest`.
 

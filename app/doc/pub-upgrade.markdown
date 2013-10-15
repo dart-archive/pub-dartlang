@@ -60,7 +60,7 @@ on them. This is the same behavior as `pub get`.
 
 If you don't have network access, you can still run `pub upgrade`. Since pub
 downloads packages to a central cache shared by all packages on your system, it
-can often find previous-downloaded packages there without needing to hit the
+can often find previously-downloaded packages there without needing to hit the
 network.
 
 However, by default, pub will always try to go online when you upgrade if you
