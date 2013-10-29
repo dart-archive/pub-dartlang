@@ -2,7 +2,7 @@
 title: "Glossary"
 ---
 
-### Application Package
+### Application package
 
 A package that is not intended to be used as a library. Application packages may
 have [dependencies](#dependency) on other packages, but are never depended on
@@ -16,6 +16,33 @@ application is deployed has a consistent set of dependencies. Because their
 dependencies are constrained by the lockfile, application packages usually
 specify `any` for their dependencies' [version
 constraints](#version-constraint).
+
+### Asset
+
+A resource&mdash;Dart, HTML, JavaScript, CSS, image, or anything
+else&mdash;intended to be part of a deployed package. The package can be a web
+app, a package used by a web app, or any other package that benefits from a
+build step. Tools such as [`pub serve`](pub-serve.html) and [`pub build`](pub-
+build.html) take _source_ assets (such as an HTML file, a CSS file, and
+several Dart files) and produce _generated_ assets (such as the same HTML and
+CSS files, plus a single JavaScript file).
+
+Assets fall into four groups, with some overlap:
+
+* Source asset: An actual, authored file on disk that `pub build` and
+  `pub serve` can find and use.
+* Generated asset: An asset (possibly the output of a
+  [transformer](#transformer)) that's either served by `pub serve` or saved
+  to disk by `pub build`.
+* Input asset: An asset that is the input to a transformer. An input asset
+  might be a source asset, or it might be the output of a transformer in a
+  previous phase.
+* Output asset: An asset that is created by a transformer. An output asset
+  might be a generated asset, or it might be the input to a transformer in a
+  later phase.
+
+For more information, see
+[Assets and Transformers](assets-and-transformers.html).
 
 ### Dependency
 
@@ -58,7 +85,7 @@ A [dependency](#dependency) that your package directly uses itself. The
 dependencies you list in your pubspec are your package's immediate dependencies.
 All other dependencies are [transitive dependencies](#transitive-dependency).
 
-### Library Package
+### Library package
 
 A package that other packages will depend on. Library packages may have
 [dependencies](#dependency) on other packages *and* may be dependencies
@@ -95,7 +122,7 @@ The lockfile is generated automatically for you by pub when you run
 package is an application package, you will typically check this into source
 control. For library packages, you usually won't.
 
-### SDK Constraint
+### SDK constraint
 
 The declared versions of the Dart SDK itself that a package declares that it
 supports. An SDK constraint is specified using normal
@@ -123,6 +150,18 @@ then reuse it in as many packages as you would like. It also means you can
 delete and regenerate your "packages" directory without having to access the
 network.
 
+### Transformer
+
+A transformer is a Dart object that converts input [assets](#asset) (such as
+Dart files or Polymer-formatted HTML) into output assets (such as JavaScript
+and HTML). The [`pub build`](pub-build.html) command puts the generated assets
+into files. The [`pub serve`](pub-serve.html) command, on the other hand,
+doesn't produce files; its generated assets are served directly by the dev
+server.
+
+For more information, see
+[Assets and Transformers](assets-and-transformers.html).
+
 ### Transitive dependency
 
 A dependency that your package indirectly uses because one of its dependencies
@@ -142,7 +181,7 @@ Anyone uploading a new package automatically becomes an uploader for
 that package. Otherwise, to become an uploader, you need to contact an
 existing uploader and ask them to add you as another uploader.
 
-### Version Constraint
+### Version constraint
 
 A constraint placed on each [dependency](#dependency) of a package that
 specifies which versions of that dependency the package is expected to work

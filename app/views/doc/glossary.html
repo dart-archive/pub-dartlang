@@ -1,4 +1,4 @@
-<h3 id="application-package">Application Package</h3>
+<h3 id="application-package">Application package</h3>
 
 <p>A package that is not intended to be used as a library. Application packages may
 have <a href="#dependency">dependencies</a> on other packages, but are never depended on
@@ -12,6 +12,35 @@ application is deployed has a consistent set of dependencies. Because their
 dependencies are constrained by the lockfile, application packages usually
 specify <code>any</code> for their dependencies&rsquo; <a href="#version-constraint">version
 constraints</a>.</p>
+
+<h3 id="asset">Asset</h3>
+
+<p>A resource&mdash;Dart, HTML, JavaScript, CSS, image, or anything
+else&mdash;intended to be part of a deployed package. The package can be a web
+app, a package used by a web app, or any other package that benefits from a
+build step. Tools such as <a href="pub-serve.html"><code>pub serve</code></a> and <a href="pub-
+build.html"><code>pub build</code></a> take <em>source</em> assets (such as an HTML file, a CSS file, and
+several Dart files) and produce <em>generated</em> assets (such as the same HTML and
+CSS files, plus a single JavaScript file).</p>
+
+<p>Assets fall into four groups, with some overlap:</p>
+
+<ul>
+  <li>Source asset: An actual, authored file on disk that <code>pub build</code> and
+<code>pub serve</code> can find and use.</li>
+  <li>Generated asset: An asset (possibly the output of a
+<a href="#transformer">transformer</a>) that&rsquo;s either served by <code>pub serve</code> or saved
+to disk by <code>pub build</code>.</li>
+  <li>Input asset: An asset that is the input to a transformer. An input asset
+might be a source asset, or it might be the output of a transformer in a
+previous phase.</li>
+  <li>Output asset: An asset that is created by a transformer. An output asset
+might be a generated asset, or it might be the input to a transformer in a
+later phase.</li>
+</ul>
+
+<p>For more information, see
+<a href="assets-and-transformers.html">Assets and Transformers</a>.</p>
 
 <h3 id="dependency">Dependency</h3>
 
@@ -54,7 +83,7 @@ contain entrypoints.</p>
 dependencies you list in your pubspec are your package&rsquo;s immediate dependencies.
 All other dependencies are <a href="#transitive-dependency">transitive dependencies</a>.</p>
 
-<h3 id="library-package">Library Package</h3>
+<h3 id="library-package">Library package</h3>
 
 <p>A package that other packages will depend on. Library packages may have
 <a href="#dependency">dependencies</a> on other packages <em>and</em> may be dependencies
@@ -91,7 +120,7 @@ exact configuration of packages used by an application.</p>
 package is an application package, you will typically check this into source
 control. For library packages, you usually won&rsquo;t.</p>
 
-<h3 id="sdk-constraint">SDK Constraint</h3>
+<h3 id="sdk-constraint">SDK constraint</h3>
 
 <p>The declared versions of the Dart SDK itself that a package declares that it
 supports. An SDK constraint is specified using normal
@@ -119,6 +148,18 @@ then reuse it in as many packages as you would like. It also means you can
 delete and regenerate your &ldquo;packages&rdquo; directory without having to access the
 network.</p>
 
+<h3 id="transformer">Transformer</h3>
+
+<p>A transformer is a Dart object that converts input <a href="#asset">assets</a> (such as
+Dart files or Polymer-formatted HTML) into output assets (such as JavaScript
+and HTML). The <a href="pub-build.html"><code>pub build</code></a> command puts the generated assets
+into files. The <a href="pub-serve.html"><code>pub serve</code></a> command, on the other hand,
+doesn&rsquo;t produce files; its generated assets are served directly by the dev
+server.</p>
+
+<p>For more information, see
+<a href="assets-and-transformers.html">Assets and Transformers</a>.</p>
+
 <h3 id="transitive-dependency">Transitive dependency</h3>
 
 <p>A dependency that your package indirectly uses because one of its dependencies
@@ -138,7 +179,7 @@ same as the <a href="pubspec.html#authorauthors">author</a> of a package.</p>
 that package. Otherwise, to become an uploader, you need to contact an
 existing uploader and ask them to add you as another uploader.</p>
 
-<h3 id="version-constraint">Version Constraint</h3>
+<h3 id="version-constraint">Version constraint</h3>
 
 <p>A constraint placed on each <a href="#dependency">dependency</a> of a package that
 specifies which versions of that dependency the package is expected to work

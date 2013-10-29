@@ -1,0 +1,49 @@
+<pre><code>$ pub serve [--port &lt;number&gt;]
+</code></pre>
+
+<p>This command starts up a <em>development server</em>, or <em>dev server</em>,
+for your Dart web app. The dev server is an HTTP server on localhost
+that serves up your web app&rsquo;s <a href="glossary.html#asset">assets</a>.</p>
+
+<p>Start the dev server from the directory that contains your web app&rsquo;s
+<code>pubspec.yaml</code> file:</p>
+
+<pre><code>$ cd ~/dart/helloworld
+$ pub serve
+Serving helloworld on http://localhost:8080
+</code></pre>
+
+<p>The dev server doesn&rsquo;t just serve up assets, it produces them by running
+<a href="glossary.html#transformer">transformers</a>. A transformer converts input
+assets (such as Dart files or Polymer-formatted HTML) into output assets
+(such as JavaScript and HTML). These output assets aren&rsquo;t in the file
+system; they exist only in the dev server.</p>
+
+<p>When you&rsquo;re ready to deploy, generate output files by running
+<a href="pub-build.html"><code>pub build</code></a>.</p>
+
+<p>See <a href="assets-and-transformers.html">Assets and Transformers</a> for
+information on:</p>
+
+<ul>
+  <li>Where in your package to put assets.</li>
+  <li>What URLs to use when referring to assets.</li>
+  <li>How to use <code>pubspec.yaml</code> to specify which transformers run, and in
+what order.</li>
+</ul>
+
+<h2 id="options">Options</h2>
+
+<h3 id="port"><code>--port</code></h3>
+
+<p>By default the dev server uses <code>http://localhost:8080</code>. To change the port
+number, use the <code>--port</code> option:</p>
+
+<pre><code>$ pub serve --port 9080
+Serving helloworld on http://localhost:9080
+</code></pre>
+
+<h2 id="what-about-dart-editors-server">What about Dart Editor&rsquo;s server?</h2>
+
+<p>Dart Editor has its own dev server. We plan to unify it with the
+pub dev server soon.</p>
