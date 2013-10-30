@@ -18,10 +18,14 @@ Start the dev server from the directory that contains your web app's
 The dev server doesn't just serve up assets, it produces them by running
 [transformers](glossary.html#transformer). A transformer converts input
 assets (such as Dart files or Polymer-formatted HTML) into output assets
-(such as JavaScript and HTML). These output assets aren't in the file
-system; they exist only in the dev server.
+(such as JavaScript and HTML).
 
-When you're ready to deploy, generate output files by running
+Pub automatically includes a dart2js transformer that compiles your Dart code
+to JavaScript. With this, you can change some Dart code, refresh your
+non-Dartium browser, and immediately see the changes.
+
+These output assets aren't in the file system; they exist only in the dev
+server. When you're ready to deploy, generate output files by running
 [`pub build`](pub-build.html).
 
 See [Assets and Transformers](assets-and-transformers.html) for
@@ -41,6 +45,11 @@ number, use the `--port` option:
 
     $ pub serve --port 9080
     Serving helloworld on http://localhost:9080
+
+### `--minify`
+
+By default, pub serves unminified JavaScript so that it's easier to debug while
+you develop. With this, pub will instead generate unminified code.
 
 ## What about Dart Editor's server?
 

@@ -1,4 +1,4 @@
-<pre><code>$ pub build
+<pre><code>$ pub build [--no-minify]
 </code></pre>
 
 <p>Use <code>pub build</code> when you&rsquo;re ready to deploy your web app. When you run
@@ -20,7 +20,8 @@ it again.</p>
 <p>To generate assets, <code>pub build</code> uses
 <a href="glossary.html#transformer">transformers</a>. Any source assets that aren&rsquo;t
 transformed are copied, as is, into the build directory or one of its
-subdirectories.</p>
+subdirectories. Pub also automatically compiles your Dart application to
+JavaScript using dart2js.</p>
 
 <p>See <a href="assets-and-transformers.html">Assets and Transformers</a> for information on:</p>
 
@@ -33,3 +34,10 @@ what order.</li>
 
 <p>Also see <a href="pub-serve.html"><code>pub serve</code></a>. With <code>pub serve</code>, you can run a
 development server that continuously generates and serves assets.</p>
+
+<h2 id="options">Options</h2>
+
+<h3 id="no-minify"><code>--no-minify</code></h3>
+
+<p>By default, pub generates minified JavaScript ready to deploy to production.
+With this, pub will instead generate unminified code.</p>

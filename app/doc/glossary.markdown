@@ -19,6 +19,12 @@ constraints](#version-constraint).
 
 ### Asset
 
+<div class="learn-more">
+  <a href="/doc/assets-and-transformers.html">
+    Learn more about assets &rarr;
+  </a>
+</div>
+
 A resource&mdash;Dart, HTML, JavaScript, CSS, image, or anything
 else&mdash;intended to be part of a deployed package. The package can be a web
 app, a package used by a web app, or any other package that benefits from a
@@ -40,9 +46,6 @@ Assets fall into four groups, with some overlap:
 * Output asset: An asset that is created by a transformer. An output asset
   might be a generated asset, or it might be the input to a transformer in a
   later phase.
-
-For more information, see
-[Assets and Transformers](assets-and-transformers.html).
 
 ### Dependency
 
@@ -152,15 +155,18 @@ network.
 
 ### Transformer
 
+<div class="learn-more">
+  <a href="/doc/assets-and-transformers.html">
+    Learn more about transformers &rarr;
+  </a>
+</div>
+
 A transformer is a Dart object that converts input [assets](#asset) (such as
 Dart files or Polymer-formatted HTML) into output assets (such as JavaScript
 and HTML). The [`pub build`](pub-build.html) command puts the generated assets
 into files. The [`pub serve`](pub-serve.html) command, on the other hand,
 doesn't produce files; its generated assets are served directly by the dev
 server.
-
-For more information, see
-[Assets and Transformers](assets-and-transformers.html).
 
 ### Transitive dependency
 
@@ -183,17 +189,25 @@ existing uploader and ask them to add you as another uploader.
 
 ### Version constraint
 
+<div class="learn-more">
+  <a href="/doc/dependencies.html#version-constraints">
+    Learn more about version constaints &rarr;
+  </a>
+</div>
+
 A constraint placed on each [dependency](#dependency) of a package that
 specifies which versions of that dependency the package is expected to work
 with. This can be a single version (e.g. `0.3.0`), a range of versions (e.g.
 `">=1.2.1 <2.0.0"`), or `any` (or just empty) to specify that any version is
 allowed.
 
+<div class="learn-more">
+  <a href="/doc/versioning.html">
+    Learn about pub's versioning philosophy &rarr;
+  </a>
+</div>
+
 [Library packages](#library-package) should always specify version constraints
 for all of their dependencies, but [application packages](#application-package)
 should usually allow any version of their dependencies, since they use the
 [lockfile](#lockfile) to manage their dependency versions.
-
-See also documentation on [version constraint
-formatting](dependencies.html#version-constraints) and [the philosophy behind
-Pub's versioning scheme](versioning.html).

@@ -20,6 +20,9 @@ handlers:
   expiration: 7d
   upload: static/(.*\.ico)
 
+- url: /img/
+  static_dir: static/img
+
 - url: /.*
   script: pub_dartlang.app
 

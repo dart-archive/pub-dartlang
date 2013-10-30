@@ -49,7 +49,7 @@ and become generated assets. Or an source asset can be transformed, such as a
 <code>.dart</code> file (along with the <code>.dart</code> files that it refers to) that is
 compiled to <code>.js</code>.</p>
 
-<p><img src="img/assets-and-transformers.png" alt="a figure showing source assets and generated assets; the .html, .css, and .png files pass through, untransformed; the .dart file is transformed into a .js file (and, for pub serve only, the .dart file is passed through, as well)" /></p>
+<p><img src="/img/assets-and-transformers.png" alt="a figure showing source assets and generated assets; the .html, .css, and .png files pass through, untransformed; the .dart file is transformed into a .js file (and, for pub serve only, the .dart file is passed through, as well)" /></p>
 
 <p>Dart files are a special case. The <code>pub build</code> command doesn&rsquo;t produce <code>.dart</code>
 files because browsers in the wild don&rsquo;t support Dart natively (yet). The <code>pub
@@ -124,8 +124,8 @@ with your main Dart file under <code>web</code> and additional Dart files under 
         *.js
       asset/
         *.png
-        *.html 
-        ... 
+        *.html
+        ...
   web/
     <em>app</em>.dart
     *.html
@@ -144,7 +144,7 @@ produced by <code>pub build</code> if the only transformer is dart2js. In this e
 all the source files have corresponding generated files, and all the Dart
 files have been compiled into a single JavaScript file.</p>
 
-<p><img src="img/input-and-output-assets.png" alt="under the build directory are assets/ and packages/ directories, plus a bunch of files derived from the web/ directory: app.dart.js, *.html, *.css, *.png, ..." /></p>
+<p><img src="/img/input-and-output-assets.png" alt="under the build directory are assets/ and packages/ directories, plus a bunch of files derived from the web/ directory: app.dart.js, *.html, *.css, *.png, ..." /></p>
 
 <h2 id="how-to-refer-to-assets">How to refer to assets</h2>
 

@@ -2,7 +2,7 @@
 title: "Command: Build"
 ---
 
-    $ pub build
+    $ pub build [--no-minify]
 
 Use `pub build` when you're ready to deploy your web app. When you run
 `pub build`, it generates the [assets](glossary.html#asset) for the current
@@ -22,7 +22,8 @@ it again.
 To generate assets, `pub build` uses
 [transformers](glossary.html#transformer). Any source assets that aren't
 transformed are copied, as is, into the build directory or one of its
-subdirectories.
+subdirectories. Pub also automatically compiles your Dart application to
+JavaScript using dart2js.
 
 See [Assets and Transformers](assets-and-transformers.html) for information on:
 
@@ -33,3 +34,10 @@ See [Assets and Transformers](assets-and-transformers.html) for information on:
 
 Also see [`pub serve`](pub-serve.html). With `pub serve`, you can run a
 development server that continuously generates and serves assets.
+
+## Options
+
+### `--no-minify`
+
+By default, pub generates minified JavaScript ready to deploy to production.
+With this, pub will instead generate unminified code.

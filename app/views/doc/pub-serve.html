@@ -16,10 +16,14 @@ Serving helloworld on http://localhost:8080
 <p>The dev server doesn&rsquo;t just serve up assets, it produces them by running
 <a href="glossary.html#transformer">transformers</a>. A transformer converts input
 assets (such as Dart files or Polymer-formatted HTML) into output assets
-(such as JavaScript and HTML). These output assets aren&rsquo;t in the file
-system; they exist only in the dev server.</p>
+(such as JavaScript and HTML).</p>
 
-<p>When you&rsquo;re ready to deploy, generate output files by running
+<p>Pub automatically includes a dart2js transformer that compiles your Dart code
+to JavaScript. With this, you can change some Dart code, refresh your
+non-Dartium browser, and immediately see the changes.</p>
+
+<p>These output assets aren&rsquo;t in the file system; they exist only in the dev
+server. When you&rsquo;re ready to deploy, generate output files by running
 <a href="pub-build.html"><code>pub build</code></a>.</p>
 
 <p>See <a href="assets-and-transformers.html">Assets and Transformers</a> for
@@ -42,6 +46,11 @@ number, use the <code>--port</code> option:</p>
 <pre><code>$ pub serve --port 9080
 Serving helloworld on http://localhost:9080
 </code></pre>
+
+<h3 id="minify"><code>--minify</code></h3>
+
+<p>By default, pub serves unminified JavaScript so that it&rsquo;s easier to debug while
+you develop. With this, pub will instead generate unminified code.</p>
 
 <h2 id="what-about-dart-editors-server">What about Dart Editor&rsquo;s server?</h2>
 
