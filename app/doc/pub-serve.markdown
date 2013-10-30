@@ -20,13 +20,13 @@ The dev server doesn't just serve up assets, it produces them by running
 assets (such as Dart files or Polymer-formatted HTML) into output assets
 (such as JavaScript and HTML).
 
-Pub automatically includes a dart2js transformer that compiles your Dart code
-to JavaScript. With this, you can change some Dart code, refresh your
-non-Dartium browser, and immediately see the changes.
-
 These output assets aren't in the file system; they exist only in the dev
 server. When you're ready to deploy, generate output files by running
 [`pub build`](pub-build.html).
+
+Pub automatically includes a dart2js transformer that compiles your Dart code
+to JavaScript. With this, you can change some Dart code, refresh your
+non-Dartium browser, and immediately see the changes.
 
 See [Assets and Transformers](assets-and-transformers.html) for
 information on:
@@ -49,7 +49,7 @@ number, use the `--port` option:
 ### `--minify`
 
 By default, pub serves unminified JavaScript so that it's easier to debug while
-you develop. With this, pub will instead generate unminified code.
+you develop. With this, pub will instead generate minified code.
 
 ## What about Dart Editor's server?
 
