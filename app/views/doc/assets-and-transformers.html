@@ -40,12 +40,12 @@ optimized HTML and Dart files.</li>
 <p>Although you specify which transformers to use, you don&rsquo;t explicitly say
 which transformers should be applied to which assets. Instead, each
 transformer determines which assets it can apply itself to. For <code>pub serve</code>,
-the transformers run when the dev server starts up and whenever an source
+the transformers run when the dev server starts up and whenever a source
 asset changes. The <code>pub build</code> command runs the transformers once and
 then exits.</p>
 
 <p>As the following figure shows, source assets can pass through, untransformed,
-and become generated assets. Or an source asset can be transformed, such as a
+and become generated assets. Or a source asset can be transformed, such as a
 <code>.dart</code> file (along with the <code>.dart</code> files that it refers to) that is
 compiled to <code>.js</code>.</p>
 
