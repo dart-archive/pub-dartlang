@@ -42,12 +42,12 @@ Here are some examples of transformers:
 Although you specify which transformers to use, you don't explicitly say
 which transformers should be applied to which assets. Instead, each
 transformer determines which assets it can apply itself to. For `pub serve`,
-the transformers run when the dev server starts up and whenever an source
+the transformers run when the dev server starts up and whenever a source
 asset changes. The `pub build` command runs the transformers once and
 then exits.
 
 As the following figure shows, source assets can pass through, untransformed,
-and become generated assets. Or an source asset can be transformed, such as a
+and become generated assets. Or a source asset can be transformed, such as a
 `.dart` file (along with the `.dart` files that it refers to) that is
 compiled to `.js`.
 
