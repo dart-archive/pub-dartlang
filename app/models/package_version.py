@@ -82,7 +82,7 @@ class PackageVersion(db.Model):
             kwargs['version'] = SemanticVersion(kwargs['version'])
 
         if not 'key_name' in kwargs and not 'key' in kwargs:
-            kwargs['key_name'] = str(kwargs['version'])
+            kwargs['key_name'] = str(kwargs['version'].canonical)
 
         if not 'parent' in kwargs:
             kwargs['parent'] = kwargs['package']
@@ -132,7 +132,8 @@ class PackageVersion(db.Model):
     def get_by_name_and_version(cls, package_name, version):
         """Looks up a package version by its package name and version."""
         parent_key = db.Key.from_path('Package', package_name)
-        return cls.get_by_key_name(version, parent=parent_key)
+        return cls.get_by_key_name(
+            SemanticVersion(version).canonical, parent=parent_key)
 
     @classmethod
     def get_reload_status(cls):
@@ -202,7 +203,11 @@ class PackageVersion(db.Model):
     @property
     def storage_path(self):
         """The Cloud Storage path for this package."""
-        return 'packages/%s-%s.tar.gz' % (self.package.name, self.version)
+        # Use the canonical version for the cloud storage path for
+        # backwards-compatibility with package versions that were uploaded
+        # prior to storing non-canonicalized versions.
+        return 'packages/%s-%s.tar.gz' % \
+            (self.package.name, self.version.canonical)
 
     @property
     def dartdoc_storage_path(self):

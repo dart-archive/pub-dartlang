@@ -180,6 +180,25 @@ class PackageVersionsTest(TestCase):
             'test-package', '1.2.3')
         self.assertEqual(1, version.downloads)
 
+    def test_package_versions_are_indexed_by_canonical_version(self):
+        self.be_admin_oauth_user()
+        self.post_package_version('1.2.3')
+        self.post_package_version('03.04.05')
+
+        response = self.testapp.get(
+            '/packages/test-package/versions/01.02.03.tar.gz')
+        self.assertEqual(response.status_int, 302)
+        self.assertEqual(response.headers['Location'],
+                         'http://localhost:80/gs_/packages/' +
+                         'test-package-1.2.3.tar.gz')
+
+        response = self.testapp.get(
+            '/packages/test-package/versions/3.4.5.tar.gz')
+        self.assertEqual(response.status_int, 302)
+        self.assertEqual(response.headers['Location'],
+                         'http://localhost:80/gs_/packages/' +
+                         'test-package-3.4.5.tar.gz')
+
     def post_package_version(self, version, name='test-package'):
         response = self.create_package(self.upload_archive(name, version))
         self.assert_json_success(response)
