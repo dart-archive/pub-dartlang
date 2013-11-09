@@ -197,7 +197,7 @@ class PackageVersionsTest(TestCase):
         self.assertEqual(response.status_int, 302)
         self.assertEqual(response.headers['Location'],
                          'http://localhost:80/gs_/packages/' +
-                         'test-package-03.04.05.tar.gz')
+                         'test-package-3.4.5.tar.gz')
 
     def post_package_version(self, version, name='test-package'):
         response = self.create_package(self.upload_archive(name, version))

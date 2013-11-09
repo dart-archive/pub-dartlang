@@ -203,7 +203,11 @@ class PackageVersion(db.Model):
     @property
     def storage_path(self):
         """The Cloud Storage path for this package."""
-        return 'packages/%s-%s.tar.gz' % (self.package.name, self.version)
+        # Use the canonical version for the cloud storage path for
+        # backwards-compatibility with package versions that were uploaded
+        # prior to storing non-canonicalized versions.
+        return 'packages/%s-%s.tar.gz' % \
+            (self.package.name, self.version.canonical)
 
     @property
     def dartdoc_storage_path(self):
