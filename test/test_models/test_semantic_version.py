@@ -48,6 +48,22 @@ class SemanticVersionTest(TestCase):
         for version1, version2 in _pairs(versions):
             assert_less_than(version1, version2)
 
+    def test_equality(self):
+        self.assertEqual(SemanticVersion("01.2.3"), SemanticVersion("1.2.3"))
+        self.assertEqual(SemanticVersion("1.02.3"), SemanticVersion("1.2.3"))
+        self.assertEqual(SemanticVersion("1.2.03"), SemanticVersion("1.2.3"))
+        self.assertEqual(
+            SemanticVersion("1.2.3-01"), SemanticVersion("1.2.3-1"))
+        self.assertEqual(
+            SemanticVersion("1.2.3+01"), SemanticVersion("1.2.3+1"))
+
+    def test_canonical(self):
+        self.assertEqual(str(SemanticVersion("01.2.3").canonical), "1.2.3")
+        self.assertEqual(str(SemanticVersion("1.02.3").canonical), "1.2.3")
+        self.assertEqual(str(SemanticVersion("1.2.03").canonical), "1.2.3")
+        self.assertEqual(str(SemanticVersion("1.2.3-01").canonical), "1.2.3-1")
+        self.assertEqual(str(SemanticVersion("1.2.3+01").canonical), "1.2.3+1")
+
 def _pairs(iterable):
     a, b = itertools.tee(iterable)
     next(b, None)

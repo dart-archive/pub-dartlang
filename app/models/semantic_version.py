@@ -31,6 +31,7 @@ class SemanticVersion(object):
         self.patch = int(match.group(3))
         self.prerelease = _split(match.group(4))
         self.build = _split(match.group(5))
+        self._text = version
 
     @property
     def is_prerelease(self):
@@ -44,6 +45,22 @@ class SemanticVersion(object):
         A package is considered to be in initial development if its major
         version is 0."""
         return self.major == 0
+
+    @property
+    def canonical(self):
+        """Returns the canonical representation of this version.
+
+        The canonical version has no leading zeros in any components."""
+
+        prerelease = ""
+        if self.prerelease:
+            prerelease = "-" + '.'.join(map(str, self.prerelease))
+
+        build = ""
+        if self.build: build = "+" + '.'.join(map(str, self.build))
+
+        return "%d.%d.%d%s%s" % (self.major, self.minor, self.patch, prerelease,
+                                 build)
 
     def __eq__(self, other):
         if not isinstance(other, SemanticVersion): return False
@@ -93,16 +110,7 @@ class SemanticVersion(object):
         return [(0 if isinstance(subcomponent, int) else 1, subcomponent)
                 for subcomponent in self.build]
 
-    def __str__(self):
-        prerelease = ""
-        if self.prerelease:
-            prerelease = "-" + '.'.join(map(str, self.prerelease))
-
-        build = ""
-        if self.build: build = "+" + '.'.join(map(str, self.build))
-
-        return "%d.%d.%d%s%s" % (self.major, self.minor, self.patch, prerelease,
-                                 build)
+    def __str__(self): return self._text
 
     def __repr__(self):
         return 'SemanticVersion({0!r})'.format(str(self))
