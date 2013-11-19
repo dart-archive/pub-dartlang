@@ -1,7 +1,5 @@
 safe: false
-auto: true
-server: true
-server_port: 8080
+port: 8080
 source: app/doc
 destination: app/views/doc
 markdown: kramdown

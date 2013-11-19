@@ -28,8 +28,7 @@ to provide. The shortest way is to just specify a name:</p>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This creates a dependency on <code>transmogrify</code>that  allows any version, and looks
 it up using the default source, which is this site itself. To limit the
@@ -37,8 +36,7 @@ dependency to a range of versions, you can provide a <em>version constraint</em>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=1.0.0</span><span class="nv"> </span><span class="s">&lt;2.0.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This creates a dependency on <code>transmogrify</code> using the default source and
 allowing any version from <code>1.0.0</code> to <code>2.0.0</code> (but not including <code>2.0.0</code>). See
@@ -51,8 +49,7 @@ allowing any version from <code>1.0.0</code> to <code>2.0.0</code> (but not incl
     <span class="l-Scalar-Plain">hosted</span><span class="p-Indicator">:</span>
       <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">transmogrify</span>
       <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://some-package-server.com</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This depends on the <code>transmogrify</code> package using the <code>hosted</code> source.
 Everything under the source key (here, just a map with a <code>url:</code> key) is the
@@ -67,8 +64,7 @@ format, detailed below.</p>
       <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">transmogrify</span>
       <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://some-package-server.com</span>
     <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=1.0.0</span><span class="nv"> </span><span class="s">&lt;2.0.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This long form is used when you don&rsquo;t use the default source or when you have a
 complex description you need to specify. But in most cases, you&rsquo;ll just use the
@@ -87,8 +83,7 @@ this form. They look like this:</p>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0</span><span class="nv"> </span><span class="s">&lt;1.0.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Here, you&rsquo;re saying your package depends on a hosted package named
 &ldquo;transmogrify&rdquo; and you&rsquo;ll work with any version from 0.4.0 to 1.0.0 (but not
@@ -103,8 +98,7 @@ specifies its URL:</p>
       <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">transmogrify</span>
       <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http://your-package-server.com</span>
     <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.4.0</span><span class="nv"> </span><span class="s">&lt;1.0.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <h3 id="git-packages">Git packages</h3>
 
@@ -117,8 +111,7 @@ repository.</p>
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">kittens</span><span class="p-Indicator">:</span>
     <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">git://github.com/munificent/kittens.git</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The <code>git</code> here says this package is found using Git, and the URL after that is
 the Git URL that can be used to clone the package. Pub assumes that the package
@@ -132,8 +125,7 @@ provide a <code>ref</code> argument:</p>
     <span class="l-Scalar-Plain">git</span><span class="p-Indicator">:</span>
       <span class="l-Scalar-Plain">url</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">git://github.com/munificent/kittens.git</span>
       <span class="l-Scalar-Plain">ref</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">some-branch</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The ref can be anything that Git allows to <a href="http://www.kernel.org/pub/software/scm/git/docs/user-manual.html#naming-commits">identify a commit</a>.</p>
 
@@ -150,8 +142,7 @@ package are instantly picked up by the one that depends on it.</p>
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">transmogrify</span><span class="p-Indicator">:</span>
     <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/Users/me/transmogrify</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>This says the root directory for <code>transmogrify</code> is <code>/Users/me/transmogrify</code>.
 When you use this, pub will generate a symlink directly to the <code>lib</code> directory
@@ -257,8 +248,7 @@ libraries&mdash;it doesn&rsquo;t actually need <code>unittest</code>. In this ca
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dev_dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">unittest</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=0.5.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Pub gets every package your package package depends on, and everything <em>those</em>
 packages depend on, transitively. It also gets your package&rsquo;s dev dependencies,

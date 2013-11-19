@@ -139,8 +139,7 @@ of versions that you can accept. If the pubspec for <code>widgets</code> looked 
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">collections</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=2.3.5</span><span class="nv"> </span><span class="s">&lt;2.4.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Then we could pick version <code>2.3.7</code> for <code>collections</code> and then both <code>widgets</code>
 and <code>templates</code> have their constraints satisfied by a single concrete version.</p>
@@ -162,8 +161,7 @@ like:</p>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">collections</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=2.3.5</span><span class="nv"> </span><span class="s">&lt;3.0.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>To make this work, then, we need to come up with that set of promises.
 Fortunately, other smart people have done the work of figuring this all out and
@@ -230,23 +228,20 @@ two apps. Here are their pubspecs:</p>
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">my_app</span>
 <span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">widgets</span><span class="p-Indicator">:</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">other_app</span>
 <span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">widgets</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">collections</span><span class="p-Indicator">:</span> <span class="s">&#39;&lt;1.5.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>They both depend on <code>widgets</code>, whose pubspec is:</p>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">widgets</span>
 <span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">collections</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=1.0.0</span><span class="nv"> </span><span class="s">&lt;2.0.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The <code>other_app</code> package uses depends directly on <code>collections</code> itself. The
 interesting part is that it happens to have a different version constraint on
@@ -335,28 +330,24 @@ the abyss:</p>
 <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">0.0.0</span>
 <span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">yin</span><span class="p-Indicator">:</span> <span class="s">&#39;&gt;=1.0.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yin</span>
 <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1.0.0</span>
 <span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yin</span>
 <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2.0.0</span>
 <span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">yang</span><span class="p-Indicator">:</span> <span class="s">&#39;1.0.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <div class="highlight"><pre><code class="yaml"><span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yang</span>
 <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1.0.0</span>
 <span class="l-Scalar-Plain">dependencies</span><span class="p-Indicator">:</span>
   <span class="l-Scalar-Plain">yin</span><span class="p-Indicator">:</span> <span class="s">&#39;1.0.0&#39;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>In all of these cases, there is no set of concrete versions that will work for
 your app, and when this happens pub will report an error and tell you what&rsquo;s
