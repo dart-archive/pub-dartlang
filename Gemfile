@@ -1,7 +1,8 @@
-source :rubygems
+source "https://rubygems.org"
 
 gem "compass"
-gem "compass_twitter_bootstrap", :git => "git://github.com/toao/compass-twitter-bootstrap.git"
+gem "compass_twitter_bootstrap", "~>2.0.3"
 gem "jekyll"
+gem "kramdown"
 gem "foreman"
 gem "pygments.rb"

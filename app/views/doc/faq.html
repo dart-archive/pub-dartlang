@@ -33,14 +33,12 @@ simple rewriting rule:</p>
 <p>For example, if you app&rsquo;s entrypoint is <code>/dev/myapp/web/main.dart</code> then:</p>
 
 <div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s1">&#39;package:unittest/unittest.dart&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Magically turns into:</p>
 
 <div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s1">&#39;/dev/myapp/web/packages/unittest/unittest.dart&#39;</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Then Dart loads that as normal. This behavior is a <a href="http://www.dartlang.org/docs/spec/">specified</a> part of
 the Dart language. The example only works if you have a directory named

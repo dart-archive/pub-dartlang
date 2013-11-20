@@ -140,8 +140,7 @@ the library file, like so:</p>
 
 <div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s2">&quot;package:enchilada/enchilada.dart&quot;</span><span class="p">;</span>
 <span class="k">import</span> <span class="s2">&quot;package:enchilada/tortilla.dart&quot;</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>If you feel the need to organize your public libraries, you can also create
 subdirectories inside <code>lib</code>. If you do that, users will specify that path when
@@ -157,8 +156,7 @@ they import it. Say you have a file hierarchy like this:</p>
 <p>Users will import <code>olives.dart</code> like:</p>
 
 <div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s2">&quot;package:enchilada/some/path/olives.dart&quot;</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>Note that only <em>libraries</em> should be in <code>lib</code>. <em>Entrypoints</em>&mdash;Dart scripts
 with a <code>main()</code> function&mdash;cannot go in <code>lib</code>. If you place a Dart script
@@ -192,8 +190,7 @@ can (and should) still use <code>"package:"</code> to import them. This is perfe
 legit:</p>
 
 <div class="highlight"><pre><code class="dart"><span class="k">import</span> <span class="s2">&quot;package:enchilada/src/beans.dart&quot;</span><span class="p">;</span>
-</code></pre>
-</div>
+</code></pre></div>
 
 <p>The name you use here (in this case <code>enchilada</code>) is the name you specify for
 your package in its <a href="pubspec.html">pubspec</a>.</p>
