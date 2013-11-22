@@ -16,7 +16,9 @@ dependencies:
   <b>polymer: any</b>
 <b>transformers:
 - polymer:
-    entry_points: web/index.html</b>
+    entry_points:
+    - web/index.html
+    - web/index2.html</b>
 </pre>
 
 A package's assets must be in one or more of the following directories:
