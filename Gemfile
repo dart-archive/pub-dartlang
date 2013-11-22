@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "compass"
-gem "compass_twitter_bootstrap"
+gem "bootstrap-sass"
 gem "jekyll"
 gem "kramdown"
 gem "foreman"

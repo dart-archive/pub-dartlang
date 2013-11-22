@@ -1,4 +1,4 @@
-require 'compass_twitter_bootstrap'
+require 'bootstrap-sass'
 
 http_path = "/"
 css_dir = "../app/static"
