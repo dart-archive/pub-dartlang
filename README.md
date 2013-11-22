@@ -4,45 +4,48 @@ package repository for the Pub package manager.
 For license information, please see [LICENSE](LICENSE).
 
 ## Repository structure
-
-    |-- app/                    The app engine app.
-    |   |-- doc/                Documentation and articles.
-    |   |-- handlers/           Core web server code.
-    |       |-- ...
-    |   |-- models/             Models for persisting data to the datastore.
-    |       |-- ...
-    |   |-- static/             Static assets.
-    |       |-- img/
-    |           |-- ...
-    |       |-- js/
-    |           |-- ...
-    |       |-- favicon.ico
-    |       |-- style.css       Generated stylesheet. Modify /css/sass/style.scss instead.
-    |   |-- views/              Mustache templates.
-    |       |-- doc/            Generated HTML. Modify /app/doc/ files instead.
-    |           |-- ...
-    |       |-- ...
-    |   |-- app.yaml            AppEngine configuration.
-    |   |-- appengine_config.py Python module configuration.
-    |   |-- pub_dartlang.py     Entrypoint for app. Use dev_appserver.py to run.
-    |   |-- ...
-    |
-    |-- css/
-    |   |-- sass/
-    |       |-- _syntax.scss    Dart language syntax styles.
-    |       |-- style.scss      Main stylesheet.
-    |   |-- config.rb           Compass configuration.
-    |
-    |-- test/                   Tests for app functionality.
-    |   |-- ...
-    |
-    |-- third_party/            External dependencies to be include in the app.
-    |   |-- ...
-    |
-    |-- _config.yml             Jekyll configuration.
-    |-- Procfile                Process to be run with Foreman.
-    |-- test.py                 Tests the app.
-    |-- ...
+    ┐
+    ├───┬ app/                    The app engine app.
+    │   ├───┬ doc/                Documentation and articles.
+    │   │   └─...
+    │   ├───┬ handlers/           Core web server code.
+    │   │   └─...
+    │   ├───┬ models/             Models for persisting data to the datastore.
+    │   │   └─...
+    │   ├───┬ static/             Static assets.
+    │   │   ├───┬ img/
+    │   │   │   └─...
+    │   │   ├───┬ js/
+    │   │   │   └─...
+    │   │   ├──── favicon.ico
+    │   │   └──── style.css       Generated stylesheet. Modify /stylesheets/style.scss instead.
+    │   │
+    │   ├───┬ views/              Mustache templates.
+    │   │   ├───┬ doc/            Generated HTML. Modify /app/doc/ files instead.
+    │   │   │   └─...
+    │   │   └─...
+    │   ├──── app.yaml            AppEngine configuration.
+    │   ├──── appengine_config.py Python module configuration.
+    │   ├──── pub_dartlang.py     Entrypoint for app. Use dev_appserver.py to run.
+    │   └─...
+    │
+    ├───┬ stylesheets/
+    │   └───┬ partials/
+    │       ├──── _syntax.scss    Dart language syntax styles.
+    │       ├──── _variables.scss Variables for theming.
+    │       └ style.scss          Main stylesheet.
+    │
+    ├───┬ test/                   Tests for app functionality.
+    │   └──── ...
+    │
+    ├───┬ third_party/            External dependencies to be include in the app.
+    │   └──── ...
+    │
+    ├──── _config.yml             Jekyll configuration.
+    ├──── Procfile                Process to be run with Foreman.
+    ├──── test.py                 Tests the app.
+    ├──── config.rb               Compass configuration.
+    └──── ...
 
 ## Running the server locally
 
