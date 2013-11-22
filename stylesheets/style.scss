@@ -3,13 +3,14 @@
 @import "compass/reset";
 @import "compass/typography/text/replacement";
 
-@import "syntax";
+@import "partials/variables";
+@import "partials/syntax";
 
 // Overridden Bootstrap variables.
 
 // Scaffolding
 // -------------------------
-$text-color:            $gray-dark;
+//$text-color:            $gray-dark;
 
 // Navbar
 // -------------------------
