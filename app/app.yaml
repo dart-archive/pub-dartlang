@@ -20,7 +20,7 @@ handlers:
   expiration: 7d
   upload: static/(.*\.ico)
 
-- url: /img/
+- url: /app/static/img
   static_dir: static/img
 
 - url: /.*

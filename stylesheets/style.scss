@@ -6,24 +6,6 @@
 @import "partials/variables";
 @import "partials/syntax";
 
-// Overridden Bootstrap variables.
-
-// Scaffolding
-// -------------------------
-//$text-color:            $gray-dark;
-
-// Navbar
-// -------------------------
-$navbar-height: 65px;
-
-// Typography
-// -------------------------
-$font-family-sans-serif: "Roboto", sans-serif;
-
-$headings-font-family: "Montserrat", sans-serif;
-
-
-
 @import "bootstrap/theme";
 @import "bootstrap";
 
@@ -42,207 +24,194 @@ body {
   // Account for the fixed navbar height.
   // TODO(amouravski): is this necessary?
   padding-top: 65px;
+
+  -webkit-font-smoothing: antialiased;
 }
-//// Don't word wrap inline code.
-//code {
-//  white-space: nowrap;
-//}
-//
-//pre code {
-//  white-space: inherit;
-//}
-//
-//pre b {
-//  font-weight: bold;
-//}
-//
-//a.permalink {
-//  margin-left: 0.5em;
-//  display: none;
-//}
-//
-//article {
-//  @extend .span8;
-//
-//  position: relative;
-//
-//  h2, h3, h4 {
-//    // Ensure that the headers don't get covered up by the navbar when the user
-//    // clicks on the permalink.
-//    padding-top: 40px;
-//    margin-top: -40px;
-//
-//    &:hover a.permalink {
-//      display: inline;
-//    }
-//  }
-//}
-//
-//.navbar-search {
-//  margin-top: 4px;
-//
-//  .search-query {
-//    border-radius: 4px;
-//    -moz-border-radius: 4px;
-//    -webkit-border-radius: 4px;
-//    height: 20px;
-//    line-height: inherit;
-//  }
-//}
-//
-//.has-permalink:hover > a.permalink {
-//  display:inline;
-//}
-//
-//// Don't make tab bars so huge.
-//.nav-tabs > li > a {
-//  padding-top: 4px;
-//  padding-bottom: 4px;
-//}
-//
-//.nav {
-//  margin-bottom: 8px;
-//}
-//
-//.package-sidebar {
-//  padding-top: 50px;
-//}
-//
+// Don't word wrap inline code.
+code {
+  white-space: nowrap;
+}
+
+pre code {
+  white-space: inherit;
+}
+
+pre b {
+  font-weight: bold;
+}
+
+a.permalink {
+  margin-left: 0.5em;
+  display: none;
+}
+
+article {
+  @extend .col-md-8;
+
+  position: relative;
+
+  h2, h3, h4 {
+    // Ensure that the headers don't get covered up by the navbar when the user
+    // clicks on the permalink.
+    padding-top: 40px;
+    margin-top: -40px;
+
+    &:hover a.permalink {
+      display: inline;
+    }
+  }
+}
+
+.navbar-search {
+  margin-top: 4px;
+
+  .search-query {
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    height: 20px;
+    line-height: inherit;
+  }
+}
+
+.has-permalink:hover > a.permalink {
+  display:inline;
+}
+
+// Don't make tab bars so huge.
+.nav-tabs > li > a {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav {
+  margin-bottom: 8px;
+}
+
+.package-sidebar {
+  padding-top: 50px;
+}
+
+// TODO(amouravski): add this back in?
 //tt {
 //  font-family: $monoFontFamily;
 //  padding: 0 3px;
 //}
-//
-//footer {
-//  @extend .well;
-//  @extend .well-small;
-//  font-size: 13px;
-//  text-align: center;
-//
-//  .login, .logout {
-//    display: inline-block;
-//    float: right;
-//    // #f5f5f5 is the background-color of the footer, which isn't a variable
-//    // for some reason.
-//    color: scale-color(#f5f5f5, $lightness: -15%);
-//  }
-//}
-//
+
+footer {
+  @extend .well;
+  @extend .well-sm;
+  font-size: 13px;
+  text-align: center;
+
+  .login, .logout {
+    display: inline-block;
+    float: right;
+    // #f5f5f5 is the background-color of the footer, which isn't a variable
+    // for some reason.
+    color: scale-color(#f5f5f5, $lightness: -15%);
+  }
+}
+
+// TODO(amouravski): add this back in?
 //form#private-key textarea {
 //  width: 550px;
 //  height: 420px;
 //  font-family: $monoFontFamily;
 //}
-//
-//// We have two brands: the dart logo and "pub.dartlang.org". This keeps them
-//// from being too spread out.
-//.brand + .brand {
-//  padding-left: 10px;
-//}
-//
-//// Highlight the brand text on hover. This matches other navbar buttons and
-//// makes it clearer that the logo links to something different.
-//a.brand:hover {
-//  color: white;
-//}
-//
-//.dart-logo {
-//  @include replace-text("/static/img/dart.png", 0, 0);
-//  width: 21px;
-//}
-//
-//.intro {
-//  @extend .well;
-//}
-//
-//.get-started {
-//  @extend .btn;
-//  @extend .btn-primary;
-//}
-//
-//h1 .version {
-//  @extend small;
-//  font-size: 20px;
-//}
-//
-//td table {
-//  margin: -4px;
-//  td, th {
-//    border: none;
-//    padding: 4px;
-//  }
-//}
-//
-//td.archive, th.archive {
-//  text-align: center;
-//  vertical-align: middle;
-//}
-//
-//// Need to shift the icons a bit to line the up with adjacent text.
-//.icon-hand-right,
-//.icon-envelope {
-//  margin: 3px 0 0 2px;
-//}
-//
-//.author {
-//  white-space: nowrap;
-//}
-//
-//.learn-more {
-//  a {
-//    @extend .btn;
-//    @extend .btn-small;
-//
-//    color: $linkColor;
-//
-//    float: right;
-//    position: absolute;
-//    width: 270px;
-//    right: -320px;
-//
-//    display: inline-block;
-//  }
-//}
-//
-//ol.toc {
-//  @extend .well;
-//
-//  position: absolute;
-//  right: -320px;
-//  width: 230px;
-//
-//  float: right;
-//
-//  // Tweak padding to handle list bullets and the spacing on the header.
-//  padding: 10px 20px 20px 40px;
-//
-//  li {
-//    font-size: 13px;
-//    line-height: 21px;
-//  }
-//}
-//
-//.toc:before {
-//  @extend h3;
-//  content: "Contents";
-//}
-//
-//.pagination {
-//  @extend .pagination-centered;
-//}
-//
-//.progress {
-//  @extend .progress-striped;
-//}
-//
-//[class^="icon-"], [class*=" icon-"] {
-//  @include hide-text;
-//}
-//
-//ul ul {
-//  list-style-type: circle;
-//}
-//
+
+.dart-logo {
+  @include replace-text-with-dimensions("dart.png", 0, 0);
+}
+
+.intro {
+  @extend .well;
+}
+
+.get-started {
+  @extend .btn;
+  @extend .btn-primary;
+}
+
+h1 .version {
+  @extend small;
+  font-size: 20px;
+}
+
+td table {
+  margin: -4px;
+  td, th {
+    border: none;
+    padding: 4px;
+  }
+}
+
+td.archive, th.archive {
+  text-align: center;
+  vertical-align: middle;
+}
+
+// Need to shift the icons a bit to line the up with adjacent text.
+.icon-hand-right,
+.icon-envelope {
+  margin: 3px 0 0 2px;
+}
+
+.author {
+  white-space: nowrap;
+}
+
+.learn-more {
+  a {
+    @extend .btn;
+    @extend .btn-sm;
+
+    color: $link-color;
+
+    float: right;
+    position: absolute;
+    width: 270px;
+    right: -320px;
+
+    display: inline-block;
+  }
+}
+
+ol.toc {
+  @extend .well;
+
+  position: absolute;
+  right: -320px;
+  width: 230px;
+
+  float: right;
+
+  // Tweak padding to handle list bullets and the spacing on the header.
+  padding: 10px 20px 20px 40px;
+
+  li {
+    font-size: 13px;
+    line-height: 21px;
+  }
+}
+
+.toc:before {
+  @extend h3;
+  content: "Contents";
+}
+
+.progress {
+  @extend .progress-striped;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  @include hide-text;
+}
+
+ul ul {
+  list-style-type: circle;
+}
+// TODO(amouravski): Fix admin page.
 //.admin {
 //  @extend .tabbable, .tabs-left;
 //
@@ -254,7 +223,7 @@ body {
 //    @extend .tab-content;
 //
 //    > div {
-//      @extend .tab-pane, .container-fluid;
+//      @extend .tab-pane, .container;
 //    }
 //  }
 //

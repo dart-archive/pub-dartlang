@@ -4,6 +4,7 @@ package repository for the Pub package manager.
 For license information, please see [LICENSE](LICENSE).
 
 ## Repository structure
+
     ┐
     ├───┬ app/                    The app engine app.
     │   ├───┬ doc/                Documentation and articles.
