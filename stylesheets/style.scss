@@ -20,9 +20,33 @@ table {
 //
 //$iconWhiteSpritePath: 'img/glyphicons-halflings-white.png';
 
+// Navbar
+// -------------------------
+
+$navbar-font-family: "Montserrat", sans-serif;
+
+.navbar {
+  border: none;
+  $shadow: 0 2px 2px rgba(50, 50, 50, 0.15);
+  @include box-shadow($shadow);
+}
+
+.navbar-brand {
+  font-family: $navbar-font-family;
+}
+
+.navbar-nav > li > a {
+  padding-top: 25px;
+  font-family: $navbar-font-family;
+  font-size: $font-size-small;
+  text-transform: uppercase;
+}
+
+// Body
+// -------------------------
+
 body {
   // Account for the fixed navbar height.
-  // TODO(amouravski): is this necessary?
   padding-top: 65px;
 
   -webkit-font-smoothing: antialiased;
@@ -62,31 +86,25 @@ article {
   }
 }
 
-.navbar-search {
-  margin-top: 4px;
-
-  .search-query {
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    height: 20px;
-    line-height: inherit;
-  }
-}
+//.navbar-form {
+//  .search-query {
+//    @include border-radius(4px, 4px);
+//  }
+//}
 
 .has-permalink:hover > a.permalink {
   display:inline;
 }
 
-// Don't make tab bars so huge.
-.nav-tabs > li > a {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
+//// Don't make tab bars so huge.
+//.nav-tabs > li > a {
+//  padding-top: 4px;
+//  padding-bottom: 4px;
+//}
 
-.nav {
-  margin-bottom: 8px;
-}
+//.nav {
+//  margin-bottom: 8px;
+//}
 
 .package-sidebar {
   padding-top: 50px;
