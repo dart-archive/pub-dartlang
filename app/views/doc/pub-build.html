@@ -1,4 +1,4 @@
-<pre><code>$ pub build [--no-minify]
+<pre><code>$ pub build [--mode=&lt;mode&gt;]
 </code></pre>
 
 <p>Use <code>pub build</code> when you&rsquo;re ready to deploy your web app. When you run
@@ -37,7 +37,15 @@ development server that continuously generates and serves assets.</p>
 
 <h2 id="options">Options</h2>
 
-<h3 id="no-minify"><code>--no-minify</code></h3>
+<h3 id="modemode"><code>--mode=&lt;mode&gt;</code></h3>
 
-<p>By default, pub generates minified JavaScript ready to deploy to production.
-With this, pub will instead generate unminified code.</p>
+<p>Specifies a transformation mode. Typical values are &ldquo;debug&rdquo; and &ldquo;release&rdquo;, but
+any word is allowed. Transformers may use this to change how they behave.</p>
+
+<p>If set to &ldquo;release&rdquo; pub will generate minified JavaScript using dart2js.
+Otherwise, it generates it unminified. Also, in release mode, Pub will not
+include any source .dart files in the resulting build output since they have
+been compiled to JavaScript. In any other mode, the raw Dart files will be
+included.</p>
+
+<p>If omitted, it defaults to &ldquo;release&rdquo;.</p>
