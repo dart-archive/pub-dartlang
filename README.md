@@ -7,7 +7,7 @@ For license information, please see [LICENSE](LICENSE).
 
     ┐
     ├───┬ app/                    The app engine app.
-    │   ├───┬ doc/                Documentation and articles.
+    │   ├───┬ doc/                Source markdown for documentation.
     │   │   └─...
     │   ├───┬ handlers/           Core web server code.
     │   │   └─...
@@ -32,19 +32,19 @@ For license information, please see [LICENSE](LICENSE).
     │
     ├───┬ stylesheets/
     │   └───┬ partials/
-    │       ├──── _syntax.scss    Dart language syntax styles.
-    │       ├──── _variables.scss Variables for theming.
+    │       ├──── _syntax.scss    Syntax highlighting styles.
+    │       ├──── _variables.scss Variables for theming bootstrap.
     │       └ style.scss          Main stylesheet.
     │
     ├───┬ test/                   Tests for app functionality.
     │   └──── ...
     │
-    ├───┬ third_party/            External dependencies to be include in the app.
+    ├───┬ third_party/            External dependencies used by the app.
     │   └──── ...
     │
     ├──── _config.yml             Jekyll configuration.
     ├──── Procfile                Process to be run with Foreman.
-    ├──── test.py                 Tests the app.
+    ├──── test.py                 Runs all tests.
     ├──── config.rb               Compass configuration.
     └──── ...
 
@@ -53,18 +53,19 @@ For license information, please see [LICENSE](LICENSE).
 **tl;dr:** Run the app with ```dev_appserver.py app```.
 
 ### Prerequisites
+
 The server is written in Python and intended to run on Google App Engine. To run
 it locally, perform the following steps:
 
   1. Install the [App Engine SDK][] for Python.
-  * Make sure the SDK is on your `$PATH`.<sup>1</sup>
-  * Install required packages.<sup>2</sup>
+  1. Make sure the SDK is on your `$PATH`.<sup>1</sup>
+  1. Install required packages.<sup>2</sup>
 
         pip install beautifulsoup4 pycrypto webtest
 
 [app engine sdk]: https://developers.google.com/appengine/downloads
 
-### Running server
+### Running the server
 
   * From the root directory of this repository, run:
 
@@ -80,8 +81,9 @@ it locally, perform the following steps:
 
 ### Publishing packages locally
 
-  * To publish packages to your local test server, visit <http://localhost:8080/admin>
-    (sign in as administrator), go to the "Private Key" tab & enter any string 
+  * To publish packages to your local test server, visit
+    <http://localhost:8080/admin>
+    (sign in as administrator), go to the "Private Key" tab & enter any string
     into the private key field.
 
 <sup>1</sup> This might have been done already if you allowed the Google App
@@ -95,18 +97,20 @@ it locally, perform the following steps:
 * If using Mac and `pip` is not available, install [brew](http://brew.sh) and 
   run `brew install python`.
 
-## Deploying to the web
+## Deploying to production
 
 See the docs on [branches and versions][].
 
-[branches and versions]: https://github.com/dart-lang/pub-dartlang/wiki/Branches-and-Versions
+[branches and versions]:
+https://github.com/dart-lang/pub-dartlang/wiki/Branches-and-Versions
 
 ## Modifying the CSS and documentation
 
-* The [CSS files](app/static/style.css) are generated from the source [Sass][] files using [Compass][].
+* The [CSS files](app/static/style.css) are generated from the source
+[Sass][] files using [Compass][].
 
-* The [HTML documentation files](app/views/doc/) are generated from the source [Markdown][] using
-[Jekyll][].
+* The [HTML documentation files](app/views/doc/) are generated from the source
+[Markdown][] using [Jekyll][].
 
 To get ready to make changes, you'll need [Ruby][] and [Python][].
 Then:
