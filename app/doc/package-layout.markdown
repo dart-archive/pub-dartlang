@@ -188,6 +188,16 @@ Users can reference another package's assets using URLs that contain
 containing the asset and `<path>` is the relative path to the asset within that
 package's `asset` directory.
 
+<aside class="alert alert-warning">
+
+<p>The mechanics of referencing assets are still being implemented. URLs that contain <tt>assets/</tt> are handled by <a href="pub-serve.html"><tt>pub serve</tt></a>.</p>
+
+<p>The <a href="pub-build.html"><tt>pub build</tt></a> command will also copy assets to an <tt>assets</tt> directory, but this will <em>only</em> be in the root directory of the output, so you must make sure that your <tt>assets/</tt> URL correctly resolves to that directory and not a subdirectory.</p>
+
+<p>We don't currently have a solution for referencing assets in command-line Dart applications.</p>
+
+</aside>
+
 Note that `assets` is plural in the URL. This is a bit like the split between
 `lib` and `packages`. The former is the name of the *directory in the package*,
 the latter is the *name you use to reference it*.
