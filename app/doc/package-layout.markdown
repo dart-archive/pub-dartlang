@@ -190,11 +190,17 @@ package's `asset` directory.
 
 <aside class="alert alert-warning">
 
-<p>The mechanics of referencing assets are still being implemented. URLs that contain <tt>assets/</tt> are handled by <a href="pub-serve.html"><tt>pub serve</tt></a>.</p>
+<p>The mechanics of referencing assets are still being implemented. URLs that
+contain <tt>assets/</tt> are handled by <a href="pub-serve.html"><tt>pub
+serve</tt></a>.</p>
 
-<p>The <a href="pub-build.html"><tt>pub build</tt></a> command will also copy assets to an <tt>assets</tt> directory, but this will <em>only</em> be in the root directory of the output, so you must make sure that your <tt>assets/</tt> URL correctly resolves to that directory and not a subdirectory.</p>
+<p>The <a href="pub-build.html"><tt>pub build</tt></a> command also copies
+assets to an <tt>assets</tt> directory, but this will <em>only</em> be in the
+root directory of the output, so you must make sure that your <tt>assets/</tt>
+URL correctly resolves to that directory and not a subdirectory.</p>
 
-<p>We don't currently have a solution for referencing assets in command-line Dart applications.</p>
+<p>We don't currently have a solution for referencing assets in command-line
+Dart applications.</p>
 
 </aside>
 
