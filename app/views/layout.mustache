@@ -1,7 +1,6 @@
 {{! Copyright (c) 2012, the Dart project authors.  Please see the AUTHORS file
     for details. All rights reserved. Use of this source code is governed by a
     BSD-style license that can be found in the LICENSE file. }}
-
 <!doctype html>
 <html lang="en-us" {{#package}}itemscope itemtype="http://schema.org/Product"{{/package}}>
   <head>
@@ -34,55 +33,63 @@
     </script>
   </head>
   <body>
-    <nav>
-      <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-          <div class="container">
-            <a class="brand" href="http://www.dartlang.org">
-              <div class="dart-logo">dartlang.org</div>
-            </a>
-            <a class="brand" href="/">pub.dartlang.org</a>
-            <ul class="nav">
-              <li><a href="/doc">Getting Started</a></li>
-              <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                  Docs
-                  <div class="caret"></div>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="/doc">Getting Started</a></li>
-                  <li><a href="/doc/dependencies.html">Dependencies</a></li>
-                  <li><a href="/doc/pubspec.html">Pubspec Format</a></li>
-                  <li><a href="/doc/package-layout.html">Package Layout Conventions</a></li>
-                  <li><a href="/doc/assets-and-transformers.html">Assets and Transformers</a></li>
-                  <li class="nav-header">Reference</li>
-                  <li><a href="/doc/faq.html">FAQ</a></li>
-                  <li><a href="/doc/glossary.html">Glossary</a></li>
-                  <li><a href="/doc/versioning.html">Versioning Philosophy</a></li>
-                  <li class="nav-header">Pub Commands</li>
-                  <li><a href="/doc/pub-build.html"><code>pub build</code></a></li>
-                  <li><a href="/doc/pub-cache.html"><code>pub cache</code></a></li>
-                  <li><a href="/doc/pub-get.html"><code>pub get</code></a></li>
-                  <li><a href="/doc/pub-lish.html"><code>pub publish</code></a></li>
-                  <li><a href="/doc/pub-upgrade.html"><code>pub upgrade</code></a></li>
-                  <li><a href="/doc/pub-serve.html"><code>pub serve</code></a></li>
-                </ul>
-              </li>
-              <li><a href="/packages">Packages</a></li>
-            </ul>
-            <form class="navbar-search pull-right" action="/search"
-                  id="cse-search-box">
+    <header class="navbar navbar-default navbar-fixed-top" role="banner">
+      <div class="container">
+
+        <div class="navbar-header">
+          <a class="navbar-brand" href="http://www.dartlang.org">
+            <div class="dart-logo">dartlang.org</div>
+          </a>
+          <a class="navbar-brand" href="/">pub.dartlang.org</a>
+        </div>
+
+        <nav class="collapse navbar-collapse" role="navigation">
+          <ul class="nav navbar-nav">
+            <li><a href="/doc">Get Started</a></li>
+
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Docs
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="/doc">Getting Started</a></li>
+                <li><a href="/doc/dependencies.html">Dependencies</a></li>
+                <li><a href="/doc/pubspec.html">Pubspec Format</a></li>
+                <li><a href="/doc/package-layout.html">Package Layout Conventions</a></li>
+                <li><a href="/doc/assets-and-transformers.html">Assets and Transformers</a></li>
+                <li role="presentation" class="divider"></li>
+                <li role="presentation" class="dropdown-header">Reference</li>
+                <li><a href="/doc/faq.html">FAQ</a></li>
+                <li><a href="/doc/glossary.html">Glossary</a></li>
+                <li><a href="/doc/versioning.html">Versioning Philosophy</a></li>
+
+                <li role="presentation" class="divider"></li>
+                <li role="presentation" class="dropdown-header">Pub Commands</li>
+                <li><a href="/doc/pub-build.html"><code>pub build</code></a></li>
+                <li><a href="/doc/pub-cache.html"><code>pub cache</code></a></li>
+                <li><a href="/doc/pub-get.html"><code>pub get</code></a></li>
+                <li><a href="/doc/pub-lish.html"><code>pub publish</code></a></li>
+                <li><a href="/doc/pub-upgrade.html"><code>pub upgrade</code></a></li>
+                <li><a href="/doc/pub-serve.html"><code>pub serve</code></a></li>
+              </ul>
+            </li>
+            <li><a href="/packages">Packages</a></li>
+          </ul>
+          <form class="navbar-form navbar-right" action="/search"
+            id="cse-search-box" role="search">
+            <div class="form-group">
               <input type="hidden" name="cx"
-                     value="009011925481577436976:h931xn2j7o0">
+              value="009011925481577436976:h931xn2j7o0">
               <input type="hidden" name="ie" value="UTF-8">
               <input type="hidden" name="hl" value="en">
-              <input type="search" name="q" class="search-query" id="q"
-                     autocomplete="off" placeholder="Search" autofocus>
-            </form>
-          </div>
-        </div>
+              <input type="search" name="q" class="form-control" id="q"
+              autocomplete="off" placeholder="Search" autofocus>
+            </div>
+          </form>
+        </nav>
       </div>
-    </nav>
+    </header>
+
     <div class="container">
       <div id="header">
         {{#message}}

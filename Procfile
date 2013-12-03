@@ -1,2 +1,2 @@
 jekyll: bundle exec jekyll build -w
-compass: bundle exec compass watch css
+compass: bundle exec compass watch

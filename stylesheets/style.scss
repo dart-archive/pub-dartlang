@@ -1,30 +1,55 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700|Montserrat:400,700);
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400|Montserrat:400,700);
 
 @import "compass/reset";
 @import "compass/typography/text/replacement";
 
-@import "syntax";
+@import "partials/variables";
+@import "partials/syntax";
 
-$baseFontSize: 14px;
-$baseLineHeight: 24px;
-
-$sansFontFamily: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-
-$iconSpritePath: 'img/glyphicons-halflings.png';
-$iconWhiteSpritePath: 'img/glyphicons-halflings-white.png';
-
-@import "compass_twitter_bootstrap";
+@import "bootstrap/theme";
+@import "bootstrap";
 
 // Don't require nasty <table class="table"> that bootstrap expects.
 table {
   @extend .table;
 }
 
-body {
-  // Account for the fixed navbar height.
-  padding-top: 60px;
+// TODO(amouravski): chuck these when everything else has been updated.
+//$sansFontFamily: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+//
+//$iconWhiteSpritePath: 'img/glyphicons-halflings-white.png';
+
+// Navbar
+// -------------------------
+
+$navbar-font-family: "Montserrat", sans-serif;
+
+.navbar {
+  border: none;
+  $shadow: 0 2px 2px rgba(50, 50, 50, 0.15);
+  @include box-shadow($shadow);
 }
 
+.navbar-brand {
+  font-family: $navbar-font-family;
+}
+
+.navbar-nav > li > a {
+  padding-top: 25px;
+  font-family: $navbar-font-family;
+  font-size: $font-size-small;
+  text-transform: uppercase;
+}
+
+// Body
+// -------------------------
+
+body {
+  // Account for the fixed navbar height.
+  padding-top: 65px;
+
+  -webkit-font-smoothing: antialiased;
+}
 // Don't word wrap inline code.
 code {
   white-space: nowrap;
@@ -44,7 +69,7 @@ a.permalink {
 }
 
 article {
-  @extend .span8;
+  @extend .col-md-8;
 
   position: relative;
 
@@ -60,44 +85,17 @@ article {
   }
 }
 
-.navbar-search {
-  margin-top: 4px;
-
-  .search-query {
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    height: 20px;
-    line-height: inherit;
-  }
-}
-
 .has-permalink:hover > a.permalink {
   display:inline;
-}
-
-// Don't make tab bars so huge.
-.nav-tabs > li > a {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.nav {
-  margin-bottom: 8px;
 }
 
 .package-sidebar {
   padding-top: 50px;
 }
 
-tt {
-  font-family: $monoFontFamily;
-  padding: 0 3px;
-}
-
 footer {
   @extend .well;
-  @extend .well-small;
+  @extend .well-sm;
   font-size: 13px;
   text-align: center;
 
@@ -110,27 +108,15 @@ footer {
   }
 }
 
-form#private-key textarea {
-  width: 550px;
-  height: 420px;
-  font-family: $monoFontFamily;
-}
-
-// We have two brands: the dart logo and "pub.dartlang.org". This keeps them
-// from being too spread out.
-.brand + .brand {
-  padding-left: 10px;
-}
-
-// Highlight the brand text on hover. This matches other navbar buttons and
-// makes it clearer that the logo links to something different.
-a.brand:hover {
-  color: white;
-}
+// TODO(amouravski): add this back in?
+//form#private-key textarea {
+//  width: 550px;
+//  height: 420px;
+//  font-family: $monoFontFamily;
+//}
 
 .dart-logo {
-  @include replace-text("/static/img/dart.png", 0, 0);
-  width: 21px;
+  @include replace-text-with-dimensions("dart.png", 0, 0);
 }
 
 .intro {
@@ -173,9 +159,9 @@ td.archive, th.archive {
 .learn-more {
   a {
     @extend .btn;
-    @extend .btn-small;
+    @extend .btn-sm;
 
-    color: $linkColor;
+    color: $link-color;
 
     float: right;
     position: absolute;
@@ -209,10 +195,6 @@ ol.toc {
   content: "Contents";
 }
 
-.pagination {
-  @extend .pagination-centered;
-}
-
 .progress {
   @extend .progress-striped;
 }
@@ -225,22 +207,23 @@ ul ul {
   list-style-type: circle;
 }
 
-.admin {
-  @extend .tabbable, .tabs-left;
-
-  > ul {
-    @extend .nav, .nav-tabs;
-  }
-
-  > div {
-    @extend .tab-content;
-
-    > div {
-      @extend .tab-pane, .container-fluid;
-    }
-  }
-
-  form button {
-    @extend .btn;
-  }
-}
+// TODO(amouravski): Fix admin page.
+//.admin {
+//  @extend .tabbable, .tabs-left;
+//
+//  > ul {
+//    @extend .nav, .nav-tabs;
+//  }
+//
+//  > div {
+//    @extend .tab-content;
+//
+//    > div {
+//      @extend .tab-pane, .container;
+//    }
+//  }
+//
+//  form button {
+//    @extend .btn;
+//  }
+//}
