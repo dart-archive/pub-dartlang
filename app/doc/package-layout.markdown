@@ -5,6 +5,7 @@ title: "Package layout conventions"
 1. [The basics](#the-basics)
 1. [README](#readme)
 1. [Public libraries](#public-libraries)
+1. [Public assets](#public-assets)
 1. [Implementation files](#implementation-files)
 1. [Web files](#web-files)
 1. [Command-line apps](#command-line-apps)
@@ -35,6 +36,8 @@ would look like:
       pubspec.lock *
       README.md
       LICENSE
+      asset/
+        guacamole.css
       benchmark/
         make_lunch.dart
         packages/ **
@@ -130,7 +133,7 @@ Many packages are [*library packages*](glossary.html#library-package): they
 define Dart libraries that other packages can import and use. These public Dart
 library files go inside a directory called `lib`.
 
-Most packages will define a single library that users can import. In that case,
+Most packages define a single library that users can import. In that case,
 its name should usually be the same as the name of the package, like
 `enchilada.dart` in the example here. But you can also define other libraries
 with whatever names make sense for your package.
@@ -164,6 +167,57 @@ with a `main()` function&mdash;cannot go in `lib`. If you place a Dart script
 inside `lib`, you will discover that any `package:` imports it contains don't
 resolve. Instead, your entrypoints should go in the appropriate
 [entrypoint directory](glossary.html#entrypoint-directory).
+
+## Public assets
+
+    enchilada/
+      asset/
+        guacamole.css
+
+While most library packages exist to let you reuse Dart code, you can also
+reuse other kinds of content. For example, a package for something like
+[Bootstrap](http://getbootstrap.com/) might include a number of CSS files for
+consumers of the package to use.
+
+These go in a top-level directory named `asset`. You can put any kind of file
+in there and organize it with subdirectories however you like. It's effectively
+a `lib` directory for stuff that isn't Dart code.
+
+Users can reference another package's assets using URLs that contain
+`assets/<package>/<path>` where `<package>` is the name of the package
+containing the asset and `<path>` is the relative path to the asset within that
+package's `asset` directory.
+
+<aside class="alert alert-warning">
+
+<p>The mechanics of referencing assets are still being implemented. URLs that
+contain <tt>assets/</tt> are handled by <a href="pub-serve.html"><tt>pub
+serve</tt></a>.</p>
+
+<p>The <a href="pub-build.html"><tt>pub build</tt></a> command also copies
+assets to an <tt>assets</tt> directory, but this will <em>only</em> be in the
+root directory of the output, so you must make sure that your <tt>assets/</tt>
+URL correctly resolves to that directory and not a subdirectory.</p>
+
+<p>We don't currently have a solution for referencing assets in command-line
+Dart applications.</p>
+
+</aside>
+
+Note that `assets` is plural in the URL. This is a bit like the split between
+`lib` and `packages`. The former is the name of the *directory in the package*,
+the latter is the *name you use to reference it*.
+
+For example, let's say your package wanted to use enchilada's `guacamole.css`
+styles. In an HTML file in your package, you can add:
+
+{% highlight html %}
+<link href="assets/enchilada/guacamole.css" rel="stylesheet">
+{% endhighlight %}
+
+When you run your application using [`pub serve`](pub-serve.html), or build it
+to something deployable using [`pub build`](pub-build.html), Pub will copy over
+any referenced assets that your package depends on.
 
 ## Implementation files
 

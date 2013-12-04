@@ -2,7 +2,7 @@
 title: "Command: Build"
 ---
 
-    $ pub build [--no-minify]
+    $ pub build [--mode=<mode>]
 
 Use `pub build` when you're ready to deploy your web app. When you run
 `pub build`, it generates the [assets](glossary.html#asset) for the current
@@ -37,7 +37,15 @@ development server that continuously generates and serves assets.
 
 ## Options
 
-### `--no-minify`
+### `--mode=<mode>`
 
-By default, pub generates minified JavaScript ready to deploy to production.
-With this, pub will instead generate unminified code.
+Specifies a transformation mode. Typical values are "debug" and "release", but
+any word is allowed. Transformers may use this to change how they behave.
+
+If set to "release" pub will generate minified JavaScript using dart2js.
+Otherwise, it generates it unminified. Also, in release mode, Pub will not
+include any source .dart files in the resulting build output since they have
+been compiled to JavaScript. In any other mode, the raw Dart files will be
+included.
+
+If omitted, it defaults to "release".

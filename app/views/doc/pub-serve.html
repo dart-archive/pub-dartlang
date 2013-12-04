@@ -47,10 +47,18 @@ number, use the <code>--port</code> option:</p>
 Serving helloworld on http://localhost:9080
 </code></pre>
 
-<h3 id="minify"><code>--minify</code></h3>
+<h3 id="modemode"><code>--mode=&lt;mode&gt;</code></h3>
 
-<p>By default, pub serves unminified JavaScript so that it&rsquo;s easier to debug while
-you develop. With this, pub will instead generate minified code.</p>
+<p>Specifies a transformation mode. Typical values are &ldquo;debug&rdquo; and &ldquo;release&rdquo;, but
+any word is allowed. Transformers may use this to change how they behave.</p>
+
+<p>If set to &ldquo;release&rdquo; pub will generate minified JavaScript using dart2js.
+Otherwise, it generates it unminified. Also, in release mode, Pub will not
+include any source .dart files in the resulting build output since they have
+been compiled to JavaScript. In any other mode, the raw Dart files will be
+included.</p>
+
+<p>If omitted, it defaults to &ldquo;debug&rdquo;.</p>
 
 <h2 id="what-about-dart-editors-server">What about Dart Editor&rsquo;s server?</h2>
 

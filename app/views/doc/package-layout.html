@@ -2,6 +2,7 @@
   <li><a href="#the-basics">The basics</a></li>
   <li><a href="#readme">README</a></li>
   <li><a href="#public-libraries">Public libraries</a></li>
+  <li><a href="#public-assets">Public assets</a></li>
   <li><a href="#implementation-files">Implementation files</a></li>
   <li><a href="#web-files">Web files</a></li>
   <li><a href="#command-line-apps">Command-line apps</a></li>
@@ -32,6 +33,8 @@ would look like:</p>
   pubspec.lock *
   README.md
   LICENSE
+  asset/
+    guacamole.css
   benchmark/
     make_lunch.dart
     packages/ **
@@ -130,7 +133,7 @@ package. This is the perfect place to introduce people to your code.</p>
 define Dart libraries that other packages can import and use. These public Dart
 library files go inside a directory called <code>lib</code>.</p>
 
-<p>Most packages will define a single library that users can import. In that case,
+<p>Most packages define a single library that users can import. In that case,
 its name should usually be the same as the name of the package, like
 <code>enchilada.dart</code> in the example here. But you can also define other libraries
 with whatever names make sense for your package.</p>
@@ -163,6 +166,57 @@ with a <code>main()</code> function&mdash;cannot go in <code>lib</code>. If you 
 inside <code>lib</code>, you will discover that any <code>package:</code> imports it contains don&rsquo;t
 resolve. Instead, your entrypoints should go in the appropriate
 <a href="glossary.html#entrypoint-directory">entrypoint directory</a>.</p>
+
+<h2 id="public-assets">Public assets</h2>
+
+<pre><code>enchilada/
+  asset/
+    guacamole.css
+</code></pre>
+
+<p>While most library packages exist to let you reuse Dart code, you can also
+reuse other kinds of content. For example, a package for something like
+<a href="http://getbootstrap.com/">Bootstrap</a> might include a number of CSS files for
+consumers of the package to use.</p>
+
+<p>These go in a top-level directory named <code>asset</code>. You can put any kind of file
+in there and organize it with subdirectories however you like. It&rsquo;s effectively
+a <code>lib</code> directory for stuff that isn&rsquo;t Dart code.</p>
+
+<p>Users can reference another package&rsquo;s assets using URLs that contain
+<code>assets/&lt;package&gt;/&lt;path&gt;</code> where <code>&lt;package&gt;</code> is the name of the package
+containing the asset and <code>&lt;path&gt;</code> is the relative path to the asset within that
+package&rsquo;s <code>asset</code> directory.</p>
+
+<aside class="alert alert-warning">
+
+<p>The mechanics of referencing assets are still being implemented. URLs that
+contain <tt>assets/</tt> are handled by <a href="pub-serve.html"><tt>pub
+serve</tt></a>.</p>
+
+<p>The <a href="pub-build.html"><tt>pub build</tt></a> command also copies
+assets to an <tt>assets</tt> directory, but this will <em>only</em> be in the
+root directory of the output, so you must make sure that your <tt>assets/</tt>
+URL correctly resolves to that directory and not a subdirectory.</p>
+
+<p>We don't currently have a solution for referencing assets in command-line
+Dart applications.</p>
+
+</aside>
+
+<p>Note that <code>assets</code> is plural in the URL. This is a bit like the split between
+<code>lib</code> and <code>packages</code>. The former is the name of the <em>directory in the package</em>,
+the latter is the <em>name you use to reference it</em>.</p>
+
+<p>For example, let&rsquo;s say your package wanted to use enchilada&rsquo;s <code>guacamole.css</code>
+styles. In an HTML file in your package, you can add:</p>
+
+<div class="highlight"><pre><code class="html"><span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;assets/enchilada/guacamole.css&quot;</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span><span class="nt">&gt;</span>
+</code></pre></div>
+
+<p>When you run your application using <a href="pub-serve.html"><code>pub serve</code></a>, or build it
+to something deployable using <a href="pub-build.html"><code>pub build</code></a>, Pub will copy over
+any referenced assets that your package depends on.</p>
 
 <h2 id="implementation-files">Implementation files</h2>
 

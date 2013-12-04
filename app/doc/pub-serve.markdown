@@ -46,10 +46,18 @@ number, use the `--port` option:
     $ pub serve --port 9080
     Serving helloworld on http://localhost:9080
 
-### `--minify`
+### `--mode=<mode>`
 
-By default, pub serves unminified JavaScript so that it's easier to debug while
-you develop. With this, pub will instead generate minified code.
+Specifies a transformation mode. Typical values are "debug" and "release", but
+any word is allowed. Transformers may use this to change how they behave.
+
+If set to "release" pub will generate minified JavaScript using dart2js.
+Otherwise, it generates it unminified. Also, in release mode, Pub will not
+include any source .dart files in the resulting build output since they have
+been compiled to JavaScript. In any other mode, the raw Dart files will be
+included.
+
+If omitted, it defaults to "debug".
 
 ## What about Dart Editor's server?
 
