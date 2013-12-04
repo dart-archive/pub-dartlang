@@ -1,0 +1,30 @@
+// Makes the element fill beyond the gutter on each side of the column.
+@mixin full-width($gutter-width) {
+  padding: 0 ($gutter-width / 2);
+  width: 100%;
+}
+
+// Makes the footer hidden underneath the root element.
+@mixin hidden-footer(
+    $footer-height,
+    $root-selector: unquote("body > main"),
+    $footer-selector: unquote("body > footer"),
+    $root-z-index: 200,
+    $footer-z-index: 100) {
+
+  #{$root-selector} {
+    position: relative;
+
+    z-index: $root-z-index;
+    margin-bottom: $footer-height;
+    height: 100%;
+  }
+
+  #{$footer-selector} {
+    position: fixed;
+    bottom: 0;
+
+    z-index: $footer-z-index;
+    height: $footer-height;
+  }
+}

@@ -1,23 +1,50 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400|Montserrat:400,700);
 
 @import "compass/reset";
+@import "compass/layout";
 @import "compass/typography/text/replacement";
 
 @import "partials/variables";
-@import "partials/syntax";
 
+@import "partials/syntax";
+@import "partials/layout";
+
+@import "partials/bootstrap_variables";
 @import "bootstrap/theme";
 @import "bootstrap";
+
+// Layout
+// -------------------------
+
+@include hidden-footer($footer-height, "main", ".page-footer");
+
+main {
+  padding-bottom: 50px;
+  background-color: $body-bg;
+}
+
+.page-footer {
+  @include background-image(linear-gradient($footer-top-color,
+        $footer-base-color $footer-gradient-stop));
+  @include full-width($grid-gutter-width);
+  padding-top: 60px;
+  padding-bottom: 80px;
+
+  a {
+    color: #fff;
+  }
+
+  .login, .logout {
+    display: inline-block;
+    float: right;
+    color: scale-color($footer-base-color, $lightness: -15%);
+  }
+}
 
 // Don't require nasty <table class="table"> that bootstrap expects.
 table {
   @extend .table;
 }
-
-// TODO(amouravski): chuck these when everything else has been updated.
-//$sansFontFamily: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-//
-//$iconWhiteSpritePath: 'img/glyphicons-halflings-white.png';
 
 // Navbar
 // -------------------------
@@ -25,9 +52,9 @@ table {
 $navbar-font-family: "Montserrat", sans-serif;
 
 .navbar {
-  border: none;
   $shadow: 0 2px 2px rgba(50, 50, 50, 0.15);
   @include box-shadow($shadow);
+  border: none;
 }
 
 .navbar-brand {
@@ -36,9 +63,9 @@ $navbar-font-family: "Montserrat", sans-serif;
 
 .navbar-nav > li > a {
   padding-top: 25px;
-  font-family: $navbar-font-family;
-  font-size: $font-size-small;
   text-transform: uppercase;
+  font-size: $font-size-small;
+  font-family: $navbar-font-family;
 }
 
 // Body
@@ -64,8 +91,8 @@ pre b {
 }
 
 a.permalink {
-  margin-left: 0.5em;
   display: none;
+  margin-left: 0.5em;
 }
 
 article {
@@ -74,10 +101,10 @@ article {
   position: relative;
 
   h2, h3, h4 {
+    margin-top: -40px;
     // Ensure that the headers don't get covered up by the navbar when the user
     // clicks on the permalink.
     padding-top: 40px;
-    margin-top: -40px;
 
     &:hover a.permalink {
       display: inline;
@@ -91,21 +118,6 @@ article {
 
 .package-sidebar {
   padding-top: 50px;
-}
-
-footer {
-  @extend .well;
-  @extend .well-sm;
-  font-size: 13px;
-  text-align: center;
-
-  .login, .logout {
-    display: inline-block;
-    float: right;
-    // #f5f5f5 is the background-color of the footer, which isn't a variable
-    // for some reason.
-    color: scale-color(#f5f5f5, $lightness: -15%);
-  }
 }
 
 // TODO(amouravski): add this back in?
@@ -136,14 +148,14 @@ h1 .version {
 td table {
   margin: -4px;
   td, th {
-    border: none;
     padding: 4px;
+    border: none;
   }
 }
 
 td.archive, th.archive {
-  text-align: center;
   vertical-align: middle;
+  text-align: center;
 }
 
 // Need to shift the icons a bit to line the up with adjacent text.
@@ -160,15 +172,15 @@ td.archive, th.archive {
   a {
     @extend .btn;
     @extend .btn-sm;
-
-    color: $link-color;
-
-    float: right;
     position: absolute;
-    width: 270px;
     right: -320px;
 
     display: inline-block;
+
+    float: right;
+    width: 270px;
+
+    color: $link-color;
   }
 }
 
@@ -177,12 +189,12 @@ ol.toc {
 
   position: absolute;
   right: -320px;
-  width: 230px;
 
   float: right;
 
   // Tweak padding to handle list bullets and the spacing on the header.
   padding: 10px 20px 20px 40px;
+  width: 230px;
 
   li {
     font-size: 13px;
@@ -227,3 +239,8 @@ ul ul {
 //    @extend .btn;
 //  }
 //}
+
+// TODO(amouravski): chuck these when everything else has been updated.
+//$sansFontFamily: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+//
+//$iconWhiteSpritePath: 'img/glyphicons-halflings-white.png';

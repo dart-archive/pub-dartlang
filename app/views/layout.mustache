@@ -90,32 +90,40 @@
       </div>
     </header>
 
-    <div class="container">
-      <div id="header">
-        {{#message}}
+    <main role="main">
+      <div class="container">
+        <div id="header">
+          {{#message}}
           <h3>{{message}}</h3>
-        {{/message}}
-      </div>
-      {{& content}}
-      <footer>
-        <a href="http://www.dartlang.org/">
-          Dart Language
-        </a> &mdash; <a href="/site-map">
-          Site Map
-        </a> &mdash; <a href="http://www.google.com/intl/en/policies/terms/">
-          Terms of Service
-        </a> &mdash; <a href="http://www.google.com/intl/en/policies/privacy/">
-          Privacy Policy
-        </a>
+          {{/message}}
+        </div>
+        {{& content}}
 
-        {{#logged_in}}
-          <a class="logout" href="{{logout_url}}" title="Log Out">&pi;</a>
-        {{/logged_in}}
-        {{^logged_in}}
-          <a class="login" href="{{login_url}}" title="Log In">+</a>
-        {{/logged_in}}
-      </footer>
-    </div>
+        <div class="container ipsum"></div>
+        <div class="container ipsum"></div>
+        <div class="container ipsum"></div>
+      </div>
+    </main>
+
+
+    <footer class="page-footer">
+      <a href="http://www.dartlang.org/">
+        Dart Language
+      </a> &mdash; <a href="/site-map">
+        Site Map
+      </a> &mdash; <a href="http://www.google.com/intl/en/policies/terms/">
+        Terms of Service
+      </a> &mdash; <a href="http://www.google.com/intl/en/policies/privacy/">
+        Privacy Policy
+      </a>
+
+      {{#logged_in}}
+        <a class="logout" href="{{logout_url}}" title="Log Out">-</a>
+      {{/logged_in}}
+      {{^logged_in}}
+        <a class="login" href="{{login_url}}" title="Log In">&pi;</a>
+      {{/logged_in}}
+    </footer>
 
     <script type="text/javascript">
       (function() {

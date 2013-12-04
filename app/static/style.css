@@ -669,7 +669,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFF2DEDE', endColorstr='#FFEBCCCC', GradientType=0);
 }
 
-.well, footer, .intro, ol.toc {
+.well, .intro, ol.toc {
   background-image: -webkit-gradient(linear, left 0%, left 100%, from(#e8e8e8), to(whitesmoke));
   background-image: -webkit-linear-gradient(top, #e8e8e8 0%, whitesmoke 100%);
   background-image: -moz-linear-gradient(top, #e8e8e8 0%, whitesmoke 100%);
@@ -6043,7 +6043,7 @@ a.list-group-item.active .list-group-item-text, a.list-group-item.active:hover .
   border-bottom-color: #bce8f1;
 }
 
-.well, footer, .intro, ol.toc {
+.well, .intro, ol.toc {
   min-height: 20px;
   padding: 19px;
   margin-bottom: 20px;
@@ -6053,7 +6053,7 @@ a.list-group-item.active .list-group-item-text, a.list-group-item.active:hover .
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-.well blockquote, footer blockquote, .intro blockquote, ol.toc blockquote {
+.well blockquote, .intro blockquote, ol.toc blockquote {
   border-color: #ddd;
   border-color: rgba(0, 0, 0, 0.15);
 }
@@ -6063,7 +6063,7 @@ a.list-group-item.active .list-group-item-text, a.list-group-item.active:hover .
   border-radius: 6px;
 }
 
-.well-sm, footer {
+.well-sm {
   padding: 9px;
   border-radius: 3px;
 }
@@ -7155,10 +7155,49 @@ td.visible-print {
     display: none !important;
   }
 }
+main {
+  position: relative;
+  z-index: 200;
+  margin-bottom: 300px;
+  height: 100%;
+}
+
+.page-footer {
+  position: fixed;
+  bottom: 0;
+  z-index: 100;
+  height: 300px;
+}
+
+main {
+  padding-bottom: 50px;
+  background-color: white;
+}
+
+.page-footer {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 35, color-stop(0%, #303235), color-stop(100%, #3f4245));
+  background-image: -webkit-linear-gradient(#303235, #3f4245 35px);
+  background-image: -moz-linear-gradient(#303235, #3f4245 35px);
+  background-image: -o-linear-gradient(#303235, #3f4245 35px);
+  background-image: linear-gradient(#303235, #3f4245 35px);
+  padding: 0 15px;
+  width: 100%;
+  padding-top: 60px;
+  padding-bottom: 80px;
+}
+.page-footer a {
+  color: #fff;
+}
+.page-footer .login, .page-footer .logout {
+  display: inline-block;
+  float: right;
+  color: #36383b;
+}
+
 .navbar {
-  border: none;
   -webkit-box-shadow: 0 2px 2px rgba(50, 50, 50, 0.15);
   box-shadow: 0 2px 2px rgba(50, 50, 50, 0.15);
+  border: none;
 }
 
 .navbar-brand {
@@ -7167,9 +7206,9 @@ td.visible-print {
 
 .navbar-nav > li > a {
   padding-top: 25px;
-  font-family: "Montserrat", sans-serif;
-  font-size: 12px;
   text-transform: uppercase;
+  font-size: 12px;
+  font-family: "Montserrat", sans-serif;
 }
 
 body {
@@ -7190,16 +7229,16 @@ pre b {
 }
 
 a.permalink {
-  margin-left: 0.5em;
   display: none;
+  margin-left: 0.5em;
 }
 
 article {
   position: relative;
 }
 article h2, article h3, article .toc:before, article h4 {
-  padding-top: 40px;
   margin-top: -40px;
+  padding-top: 40px;
 }
 article h2:hover a.permalink, article h3:hover a.permalink, article .toc:hover:before a.permalink, article h4:hover a.permalink {
   display: inline;
@@ -7211,16 +7250,6 @@ article h2:hover a.permalink, article h3:hover a.permalink, article .toc:hover:b
 
 .package-sidebar {
   padding-top: 50px;
-}
-
-footer {
-  font-size: 13px;
-  text-align: center;
-}
-footer .login, footer .logout {
-  display: inline-block;
-  float: right;
-  color: #d0d0d0;
 }
 
 .dart-logo {
@@ -7244,13 +7273,13 @@ td table {
   margin: -4px;
 }
 td table td, td table th {
-  border: none;
   padding: 4px;
+  border: none;
 }
 
 td.archive, th.archive {
-  text-align: center;
   vertical-align: middle;
+  text-align: center;
 }
 
 .icon-hand-right,
@@ -7263,20 +7292,20 @@ td.archive, th.archive {
 }
 
 .learn-more a {
-  color: #428bca;
-  float: right;
   position: absolute;
-  width: 270px;
   right: -320px;
   display: inline-block;
+  float: right;
+  width: 270px;
+  color: #428bca;
 }
 
 ol.toc {
   position: absolute;
   right: -320px;
-  width: 230px;
   float: right;
   padding: 10px 20px 20px 40px;
+  width: 230px;
 }
 ol.toc li {
   font-size: 13px;
