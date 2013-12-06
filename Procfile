@@ -1,2 +1,2 @@
 jekyll: bundle exec jekyll build -w
-compass: bundle exec compass watch
+sass: bundle exec sass --compass --sourcemap --watch stylesheets/style.scss:app/static/style.css
