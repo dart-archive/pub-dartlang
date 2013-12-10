@@ -56,14 +56,18 @@ For example, on Mac and Linux:
 
     export PATH=$PATH:<path to sdk>/bin
 
-Here, `<path to sdk>` is the absolute path
+For Windows, here's an equivalent in PowerShell:
+
+    [Environment]::SetEnvironmentVariable("PATH", "$env:PATH;<path to sdk>\bin", "User")
+
+In the examples above, `<path to sdk>` is the absolute path
 to the main directory of the SDK. For example,
 if you install Dart Editor in
 `/home/me/dart`, then add this to your PATH:
 
     /home/me/dart/dart-sdk/bin
 
-On Windows, you can set the system PATH environment variable through the
+On Windows, you can also set the system PATH environment variable through the
 Control Panel. A quick
 [search](https://www.google.com/search?q=windows+set+environment+variable)
 should find the instructions for your version of Windows.
