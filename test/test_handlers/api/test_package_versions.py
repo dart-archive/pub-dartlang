@@ -253,6 +253,29 @@ class PackageVersionsTest(TestCase):
             status=404)
         self.assert_json_error(response)
 
+    def test_api_malformed_package_version(self):
+        version = self.package_version(self.package, '1.2.3')
+        version.put()
+
+        response = self.testapp.get(
+            '/api/packages/test-package/versions/banana', status=400)
+        self.assertEqual(response.headers['Content-Type'], 'application/json')
+        self.assertEqual(json.loads(response.body), {
+            'error': {'message': '"banana" is not a valid semantic version.'}
+        })
+
+    def test_api_no_such_package_version(self):
+        version = self.package_version(self.package, '1.2.3')
+        version.put()
+
+        response = self.testapp.get(
+            '/api/packages/test-package/versions/2.0.0', status=404)
+        self.assertEqual(response.headers['Content-Type'], 'application/json')
+        self.assertEqual(json.loads(response.body), {
+            'error':
+            {'message': '"test-package" version 2.0.0 doesn\'t exist.'}
+        })
+
     def post_package_version(self, version, name='test-package'):
         response = self.create_package(self.upload_archive(name, version))
         self.assert_json_success(response)

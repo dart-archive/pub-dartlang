@@ -164,10 +164,13 @@ class PackageVersions(object):
         return ""
 
     @handlers.api(2)
-    def show(self, package_id, id, format):
+    def show(self, package_id, id, format=None):
         """Retrieve the document describing a package version."""
-        # The mapper thinks the final version digit is the format.
-        id = id + '.' + format
+        # The mapper expects anything past a period to be the format of the
+        # document, which is fine for "index.html" or "packages.json" but not
+        # for "1.2.3". It thinks "3" is the format, which is wrong, so we add it
+        # on here.
+        if format: id = id + '.' + format
         return json.dumps(
             handlers.request().package_version(id).as_dict(full=True))
 
