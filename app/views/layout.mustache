@@ -5,7 +5,7 @@
 <html lang="en-us" {{#package}}itemscope itemtype="http://schema.org/Product"{{/package}}>
   <head>
     <title>{{title}}</title>
-    <meta itemprop="image" content="/static/img/dart-logo-400x400.png">
+    <meta itemprop="image" content="/images/dart-logo-400x400.png">
     {{#package}}
       <meta itemprop="name" content="{{package.name}} - A pub package for Dart">
       <meta name="description" content="{{package.name}} - {{package.description}}">
@@ -16,11 +16,11 @@
         Dart programming language.">
     {{/package}}
 
-    <link href="/static/style.css" rel="stylesheet" type="text/css" />
-    <script src="/static/js/jquery-1.7.2.min.js"></script>
-    <script src="/static/js/bootstrap-dropdown.js"></script>
-    <script src="/static/js/bootstrap-tab.js"></script>
-    <script src="/static/js/script.js"></script>
+    <link href="/stylesheets/style.css" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/jquery-1.7.2.min.js"></script>
+    <script src="/javascripts/bootstrap-dropdown.js"></script>
+    <script src="/javascripts/bootstrap-tab.js"></script>
+    <script src="/javascripts/script.js"></script>
     <script type="text/javascript">
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-26406144-13']);
@@ -32,7 +32,8 @@
     })();
     </script>
   </head>
-  <body>
+  <body data-grid-framework="b3" data-grid-color="blue" data-grid-opacity="0.5"
+    data-grid-zindex="2000" data-grid-nbcols="12">
     <header class="navbar navbar-default navbar-fixed-top" role="banner">
       <div class="container">
 
@@ -91,20 +92,15 @@
     </header>
 
     <main role="main">
+      {{#message}}
+      <div id="header">
+        <h3>{{message}}</h3>
+      </div>
+      {{/message}}
       <div class="container">
-        <div id="header">
-          {{#message}}
-          <h3>{{message}}</h3>
-          {{/message}}
-        </div>
         {{& content}}
-
-        <div class="container ipsum"></div>
-        <div class="container ipsum"></div>
-        <div class="container ipsum"></div>
       </div>
     </main>
-
 
     <footer class="page-footer">
       <a href="http://www.dartlang.org/">

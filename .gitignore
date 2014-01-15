@@ -3,3 +3,6 @@
 .DS_Store
 
 /app/views/doc/assets-and-transformers.graffle
+*.css.map
+
+.bundle

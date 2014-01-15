@@ -1,5 +1,5 @@
 // Override Bootstrap variables here (defaults copied from bootstrap-sass version 3.0.2.1):
-//
+
 // Variables
 // --------------------------------------------------
 
@@ -10,7 +10,7 @@
 // -------------------------
 
 //$gray-darker:            lighten(#000, 13.5%); // #222
-$gray-dark:              #484848;
+$gray-dark:              #333;
 //$gray:                   lighten(#000, 33.5%); // #555
 //$gray-light:             lighten(#000, 60%);   // #999
 //$gray-lighter:           lighten(#000, 93.5%); // #eee
@@ -28,7 +28,7 @@ $gray-dark:              #484848;
 // -------------------------
 
 //$body-bg:               #fff;
-//$text-color:            $gray-dark;
+$text-color:            #484848;
 
 // Links
 // -------------------------
@@ -55,13 +55,13 @@ $font-size-small:         12px;
 //$font-size-h5:            $font-size-base;
 //$font-size-h6:            ceil($font-size-base * 0.85); // ~12px
 
-$line-height-base:        1.2; // 18/15
+$line-height-base:        1.428; // 18/15
 $line-height-computed:    floor($font-size-base * $line-height-base); // 18px
 
 $headings-font-family:    "Montserrat", sans-serif;
 //$headings-font-weight:    500;
 //$headings-line-height:    1.1;
-//$headings-color:          inherit;
+$headings-color:          #333;
 
 // Iconography
 // -------------------------
@@ -271,7 +271,7 @@ $navbar-default-link-hover-color:          #000;
 // Navs
 // -------------------------
 
-$nav-link-padding:                          200px 15px;
+//$nav-link-padding:                          200px 15px;
 //$nav-link-hover-bg:                         $gray-lighter;
 
 //$nav-disabled-link-color:                   $gray-light;

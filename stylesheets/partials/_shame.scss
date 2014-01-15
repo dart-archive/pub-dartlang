@@ -1,0 +1,31 @@
+// Copyright (c) 2013, the Dart project authors.  Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
+// From: http://csswizardry.com/2013/04/shame-css/
+// 1. If it’s a hack, it goes in shame.css.
+// 2. Document all hacks fully:
+//   a. What part of the codebase does it relate to?
+//   b. Why was this needed?
+//   c. How does this fix it?
+//   d. How might you fix it properly, given more time?
+// 3. Do not blame the developer; if they explained why they had to do it then
+//    their reasons are probably (hopefully) valid.
+// 4. Try and clean shame.css up when you have some down time.
+//   a. Even better, get a tech-debt story in which you can dedicate actual
+//      sprint time to it.
+// -------------------------
+
+// a. Applies to clicking navigation in side-bar to go to an anchored element.
+// b. When anchors are clicked, the page moves so that the top of the anchored
+//    element is at the top of the viewport, but is concealed by fixed header.
+//    The actual height of the navbar is a little wonky, and is NOT simply
+//    $navbar-height.
+// c. This forces the top of the anchored element to appear lower in the
+//    viewport without changing its position in the page.
+// d. If we had a better computed height for navbar, we could replace rvalue
+//    with the computed value.
+@mixin fixed-navbar-anchor-shame($navbar-height) {
+  padding-top: $navbar-height + 20;
+  margin-top: -($navbar-height + 10);
+}

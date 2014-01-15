@@ -3,8 +3,28 @@
  * BSD-style license that can be found in the LICENSE file. */
 
 $(function() {
-  $("article").find("h2, h3, h4").each(function() {
-    $(this).append($('<a class="permalink" title="Permalink" href="#' + $(this).attr('id') + '">#</a>'));
+  $("section").find("h1, h2, h3, h4").each(function() {
+    // Sets the IDs on headings that are in user provided markdown.
+    if (!$(this).attr('id')) {
+      $(this).attr('id', $(this).text());
+    }
+
+    id = $(this).attr('id');
+
+    // Add a hash link to every heading.
+    $(this).append(
+        $('<a class="permalink" title="Permalink" href="#' + id + '">#</a>'));
+
+    if (!$(this).is('.no-nav-link')) {
+      // Section will be "readme", or "changelog",
+      // or whatever other section this heading is under.
+      section = $(this).parent().attr('id');
+      $('li' + '.' + section + ' ol').append(
+          $('<li>' +
+              '<a href="#' + id + '">' + id + '</a>' +
+            '</li>'));
+    }
+
   });
 
   // Allow the anchor to specify which tab of a tabbed control is shown.

@@ -1,17 +1,113 @@
+// Copyright (c) 2013, the Dart project authors.  Please see the AUTHORS file
+// for details. All rights reserved. Use of this source code is governed by a
+// BSD-style license that can be found in the LICENSE file.
+
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400|Montserrat:400,700);
 
 @import "compass/reset";
 @import "compass/layout";
 @import "compass/typography/text/replacement";
 
-@import "partials/variables";
-
-@import "partials/syntax";
-@import "partials/layout";
-
 @import "partials/bootstrap_variables";
 @import "bootstrap/theme";
 @import "bootstrap";
+
+@import "partials/variables";
+
+@import "partials/shame";
+@import "partials/syntax";
+@import "partials/layout";
+
+
+// 'Fixes'
+// -------------------------
+
+// Don't require nasty <table class="table"> that bootstrap expects.
+table {
+  @extend .table;
+}
+
+// Reset the gradient on panel headings.
+.panel-default > .panel-heading {
+  @include gradient-vertical($start-color: $panel-default-heading-bg,
+      $end-color:$panel-default-heading-bg);
+}
+
+// Resets the address element to be just a standard, unstyled element used for
+// semantic purposes only.
+address {
+  margin-bottom: inherit;
+  font-style: inherit;
+  line-height: inherit;
+}
+
+// Wraps bootstrap variables in a map.
+$header-font-size-map: (
+    h1: $font-size-h1,
+    h2: $font-size-h2,
+    h3: $font-size-h3,
+    h4: $font-size-h4,
+    h5: $font-size-h5,
+    h6: $font-size-h6
+);
+
+// Modify all headers by a multiple.
+@mixin adjust-header-font-size($multiple) {
+  @each $header, $font-size in $header-font-size-map {
+    #{$header} {
+      font-size: $font-size * $multiple;
+    }
+  }
+}
+
+.external-link:after {
+  @extend .glyphicon;
+  // Same as glyphicon-new-window, but here we're appending it instead of
+  // pre-pending it to a new element. This makes it easier to add to a link.
+  content: "\e164";
+}
+
+
+// Pills
+// -------------------------
+
+// This is copied wholesale from Bootstrap's _navs.scss, but changes the child
+// selector (.nav-pills > li) to select all list item and sublist items.
+.nav-pills {
+  li {
+    float: left;
+
+    // Links rendered as pills.
+    > a {
+      border-radius: $nav-pills-border-radius;
+    }
+    + li {
+      margin-left: 2px;
+    }
+
+    // Active state.
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: $nav-pills-active-link-hover-color;
+        background-color: $nav-pills-active-link-hover-bg;
+      }
+    }
+  }
+}
+
+// Stacked pills.
+.nav-stacked {
+  li {
+    float: none;
+    + li {
+      margin-top: 2px;
+      margin-left: 0; // There is no need for this gap between nav items.
+    }
+  }
+}
+
 
 // Layout
 // -------------------------
@@ -19,8 +115,13 @@
 @include hidden-footer($footer-height, "main", ".page-footer");
 
 main {
+  margin-top: 80px;
   padding-bottom: 50px;
   background-color: $body-bg;
+
+  .page {
+    @include make-row;
+  }
 }
 
 .page-footer {
@@ -41,10 +142,80 @@ main {
   }
 }
 
-// Don't require nasty <table class="table"> that bootstrap expects.
-table {
-  @extend .table;
+.btn + .btn {
+  margin-left: 10px;
 }
+
+
+// Page contents
+// -------------------------
+
+.page {
+  @include make-row;
+  .user-file {
+    margin-top: 20px;
+    // Make headers smaller for subsection so they don't overpower main page.
+    @include adjust-header-font-size(.8);
+  }
+
+  // Package Page
+  &.package {
+    article {
+      @extend .col-md-push-3;
+      @extend .col-md-7;
+      margin-top: 20px;
+    }
+
+    .metadata {
+      @extend .col-md-pull-7;
+      @extend .col-md-3;
+      margin-top: 30px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  h1, h2, h3, h4 {
+    // So that the navbar does not get concealed when going to anchor.
+    @include fixed-navbar-anchor-shame($navbar-height);
+
+    // Display the permalink button when it's there.
+    &:hover a.permalink {
+      display: inline;
+    }
+  }
+
+  .metadata {
+    @include adjust-header-font-size(.4);
+
+    section {
+      @extend .panel;
+      @extend .panel-default;
+
+      h1 {
+        @extend .panel-heading;
+        @extend .panel-title;
+      }
+
+      .metadata-body {
+        @extend .panel-body;
+      }
+    }
+
+    ul {
+      list-style-type: circle;
+      padding: 10px 20px 0;
+    }
+  }
+}
+
+
+.share-buttons {
+  // TODO(amouravski): Move share buttons into the navbar.
+  display: inline-block;
+  vertical-align: bottom;
+}
+
 
 // Navbar
 // -------------------------
@@ -68,15 +239,10 @@ $navbar-font-family: "Montserrat", sans-serif;
   font-family: $navbar-font-family;
 }
 
-// Body
+
+// To be organized
 // -------------------------
 
-body {
-  // Account for the fixed navbar height.
-  padding-top: 65px;
-
-  -webkit-font-smoothing: antialiased;
-}
 // Don't word wrap inline code.
 code {
   white-space: nowrap;
@@ -96,28 +262,13 @@ a.permalink {
 }
 
 article {
-  @extend .col-md-8;
+  @extend .col-md-7;
 
   position: relative;
-
-  h2, h3, h4 {
-    margin-top: -40px;
-    // Ensure that the headers don't get covered up by the navbar when the user
-    // clicks on the permalink.
-    padding-top: 40px;
-
-    &:hover a.permalink {
-      display: inline;
-    }
-  }
 }
 
 .has-permalink:hover > a.permalink {
   display:inline;
-}
-
-.package-sidebar {
-  padding-top: 50px;
 }
 
 // TODO(amouravski): add this back in?
@@ -162,10 +313,6 @@ td.archive, th.archive {
 .icon-hand-right,
 .icon-envelope {
   margin: 3px 0 0 2px;
-}
-
-.author {
-  white-space: nowrap;
 }
 
 .learn-more {
@@ -213,10 +360,6 @@ ol.toc {
 
 [class^="icon-"], [class*=" icon-"] {
   @include hide-text;
-}
-
-ul ul {
-  list-style-type: circle;
 }
 
 // TODO(amouravski): Fix admin page.
