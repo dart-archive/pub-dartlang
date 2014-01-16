@@ -31,10 +31,23 @@ For license information, please see [LICENSE](LICENSE).
     │   └─...
     │
     ├───┬ stylesheets/
-    │   └───┬ partials/
-    │       ├──── _syntax.scss    Syntax highlighting styles.
-    │       ├──── _variables.scss Variables for theming bootstrap.
-    │       └ style.scss          Main stylesheet.
+    │   ├───┬ modules/            Common modules. Nothing here generates CSS on import.
+    │   │   ├───┬ mixins/
+    │   │   │   └──── _layout.scss   Utilities to lay out components.
+    │   │   │
+    │   │   ├───┬ variables/
+    │   │   │   ├──── _bootstrap_variables.scss   Overrides bootstrap's styles.
+    │   │   │   └──── _pub_variables.scss         Variables for pub.dartlang.org.
+    │   │   │
+    │   │   ├──── _all.scss       Imports all modules.
+    │   │   └──── _shame.scss     Styles that are hacks or kludges.
+    │   │
+    │   ├───┬ partials/
+    │   │   ├──── _base.scss      Sets up environment for all other stylesheets.
+    │   │   ├──── _fonts.scss     Imports all fonts.
+    │   │   └──── _syntax.scss    Syntax highlighting for code blocks.
+    │   │
+    │   └──── style.scss          Main stylesheet.
     │
     ├───┬ test/                   Tests for app functionality.
     │   └──── ...

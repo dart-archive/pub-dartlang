@@ -4,20 +4,10 @@
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,400|Montserrat:400,700);
 
-@import "compass/reset";
-@import "compass/layout";
-@import "compass/typography/text/replacement";
+// Set up environment with variables and modules.
+@import "partials/base";
 
-@import "partials/bootstrap_variables";
-@import "bootstrap/theme";
-@import "bootstrap";
-
-@import "partials/variables";
-
-@import "partials/shame";
 @import "partials/syntax";
-@import "partials/layout";
-
 
 // 'Fixes'
 // -------------------------
