@@ -70,7 +70,7 @@ would look like:
 \* The `pubspec.lock` will only be in source control if the package is an
 [application package](glossary.html#application-package).
 
-\** The `packages` directories will exist locally after you're run
+\** The `packages` directories will exist locally after you've run
 `pub get`, but won't be checked into source control.
 
 ## The basics
