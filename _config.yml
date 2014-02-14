@@ -1,8 +1,0 @@
-safe: false
-port: 8080
-source: app/doc
-destination: app/views/doc
-markdown: kramdown
-kramdown:
-  entity_output: symbolic
-pygments: true

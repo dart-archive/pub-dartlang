@@ -40,7 +40,7 @@ it locally, perform the following steps:
         ./test.py
 
   * To publish packages to your local test server, visit <http://localhost:8080/admin>
-    (sign in as administrator), go to the "Private Key" tab & enter any string 
+    (sign in as administrator), go to the "Private Key" tab & enter any string
     into the private key field.
 
 <sup>1</sup> This might have been done already if you allowed the Google App
@@ -50,7 +50,7 @@ it locally, perform the following steps:
 * Beautiful Soup & WebTest are only required for running tests.
 * Some Linux distributions come with PyCrypto installed by default.  Make sure
   at least version 2.6 installed.
-* If using Mac and `pip` is not available, install [brew](http://brew.sh) and 
+* If using Mac and `pip` is not available, install [brew](http://brew.sh) and
   run `brew install python`.
 
 ### Deploying
@@ -62,16 +62,12 @@ See the docs on [branches and versions][].
 ### Modifying the CSS and Documentation
 
 The CSS files are generated from the source [Sass][] files using [Compass][].
-The HTML documentation files are generated from the source [Markdown][] using
-[Jekyll][]. To get ready to make changes, you'll need [Ruby][] and [Python][].
-Then:
+To get ready to make changes, you'll need [Ruby][] and [Python][]. Then:
 
 [ruby]: http://ruby-lang.org
 [python]: http://python.org
 [sass]: http://sass-lang.com
 [compass]: http://compass-style.org
-[markdown]: http://daringfireball.net/projects/markdown/
-[jekyll]: http://jekyllrb.com/
 
  1. Ensure you have bundler installed:
 
@@ -85,21 +81,18 @@ Then:
 
         sudo pip install --upgrade pygments
 
-Note that this is only needed on your development machine to iterate on the CSS
-and documentation. The deployed server just uses the pre-compiled CSS and HTML
-and only requires Python.
+Note that this is only needed on your development machine to iterate on the CSS. The deployed server just uses the pre-compiled CSS and only requires Python.
 
-Once you have everything installed, to modify the styles and documentation:
+Once you have everything installed, to modify the styles:
 
- 1. Run [Foreman][] to automatically regenerate the CSS and HTML files when any
-    Sass or Markdown files change:
+ 1. Run [Foreman][] to automatically regenerate the CSS files when any Sass
+    files change:
 
         bundle exec foreman start
 
- 1. Edit the `.scss` files under `css/sass` and the `.markdown` files under
-    `doc`.
+ 1. Edit the `.scss` files under `css/sass`.
 
 [foreman]: http://ddollar.github.com/foreman/
 
-When you make changes to SCSS or Markdown files, make sure to check in the
-generated CSS or HTML files with them.
+When you make changes to SCSS files, make sure to check in the generated CSS
+files with them.
