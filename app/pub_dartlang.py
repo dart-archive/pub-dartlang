@@ -16,6 +16,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 import handlers
 import handlers.api as api
+from handlers.doc import Doc
 from handlers.root import Root
 from handlers.packages import Packages
 from handlers.package_uploaders import PackageUploaders
@@ -42,6 +43,9 @@ class Application(cherrypy.Application):
             '/admin', controller='root', action='admin')
         self.dispatcher.mapper.connect(
             '/gs_/{filename:.*?}', controller='root', action='serve')
+
+        self.dispatcher.connect('doc', '/doc', Doc(), action='index')
+        self.dispatcher.connect('doc', '/doc/{path:.*?}', Doc(), action='show')
 
         self._resource('package', 'packages', Packages())
         self._resource('private-key', 'private-keys', PrivateKeys())
