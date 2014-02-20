@@ -196,7 +196,9 @@ class PackageVersion(db.Model):
     @property
     def example_version_constraint(self):
         """Return the example version constraint for this package."""
-        if self.version.in_initial_development: return str(self.version)
+        if self.version.in_initial_development:
+            return json.dumps(">=%s <%d.%d.0" % 
+                (self.version, self.version.major, self.version.minor + 1))
         return json.dumps(
             ">=%s <%d.0.0" % (self.version, self.version.major + 1))
 
