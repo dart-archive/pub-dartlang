@@ -8,7 +8,7 @@ import cherrypy
 from google.appengine.api import users
 
 import handlers
-from handlers.pager import Pager
+from handlers.pager import QueryPager
 from models.package import Package
 
 class Packages(object):
@@ -26,9 +26,9 @@ class Packages(object):
           page: The page of packages to get. Each page contains 10 packages.
         """
         if format == 'json':
-            pager = Pager(int(page), "/packages.json?page=%d",
-                          Package.all().order('-updated'),
-                          per_page=50)
+            pager = QueryPager(int(page), "/packages.json?page=%d",
+                               Package.all().order('-updated'),
+                               per_page=50)
             return json.dumps({
                 "packages": [
                     handlers.request().url(action='show', id=package.name)
@@ -39,8 +39,8 @@ class Packages(object):
                 "pages": pager.page_count
             })
         else:
-            pager = Pager(int(page), "/packages?page=%d",
-                          Package.all().order('-updated'))
+            pager = QueryPager(int(page), "/packages?page=%d",
+                               Package.all().order('-updated'))
             title = 'All Packages'
             if page != 1: title = 'Page %s | %s' % (page, title)
             return handlers.render("packages/index",

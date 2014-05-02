@@ -29,7 +29,7 @@ class PackageVersions(object):
     """The handler for /api/packages/*/versions/*."""
 
     @handlers.api(1)
-    @handlers.requires_private_key
+    @handlers.requires_oauth_key
     @handlers.requires_uploader
     def new(self, format=''):
         """Retrieve the form for uploading a package version.
@@ -138,7 +138,7 @@ class PackageVersions(object):
         return old.version < new.version
 
     @handlers.api(1)
-    @handlers.requires_private_key
+    @handlers.requires_oauth_key
     def upload(self, file, key, acl=None, policy=None, signature=None,
                success_action_redirect=None, **kwargs):
         """A development-only action for uploading a package archive.
@@ -175,7 +175,7 @@ class PackageVersions(object):
             handlers.request().package_version(id).as_dict(full=True))
 
     @handlers.api(1)
-    @handlers.requires_private_key
+    @handlers.requires_oauth_key
     @handlers.requires_uploader
     def new_dartdoc(self, package_id, id):
         """Retrieve the form for uploading dartdoc for this package version."""

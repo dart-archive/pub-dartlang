@@ -30,10 +30,6 @@ class Root(object):
         """Retrieves a map of the site."""
         return handlers.render('site_map', layout={'title': 'Site Map'})
 
-    def search(self, **kwargs):
-        """Exposes an embedded Google search."""
-        return handlers.render('search', layout={'title': 'Search Pub'})
-
     def admin(self):
         """Retrieve a page for performing administrative tasks."""
 
@@ -48,10 +44,10 @@ class Root(object):
                 100.0 * reload_status['count'] / reload_status['total'])
 
         return handlers.render('admin',
-                               reload_status=reload_status,
-                               private_key_set=PrivateKey.get() is not None,
-                               production=handlers.is_production(),
-                               layout={'title': 'Admin Console'})
+               reload_status=reload_status,
+               private_keys_set=PrivateKey.get_oauth() is not None,
+               production=handlers.is_production(),
+               layout={'title': 'Admin Console'})
 
     def serve(self, filename):
         """Serves a cloud storage file for the development server."""

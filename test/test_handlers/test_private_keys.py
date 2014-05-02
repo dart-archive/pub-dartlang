@@ -11,10 +11,10 @@ class PrivateKeysTest(TestCase):
         self.be_normal_user()
 
         response = self.testapp.post(
-            '/private-keys', params='key=key', status=403)
+            '/private-keys', params='oauth_key=oauth&api_key=api', status=403)
         self.assert_error_page(response)
 
-    def test_admin_creates_key(self):
+    def test_admin_creates_keys(self):
         self.be_admin_user()
 
         get_response = self.testapp.get('/admin')
@@ -22,10 +22,12 @@ class PrivateKeysTest(TestCase):
         form = get_response.forms["private-key"]
         self.assertEqual(form.method, 'POST')
 
-        form['key'] = 'key'
+        form['oauth_key'] = 'oauth'
+        form['api_key'] = 'api'
         post_response = form.submit()
 
         self.assertEqual(post_response.status_int, 302)
         self.assertEqual(post_response.headers['Location'],
-                         'http://localhost:80/admin#tab-private-key')
-        self.assertEqual(PrivateKey.get(), 'key')
+                         'http://localhost:80/admin#tab-private-keys')
+        self.assertEqual(PrivateKey.get_oauth(), 'oauth')
+        self.assertEqual(PrivateKey.get_api(), 'api')

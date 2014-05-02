@@ -66,8 +66,8 @@ class TestCase(unittest.TestCase):
 
         self.testapp = webtest.TestApp(Application())
 
-        # This private key is not actually used for anything other than testing.
-        PrivateKey.set('''-----BEGIN RSA PRIVATE KEY-----
+        # These private keys are not used for anything other than testing.
+        PrivateKey.set_oauth('''-----BEGIN RSA PRIVATE KEY-----
 Proc-Type: 4,ENCRYPTED
 DEK-Info: DES-EDE3-CBC,CEB8C6541017AC8B
 
@@ -85,6 +85,8 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
 9jgARPpnDYsXH1lESxmiNZucHa50qI/ezNvQx8CbNa1/+JWoZ77yqM9qnDlXUwDY
 1Sxqx9+4kthG9oyCzzUwFvhf1kTEHd0RfIapgjJ16HBQmzLnEPtjPA==
 -----END RSA PRIVATE KEY-----''')
+
+        PrivateKey.set_api('not a real API key')
 
         self.dont_be_oauth_user()
 
@@ -387,8 +389,7 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
           response: The webtest response object to check.
           url: The link URL to look for.
         """
-
-        return any([link['href'] == url for link
+        return any([link.get('href') == url for link
                     in self.html(response).find_all('a')])
 
     def package_version_dict(self, name, version):

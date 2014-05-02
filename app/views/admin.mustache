@@ -8,7 +8,7 @@
   <ul>
     <li class="active"><a href="#tab-packages" data-toggle="tab">Packages</a></li>
     <li>
-      <a href="#tab-private-key" data-toggle="tab">Private Key</a>
+      <a href="#tab-private-keys" data-toggle="tab">Private Keys</a>
     </li>
   </ul>
   <div>
@@ -30,18 +30,26 @@
         <button type="submit">Reload package metadata from archives.</button>
       </form>
     </div>
-    <div id="tab-private-key">
-      {{#private_key_set}}
-        <h4>Note: the private key has already been set.</h4>
-      {{/private_key_set}}
-
-      {{^production}}
-        <p>In development, the private key may be any string.</p>
-      {{/production}}
+    <div id="tab-private-keys">
+      {{#private_keys_set}}
+        <h4 class="alert">
+          Note: the private keys have already been set.
+        </h4>
+      {{/private_keys_set}}
+      {{^private_keys_set}}
+        {{^production}}
+          <p class="alert alert-info">
+            In development, the private keys may be any string.
+          </p>
+        {{/production}}
+      {{/private_keys_set}}
 
       <form action="/private-keys" method="POST" id="private-key">
-        <textarea name="key" cols="64"></textarea>
-        <button type="submit">Set Key</button>
+        <h3>OAuth2 Key</h3>
+        <textarea name="oauth_key" rows="8" cols="64"></textarea>
+        <h3>Google API Key</h3>
+        <textarea name="api_key" rows="1" cols="64"></textarea>
+        <button type="submit">Set Keys</button>
       </form>
     </div>
   </div>

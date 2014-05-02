@@ -66,7 +66,7 @@ class PackageVersionsTest(TestCase):
         # header shouldn't have OAuth2-specific fields.
         self.assertEqual(response.headers['WWW-Authenticate'], 'Bearer')
 
-    def test_api_new_requires_private_key(self):
+    def test_api_new_requires_oauth_key(self):
         self.be_admin_oauth_user()
         PrivateKey.get_by_key_name('singleton').delete()
 
@@ -214,7 +214,7 @@ class PackageVersionsTest(TestCase):
         })
         self.assertEqual(json.loads(response.body), expected)
 
-    def test_api_dartdoc_requires_private_key(self):
+    def test_api_dartdoc_requires_oauth_key(self):
         self.be_admin_oauth_user()
         self.post_package_version('1.2.3')
         PrivateKey.get_by_key_name('singleton').delete()

@@ -73,13 +73,10 @@ class PackageVersions(object):
             version.package.put()
 
     @handlers.json_action
-    @handlers.requires_private_key
+    @handlers.requires_oauth_key
     @handlers.requires_uploader
     def new_dartdoc(self, package_id, id, format):
         """Retrieve the form for uploading dartdoc for this package version."""
-        if PrivateKey.get() is None:
-            handlers.http_error(500, 'No private key set.')
-
         version = handlers.request().package_version(id)
         upload = cloud_storage.Upload(version.dartdoc_storage_path,
                                       acl='public-read',

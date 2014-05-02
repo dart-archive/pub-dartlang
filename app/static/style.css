@@ -5057,7 +5057,6 @@ footer .login, footer .logout {
 
 form#private-key textarea {
   width: 550px;
-  height: 420px;
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
@@ -5138,4 +5137,14 @@ ol.toc li {
 
 ul ul {
   list-style-type: circle;
+}
+
+table.search-results {
+  margin-top: 10px;
+}
+table.search-results h3, table.search-results .toc:before {
+  line-height: 24px;
+}
+table.search-results p {
+  margin: 0;
 }

@@ -5,6 +5,7 @@
 """This module provides utility functions for models."""
 
 from contextlib import contextmanager
+import datetime
 import re
 
 import cherrypy
@@ -59,3 +60,32 @@ def url(**kwargs):
     URL of the app.
     """
     return cherrypy.request.base + routes.url_for(**kwargs)
+
+def relative_date(date):
+    """Construct a human-friendly relative date string like "2 hours ago".
+
+    Arguments:
+      date: The absolute date. The relative time will between this and the
+            server's current time.
+    """
+
+    relative = datetime.datetime.utcnow() - date
+    seconds = relative.seconds
+    if relative.days > 7 or relative.days < 0:
+        return date.strftime('%b %d, %Y')
+    elif relative.days == 1:
+        return '1 day ago'
+    elif relative.days > 1:
+        return '{} days ago'.format(relative.days)
+    elif seconds <= 1:
+        return 'just now'
+    elif seconds < 60:
+        return '{} seconds ago'.format(seconds)
+    elif seconds < 120:
+        return '1 minute ago'
+    elif seconds < 3600:
+        return '{} minutes ago'.format(seconds / 60)
+    elif seconds < 7200:
+        return '1 hour ago'
+    else:
+        return '{} hours ago'.format(seconds / 3600)

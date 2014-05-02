@@ -249,9 +249,17 @@ def requires_uploader(fn, *args, **kwargs):
     return fn(*args, **kwargs)
 
 @decorator
-def requires_private_key(fn, *args, **kwargs):
-    """A decorator for actions that require a private key to be set."""
-    if PrivateKey.get() is None: http_error(500, 'No private key set.')
+def requires_oauth_key(fn, *args, **kwargs):
+    """A decorator for actions that require an OAuth2 private key to be set."""
+    if PrivateKey.get_oauth() is None:
+        http_error(500, 'No OAuth2 private key set.')
+    return fn(*args, **kwargs)
+
+@decorator
+def requires_api_key(fn, *args, **kwargs):
+    """A decorator for actions that require a Google API key to be set."""
+    if PrivateKey.get_api() is None:
+        http_error(500, 'No private Google API key set.')
     return fn(*args, **kwargs)
 
 def get_current_user():

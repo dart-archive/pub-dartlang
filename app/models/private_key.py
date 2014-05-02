@@ -13,30 +13,47 @@ from google.appengine.ext import db
 import handlers
 
 class PrivateKey(db.Model):
-    """A singleton model that stores the Google API private key for this app.
+    """A model that stores the Google API private keys for this app.
 
-    This key has to be stored in the database so that it's inaccessible to
+    These keys are stored in the database so that they're inaccessible to
     anyone reading the source code, but easily available to the actual App
     Engine instance.
 
-    For anyone with admin rights to the main pub.dartlang.org, the private key
-    is available from the App Engine datastore viewer. For anyone creating a new
-    package host, a private key can be obtained from the Google API console as
-    described in https://developers.google.com/console/help/#WhatIsKey.
+    For anyone with admin rights to the main pub.dartlang.org, the private keys
+    are available from the App Engine datastore viewer. For anyone creating a
+    new package host, a private key can be obtained from the Google API console
+    as described in https://developers.google.com/console/help/#WhatIsKey.
     """
 
     value = db.TextProperty(required=True)
-    """The private key, in PEM format."""
+    """The private key.
+
+    For the OAuth2 key, this is in PEM format. For a Google API key, it is just
+    the key string.
+    """
 
     @classmethod
-    def set(cls, value):
-        """Sets the value of the private key."""
+    def set_oauth(cls, value):
+        """Sets the value of the OAuth2 private key."""
+        # Note: this uses the name "singleton" for legacy reasons. This class
+        # used to only store an OAuth2 key and not an API key as well.
         cls(key_name='singleton', value=value).put()
 
     @classmethod
-    def get(cls):
-        """Gets the value of the private key."""
+    def get_oauth(cls):
+        """Gets the value of the OAuth2 private key."""
         instance = cls.get_by_key_name('singleton')
+        return instance and instance.value
+
+    @classmethod
+    def set_api(cls, value):
+        """Sets the value of the API private key."""
+        cls(key_name='api', value=value).put()
+
+    @classmethod
+    def get_api(cls):
+        """Gets the value of the API private key."""
+        instance = cls.get_by_key_name('api')
         return instance and instance.value
 
     @classmethod
@@ -50,7 +67,7 @@ class PrivateKey(db.Model):
         """
 
         # All Google API keys have "notasecret" as their passphrase
-        value = cls.get()
+        value = cls.get_oauth()
         if value is None: raise "Private key has not been set."
         if handlers.is_production():
             # TODO(nweiz): This currently doesn't work on the development server

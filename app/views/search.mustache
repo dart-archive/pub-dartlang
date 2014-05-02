@@ -2,14 +2,26 @@
     for details. All rights reserved. Use of this source code is governed by a
     BSD-style license that can be found in the LICENSE file. }}
 
-<script>
-  (function() {
-    var cx = '009011925481577436976:h931xn2j7o0';
-    var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
-    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-        '//www.google.com/cse/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
-  })();
-</script>
+<h1>Search Results for &ldquo;{{query}}&rdquo;</h1>
+{{#hasResults}}
+  <table class="search-results">
+  <tbody>
+{{/hasResults}}
+{{#results}}
+  <tr>
+  <td>
+  <h3><a href="{{url}}">{{name}} <small>{{version}}</small></a></h3>
+  <p>{{desc}}</p>
+  <p><small>last updated {{last_uploaded}}</small></p>
+  </td>
+  </tr>
+{{/results}}
+{{#hasResults}}
+  </tbody>
+  </table>
+{{/hasResults}}
+{{^hasResults}}
+  <p>Search for &ldquo;{{query}}&rdquo; did not match any packages.</p>
+{{/hasResults}}
 
-<gcse:search></gcse:search>
+{{{pagination}}}

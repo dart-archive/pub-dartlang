@@ -30,7 +30,7 @@ class PackageVersion(db.Model):
 
     pubspec = PubspecProperty(required=True, indexed=False)
     """The package version's pubspec file."""
-    
+
     readme = ReadmeProperty()
     """The README file."""
 
@@ -122,7 +122,7 @@ class PackageVersion(db.Model):
                                    name.endswith('.dart'))
 
             return PackageVersion.new(
-                package=package, changelog=changelog, readme=readme, 
+                package=package, changelog=changelog, readme=readme,
                 pubspec=pubspec, libraries=libraries, uploader=uploader)
         except (tarfile.TarError, KeyError) as err:
             raise db.BadValueError(
@@ -157,6 +157,11 @@ class PackageVersion(db.Model):
     def short_created(self):
         """The short created time of the package version."""
         return self.created.strftime('%b %d, %Y')
+
+    @property
+    def relative_created(self):
+        """The relative created time of the package version."""
+        return models.relative_date(self.created)
 
     @property
     def download_url(self):
@@ -197,7 +202,7 @@ class PackageVersion(db.Model):
     def example_version_constraint(self):
         """Return the example version constraint for this package."""
         if self.version.in_initial_development:
-            return json.dumps(">=%s <%d.%d.0" % 
+            return json.dumps(">=%s <%d.%d.0" %
                 (self.version, self.version.major, self.version.minor + 1))
         return json.dumps(
             ">=%s <%d.0.0" % (self.version, self.version.major + 1))
