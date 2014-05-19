@@ -96,3 +96,7 @@ Once you have everything installed, to modify the styles:
 
 When you make changes to SCSS files, make sure to check in the generated CSS
 files with them.
+
+### Reporting issues, feature requests, and bugs
+
+Please file all issues at [dartbug.com/new](http://dartbug.com/new).
