@@ -131,6 +131,8 @@ class PackageVersions(object):
             # causing icky bugs.
             if latest_version_key == key:
                 package.put()
+                package.invalidate_cache()
+
 
         count = memcache.incr('versions_reloaded')
         logging.info('%s/%s versions reloaded' %

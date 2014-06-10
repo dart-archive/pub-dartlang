@@ -134,3 +134,59 @@ class PackagesTest(TestCase):
             ],
             "latest": self.package_version_dict("test-package", "1.2.0")
         })
+
+    # The following tests are to ensure that we invalidate the memcached
+    # package data correctly.
+
+    def test_api_get_package_sees_uploader_change(self):
+        self._cache_test_package()
+
+        # Add an uploader.
+        response = self.testapp.post('/api/packages/test-package/uploaders',
+                                     {'email': self.normal_user().email()})
+        self.assertEqual(response.status_int, 200)
+
+        # Request it again and make sure we get the updated list.
+        response = self.testapp.get('/api/packages/test-package')
+        self.assertEqual(json.loads(response.body)["uploaders"],
+            [self.admin_user().email(), self.normal_user().email()])
+
+        # Delete an uploader.
+        response = self.testapp.delete(
+            '/api/packages/test-package/uploaders/' +
+                self.normal_user().email())
+        self.assert_json_success(response)
+
+        # Request it again and make sure we get the updated list.
+        response = self.testapp.get('/api/packages/test-package')
+        self.assertEqual(json.loads(response.body)["uploaders"],
+            [self.admin_user().email()])
+
+    def test_api_get_package_sees_upload(self):
+        self._cache_test_package()
+
+        # Upload a new version.
+        self.post_package_version('1.2.3')
+
+        # Request it again and make sure we get the updated list.
+        response = self.testapp.get('/api/packages/test-package')
+        self.assertEqual(json.loads(response.body)["versions"], [
+            self.package_version_dict("test-package", "1.1.0"),
+            self.package_version_dict("test-package", "1.1.1"),
+            self.package_version_dict("test-package", "1.2.3")
+        ])
+
+    def _cache_test_package(self):
+        """Create a test package and request its details so that the memcache
+        is populated with it.
+
+        This way, we can ensure that the cache is properly invalidated when a
+        package changes."""
+        self.be_admin_user()
+        self.create_package('test-package', '1.1.0')
+        self.create_package('test-package', '1.1.1')
+        self.be_admin_oauth_user()
+
+        # Request the package once to cache it.
+        response = self.testapp.get('/api/packages/test-package')
+        self.assertEqual(response.status_int, 200)

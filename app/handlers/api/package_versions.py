@@ -108,6 +108,7 @@ class PackageVersions(object):
             with models.transaction():
                 version.package.put()
                 version.put()
+                version.package.invalidate_cache()
 
             deferred.defer(self._compute_version_order, version.package.name)
 

@@ -28,6 +28,7 @@ class PackageUploaders(object):
 
         package.uploaders.append(user_to_add)
         package.put()
+        package.invalidate_cache()
         return handlers.json_success(
             "'%s' added as an uploader for package '%s'." %
                 (email, package.name))
@@ -60,6 +61,7 @@ class PackageUploaders(object):
         package.uploaders = [uploader for uploader in package.uploaders
                              if uploader.email().lower() != email_to_delete]
         package.put()
+        package.invalidate_cache()
         return handlers.json_success(
             "'%s' is no longer an uploader for package '%s'." %
                 (id, package.name))

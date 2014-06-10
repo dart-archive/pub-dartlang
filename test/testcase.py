@@ -4,6 +4,7 @@
 
 import base64
 import os
+import re
 import unittest
 from cStringIO import StringIO
 from decorator import decorator
@@ -279,6 +280,27 @@ cMJfCVm8pqhXwCVx3uYnhUzvth7mcEseXh5Dcg1RHka5rCXUz4eVxTkj1u3FOy9o
         pubspec.update(additional_pubspec_fields)
         contents = self.tar_package(pubspec)
         return ('file', '%s-%s.tar.gz' % (name, version), contents)
+
+    def post_package_version(self, version, name='test-package'):
+        response = self.upload_package(self.upload_archive(name, version))
+        self.assert_json_success(response)
+
+    def upload_package(self, upload, status=None):
+        get_response = self.testapp.get('/api/packages/versions/new')
+        self.assertEqual(get_response.status_int, 200)
+        content = json.loads(get_response.body)
+        post_response = self.testapp.post(str(content['url']),
+                                          content['fields'],
+                                          upload_files=[upload])
+
+        self.assertEqual(post_response.status_int, 302)
+        self.assertTrue(re.match(
+                r'^http://localhost:80/api/packages/versions/[^/]+/create$',
+                post_response.headers['Location']))
+
+        path = post_response.headers['Location'].replace(
+            'http://localhost:80', '')
+        return self.testapp.get(path, status=status)
 
     def assert_requires_login(self, response):
         """Assert that the given response is requesting user authentication."""

@@ -34,4 +34,4 @@ class Packages(object):
     @handlers.api(2)
     def show(self, id):
         """Retrieve the page describing a specific package."""
-        return json.dumps(handlers.request().package.as_dict(full=True))
+        return handlers.request().package.as_json()

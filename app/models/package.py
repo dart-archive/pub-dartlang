@@ -3,7 +3,10 @@
 # BSD-style license that can be found in the LICENSE file.
 
 import cgi
+import json
+import logging
 
+from google.appengine.api import memcache
 from google.appengine.api import users
 from google.appengine.ext import db
 
@@ -16,13 +19,19 @@ class Package(db.Model):
     A package contains only metadata that applies to every version of the
     package, such as its name and uploader. Each individual version of the
     package is represented by a PackageVersion model.
+
+    Whenever a new PackageVersion for a Package is added or modified, you must
+    call invalidate_cache() to ensure any stale cached description of the
+    package is discarded.
     """
 
     MAX_SIZE = 10 * 2**20 # 10MB
     """The maximum package size, in bytes."""
 
     uploaders = db.ListProperty(users.User, validator=models.validate_not_empty)
-    """The users who are allowed to upload new versions of the package."""
+    """The users who are allowed to upload new versions of the package.
+
+    When this is set, invalidate_cache() must be called."""
 
     name = db.StringProperty(required=True)
     """The name of the package."""
@@ -36,7 +45,9 @@ class Package(db.Model):
     # This should only reference a PackageVersion, but cyclic imports aren't
     # allowed so we can't import PackageVersion here.
     latest_version = db.ReferenceProperty()
-    """The most recent non-prerelease version of this package."""
+    """The most recent non-prerelease version of this package.
+
+    When this is set, invalidate_cache() must be called."""
 
     @property
     def description(self):
@@ -182,3 +193,31 @@ class Package(db.Model):
             })
 
         return value
+
+    def as_json(self):
+        """Returns the JSON stringified representation of the full information
+        for this package.
+        """
+        cached = memcache.get(self._package_json_cache_key)
+        if cached:
+            logging.info("Found cached " + self._package_json_cache_key)
+            return cached
+
+        value = json.dumps(self.as_dict(full=True))
+        memcache.set(self._package_json_cache_key, value)
+        return value
+
+    def invalidate_cache(self):
+        """Clears the cached JSON for the package.
+
+        This must be called any time any data that is in the JSON for the full
+        description of the package changes. This isn't often since most package
+        data is immutable, but when the uploader list changes or new versions
+        of the package are uploaded, the data will change.
+        """
+        memcache.delete(self._package_json_cache_key)
+
+    @property
+    def _package_json_cache_key(self):
+        """The memcache key for the cached JSON for this package."""
+        return 'package_json_' + self.name

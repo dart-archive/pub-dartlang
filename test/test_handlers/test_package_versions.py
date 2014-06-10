@@ -200,10 +200,10 @@ class PackageVersionsTest(TestCase):
                          'test-package-3.4.5.tar.gz')
 
     def post_package_version(self, version, name='test-package'):
-        response = self.create_package(self.upload_archive(name, version))
+        response = self._upload_package(self.upload_archive(name, version))
         self.assert_json_success(response)
 
-    def create_package(self, upload, status=None):
+    def _upload_package(self, upload, status=None):
         get_response = self.testapp.get('/packages/versions/new.json')
         self.assertEqual(get_response.status_int, 200)
         content = json.loads(get_response.body)

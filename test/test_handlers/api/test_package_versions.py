@@ -112,7 +112,7 @@ class PackageVersionsTest(TestCase):
         self.package_version(self.package, '1.2.3', description='old').put()
 
         upload = self.upload_archive('test-package', '1.2.3', description='new')
-        response = self.create_package(upload, status=400)
+        response = self.upload_package(upload, status=400)
         self.assert_json_error(response)
 
         version = self.get_package_version('1.2.3')
@@ -275,27 +275,6 @@ class PackageVersionsTest(TestCase):
             'error':
             {'message': '"test-package" version 2.0.0 doesn\'t exist.'}
         })
-
-    def post_package_version(self, version, name='test-package'):
-        response = self.create_package(self.upload_archive(name, version))
-        self.assert_json_success(response)
-
-    def create_package(self, upload, status=None):
-        get_response = self.testapp.get('/api/packages/versions/new')
-        self.assertEqual(get_response.status_int, 200)
-        content = json.loads(get_response.body)
-        post_response = self.testapp.post(str(content['url']),
-                                          content['fields'],
-                                          upload_files=[upload])
-
-        self.assertEqual(post_response.status_int, 302)
-        self.assertTrue(re.match(
-                r'^http://localhost:80/api/packages/versions/[^/]+/create$',
-                post_response.headers['Location']))
-
-        path = post_response.headers['Location'].replace(
-            'http://localhost:80', '')
-        return self.testapp.get(path, status=status)
 
     def latest_version(self):
         return Package.get_by_key_name('test-package').latest_version.version
