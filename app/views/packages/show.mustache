@@ -75,13 +75,22 @@ $ <strong>pub install</strong>
             <tr>
               <th>Version</th>
               <th>Uploaded</th>
+              <th class="documentation" width="60">Documentation</th>
               <th class="archive" width="60">Archive</th>
             </tr>
           </thead>
           {{#versions}}
             <tr>
-              <td><a href="http://www.dartdocs.org/documentation/{{package.name}}/{{version}}/index.html#{{package.name}}">{{version}}</a></td>
+              <th>{{version}}</th>
               <td>{{short_created}}</td>
+              <td class="documentation">
+                <a href="http://www.dartdocs.org/documentation/{{package.name}}/{{version}}/index.html#{{package.name}}"
+                   title="Go to the documentation of {{package.name}} {{version}}">
+                  <i class="icon-book">
+                    Go to the documentation of {{package.name}} {{version}}
+                  </i>
+                </a>
+              </td>
               <td class="archive">
                 <a href="{{download_url}}"
                    title="Download {{package.name}} {{version}} archive">
@@ -121,6 +130,13 @@ $ <strong>pub install</strong>
       <h4>Documentation</h4>
       <p><a href="{{package.documentation}}">{{package.documentation}}</a></p>
     {{/package.documentation}}
+
+    <!-- uncomment when https://github.com/financeCoding/dart-carte-du-jour/issues/51 is fixed
+    {{^package.documentation}}
+      <h4>Documentation</h4>
+      <p><a href="http://www.dartdocs.org/documentation/{{package.name}}/latest/index.html#{{package.name}}">http://www.dartdocs.org/documentation/{{package.name}}/latest/index.html#{{package.name}}</a></p>
+    {{/package.documentation}}
+    -->
 
     <h4>{{package.uploaders_title}}</h4>
     <p>{{& package.uploaders_html}}</p>
