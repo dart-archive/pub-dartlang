@@ -74,9 +74,7 @@ class Package(db.Model):
     def documentation(self):
         """The documentation URL for the package, or None."""
         if self.latest_version is None: return None
-        return self.latest_version.pubspec.get('documentation',
-            'http://www.dartdocs.org/documentation/%s/%s/index.html#%s' % \
-            (self.name, self.latest_version.version, self.name))
+        return self.latest_version.documentation
 
     @property
     def authors_title(self):
