@@ -162,7 +162,7 @@ class PackageVersion(db.Model):
     def dartdocs_url(self):
         """The dartdocs URL for the package."""
         return 'http://www.dartdocs.org/documentation/%s/%s/index.html#%s' % \
-            (self.name, self.latest_version.version, self.name)
+            (self.package.name, self.version, self.package.name)
 
     @property
     def documentation(self):
