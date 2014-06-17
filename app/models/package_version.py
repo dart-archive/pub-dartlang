@@ -159,6 +159,17 @@ class PackageVersion(db.Model):
         return self.created.strftime('%b %d, %Y')
 
     @property
+    def dartdocs_url(self):
+        """The dartdocs URL for the package."""
+        return 'http://www.dartdocs.org/documentation/%s/%s/index.html#%s' % \
+            (self.package.name, self.version, self.package.name)
+
+    @property
+    def documentation(self):
+        """The documentation URL for the package, or the default dartdocs."""
+        return self.pubspec.get('documentation', self.dartdocs_url)
+
+    @property
     def relative_created(self):
         """The relative created time of the package version."""
         return models.relative_date(self.created)

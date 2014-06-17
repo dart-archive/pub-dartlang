@@ -71,10 +71,20 @@ class Package(db.Model):
         return self.latest_version.pubspec.get('homepage')
 
     @property
+    def nice_homepage(self):
+        """The human-readable homepage URL for the package."""
+        return models.nice_url(self.homepage)
+
+    @property
     def documentation(self):
         """The documentation URL for the package, or None."""
         if self.latest_version is None: return None
-        return self.latest_version.pubspec.get('documentation')
+        return self.latest_version.documentation
+
+    @property
+    def nice_documentation(self):
+        """The human-readable documentation URL for the package."""
+        return models.nice_url(self.documentation)
 
     @property
     def authors_title(self):

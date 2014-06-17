@@ -75,6 +75,7 @@ $ <strong>pub install</strong>
             <tr>
               <th>Version</th>
               <th>Uploaded</th>
+              <th class="documentation" width="60">Documentation</th>
               <th class="archive" width="60">Archive</th>
             </tr>
           </thead>
@@ -82,6 +83,14 @@ $ <strong>pub install</strong>
             <tr>
               <th>{{version}}</th>
               <td>{{short_created}}</td>
+              <td class="documentation">
+                <a href="{{documentation}}"
+                   title="Go to the documentation of {{package.name}} {{version}}">
+                  <i class="icon-book">
+                    Go to the documentation of {{package.name}} {{version}}
+                  </i>
+                </a>
+              </td>
               <td class="archive">
                 <a href="{{download_url}}"
                    title="Download {{package.name}} {{version}} archive">
@@ -114,12 +123,12 @@ $ <strong>pub install</strong>
 
     {{#package.homepage}}
       <h4>Homepage</h4>
-      <p><a href="{{package.homepage}}">{{package.homepage}}</a></p>
+      <p><a href="{{package.homepage}}">{{package.nice_homepage}}</a></p>
     {{/package.homepage}}
 
     {{#package.documentation}}
       <h4>Documentation</h4>
-      <p><a href="{{package.documentation}}">{{package.documentation}}</a></p>
+      <p><a href="{{package.documentation}}">{{package.nice_documentation}}</a></p>
     {{/package.documentation}}
 
     <h4>{{package.uploaders_title}}</h4>
