@@ -5096,7 +5096,12 @@ td.archive, th.archive {
   vertical-align: middle;
 }
 
-.ellipsed {
+.homepage {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.main-documentation {
   overflow: hidden;
   text-overflow: ellipsis;
 }

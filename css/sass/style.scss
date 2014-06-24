@@ -15,6 +15,11 @@ $iconWhiteSpritePath: 'img/glyphicons-halflings-white.png';
 
 @import "compass_twitter_bootstrap";
 
+@mixin ellipsed {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 // Don't require nasty <table class="table"> that bootstrap expects.
 table {
   @extend .table;
@@ -160,9 +165,12 @@ td.archive, th.archive {
   vertical-align: middle;
 }
 
-.ellipsed {
-  overflow: hidden;
-  text-overflow: ellipsis;
+.homepage {
+  @include ellipsed;
+}
+
+.main-documentation {
+  @include ellipsed;
 }
 
 // Need to shift the icons a bit to line the up with adjacent text.
