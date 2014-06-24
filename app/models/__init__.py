@@ -61,17 +61,14 @@ def url(**kwargs):
     """
     return cherrypy.request.base + routes.url_for(**kwargs)
 
-_MAX_URL_CHARS = 40
-
 _HTTP_RE = re.compile(r"^https?://")
 
 def nice_url(url):
     """Returns a human-readable version of URL.
 
-    This removes the scheme and ellipsizes if necessary. It returns None if the
-    url is None."""
+    This removes the scheme. It returns None if the url is None."""
     if url is None: return None
-    return ellipsize(_HTTP_RE.sub("", url), _MAX_URL_CHARS)
+    return _HTTP_RE.sub("", url)
 
 def relative_date(date):
     """Construct a human-friendly relative date string like "2 hours ago".

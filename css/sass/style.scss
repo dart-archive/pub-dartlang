@@ -160,6 +160,11 @@ td.archive, th.archive {
   vertical-align: middle;
 }
 
+.ellipsed {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 // Need to shift the icons a bit to line the up with adjacent text.
 .icon-hand-right,
 .icon-envelope {
