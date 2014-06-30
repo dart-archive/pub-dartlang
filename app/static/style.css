@@ -5096,6 +5096,16 @@ td.archive, th.archive {
   vertical-align: middle;
 }
 
+.homepage {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.main-documentation {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .icon-hand-right,
 .icon-envelope {
   margin: 3px 0 0 2px;
