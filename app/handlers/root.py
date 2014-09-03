@@ -5,12 +5,13 @@
 import os
 
 from google.appengine.api import users
-import cherrypy
 
 from handlers import cloud_storage
 from models.package_version import PackageVersion
 from models.private_key import PrivateKey
 import handlers
+import feed as feed
+import cherrypy
 from models.package import Package
 
 class Root(object):
@@ -20,6 +21,10 @@ class Root(object):
         """Retrieves the front page of the package server."""
         packages = Package.all().order('-updated').fetch(5)
         return handlers.render('index', recent_packages=packages)
+
+    def feed(self):
+        """Atom Feed"""
+        packages = feed.generate_feed()
 
     def authorized(self):
         """Retrieves the client authorization landing page."""
