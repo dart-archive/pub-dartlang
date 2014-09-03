@@ -1,4 +1,4 @@
-This is the server that will be used on `pub.dartlang.org` as the default
+This is the server that is used on `pub.dartlang.org` as the default
 package repository for the Pub package manager.
 
 For license information, please see LICENSE.
