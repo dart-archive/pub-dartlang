@@ -26,7 +26,9 @@ class Feeds(object):
                 entry.author({ "name": author, "email": "N/A", uri: "" })
             entry.link(item.url)
             entry.id("https://pub.dartlang.org/feeds")
-            entry.description(item.latest_version.pubspec.get("description", "Not Available"))
+            entry.description(
+                item.latest_version.pubspec
+                    .get("description", "Not Available"))
             entry.content(item.latest_version.readme.render())
             entry.published(item.updated)
             entry.updated(item.updated)
