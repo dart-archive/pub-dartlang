@@ -45,7 +45,6 @@ class Application(cherrypy.Application):
             '/gs_/{filename:.*?}', controller='root', action='serve')
 
         self.dispatcher.connect('feeds', '/feed.atom', Feeds(), action='atom')
-        self.dispatcher.connect('feeds', '/feed.rss', Feeds(), action='rss')
 
         self.dispatcher.connect('search', '/search', Search(), action='index')
 
