@@ -5,8 +5,6 @@
 import re
 from functools import total_ordering
 
-from google.appengine.ext import db
-
 @total_ordering
 class SemanticVersion(object):
     """A semantic version number. See http://semver.org/."""
@@ -23,8 +21,8 @@ class SemanticVersion(object):
         """Parse a semantic version string."""
 
         match = SemanticVersion._RE.match(version)
-        if not match: raise db.BadValueError(
-            '"%s" is not a valid semantic version.' % version)
+        if not match:
+            raise ValueError('"%s" is not a valid semantic version.' % version)
 
         self.major = int(match.group(1))
         self.minor = int(match.group(2))
