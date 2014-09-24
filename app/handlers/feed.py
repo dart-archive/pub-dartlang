@@ -4,12 +4,16 @@ import handlers
 from handlers.pager import QueryPager
 from models.package import Package
 import cherrypy
+from datetime import datetime
 
 XML_BEGIN = '<?xml version="1.0" encoding="UTF-8"?>'
 
+
 class Feeds(object):
     """Generation of Feeds"""
-    def generate_feed(self, page=1):
+
+    @staticmethod
+    def generate_feed(page=1):
         feed = FeedGenerator()
         feed.id("https://pub.dartlang.org/feed.atom")
         feed.title("Pub Packages for Dart")
@@ -18,24 +22,23 @@ class Feeds(object):
         feed.author({"name": "Dart Team"})
         i = 1
         pager = QueryPager(int(page), "/feed.atom?page=%d",
-                       Package.all().order('-updated'),
-                       per_page=10)
+                           Package.all().order('-updated'),
+                           per_page=10)
         for item in pager.get_items():
             i += 1
             entry = feed.add_entry()
             for author in item.latest_version.pubspec.authors:
-                entry.author({ "name": author })
+                entry.author({"name": author})
             entry.title("v" + item.latest_version.pubspec.get("version") + " of " + item.name)
             entry.link(link={"href": item.url, "rel": "alternate", "title": item.name})
-            entry.id("https://pub.dartlang.org/packages/" + item.name + "#" + item.latest_version.pubspec.get("version"))
+            entry.id(
+                "https://pub.dartlang.org/packages/" + item.name + "#" + item.latest_version.pubspec.get("version"))
             entry.description(
                 item.latest_version.pubspec
-                    .get("description", "Not Available"))
+                .get("description", "Not Available"))
             entry.content(item.latest_version.readme.render())
-            entry.published(item.updated)
-            entry.updated(item.updated)
         return feed
-    
+
     def atom(self, page=1):
         cherrypy.response.headers['Content-Type'] = "application/atom+xml"
         return XML_BEGIN + "\n" + self.generate_feed(page=page).atom_str(pretty=True)
