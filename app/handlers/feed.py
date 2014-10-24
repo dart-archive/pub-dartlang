@@ -28,7 +28,7 @@ class Feeds(object):
             i += 1
             entry = feed.add_entry()
             for author in item.latest_version.pubspec.authors:
-                entry.author({"name": author})
+                entry.author({"name": author[0]})
             entry.title("v" + item.latest_version.pubspec.get("version") + " of " + item.name)
             entry.link(link={"href": item.url, "rel": "alternate", "title": item.name})
             entry.id(
