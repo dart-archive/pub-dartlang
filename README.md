@@ -53,6 +53,11 @@ it locally, perform the following steps:
 * If using Mac and `pip` is not available, install [brew](http://brew.sh) and
   run `brew install python`.
 
+### Contributing
+
+Pub is open source, and we appreciate Pull Requests.
+Please read more about [contributing to pub.dartlang.org][contributing].
+
 ### Deploying
 
 See the docs on [branches and versions][].
@@ -99,4 +104,7 @@ files with them.
 
 ### Reporting issues, feature requests, and bugs
 
-Please file all issues at [dartbug.com/new](http://dartbug.com/new).
+We appreciate feedback. Please open [issues and features][issues].
+
+[contributing]: https://github.com/dart-lang/pub-dartlang/wiki/Contributing
+[issues]: https://github.com/dart-lang/pub-dartlang/issues
