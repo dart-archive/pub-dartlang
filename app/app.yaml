@@ -34,6 +34,8 @@ handlers:
 libraries:
 - name: pycrypto
   version: "2.6"
+- name: lxml
+  version: "latest"
 
 inbound_services:
 - warmup

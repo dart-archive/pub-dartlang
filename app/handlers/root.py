@@ -5,12 +5,12 @@
 import os
 
 from google.appengine.api import users
-import cherrypy
 
 from handlers import cloud_storage
 from models.package_version import PackageVersion
 from models.private_key import PrivateKey
 import handlers
+import cherrypy
 from models.package import Package
 
 class Root(object):
