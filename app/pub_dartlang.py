@@ -19,6 +19,7 @@ import handlers.api as api
 from handlers.doc import Doc
 from handlers.root import Root
 from handlers.search import Search
+from handlers.feed import Feeds
 from handlers.packages import Packages
 from handlers.package_uploaders import PackageUploaders
 from handlers.package_versions import PackageVersions
@@ -42,6 +43,8 @@ class Application(cherrypy.Application):
             '/admin', controller='root', action='admin')
         self.dispatcher.mapper.connect(
             '/gs_/{filename:.*?}', controller='root', action='serve')
+
+        self.dispatcher.connect('feeds', '/feed.atom', Feeds(), action='atom')
 
         self.dispatcher.connect('search', '/search', Search(), action='index')
 
