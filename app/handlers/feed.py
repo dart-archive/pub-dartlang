@@ -32,7 +32,7 @@ class Feeds(object):
                 entry.author({"name": author[0]})
             entry.title("v" + item.latest_version.pubspec.get("version") +\
                 " of " + item.name)
-            entry.link(link={"href": item.url, "rel": "alternate",
+            entry.link(link={"href": "https://pub.dartlang.org/packages/" + item.name, "rel": "alternate",
                 "title": item.name})
             entry.id(
                 "https://pub.dartlang.org/packages/" + item.name + "#" +\
