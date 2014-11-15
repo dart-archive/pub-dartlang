@@ -1,5 +1,6 @@
 from feedgen.feed import FeedGenerator
 
+import uuid
 import handlers
 from handlers.pager import QueryPager
 from models.package import Package
@@ -32,11 +33,13 @@ class Feeds(object):
                 entry.author({"name": author[0]})
             entry.title("v" + item.latest_version.pubspec.get("version") +\
                 " of " + item.name)
-            entry.link(link={"href": "https://pub.dartlang.org/packages/" + item.name, "rel": "alternate",
-                "title": item.name})
+            entry.link(link={"href": "https://pub.dartlang.org/packages/" +\
+                item.name, "rel": "alternate", "title": item.name})
             entry.id(
-                "https://pub.dartlang.org/packages/" + item.name + "#" +\
-                item.latest_version.pubspec.get("version"))
+                "urn:uuid:"+\
+                  uuid.uuidv5(uuid.NAMESPACE_URL,
+                    "https://pub.dartlang.org/packages/" + item.name + "#" +\
+                    item.latest_version.pubspec.get("version")))
             entry.description(
                 item.latest_version.pubspec
                 .get("description", "Not Available"))
