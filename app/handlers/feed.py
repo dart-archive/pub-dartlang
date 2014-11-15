@@ -35,11 +35,9 @@ class Feeds(object):
                 " of " + item.name)
             entry.link(link={"href": "https://pub.dartlang.org/packages/" +\
                 item.name, "rel": "alternate", "title": item.name})
-            entry.id(
-                "urn:uuid:"+\
-                  uuid.uuidv5(uuid.NAMESPACE_URL,
-                    "https://pub.dartlang.org/packages/" + item.name + "#" +\
-                    item.latest_version.pubspec.get("version")))
+            entry.id(uuid.uuid5(uuid.NAMESPACE_URL,
+                ("https://pub.dartlang.org/packages/" + item.name + "#" +\
+                item.latest_version.pubspec.get("version")).encode('utf-8')).urn)
             entry.description(
                 item.latest_version.pubspec
                 .get("description", "Not Available"))
