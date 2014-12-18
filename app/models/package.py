@@ -33,6 +33,11 @@ class Package(db.Model):
 
     When this is set, invalidate_cache() must be called."""
 
+    uploaderEmails = db.StringListProperty()
+    """The user emails who are allowed to upload new versions of the package.
+
+    When this is set, invalidate_cache() must be called."""
+
     name = db.StringProperty(required=True)
     """The name of the package."""
 
@@ -48,6 +53,15 @@ class Package(db.Model):
     """The most recent non-prerelease version of this package.
 
     When this is set, invalidate_cache() must be called."""
+
+    def temp_synchronize_uploaders_to_uploaderemails(self):
+      """ Will synchronize self.uploaders -> self.uploaderEmails. """
+      if self.uploaders is None:
+        self.uploaderEmails = None
+      elif len(self.uploaders) == 0:
+        self.uploaderEmails = self.uploaders
+      else:
+        self.uploaderEmails = [uploader.email() for uploader in self.uploaders]
 
     @property
     def description(self):
@@ -114,6 +128,8 @@ class Package(db.Model):
         return 'Uploader' if len(self.latest_version.pubspec.authors) == 1 \
             else 'Uploaders'
 
+    # TODO(kustermann): When we have string emails, this needs to be changed
+    # to read uploaderEmails instead of uploaders.
     @property
     def uploaders_html(self):
         """Inline HTML for the uploaders of this package."""
@@ -159,6 +175,8 @@ class Package(db.Model):
             self.name, str(version))
         return version is not None
 
+    # TODO(kustermann): When we have string emails, this needs to be changed
+    # to read uploaderEmails instead of uploaders.
     def has_uploader(self, uploader):
         """Determine whether the given user is an uploader for this package.
 
@@ -176,6 +194,8 @@ class Package(db.Model):
         return models.url(
             controller='api.packages', action='show', id=self.name)
 
+    # TODO(kustermann): When we have string emails, this needs to be changed
+    # to read uploaderEmails instead of uploaders.
     def as_dict(self, full=False):
         """Returns the dictionary representation of this package.
 

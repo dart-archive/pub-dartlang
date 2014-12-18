@@ -27,6 +27,7 @@ class PackageUploaders(object):
                          (email, package.name))
 
         package.uploaders.append(user_to_add)
+        package.temp_synchronize_uploaders_to_uploaderemails()
         package.put()
         package.invalidate_cache()
         return handlers.json_success(
@@ -60,6 +61,7 @@ class PackageUploaders(object):
         email_to_delete = user_to_delete.email().lower()
         package.uploaders = [uploader for uploader in package.uploaders
                              if uploader.email().lower() != email_to_delete]
+        package.temp_synchronize_uploaders_to_uploaderemails()
         package.put()
         package.invalidate_cache()
         return handlers.json_success(

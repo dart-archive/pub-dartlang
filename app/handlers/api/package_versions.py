@@ -106,7 +106,9 @@ class PackageVersions(object):
                                         copy_source='tmp/' + id)
 
             with models.transaction():
+                version.package.temp_synchronize_uploaders_to_uploaderemails()
                 version.package.put()
+                version.temp_synchronize_uploader_to_uploaderemail_and_pickles()
                 version.put()
                 version.package.invalidate_cache()
 

@@ -34,8 +34,20 @@ class PackageVersion(db.Model):
     readme = ReadmeProperty()
     """The README file."""
 
+    readmeFilename = db.StringProperty(indexed=False)
+    """The README filename."""
+
+    readmeContent = db.TextProperty()
+    """The README file as a string."""
+
     changelog = ReadmeProperty()
     """The CHANGELOG file."""
+
+    changelogFilename = db.StringProperty(indexed=False)
+    """The CHANGELOG filename."""
+
+    changelogContent = db.TextProperty()
+    """The CHANGELOG file as a string."""
 
     libraries = db.ListProperty(str)
     """All libraries that can be imported from this package version."""
@@ -62,6 +74,27 @@ class PackageVersion(db.Model):
 
     uploader = db.UserProperty(required=True)
     """The user who uploaded this package version."""
+
+    uploaderEmail = db.StringProperty()
+    """The user email who uploaded this package version."""
+
+    def temp_synchronize_uploader_to_uploaderemail_and_pickles(self):
+      """ Will synchronize properties.
+
+      uploader/readme/changelog -> uploaderEmail/readmeString/changelogString
+      """
+      if self.uploader is None:
+        self.uploaderEmail = None
+      else:
+        self.uploaderEmail = self.uploader.email()
+
+      if self.readme:
+        self.readmeFilename = self.readme.filename
+        self.readmeContent = db.Text(self.readme.text, encoding="utf-8")
+
+      if self.changelog:
+        self.changelogFilename = self.changelog.filename
+        self.changelogContent = db.Text(self.changelog.text, encoding="utf-8")
 
     @classmethod
     def new(cls, **kwargs):
@@ -91,6 +124,8 @@ class PackageVersion(db.Model):
         version._validate_fields_match_pubspec()
         return version
 
+    # TODO(kustermann): When we have string emails, this needs to be changed
+    # to read uploaderEmails instead of uploaders.
     @classmethod
     def from_archive(cls, file, uploader):
         """Load a package version from a .tar.gz archive.
@@ -254,6 +289,8 @@ class PackageVersion(db.Model):
                           package_id=self.package.name,
                           id=str(self.version))
 
+    # TODO(kustermann): When we have string emails, this needs to be changed
+    # to read uploaderEmails instead of uploaders.
     def as_dict(self, full=False):
         """Returns the dictionary representation of this package version.
 
