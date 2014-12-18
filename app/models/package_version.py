@@ -90,11 +90,11 @@ class PackageVersion(db.Model):
 
       if self.readme:
         self.readmeFilename = self.readme.filename
-        self.readmeContent = db.Text(self.readme.text, encoding="utf-8")
+        self.readmeContent = db.Text(self.readme.text)
 
       if self.changelog:
         self.changelogFilename = self.changelog.filename
-        self.changelogContent = db.Text(self.changelog.text, encoding="utf-8")
+        self.changelogContent = db.Text(self.changelog.text)
 
     @classmethod
     def new(cls, **kwargs):
