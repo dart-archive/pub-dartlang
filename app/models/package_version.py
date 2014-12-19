@@ -96,6 +96,20 @@ class PackageVersion(db.Model):
         self.changelogFilename = self.changelog.filename
         self.changelogContent = db.Text(self.changelog.text)
 
+    @property
+    def readme_obj(self):
+      if self.readmeFilename:
+        return Readme(self.readmeContent, self.readmeFilename)
+      else:
+        return None
+
+    @property
+    def changelog_obj(self):
+      if self.readmeFilename:
+        return Readme(self.changelogContent, self.changelogFilename)
+      else:
+        return None
+
     @classmethod
     def new(cls, **kwargs):
         """Construct a new package version.

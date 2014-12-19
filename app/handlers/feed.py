@@ -41,9 +41,9 @@ class Feeds(object):
             entry.description(
                 item.latest_version.pubspec
                 .get("description", "Not Available"))
-            readme = item.latest_version.readme
-            if not readme is None:
-                entry.content(item.latest_version.readme.render(), type='html')
+            readme = item.latest_version.readme_obj
+            if readme is not None:
+                entry.content(readme.render(), type='html')
             else:
                 entry.content("<p>No README Found</p>", type='html')
         return feed

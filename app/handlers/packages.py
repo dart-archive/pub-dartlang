@@ -71,13 +71,16 @@ class Packages(object):
             changelog_filename = None
             if package.latest_version:
                 title = '%s %s' % (package.name, package.latest_version.version)
-                if package.latest_version.readme:
-                    readme = package.latest_version.readme.render()
-                    readme_filename = package.latest_version.readme.filename
-                if package.latest_version.changelog:
-                    changelog = package.latest_version.changelog.render()
-                    changelog_filename = \
-                            package.latest_version.changelog.filename
+
+                readme_obj = package.latest_version.readme_obj
+                if readme_obj:
+                    readme = readme_obj.render()
+                    readme_filename = readme_obj.filename
+
+                changelog_obj = package.latest_version.changelog_obj
+                if changelog_obj:
+                    changelog = changelog_obj.render()
+                    changelog_filename = changelog_obj.filename
 
             return handlers.render(
                 "packages/show", package=package,
