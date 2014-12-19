@@ -238,7 +238,7 @@ def requires_uploader(fn, *args, **kwargs):
     if is_current_user_admin(): return fn(*args, **kwargs)
 
     package = request().maybe_package
-    if package and not package.has_uploader(get_current_user()):
+    if package and not package.has_uploader_email(get_current_user().email()):
         message = "You aren't an uploader for package '%s'." % package.name
         if request().is_json:
             http_error(403, message)

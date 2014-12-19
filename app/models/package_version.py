@@ -72,29 +72,8 @@ class PackageVersion(db.Model):
 
     Lower numbers indicate earlier versions."""
 
-    uploader = db.UserProperty(required=True)
-    """The user who uploaded this package version."""
-
-    uploaderEmail = db.StringProperty()
+    uploaderEmail = db.StringProperty(required=True)
     """The user email who uploaded this package version."""
-
-    def temp_synchronize_uploader_to_uploaderemail_and_pickles(self):
-      """ Will synchronize properties.
-
-      uploader/readme/changelog -> uploaderEmail/readmeString/changelogString
-      """
-      if self.uploader is None:
-        self.uploaderEmail = None
-      else:
-        self.uploaderEmail = self.uploader.email()
-
-      if self.readme:
-        self.readmeFilename = self.readme.filename
-        self.readmeContent = db.Text(self.readme.text)
-
-      if self.changelog:
-        self.changelogFilename = self.changelog.filename
-        self.changelogContent = db.Text(self.changelog.text)
 
     @property
     def readme_obj(self):
@@ -105,7 +84,7 @@ class PackageVersion(db.Model):
 
     @property
     def changelog_obj(self):
-      if self.readmeFilename:
+      if self.changelogFilename:
         return Readme(self.changelogContent, self.changelogFilename)
       else:
         return None
@@ -128,6 +107,16 @@ class PackageVersion(db.Model):
                 not isinstance(kwargs['version'], SemanticVersion):
             kwargs['version'] = SemanticVersion(kwargs['version'])
 
+        if 'readme' in kwargs and kwargs['readme']:
+            kwargs['readmeFilename'] = kwargs['readme'].filename
+            kwargs['readmeContent'] = kwargs['readme'].text
+            del kwargs['readme']
+
+        if 'changelog' in kwargs and kwargs['changelog']:
+            kwargs['changelogFilename'] = kwargs['changelog'].filename
+            kwargs['changelogContent'] = kwargs['changelog'].text
+            del kwargs['changelog']
+
         if not 'key_name' in kwargs and not 'key' in kwargs:
             kwargs['key_name'] = str(kwargs['version'].canonical)
 
@@ -138,10 +127,8 @@ class PackageVersion(db.Model):
         version._validate_fields_match_pubspec()
         return version
 
-    # TODO(kustermann): When we have string emails, this needs to be changed
-    # to read uploaderEmails instead of uploaders.
     @classmethod
-    def from_archive(cls, file, uploader):
+    def from_archive(cls, file, uploaderEmail):
         """Load a package version from a .tar.gz archive.
 
         If the package specified in the archive already exists, it will be
@@ -150,7 +137,7 @@ class PackageVersion(db.Model):
 
         Arguments:
           file: An open file object containing a .tar.gz archive.
-          uploader: The user who uploaded this package archive.
+          uploaderEmail: The user email who uploaded this package archive.
 
         Returns: Both the Package object and the PackageVersion object.
         """
@@ -162,8 +149,8 @@ class PackageVersion(db.Model):
             name = pubspec.required('name')
             package = Package.get_by_key_name(name)
             if not package:
-                assert uploader is not None
-                package = Package.new(name=name, uploaders=[uploader])
+                assert uploaderEmail is not None
+                package = Package.new(name=name, uploaderEmails=[uploaderEmail])
 
             libraries = sorted(name[4:] for name in tar.getnames()
                                if name.startswith('lib/') and
@@ -172,7 +159,8 @@ class PackageVersion(db.Model):
 
             return PackageVersion.new(
                 package=package, changelog=changelog, readme=readme,
-                pubspec=pubspec, libraries=libraries, uploader=uploader)
+                pubspec=pubspec, libraries=libraries,
+                uploaderEmail=uploaderEmail)
         except (tarfile.TarError, KeyError) as err:
             raise db.BadValueError(
                 "Error parsing package archive: %s" % err)
@@ -303,8 +291,6 @@ class PackageVersion(db.Model):
                           package_id=self.package.name,
                           id=str(self.version))
 
-    # TODO(kustermann): When we have string emails, this needs to be changed
-    # to read uploaderEmails instead of uploaders.
     def as_dict(self, full=False):
         """Returns the dictionary representation of this package version.
 

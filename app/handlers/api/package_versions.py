@@ -79,7 +79,7 @@ class PackageVersions(object):
             try:
                 with closing(cloud_storage.read('tmp/' + id)) as f:
                     version = PackageVersion.from_archive(
-                        f, uploader=handlers.get_oauth_user())
+                        f, uploaderEmail=handlers.get_oauth_user().email())
             except (KeyError, files.ExistenceError):
                 handlers.http_error(
                     403, "Package upload " + id + " does not exist.")
@@ -87,7 +87,8 @@ class PackageVersions(object):
             # If the package for this version already exists, make sure we're an
             # uploader for it. If it doesn't, we're fine to create it anew.
             if version.package.is_saved():
-                if not version.package.has_uploader(handlers.get_oauth_user()):
+                if not version.package.has_uploader_email(
+                    handlers.get_oauth_user().email()):
                     handlers.http_error(
                         403, "You aren't an uploader for package '%s'." %
                                  version.package.name)
@@ -106,9 +107,7 @@ class PackageVersions(object):
                                         copy_source='tmp/' + id)
 
             with models.transaction():
-                version.package.temp_synchronize_uploaders_to_uploaderemails()
                 version.package.put()
-                version.temp_synchronize_uploader_to_uploaderemail_and_pickles()
                 version.put()
                 version.package.invalidate_cache()
 

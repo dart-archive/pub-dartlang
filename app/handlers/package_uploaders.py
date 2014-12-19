@@ -24,14 +24,12 @@ class PackageUploaders(object):
         Only other uploaders may add new uploaders."""
 
         package = handlers.request().package
-        user_to_add = users.User(email)
-        if package.has_uploader(user_to_add):
+        if package.has_uploader_email(email):
             handlers.http_error(
                 400, "User '%s' is already an uploader for package '%s'." %
                          (email, package.name))
 
-        package.uploaders.append(user_to_add)
-        package.temp_synchronize_uploaders_to_uploaderemails()
+        package.uploaderEmails.append(email)
         package.put()
         package.invalidate_cache()
         return handlers.json_success(
@@ -49,23 +47,23 @@ class PackageUploaders(object):
         """
 
         package = handlers.request().package
-        user_to_delete = users.User(id)
-        if not package.has_uploader(user_to_delete):
+        email = id
+        if not package.has_uploader_email(email):
             handlers.http_error(
                 400, "'%s' isn't an uploader for package '%s'." %
-                         (user_to_delete.nickname(), package.name))
+                         (email, package.name))
 
-        if len(package.uploaders) == 1:
+        if len(package.uploaderEmails) == 1:
             handlers.http_error(
                 400, ("Package '%s' only has one uploader, so that uploader " +
                           "can't be removed.") % package.name)
 
-        email_to_delete = user_to_delete.email().lower()
-        package.uploaders = [uploader for uploader in package.uploaders
-                             if uploader.email().lower() != email_to_delete]
-        package.temp_synchronize_uploaders_to_uploaderemails()
+        email_to_delete = email.lower()
+        package.uploaderEmails = [email for email in package.uploaderEmails
+                                  if email.lower() != email_to_delete]
         package.put()
         package.invalidate_cache()
         return handlers.json_success(
             "'%s' is no longer an uploader for package '%s'." %
                 (id, package.name))
+

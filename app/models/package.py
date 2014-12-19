@@ -28,12 +28,7 @@ class Package(db.Model):
     MAX_SIZE = 10 * 2**20 # 10MB
     """The maximum package size, in bytes."""
 
-    uploaders = db.ListProperty(users.User, validator=models.validate_not_empty)
-    """The users who are allowed to upload new versions of the package.
-
-    When this is set, invalidate_cache() must be called."""
-
-    uploaderEmails = db.StringListProperty()
+    uploaderEmails = db.StringListProperty(validator=models.validate_not_empty)
     """The user emails who are allowed to upload new versions of the package.
 
     When this is set, invalidate_cache() must be called."""
@@ -53,15 +48,6 @@ class Package(db.Model):
     """The most recent non-prerelease version of this package.
 
     When this is set, invalidate_cache() must be called."""
-
-    def temp_synchronize_uploaders_to_uploaderemails(self):
-      """ Will synchronize self.uploaders -> self.uploaderEmails. """
-      if self.uploaders is None:
-        self.uploaderEmails = None
-      elif len(self.uploaders) == 0:
-        self.uploaderEmails = self.uploaders
-      else:
-        self.uploaderEmails = [uploader.email() for uploader in self.uploaders]
 
     @property
     def description(self):
@@ -173,7 +159,7 @@ class Package(db.Model):
             self.name, str(version))
         return version is not None
 
-    def has_uploader(self, uploader):
+    def has_uploader_email(self, uploaderEmail):
         """Determine whether the given user is an uploader for this package.
 
         This compares users via case-insensitive email comparison.
@@ -181,7 +167,7 @@ class Package(db.Model):
         Although admins have uploader privileges for all packages, this will not
         return True for admins.
         """
-        return uploader.email().lower() in \
+        return uploaderEmail.lower() in \
             [email.lower() for email in self.uploaderEmails]
 
     @property

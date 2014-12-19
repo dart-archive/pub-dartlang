@@ -94,7 +94,7 @@ class PackageVersions(object):
 
         with closing(cloud_storage.read(version.storage_path)) as f:
             new_version = PackageVersion.from_archive(
-                f, uploader=version.uploader)
+                f, uploaderEmail=version.uploaderEmail)
 
         with models.transaction():
             # Reload the old version in case anything (e.g. sort order) changed.
@@ -114,14 +114,12 @@ class PackageVersions(object):
             new_version.downloads = version.downloads
             new_version.sort_order = version.sort_order
             version.delete()
-            new_version.temp_synchronize_uploader_to_uploaderemail_and_pickles()
             new_version.put()
 
             # Only save the package if its latest version has been updated.
             # Otherwise, its latest version may be being updated in parallel,
             # causing icky bugs.
             if latest_version_key == key:
-                package.temp_synchronize_uploader_to_uploaderemail()
                 package.put()
                 package.invalidate_cache()
 
