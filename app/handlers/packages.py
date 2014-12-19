@@ -56,8 +56,7 @@ class Packages(object):
             versions = [str(version.version) for version in package.version_set]
             return json.dumps({
                 "name": package.name,
-                "uploaders": [uploader.email() for uploader
-                              in package.uploaders],
+                "uploaders": package.uploaderEmails,
                 "versions": versions
             })
         elif format == 'html':

@@ -333,7 +333,7 @@ class PackageVersion(db.Model):
                 'created': self.created.isoformat(),
                 'downloads': self.downloads,
                 'libraries': self.libraries,
-                'uploader': self.uploader.email()
+                'uploader': self.uploaderEmail
             })
 
         return value

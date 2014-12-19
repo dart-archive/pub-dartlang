@@ -128,13 +128,11 @@ class Package(db.Model):
         return 'Uploader' if len(self.latest_version.pubspec.authors) == 1 \
             else 'Uploaders'
 
-    # TODO(kustermann): When we have string emails, this needs to be changed
-    # to read uploaderEmails instead of uploaders.
     @property
     def uploaders_html(self):
         """Inline HTML for the uploaders of this package."""
-        return '<br/>'.join(cgi.escape(uploader.nickname())
-                         for uploader in self.uploaders)
+        return '<br/>'.join(cgi.escape(email)
+                         for email in self.uploaderEmails)
 
     @property
     def short_updated(self):
@@ -175,8 +173,6 @@ class Package(db.Model):
             self.name, str(version))
         return version is not None
 
-    # TODO(kustermann): When we have string emails, this needs to be changed
-    # to read uploaderEmails instead of uploaders.
     def has_uploader(self, uploader):
         """Determine whether the given user is an uploader for this package.
 
@@ -186,7 +182,7 @@ class Package(db.Model):
         return True for admins.
         """
         return uploader.email().lower() in \
-            [u.email().lower() for u in self.uploaders]
+            [email.lower() for email in self.uploaderEmails]
 
     @property
     def url(self):
@@ -194,8 +190,6 @@ class Package(db.Model):
         return models.url(
             controller='api.packages', action='show', id=self.name)
 
-    # TODO(kustermann): When we have string emails, this needs to be changed
-    # to read uploaderEmails instead of uploaders.
     def as_dict(self, full=False):
         """Returns the dictionary representation of this package.
 
@@ -218,7 +212,7 @@ class Package(db.Model):
             value.update({
                 'created': self.created.isoformat(),
                 'downloads': self.downloads,
-                'uploaders': [uploader.email() for uploader in self.uploaders],
+                'uploaders': [email for email in self.uploaderEmails],
                 'versions': [version.as_dict() for version in self.version_set]
             })
 
