@@ -39,3 +39,12 @@ libraries:
 
 inbound_services:
 - warmup
+
+# After the migration of performance settings from application-level to
+# module-level the following settings are necessary:
+instance_class: F4
+automatic_scaling:
+  min_idle_instances: 1
+  max_idle_instances: 885
+  max_pending_latency: 2.0
+
