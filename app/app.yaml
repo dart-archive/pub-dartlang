@@ -3,7 +3,7 @@
 # BSD-style license that can be found in the LICENSE file.
 
 application: dartlang-pub
-version: 1
+version: 31
 runtime: python27
 threadsafe: true
 api_version: 1
@@ -46,5 +46,5 @@ instance_class: F4
 automatic_scaling:
   min_idle_instances: 1
   max_idle_instances: 885
-  max_pending_latency: 2.0
+  max_pending_latency: 2.0s
 
