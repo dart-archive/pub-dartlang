@@ -31,17 +31,12 @@ class PackageVersion(db.Model):
     pubspec = PubspecProperty(required=True, indexed=False)
     """The package version's pubspec file."""
 
-    readme = ReadmeProperty()
-    """The README file."""
-
     readmeFilename = db.StringProperty(indexed=False)
     """The README filename."""
 
     readmeContent = db.TextProperty()
     """The README file as a string."""
 
-    changelog = ReadmeProperty()
-    """The CHANGELOG file."""
 
     changelogFilename = db.StringProperty(indexed=False)
     """The CHANGELOG filename."""
