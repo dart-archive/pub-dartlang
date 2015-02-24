@@ -226,8 +226,14 @@ class Package(db.Model):
         of the package are uploaded, the data will change.
         """
         memcache.delete(self._package_json_cache_key)
+        memcache.delete(self._dart_package_json_cache_key)
 
     @property
     def _package_json_cache_key(self):
         """The memcache key for the cached JSON for this package."""
         return 'package_json_' + self.name
+
+    @property
+    def _dart_package_json_cache_key(self):
+        """The Dart memcache key for the cached JSON for this package."""
+        return 'dart_package_json_' + self.name
