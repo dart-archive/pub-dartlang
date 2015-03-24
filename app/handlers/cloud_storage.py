@@ -22,6 +22,8 @@ from google.appengine.api import urlfetch
 
 from models.private_key import PrivateKey
 
+import cloudstorage
+
 # The Google Cloud Storage bucket for this app
 _BUCKET = "pub.dartlang.org"
 
@@ -214,8 +216,15 @@ def delete_object(obj):
     files.delete(_appengine_object_path(obj))
 
 def open(obj):
-    """Opens an object in cloud storage."""
+    """Opens an object in cloud storage.
+
+    DEPRECATED: For larger files, please consider using `open_with_gcs()`.
+    """
     return files.open(_appengine_object_path(obj), 'r')
+
+def open_with_gcs(obj):
+    """Opens an object in cloud storage with the GCS library."""
+    return cloudstorage.open(_gcs_appengine_object_path(obj), 'r')
 
 def read(obj):
     """Consumes and returns all data in an object in cloud storage.
@@ -226,7 +235,7 @@ def read(obj):
     This can be necessary since many operations on the file object itself
     require a network round trip."""
 
-    with open(obj) as f:
+    with open_with_gcs(obj) as f:
         io = StringIO()
         data = f.read(_CHUNK_SIZE)
         while data:
@@ -251,6 +260,10 @@ def _object_path(obj):
 def _appengine_object_path(obj):
     """Returns the path for an object for use with the AppEngine APIs."""
     return '/gs/' + _object_path(obj)
+
+def _gcs_appengine_object_path(obj):
+    """Returns the path for an object for use with the GCS APIs."""
+    return '/' + _object_path(obj)
 
 def _iso8601(secs):
     """Returns the ISO8601 representation of the given time.

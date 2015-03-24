@@ -25,7 +25,7 @@ class Package(db.Model):
     package is discarded.
     """
 
-    MAX_SIZE = 10 * 2**20 # 10MB
+    MAX_SIZE = 100 * 2**20 # 100MB
     """The maximum package size, in bytes."""
 
     uploaderEmails = db.StringListProperty(validator=models.validate_not_empty)
