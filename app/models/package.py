@@ -214,6 +214,7 @@ class Package(db.Model):
             return cached
 
         value = json.dumps(self.as_dict(full=True))
+        logging.info("Setting memcache key: " + self._package_json_cache_key)
         memcache.set(self._package_json_cache_key, value)
         return value
 
@@ -225,6 +226,10 @@ class Package(db.Model):
         data is immutable, but when the uploader list changes or new versions
         of the package are uploaded, the data will change.
         """
+        logging.info("Invalidating memcache keys: %s and %s"
+                     % (self._package_json_cache_key,
+                        self._dart_package_json_cache_key))
+
         memcache.delete(self._package_json_cache_key)
         memcache.delete(self._dart_package_json_cache_key)
 
@@ -236,4 +241,4 @@ class Package(db.Model):
     @property
     def _dart_package_json_cache_key(self):
         """The Dart memcache key for the cached JSON for this package."""
-        return 'dart_package_json_' + self.name
+        return 'dart_package_json' + self.name
