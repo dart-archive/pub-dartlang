@@ -232,6 +232,7 @@ class Package(db.Model):
 
         memcache.delete(self._package_json_cache_key)
         memcache.delete(self._dart_package_json_cache_key)
+        memcache.delete(self._dart_package_ui_cache_key)
 
     @property
     def _package_json_cache_key(self):
@@ -242,3 +243,8 @@ class Package(db.Model):
     def _dart_package_json_cache_key(self):
         """The Dart memcache key for the cached JSON for this package."""
         return 'dart_package_json' + self.name
+
+    @property
+    def _dart_package_ui_cache_key(self):
+        """The Dart memcache key for the cached UI page for this package."""
+        return 'dart_package_ui' + self.name
