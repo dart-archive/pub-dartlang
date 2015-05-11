@@ -3,7 +3,7 @@
 # BSD-style license that can be found in the LICENSE file.
 
 application: dartlang-pub
-version: 35
+version: 36
 runtime: python27
 threadsafe: true
 api_version: 1
