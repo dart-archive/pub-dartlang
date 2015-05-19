@@ -244,11 +244,10 @@ class PackageVersion(db.Model):
     @property
     def example_version_constraint(self):
         """Return the example version constraint for this package."""
-        if self.version.in_initial_development:
-            return json.dumps(">=%s <%d.%d.0" %
-                (self.version, self.version.major, self.version.minor + 1))
-        return json.dumps(
-            ">=%s <%d.0.0" % (self.version, self.version.major + 1))
+        # TODO(nweiz): Once the 1.11 SDK is out and pub supports ">=1.2.3-pre
+        # <1.2.3", suggest that as the version constraint for prerelease
+        # versions.
+        return json.dumps("^%s" % self.version)
 
     @property
     def storage_path(self):
